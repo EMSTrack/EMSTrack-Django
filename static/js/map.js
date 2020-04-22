@@ -563,7 +563,7 @@ function updateCall(call) {
             $('#call-details-' + call.id).html( trimString(call.details, 20) );
 
             // update patients
-            setCallPatientPopover(call.id, call.patient_set, true);
+            // setCallPatientPopover(call.id, call.patient_set, true);
 
             // update info
             setCallDetailPopover(call, true);
@@ -1265,10 +1265,12 @@ function addCallToGrid(call) {
                     type="button" class="btn btn-outline-dark btn-sm" aria-label="Detail">
                 <span class="fas fa-info fa-sm"></span> 
             </button>
+            <!--
             <button id="call-${call.id}-patients-button"                 
                     type="button" class="btn btn-outline-dark btn-sm" aria-label="Patients">
                 <span class="fas fa-user fa-sm"></span> 
             </button>
+            -->
         </div>
         <div>
             <button id="call-${call.id}-abort" type="button" class="close ml-1" aria-label="Close">
@@ -1298,7 +1300,7 @@ function addCallToGrid(call) {
         });
 
     // set call patient popover
-    setCallPatientPopover(call.id, call.patient_set);
+    // setCallPatientPopover(call.id, call.patient_set);
 
     // set call detail popover
     setCallDetailPopover(call);
@@ -2110,6 +2112,8 @@ function beginDispatching() {
 
     // Update current address
     updateCurrentAddress(currentLocation);
+
+    // TODO: upgrade patients to use patient component
 
     // Clear current currentPatients
     currentPatients = {};
