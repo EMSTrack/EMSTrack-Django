@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-16 22:49+0000\n"
+"POT-Creation-Date: 2020-04-22 16:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,289 +19,674 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ambulance/forms.py:13 ambulance/forms.py:46 hospital/forms.py:12
-#: templates/ambulance/ambulance_detail.html:176
-#: templates/ambulance/location_detail.html:11
-#: templates/ambulance/location_detail.html:28
-#: templates/ambulance/location_form.html:18
-#: templates/hospital/hospital_detail.html:30
+#: templates/ambulance/location_detail.html:23
+#: templates/ambulance/location_detail.html:40
+#: templates/ambulance/location_form.html:36
+#: templates/hospital/hospital_detail.html:39
 msgid "Location"
 msgstr "Ubicación"
 
 # AmbulanceOnline
-#: ambulance/models.py:65
+#: ambulance/models.py:76
 msgid "Online"
 msgstr "En servicio"
 
-#: ambulance/models.py:65
+#: ambulance/models.py:77
 msgid "Offline"
 msgstr "Fuera de servicio"
 
 # AmbulanceStatus
-#: ambulance/models.py:65
+#: ambulance/models.py:87
 msgid "Unknown"
 msgstr "Desconocido"
 
-#: ambulance/models.py:66
+#: ambulance/models.py:88
 msgid "Available"
 msgstr "Disponible"
 
-#: ambulance/models.py:67
+#: ambulance/models.py:89
 msgid "Out of service"
 msgstr "Fuera de servicio"
 
-#: ambulance/models.py:68
+#: ambulance/models.py:90
 msgid "Incident bound"
 msgstr "Hacia el incidente"
 
-#: ambulance/models.py:69
+#: ambulance/models.py:91
 msgid "At incident"
 msgstr "En el incidente"
 
-#: ambulance/models.py:70
+#: ambulance/models.py:92
 msgid "Hospital bound"
 msgstr "Hacia el hospital"
 
-#: ambulance/models.py:71
+#: ambulance/models.py:93
 msgid "At hospital"
 msgstr "En el hospital"
 
-#: ambulance/models.py:72
+#: ambulance/models.py:94
 msgid "Base bound"
 msgstr "Hacia la base"
 
-#: ambulance/models.py:73
+#: ambulance/models.py:95
 msgid "At base"
 msgstr "En la base"
 
-#: ambulance/models.py:74
+#: ambulance/models.py:96
 msgid "Waypoint bound"
 msgstr "Hacia un punto de ruta"
 
-#: ambulance/models.py:75
+#: ambulance/models.py:97
 msgid "At waypoint"
 msgstr "En en punto de ruta"
 
-#: ambulance/models.py:94
+#: ambulance/models.py:116
 msgid "Basic"
 msgstr "Basica"
 
-#: ambulance/models.py:95
+#: ambulance/models.py:117
 msgid "Advanced"
 msgstr "Avanzada"
 
-#: ambulance/models.py:96
+#: ambulance/models.py:118
 msgid "Rescue"
 msgstr "Rescate"
 
-#: ambulance/models.py:97
+#: ambulance/models.py:119
 msgid "Medic"
 msgstr "Médica"
 
-#: ambulance/models.py:98
+#: ambulance/models.py:120
 msgid "Supervisor"
 msgstr "Supervisor"
 
-#: ambulance/models.py:99
+#: ambulance/models.py:121
 msgid "Professional First Responder"
 msgstr "Primer Respondiente Profesional"
 
-#: ambulance/models.py:100
+#: ambulance/models.py:122
 msgid "Community First Responder"
 msgstr "Primer Respondiente Comunitario"
 
-#: ambulance/models.py:114 equipment/models.py:119 hospital/models.py:15
+#: ambulance/models.py:143 equipment/models.py:122 hospital/models.py:18
 msgid "equipmentholder"
 msgstr "portadordeequipo"
 
-#: ambulance/models.py:117
+#: ambulance/models.py:146
 msgid "identifier"
 msgstr "identificador"
 
-#: ambulance/models.py:121 ambulance/models.py:298
+#: ambulance/models.py:150 ambulance/models.py:310
 msgid "capability"
 msgstr "capacidad"
 
-#: ambulance/models.py:125 ambulance/models.py:302 ambulance/models.py:384
-#: ambulance/models.py:493 ambulance/models.py:600 ambulance/models.py:691
-#: ambulance/models.py:753 login/models.py:331 login/models.py:368
+#: ambulance/models.py:154 ambulance/models.py:314 ambulance/models.py:406
+#: ambulance/models.py:564 ambulance/models.py:654 ambulance/models.py:753
+#: ambulance/models.py:815 login/models.py:223 login/models.py:475
 msgid "status"
 msgstr "estado"
 
-#: ambulance/models.py:130 ambulance/models.py:307
+#: ambulance/models.py:159 ambulance/models.py:319
 msgid "orientation"
 msgstr "orientación"
 
-#: ambulance/models.py:131 ambulance/models.py:308 ambulance/models.py:699
+#: ambulance/models.py:160 ambulance/models.py:320 ambulance/models.py:761
 #: emstrack/admin.py:12 emstrack/models.py:59
 msgid "location"
 msgstr "ubicación"
 
-#: ambulance/models.py:134 ambulance/models.py:311
+#: ambulance/models.py:163 ambulance/models.py:323
 msgid "timestamp"
 msgstr "hora"
 
-#: ambulance/models.py:295 ambulance/models.py:505 login/models.py:122
-#: login/models.py:210 login/models.py:337
+#: ambulance/models.py:166 hospital/models.py:21
+#, fuzzy
+#| msgid "Active"
+msgid "active"
+msgstr "Activo"
+
+#: ambulance/models.py:307 ambulance/models.py:576 login/models.py:110
+#: login/models.py:150 login/models.py:229
 msgid "ambulance"
 msgstr "ambulancia"
 
-#: ambulance/models.py:325
+#: ambulance/models.py:337
 msgid "Resuscitation"
 msgstr "Resucitación"
 
-#: ambulance/models.py:326
+#: ambulance/models.py:338
 msgid "Emergent"
 msgstr "Emergente"
 
-#: ambulance/models.py:327
+#: ambulance/models.py:339
 msgid "Urgent"
 msgstr "Urgente"
 
-#: ambulance/models.py:328
+#: ambulance/models.py:340
 msgid "Less urgent"
 msgstr "Menos urgent"
 
-#: ambulance/models.py:329
+#: ambulance/models.py:341
 msgid "Not urgent"
 msgstr "No urgent"
 
-#: ambulance/models.py:330
+#: ambulance/models.py:342
 msgid "Omega"
 msgstr "Omega"
 
-#: ambulance/models.py:344 templates/ambulance/call_list.html:13
+#: ambulance/models.py:356 templates/ambulance/call_list.html:13
 msgid "Pending"
 msgstr "Pendientes"
 
-#: ambulance/models.py:345 templates/ambulance/call_list.html:47
+#: ambulance/models.py:357 templates/ambulance/call_list.html:55
 msgid "Started"
 msgstr "Empezadas"
 
-#: ambulance/models.py:346 templates/ambulance/call_list.html:84
+#: ambulance/models.py:358 templates/ambulance/call_list.html:100
 msgid "Ended"
 msgstr "Terminadas"
 
-#: ambulance/models.py:389 login/models.py:374
-msgid "details"
-msgstr "detalles"
+#: ambulance/models.py:371 ambulance/models.py:390 ambulance/models.py:399
+msgid "label"
+msgstr "mensaje"
 
-#: ambulance/models.py:392 login/models.py:78
+#: ambulance/models.py:379
+msgid "prefix"
+msgstr "prefijo"
+
+#: ambulance/models.py:382 ambulance/models.py:414 login/models.py:80
 msgid "priority"
 msgstr "prioridad"
 
-#: ambulance/models.py:397
+#: ambulance/models.py:387
+msgid "suffix"
+msgstr "sufijo"
+
+#: ambulance/models.py:396
+#, fuzzy
+msgid "zipcode"
+msgstr "código postal"
+
+#: ambulance/models.py:411 login/models.py:481
+msgid "details"
+msgstr "detalles"
+
+#: ambulance/models.py:422
+#, fuzzy
+msgid "priority_code"
+msgstr "codigo_de_prioridad"
+
+#: ambulance/models.py:428
+#, fuzzy
+msgid "radio_code"
+msgstr "codigo_de_radio"
+
+#: ambulance/models.py:435
 msgid "pending_at"
 msgstr "pendiente_en"
 
-#: ambulance/models.py:398
+#: ambulance/models.py:436
 msgid "started_at"
 msgstr "empezado_en"
 
-#: ambulance/models.py:399
+#: ambulance/models.py:437
 msgid "ended_at"
 msgstr "terminado_en"
 
-#: ambulance/models.py:402
+#: ambulance/models.py:440
 msgid "created_at"
 msgstr "creado_en"
 
-#: ambulance/models.py:482
-msgid "Requested"
-msgstr "Requisitado"
+#: ambulance/models.py:453 ambulance/signals.py:39
+msgid "You will no longer be notified of updates to"
+msgstr "Ya no se te notificarán las actualizaciones de"
 
-#: ambulance/models.py:483
-msgid "Accepted"
-msgstr "Aceptado"
+#: ambulance/models.py:454 ambulance/signals.py:40 ambulance/viewsets.py:459
+#: templates/ambulance/call_detail.html:26
+msgid "Call"
+msgstr "Llamada"
 
-#: ambulance/models.py:484
-msgid "Declined"
-msgstr "Rechazado"
+#: ambulance/models.py:532 ambulance/views.py:527 ambulance/views.py:539
+#: templates/ambulance/ambulance_detail.html:12
+#: templates/ambulance/ambulance_form.html:15
+#: templates/ambulance/ambulance_list.html:12
+#: templates/ambulance/call_detail.html:164
+#: templates/ambulance/call_list.html:25 templates/ambulance/call_list.html:67
+#: templates/ambulance/call_list.html:126 templates/ambulance/map.html:55
+#: templates/ambulance/map.html:221 templates/base.html:84
+#: templates/login/group_detail.html:101
+msgid "Ambulances"
+msgstr "Ambulancias"
 
-#: ambulance/models.py:485
-msgid "Suspended"
-msgstr "Suspendido"
-
-#: ambulance/models.py:486
-msgid "Completed"
-msgstr "Completado"
-
-#: ambulance/models.py:500 ambulance/models.py:617
+#: ambulance/models.py:544 ambulance/models.py:571 ambulance/models.py:671
 msgid "call"
 msgstr "llamada"
 
-#: ambulance/models.py:597 ambulance/models.py:685
+#: ambulance/models.py:553
+msgid "Requested"
+msgstr "Requisitado"
+
+#: ambulance/models.py:554
+msgid "Accepted"
+msgstr "Aceptado"
+
+#: ambulance/models.py:555
+msgid "Declined"
+msgstr "Rechazado"
+
+#: ambulance/models.py:556
+msgid "Suspended"
+msgstr "Suspendido"
+
+#: ambulance/models.py:557
+msgid "Completed"
+msgstr "Completado"
+
+#: ambulance/models.py:651 ambulance/models.py:747
 msgid "ambulance_call"
 msgstr "ambulance_llamada"
 
-#: ambulance/models.py:619 ambulance/models.py:655 ambulance/models.py:760
-#: equipment/models.py:31 equipment/models.py:55
+#: ambulance/models.py:673 ambulance/models.py:709 ambulance/models.py:822
+#: equipment/models.py:34 equipment/models.py:58
 msgid "name"
 msgstr "nombre"
 
-#: ambulance/models.py:620
+#: ambulance/models.py:674
 msgid "age"
 msgstr "edad"
 
-#: ambulance/models.py:633
+#: ambulance/models.py:687
 msgid "Base"
 msgstr "Base"
 
-#: ambulance/models.py:634
+#: ambulance/models.py:688
 msgid "AED"
 msgstr "AED"
 
-#: ambulance/models.py:635 templates/ambulance/location_list.html:94
+#: ambulance/models.py:689 templates/ambulance/location_list.html:131
 msgid "Incident"
 msgstr "Incidente"
 
-#: ambulance/models.py:636 login/forms.py:189 login/forms.py:207
-#: templates/hospital/hospital_detail.html:11
-#: templates/hospital/hospital_form.html:15
-#: templates/login/client_detail.html:39 templates/login/client_list.html:23
-#: templates/login/client_list.html:95 templates/login/group_detail.html:116
-#: templates/login/user_detail.html:124
+#: ambulance/models.py:690 login/forms.py:189 login/forms.py:207
+#: templates/hospital/hospital_detail.html:20
+#: templates/hospital/hospital_form.html:28
+#: templates/login/client_detail.html:56 templates/login/client_list.html:23
+#: templates/login/client_list.html:95 templates/login/group_detail.html:143
+#: templates/login/user_detail.html:144
 msgid "Hospital"
 msgstr "Hospital"
 
-#: ambulance/models.py:637
+#: ambulance/models.py:691
 msgid "Waypoint"
 msgstr "Punto de ruta"
 
-#: ambulance/models.py:638
+#: ambulance/models.py:692
 msgid "Other"
 msgstr "Otro"
 
-#: ambulance/models.py:658 equipment/models.py:33
+#: ambulance/models.py:712 equipment/models.py:36
 msgid "type"
 msgstr "tipo"
 
-#: ambulance/models.py:674
+#: ambulance/models.py:728
 msgid "Created"
 msgstr "Creado"
 
-#: ambulance/models.py:675
+#: ambulance/models.py:729
 msgid "Visiting"
 msgstr "Visitando"
 
-#: ambulance/models.py:676
+#: ambulance/models.py:730
 msgid "Visited"
 msgstr "Visitado"
 
-#: ambulance/models.py:677
+#: ambulance/models.py:731 templates/import.html:172
 msgid "Skipped"
 msgstr "Saltado"
 
-#: ambulance/models.py:688 ambulance/models.py:750
+#: ambulance/models.py:750 ambulance/models.py:812
 msgid "order"
 msgstr "orden"
 
-#: ambulance/models.py:747
+#: ambulance/models.py:809
 msgid "waypoint"
 msgstr "punto_de_ruta"
 
-#: ambulance/models.py:761
+#: ambulance/models.py:823
 msgid "center"
 msgstr "centro"
+
+#: ambulance/signals.py:37
+msgid "You will be notified of updates to"
+msgstr "Se le notificarán las actualizaciones de"
+
+#: ambulance/views.py:265
+msgid "Age"
+msgstr "Edad"
+
+#: ambulance/views.py:266 templates/ambulance/ambulance_detail.html:79
+#: templates/ambulance/ambulance_detail.html:120
+#: templates/ambulance/location_detail.html:28
+#: templates/ambulance/location_list.html:24
+#: templates/ambulance/location_list.html:61
+#: templates/ambulance/location_list.html:98
+#: templates/equipment/equipment_detail.html:24
+#: templates/equipment/equipment_list.html:36
+#: templates/equipment/equipmentset_detail.html:24
+#: templates/equipment/equipmentset_detail.html:41
+#: templates/equipment/equipmentset_list.html:35
+#: templates/hospital/hospital_detail.html:27
+#: templates/hospital/hospital_detail.html:74
+#: templates/hospital/hospital_detail.html:113
+#: templates/hospital/hospital_list.html:37
+#: templates/login/group_detail.html:24 templates/login/group_list.html:35
+#: templates/login/user_detail.html:76
+msgid "Name"
+msgstr "Nombre"
+
+#: ambulance/views.py:267 templates/ambulance/call_detail.html:50
+#: templates/ambulance/call_list.html:24 templates/ambulance/call_list.html:66
+#: templates/ambulance/call_list.html:125 templates/ambulance/map.html:161
+#: templates/ambulance/map.html:165 templates/ambulance/map.html:171
+msgid "Radio Code"
+msgstr "Código de Radio"
+
+#: ambulance/views.py:268 templates/ambulance/call_detail.html:34
+#: templates/ambulance/call_list.html:23 templates/ambulance/call_list.html:65
+#: templates/ambulance/call_list.html:124 templates/ambulance/map.html:144
+#: templates/ambulance/map.html:151
+msgid "Priority Code"
+msgstr "Código de Prioridad"
+
+#: ambulance/views.py:269 templates/ambulance/map.html:131
+msgid "Priority Classification"
+msgstr "Clasificación de Prioridad"
+
+#: ambulance/views.py:270
+msgid "Alert"
+msgstr "Alerta"
+
+#: ambulance/views.py:271
+msgid "Attention"
+msgstr "Atención"
+
+#: ambulance/views.py:272
+msgid "Invalid radio code"
+msgstr "Código de radio inválido"
+
+#: ambulance/views.py:273
+msgid "Invalid priority code"
+msgstr "Código de prioridad inválido"
+
+#: ambulance/views.py:274
+msgid "Please select the priority"
+msgstr "Por favor seleccione la prioridad"
+
+#: ambulance/views.py:275
+msgid "Please dispatch at least one ambulance"
+msgstr "Por favor despacha al menos una ambulancia"
+
+#: ambulance/views.py:276
+msgid "Blank name"
+msgstr "Nombre en blanco"
+
+#: ambulance/views.py:277
+msgid "Can only dispatch available ambulances!"
+msgstr "¡Solo se pueden despachar ambulancias disponibles!"
+
+#: ambulance/views.py:278
+msgid "Could not update ambulance status"
+msgstr "No se pudo actualizar el estado de la ambulancia"
+
+#: ambulance/views.py:279
+#, python-format
+msgid "'%s' is now '%s'"
+msgstr "'%s' está ahora '%s'"
+
+#: ambulance/views.py:280
+#, python-format
+msgid "Do you want to abort call %d?"
+msgstr "¿Quieres abortar la llamada %d?"
+
+#: ambulance/views.py:282
+#, python-format
+msgid ""
+"Do you want to modify ambulance <strong>%s</strong> status to <strong>%s</"
+"strong>?"
+msgstr ""
+"¿Quieres modificar el estado de la ambulancia <strong>%s</strong> a <strong>"
+"%s</strong>?"
+
+#: ambulance/views.py:283 templates/ambulance/call_detail.html:115
+#: templates/ambulance/map.html:233
+msgid "Patients"
+msgstr "Pacientes"
+
+#: ambulance/views.py:284 templates/ambulance/call_detail.html:133
+msgid "No patient names are available."
+msgstr "No hay nombres de pacientes disponibles."
+
+#: ambulance/views.py:285 templates/ambulance/ambulance_detail.html:23
+#: templates/ambulance/call_list.html:21 templates/ambulance/call_list.html:63
+#: templates/ambulance/call_list.html:122
+#: templates/ambulance/location_detail.html:25
+#: templates/ambulance/location_form.html:38
+#: templates/equipment/equipment_detail.html:21
+#: templates/equipment/equipment_form.html:29
+#: templates/equipment/equipmentset_detail.html:21
+#: templates/equipment/equipmentset_form.html:35
+#: templates/hospital/hospital_detail.html:23
+#: templates/hospital/hospital_form.html:33
+#: templates/login/client_detail.html:21 templates/login/client_detail.html:95
+#: templates/login/group_create.html:29 templates/login/group_detail.html:21
+#: templates/login/group_form.html:30 templates/login/user_create_form.html:24
+#: templates/login/user_detail.html:22 templates/login/user_form.html:29
+msgid "Details"
+msgstr "Detalles"
+
+#: ambulance/views.py:286 templates/ambulance/call_detail.html:90
+msgid "Notes"
+msgstr "Notas"
+
+#: ambulance/views.py:287
+msgid "Enter new note"
+msgstr "Escribe una nueva nota"
+
+#: ambulance/views.py:288
+msgid "Send SMS notifications?"
+msgstr "¿Enviar notificaciones por SMS?"
+
+#: ambulance/views.py:289 templates/ambulance/call_detail.html:84
+#: templates/ambulance/dispatch_list.html:28 templates/ambulance/map.html:180
+#: templates/login/group_detail.html:29 templates/login/group_list.html:36
+#: templates/login/user_detail.html:77
+msgid "Description"
+msgstr "Descripción"
+
+#: ambulance/views.py:290 templates/ambulance/map.html:185
+msgid "Describe the incident"
+msgstr "Describe el incidente"
+
+#: ambulance/views.py:291 login/forms.py:219
+#: templates/ambulance/call_detail.html:141 templates/ambulance/map.html:239
+#: templates/login/group_detail.html:39 templates/login/group_list.html:38
+#, fuzzy
+msgid "Locations"
+msgstr "Ubicaciones"
+
+msgid "SMS Notifications"
+msgstr "Notificaciones por SMS"
+
+#: ambulance/views.py:292
+#, fuzzy, python-format
+msgid "Do you want to abort call %d?"
+msgstr "¿Quieres abortar la llamada %d?"
+
+msgid "Do you want to save the %s?"
+msgstr "¿Quieres actualizar %d?"
+
+#: ambulance/views.py:293
+#, fuzzy
+msgid "Username"
+msgstr "Usuario"
+
+msgid "Select username"
+msgstr "Elija un usuario"
+
+#: ambulance/views.py:294
+#, fuzzy
+msgid "call"
+msgstr "llamada"
+
+msgid "the call"
+msgstr "la llamada"
+
+#: ambulance/views.py:295
+#, fuzzy
+msgid "Patients"
+msgstr "Pacientes"
+
+msgid "the patients"
+msgstr "los pacientes"
+
+#: ambulance/views.py:296 templates/ambulance/ambulance_form.html:36
+#: templates/ambulance/location_form.html:45
+#: templates/equipment/equipment_form.html:36
+#: templates/equipment/equipmentholder_form.html:76
+#: templates/equipment/equipmentset_form.html:91
+#: templates/hospital/hospital_form.html:41
+#: templates/login/group_create.html:40 templates/login/group_form.html:48
+#: templates/login/user_create_form.html:42 templates/login/user_form.html:47
+msgid "Save"
+msgstr "Salvar"
+
+#: ambulance/views.py:297 templates/ambulance/call_detail.html:259
+#: templates/modal.html:65
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: ambulance/views.py:298
+msgid "Roads"
+msgstr "Calles"
+
+#: ambulance/views.py:299
+msgid "Satellite"
+msgstr "Satélite"
+
+#: ambulance/views.py:300
+msgid "Hybrid"
+msgstr "Híbrido"
+
+#: ambulance/views.py:301 templates/ambulance/call_detail.html:188
+msgid "Waypoints"
+msgstr "Puntos de ruta"
+
+#: ambulance/views.py:302 templates/ambulance/call_detail.html:193
+#: templates/ambulance/location_detail.html:32
+#: templates/equipment/equipment_detail.html:28
+#: templates/equipment/equipment_list.html:37
+msgid "Type"
+msgstr "Tipo"
+
+#: ambulance/views.py:303 templates/ambulance/ambulance_detail.html:39
+#: templates/ambulance/ambulance_list.html:41
+#: templates/ambulance/call_detail.html:29
+#: templates/ambulance/call_detail.html:195
+#: templates/login/client_detail.html:34 templates/login/client_detail.html:93
+#: templates/login/client_list.html:21 templates/login/client_list.html:93
+#: templates/report/vehicle-activity.html:68
+msgid "Status"
+msgstr "Estado"
+
+#: ambulance/views.py:304 templates/ambulance/dispatch_list.html:27
+#: templates/ambulance/location_detail.html:36
+#: templates/ambulance/location_list.html:25
+#: templates/ambulance/location_list.html:62
+#: templates/ambulance/location_list.html:99
+#: templates/ambulance/location_list.html:152 templates/ambulance/map.html:199
+#: templates/hospital/hospital_detail.html:35
+#: templates/hospital/hospital_list.html:38
+msgid "Address"
+msgstr "Dirección"
+
+#: ambulance/views.py:305
+msgid "Please select"
+msgstr "Por favor seleccione"
+
+#: ambulance/views.py:306 templates/ambulance/call_detail.html:256
+msgid "Ok"
+msgstr "Ok"
+
+#: ambulance/views.py:307 templates/index.html:66
+msgid "Close"
+msgstr "Cerrar"
+
+#: ambulance/views.py:308
+msgid "Please confirm that you want to skip the current waypoint."
+msgstr "Por favor, confirme que desea saltar el punto de ruta actual."
+
+#: ambulance/views.py:310
+msgid "Do you want to save the modified waypoints?"
+msgstr "¿Desea salvar los waypoints modificados?"
+
+#: ambulance/views.py:311
+msgid "Do you want to save the modified patients?"
+msgstr "¿Desea salvar los pacientes modificados?"
+
+#: ambulance/views.py:457 report/views.py:31 report/views.py:53
+msgid "Abort Call"
+msgstr "Cancelar Llamada"
+
+#: ambulance/views.py:458 report/views.py:32 report/views.py:54
+msgid "Are you sure?"
+msgstr "¿Tienes certeza?"
+
+#: ambulance/views.py:556 ambulance/views.py:568
+#: templates/ambulance/callradiocode_list.html:12 templates/base.html:113
+#, fuzzy
+msgid "Radio Code"
+msgstr "Código de Radio"
+
+#: ambulance/views.py:536
+msgid "Successfully imported ambulances"
+msgstr "Ambulancias importadas exitosamente"
+
+#: ambulance/views.py:565
+msgid "Successfully imported call radio codes"
+msgstr "Códigos de radio importados exitosamente"
+
+#: ambulance/views.py:594
+msgid "Successfully imported call priority codes"
+msgstr "Códigos de prioridad importados exitosamente"
+
+#: ambulance/views.py:623
+#, fuzzy
+msgid "Successfully imported call priority classifications"
+msgstr "Classificaciones de prioridad importadas exitosamente"
+
+#: ambulance/views.py:585 ambulance/views.py:597
+#: templates/ambulance/callprioritycode_list.html:12 templates/base.html:114
+#, fuzzy
+msgid "Priority Code"
+msgstr "Código de Prioridad"
+
+#: ambulance/views.py:614 ambulance/views.py:626
+#: templates/ambulance/callpriorityclassification_list.html:12
+#: templates/base.html:115
+#, fuzzy
+msgid "Priority Classification"
+msgstr "Clasificación de Prioridad"
+
+msgid "Priority Classifications"
+msgstr "Clasificaciones de Prioridad"
+
+#: ambulance/viewsets.py:459
+msgid "Notification of Emergency Service"
+msgstr "Notificacion de traslado de emergencia"
+
+#: emstrack/mixins.py:303 templates/import.html:12
+msgid "Import"
+msgstr "Importar"
 
 #: emstrack/models.py:50
 msgid "number"
@@ -343,51 +728,90 @@ msgstr "comentario"
 msgid "updated_by"
 msgstr "actualizado_en"
 
-#: emstrack/models.py:93 emstrack/models.py:108 login/models.py:344
-#: login/models.py:376
+#: emstrack/models.py:93 emstrack/models.py:108 login/models.py:236
+#: login/models.py:483
 msgid "updated_on"
 msgstr "actualizado_en"
 
-#: equipment/forms.py:50 templates/ambulance/ambulance_detail.html:67
-#: templates/hospital/hospital_detail.html:53
+#: equipment/forms.py:50 templates/ambulance/ambulance_detail.html:71
+#: templates/hospital/hospital_detail.html:66
 msgid "Equipment sets"
 msgstr "Juegos de equipos"
 
-#: equipment/models.py:18
+#: equipment/models.py:21
 msgid "Boolean"
 msgstr "Booleano"
 
-#: equipment/models.py:19
+#: equipment/models.py:22
 msgid "Integer"
 msgstr "Entero"
 
-#: equipment/models.py:20
+#: equipment/models.py:23
 msgid "String"
 msgstr "Texto"
 
-#: equipment/models.py:36
+#: equipment/models.py:39
 msgid "default"
 msgstr "estándar"
 
-#: equipment/models.py:67
+#: equipment/models.py:70
 msgid "equipment_set"
 msgstr "juegos_de_equipos"
 
-#: equipment/models.py:70 equipment/models.py:122
+#: equipment/models.py:73 equipment/models.py:125
 msgid "equipment"
 msgstr "equipo"
 
-#: equipment/models.py:75
+#: equipment/models.py:78
 msgid "equipmentsets"
 msgstr "juegosdeequipos"
 
-#: equipment/models.py:123
+#: equipment/models.py:126
 msgid "value"
 msgstr "valor"
 
+#: equipment/views.py:156 equipment/views.py:168
+#: templates/equipment/equipment_detail.html:11
+#: templates/equipment/equipment_form.html:11
+#, fuzzy
+#| msgid "Equipment"
+msgid "Equipments"
+msgstr "Equipo"
+
+msgid "Equipment"
+msgstr "Equipo"
+
+#: equipment/views.py:165
+msgid "Successfully imported equipments"
+msgstr "Equipo importado exitosamente"
+
+#: equipment/views.py:183 equipment/views.py:195 templates/base.html:111
+#: templates/equipment/equipmentset_detail.html:11
+#: templates/equipment/equipmentset_form.html:17
+#: templates/equipment/equipmentset_list.html:11
+msgid "Equipment Sets"
+msgstr "Juegos de Equipos"
+
+#: equipment/views.py:192
+msgid "Successfully imported equipment sets"
+msgstr "Juegos de Equipo importados exitosamente"
+
+#: hospital/views.py:86 hospital/views.py:98 templates/base.html:90
+#: templates/hospital/hospital_detail.html:11
+#: templates/hospital/hospital_form.html:15
+#: templates/hospital/hospital_list.html:11
+#: templates/login/group_detail.html:136
+msgid "Hospitals"
+msgstr "Hospitales"
+
+#: hospital/views.py:95
+msgid "Successfully imported hospitals"
+msgstr "Hospitales importados exitosamente"
+
 #: login/forms.py:24 login/forms.py:29 login/forms.py:88 login/forms.py:93
-#: templates/login/group_detail.html:43 templates/login/user_detail.html:16
-#: templates/login/user_list.html:19
+#: templates/login/group_detail.html:56 templates/login/user_detail.html:25
+#: templates/login/user_list.html:35
+#: templates/registration/password_reset_email.html:6
 msgid "Username"
 msgstr "Usuario"
 
@@ -407,397 +831,453 @@ msgstr "Nombre"
 msgid "Last name"
 msgstr "Apellido"
 
-#: login/forms.py:70 login/forms.py:73 templates/login/group_detail.html:46
-#: templates/login/user_detail.html:28 templates/login/user_list.html:22
+#: login/forms.py:70 login/forms.py:73 templates/login/group_detail.html:59
+#: templates/login/user_detail.html:44 templates/login/user_list.html:38
 msgid "Email"
 msgstr "Email"
 
 #: login/forms.py:180 login/forms.py:198
 #: templates/ambulance/ambulance_detail.html:20
-#: templates/ambulance/ambulance_form.html:14
+#: templates/ambulance/ambulance_form.html:27
 #: templates/ambulance/dispatch_list.html:23
-#: templates/login/client_detail.html:32 templates/login/client_list.html:22
-#: templates/login/client_list.html:94 templates/login/group_detail.html:88
-#: templates/login/user_detail.html:93
+#: templates/login/client_detail.html:41 templates/login/client_list.html:22
+#: templates/login/client_list.html:94 templates/login/group_detail.html:108
+#: templates/login/user_detail.html:113
 msgid "Ambulance"
 msgstr "Ambulancia"
 
-#: login/forms.py:238 templates/login/user_detail.html:40
-#: templates/login/user_list.html:24
+#: login/forms.py:241 templates/login/user_detail.html:60
+#: templates/login/user_list.html:41
 msgid "Dispatcher"
 msgstr "Despachador"
 
-#: login/models.py:36 login/models.py:119 login/models.py:163
-#: login/models.py:303 login/models.py:329
+#: login/models.py:47 login/models.py:107 login/models.py:127
+#: login/models.py:194 login/models.py:221 login/models.py:473
 msgid "user"
 msgstr "usuário"
 
-#: login/models.py:37
+#: login/models.py:48
 msgid "is_dispatcher"
 msgstr "es_despachador"
 
-#: login/models.py:75 login/models.py:207 login/models.py:254
+#: login/models.py:77 login/models.py:147 login/models.py:170
 msgid "group"
 msgstr "grupo"
 
-#: login/models.py:77
+#: login/models.py:79
 msgid "description"
 msgstr "descripción"
 
-#: login/models.py:109
+#: login/models.py:81
+msgid "can_sms_notifications"
+msgstr "puede_notificacion_sms"
+
+#: login/models.py:96
 msgid "can_read"
 msgstr "puede_leer"
 
-#: login/models.py:110
+#: login/models.py:97
 msgid "can_write"
 msgstr "puede_escribir"
 
-#: login/models.py:166 login/models.py:257 login/models.py:342
+#: login/models.py:130 login/models.py:173 login/models.py:234
 msgid "hospital"
 msgstr "hospital"
 
-#: login/models.py:304
+#: login/models.py:195
 msgid "password"
 msgstr "contraseña"
 
-#: login/models.py:305
+#: login/models.py:196
 msgid "created_on"
 msgstr "creado_en"
 
-#: login/models.py:313
+#: login/models.py:204
 msgid "online"
 msgstr "conectado"
 
-#: login/models.py:314
+#: login/models.py:205
 msgid "offline"
 msgstr "desconectado"
 
-#: login/models.py:315
+#: login/models.py:206
 msgid "disconnected"
 msgstr "desconectado"
 
-#: login/models.py:322
-msgid "id"
-msgstr "id"
+#: login/models.py:207
+#, fuzzy
+#| msgid "disconnected"
+msgid "reconnected"
+msgstr "reconectado"
 
-#: login/models.py:325
+msgid "disconnected"
+msgstr "desconectado"
+
+#: login/models.py:217
 msgid "client_id"
 msgstr "cliente_id"
 
-#: login/models.py:352
+#: login/models.py:426
+#, fuzzy
+msgid "No dispatched ambulance."
+msgstr "No hay ambulancias despachadas."
+
+msgid "Cannot write on ambulance"
+msgstr "No se puede modificar ambulancia"
+
+#: login/models.py:429
+msgid "Cannot write on hospital"
+msgstr "No se puede modificar hospital"
+
+#: login/models.py:455
 msgid "handshake"
 msgstr "conectó"
 
-#: login/models.py:353
+#: login/models.py:456
 msgid "ambulance login"
 msgstr "conectó ambulancia"
 
-#: login/models.py:354
+#: login/models.py:457
 msgid "ambulance logout"
 msgstr "desconectó ambulancia"
 
-#: login/models.py:355
+#: login/models.py:458
 msgid "ambulance stop location"
 msgstr "ambulancia empezó localizacion"
 
-#: login/models.py:356
+#: login/models.py:459
 msgid "ambulance start location"
 msgstr "ambulancia terminó localizacion"
 
-#: login/models.py:357
+#: login/models.py:460
 msgid "hospital login"
 msgstr "conectó hospital"
 
-#: login/models.py:358
+#: login/models.py:461
 msgid "hospital logout"
 msgstr "desconectó hospital"
 
-#: login/models.py:366
+#: login/models.py:469
 msgid "client"
 msgstr "clientes"
 
-#: login/models.py:371
+#: login/models.py:478
 msgid "activity"
 msgstr "actividad"
 
-#: templates/ambulance/ambulance_detail.html:23
-#: templates/ambulance/call_detail.html:30
-#: templates/ambulance/call_detail.html:37
-#: templates/ambulance/call_list.html:21 templates/ambulance/call_list.html:55
-#: templates/ambulance/call_list.html:106
-#: templates/ambulance/location_detail.html:13
-#: templates/ambulance/location_form.html:20
-#: templates/equipment/equipment_detail.html:13
-#: templates/equipment/equipment_form.html:16
-#: templates/equipment/equipmentset_detail.html:13
-#: templates/equipment/equipmentset_form.html:22
-#: templates/hospital/hospital_detail.html:14
-#: templates/hospital/hospital_form.html:20
-#: templates/login/client_detail.html:13 templates/login/client_detail.html:61
-#: templates/login/group_create.html:16 templates/login/group_detail.html:13
-#: templates/login/group_form.html:17 templates/login/user_detail.html:13
-#: templates/login/user_form.html:16
-msgid "Details"
-msgstr "Detalles"
+#: login/views.py:913 login/views.py:925 templates/base.html:108
+#: templates/login/group_detail.html:49
+#: templates/login/user_create_form.html:11 templates/login/user_detail.html:11
+#: templates/login/user_form.html:11 templates/login/user_list.html:11
+#: templates/report/vehicle-activity.html:72
+msgid "Users"
+msgstr "Usuarios"
+
+#: login/views.py:922
+msgid "Successfully imported users"
+msgstr "Usuarios importados exitosamente"
+
+#: login/views.py:954 login/views.py:966 login/views.py:975 login/views.py:987
+#: login/views.py:996 login/views.py:1008 templates/base.html:109
+#: templates/login/group_create.html:11 templates/login/group_detail.html:11
+#: templates/login/group_form.html:12 templates/login/group_list.html:11
+msgid "Groups"
+msgstr "Grupos"
+
+#: login/views.py:963
+msgid "Successfully imported groups"
+msgstr "Grupos importados exitosamente"
+
+#: login/views.py:984
+msgid "Successfully imported group ambulance permissions"
+msgstr "Permissiones de ambulancias importadas exitosamente"
+
+#: login/views.py:1005
+msgid "Successfully imported group hospital permissions"
+msgstr "Permissiones de hospitales importadas exitosamente"
 
 #: templates/ambulance/ambulance_detail.html:27
-#: templates/ambulance/ambulance_list.html:28
+#: templates/ambulance/ambulance_list.html:39
 msgid "Identifier"
 msgstr "Identificador"
 
 #: templates/ambulance/ambulance_detail.html:35
-#: templates/ambulance/ambulance_list.html:29 templates/ambulance/map.html:142
+#: templates/ambulance/ambulance_list.html:40 templates/ambulance/map.html:68
 msgid "Capability"
 msgstr "Capacidad"
 
-#: templates/ambulance/ambulance_detail.html:39
-#: templates/ambulance/ambulance_detail.html:175
-#: templates/ambulance/ambulance_list.html:30
-#: templates/ambulance/call_detail.html:33
-#: templates/ambulance/call_detail.html:130
-#: templates/login/client_detail.html:26 templates/login/client_detail.html:59
-#: templates/login/client_list.html:21 templates/login/client_list.html:93
-msgid "Status"
-msgstr "Estado"
-
 #: templates/ambulance/ambulance_detail.html:43
-#: templates/ambulance/ambulance_detail.html:118
-#: templates/ambulance/ambulance_detail.html:177
-#: templates/ambulance/location_detail.html:32
-#: templates/equipment/equipmentset_detail.html:34
-#: templates/hospital/hospital_detail.html:34
-#: templates/hospital/hospital_detail.html:102
+#: templates/hospital/hospital_detail.html:43
+#: templates/login/user_detail.html:56 templates/login/user_list.html:42
+msgid "Active"
+msgstr "Activo"
+
+#: templates/ambulance/ambulance_detail.html:47
+#: templates/ambulance/ambulance_detail.html:122
+#: templates/ambulance/location_detail.html:44
+#: templates/equipment/equipmentset_detail.html:42
+#: templates/hospital/hospital_detail.html:47
+#: templates/hospital/hospital_detail.html:115
 msgid "Comment"
 msgstr "Comentario"
 
-#: templates/ambulance/ambulance_detail.html:48
+#: templates/ambulance/ambulance_detail.html:52
 msgid "Update client"
 msgstr "Cliente de actualización"
 
-#: templates/ambulance/ambulance_detail.html:53
-#: templates/ambulance/ambulance_detail.html:119
-#: templates/ambulance/ambulance_detail.html:179
-#: templates/ambulance/ambulance_list.html:32
-#: templates/ambulance/location_detail.html:36
+#: templates/ambulance/ambulance_detail.html:57
+#: templates/ambulance/ambulance_detail.html:123
+#: templates/ambulance/ambulance_list.html:43
+#: templates/ambulance/location_detail.html:48
 #: templates/ambulance/location_list.html:27
 #: templates/ambulance/location_list.html:64
-#: templates/ambulance/location_list.html:117
-#: templates/equipment/equipmentset_detail.html:35
-#: templates/hospital/hospital_detail.html:38
-#: templates/hospital/hospital_detail.html:103
-#: templates/hospital/hospital_list.html:27
-#: templates/login/client_detail.html:45 templates/login/client_detail.html:62
+#: templates/ambulance/location_list.html:101
+#: templates/ambulance/location_list.html:154
+#: templates/equipment/equipmentset_detail.html:43
+#: templates/hospital/hospital_detail.html:51
+#: templates/hospital/hospital_detail.html:116
+#: templates/hospital/hospital_list.html:40
+#: templates/login/client_detail.html:62 templates/login/client_detail.html:97
 #: templates/login/client_list.html:24 templates/login/client_list.html:96
 msgid "Updated on"
 msgstr "Actualizado en"
 
-#: templates/ambulance/ambulance_detail.html:57
-#: templates/ambulance/location_detail.html:40
-#: templates/hospital/hospital_detail.html:42
+#: templates/ambulance/ambulance_detail.html:61
+#: templates/ambulance/location_detail.html:52
+#: templates/hospital/hospital_detail.html:55
 msgid "By"
 msgstr "por"
 
-#: templates/ambulance/ambulance_detail.html:75
-#: templates/ambulance/ambulance_detail.html:116
-#: templates/ambulance/location_detail.html:16
-#: templates/ambulance/location_list.html:24
-#: templates/ambulance/location_list.html:61
-#: templates/equipment/equipment_detail.html:16
-#: templates/equipment/equipment_list.html:23
-#: templates/equipment/equipmentset_detail.html:16
-#: templates/equipment/equipmentset_detail.html:33
-#: templates/equipment/equipmentset_list.html:22
-#: templates/hospital/hospital_detail.html:18
-#: templates/hospital/hospital_detail.html:61
-#: templates/hospital/hospital_detail.html:100
-#: templates/hospital/hospital_list.html:24
-#: templates/login/group_detail.html:16 templates/login/group_list.html:22
-#: templates/login/user_detail.html:56
-msgid "Name"
-msgstr "Nombre"
-
-msgid "Age"
-msgstr "Edad"
-
-#: templates/ambulance/ambulance_detail.html:90
+#: templates/ambulance/ambulance_detail.html:94
 msgid "This ambulance has no equipment sets."
 msgstr "Esta ambulancia no tiene juegos de equipos."
 
-#: templates/ambulance/ambulance_detail.html:102 templates/base.html:100
-#: templates/equipment/equipment_detail.html:11
-#: templates/equipment/equipment_form.html:11
+#: templates/ambulance/ambulance_detail.html:106 templates/base.html:110
+#: templates/equipment/equipment_detail.html:19
+#: templates/equipment/equipment_form.html:24
 #: templates/equipment/equipment_list.html:12
 #: templates/equipment/equipmentholder_form.html:26
-#: templates/equipment/equipmentset_detail.html:27
-#: templates/equipment/equipmentset_form.html:28
-#: templates/hospital/hospital_detail.html:88
+#: templates/equipment/equipmentset_detail.html:35
+#: templates/equipment/equipmentset_form.html:41
+#: templates/hospital/hospital_detail.html:101
 msgid "Equipment"
 msgstr "Equipo"
 
-#: templates/ambulance/ambulance_detail.html:107
-#: templates/hospital/hospital_detail.html:92
+#: templates/ambulance/ambulance_detail.html:111
+#: templates/hospital/hospital_detail.html:105
 msgid "edit"
 msgstr "editar"
 
-#: templates/ambulance/ambulance_detail.html:117
-#: templates/hospital/hospital_detail.html:101
+#: templates/ambulance/ambulance_detail.html:121
+#: templates/hospital/hospital_detail.html:114
 msgid "Value"
 msgstr "valor"
 
-#: templates/ambulance/ambulance_detail.html:120
-#: templates/ambulance/ambulance_detail.html:180
-#: templates/ambulance/ambulance_list.html:33
+#: templates/ambulance/ambulance_detail.html:124
+#: templates/ambulance/ambulance_list.html:44
 #: templates/ambulance/location_list.html:28
 #: templates/ambulance/location_list.html:65
-#: templates/ambulance/location_list.html:118
-#: templates/equipment/equipmentset_detail.html:36
-#: templates/hospital/hospital_detail.html:104
-#: templates/hospital/hospital_list.html:28
+#: templates/ambulance/location_list.html:102
+#: templates/ambulance/location_list.html:155
+#: templates/equipment/equipmentset_detail.html:44
+#: templates/hospital/hospital_detail.html:117
+#: templates/hospital/hospital_list.html:41
 msgid "by"
 msgstr "por"
 
-#: templates/ambulance/ambulance_detail.html:139
+#: templates/ambulance/ambulance_detail.html:143
 msgid "This ambulance has no registered equipments."
 msgstr "Esta ambulancia no tiene equipos."
 
-#: templates/ambulance/ambulance_detail.html:151
-msgid "Past Locations"
-msgstr "Ubicaciones pasadas"
+#: templates/ambulance/ambulance_detail.html:155
+#: templates/login/client_detail.html:94
+#: templates/report/vehicle-mileage.html:113
+msgid "Activity"
+msgstr "Actividad"
 
-#: templates/ambulance/ambulance_detail.html:178
-msgid "Timestamp"
-msgstr "Hora"
+#: templates/ambulance/ambulance_detail.html:161
+msgid "overlap"
+msgstr "superposición"
 
-#: templates/ambulance/ambulance_form.html:23
-#: templates/ambulance/location_form.html:27
-#: templates/equipment/equipment_form.html:23
-#: templates/equipment/equipmentholder_form.html:76
-#: templates/equipment/equipmentset_form.html:78
-#: templates/hospital/hospital_form.html:28
-#: templates/login/group_create.html:27 templates/login/group_form.html:35
-#: templates/login/user_form.html:34
-msgid "Save"
-msgstr "Salvar"
+#: templates/ambulance/ambulance_detail.html:165
+#, fuzzy
+msgid "Number of Users"
+msgstr "Número de Usuarios"
 
-#: templates/ambulance/ambulance_list.html:12
-#: templates/ambulance/call_detail.html:99
-#: templates/ambulance/call_list.html:23 templates/ambulance/call_list.html:57
-#: templates/ambulance/call_list.html:108 templates/ambulance/map.html:109
-#: templates/ambulance/map.html:269 templates/base.html:74
-msgid "Ambulances"
-msgstr "Ambulancias"
+msgid "number of records"
+msgstr "número de registros"
 
-msgid "Service"
-msgstr "Unidades en Servicio"
+#: templates/ambulance/ambulance_detail.html:173
+msgid "Retrieving data..."
+msgstr "Recuperando datos..."
 
-#: templates/ambulance/ambulance_list.html:18
+#: templates/ambulance/ambulance_form.html:18
+#: templates/ambulance/location_form.html:22
+#: templates/equipment/equipment_form.html:14
+#: templates/equipment/equipmentset_form.html:20
+#: templates/hospital/hospital_form.html:18 templates/import.html:176
+#: templates/login/group_create.html:14 templates/login/group_form.html:15
+#: templates/login/user_form.html:14
+#, fuzzy
+msgid "Updated on"
+msgstr "Actualizado en"
+
+msgid "Update"
+msgstr "Actualizar"
+
+#: templates/ambulance/ambulance_form.html:20
+#: templates/ambulance/location_form.html:24
+#: templates/equipment/equipment_form.html:16
+#: templates/equipment/equipmentset_form.html:22
+#: templates/hospital/hospital_form.html:20
+#: templates/login/group_create.html:16 templates/login/group_form.html:17
+#: templates/login/user_create_form.html:12 templates/login/user_form.html:16
+#, fuzzy
+msgid "Created"
+msgstr "Creado"
+
+msgid "Create"
+msgstr "Crear"
+
+#: templates/ambulance/ambulance_list.html:17
 msgctxt "feminine"
 msgid "new"
 msgstr "nueva"
 
-#: templates/ambulance/ambulance_list.html:31
+#: templates/ambulance/ambulance_list.html:18
+#: templates/ambulance/callpriorityclassification_list.html:15
+#: templates/ambulance/callprioritycode_list.html:15
+#: templates/ambulance/callradiocode_list.html:15
+#: templates/equipment/equipment_list.html:16
+#: templates/equipment/equipmentset_list.html:15
+#: templates/hospital/hospital_list.html:16
+#: templates/login/group_detail.html:97 templates/login/group_detail.html:132
+#: templates/login/group_list.html:15 templates/login/user_list.html:15
+msgid "export"
+msgstr "exportar"
+
+#: templates/ambulance/ambulance_list.html:19
+#: templates/ambulance/callpriorityclassification_list.html:16
+#: templates/ambulance/callprioritycode_list.html:16
+#: templates/ambulance/callradiocode_list.html:16
+#: templates/equipment/equipment_list.html:17
+#: templates/equipment/equipmentset_list.html:16
+#: templates/hospital/hospital_list.html:17
+#: templates/login/group_detail.html:98 templates/login/group_detail.html:133
+#: templates/login/group_list.html:16 templates/login/user_list.html:16
+msgid "import"
+msgstr "importar"
+
+#: templates/ambulance/ambulance_list.html:42
 #: templates/ambulance/location_list.html:26
 #: templates/ambulance/location_list.html:63
-#: templates/ambulance/location_list.html:116
-#: templates/hospital/hospital_list.html:26
+#: templates/ambulance/location_list.html:100
+#: templates/ambulance/location_list.html:153
+#: templates/hospital/hospital_list.html:39
 msgid "Comments"
 msgstr "Comentarios"
 
-#: templates/ambulance/ambulance_list.html:64
+#: templates/ambulance/ambulance_list.html:86
 msgid "No ambulances."
 msgstr "No hay ambulancias."
 
-#: templates/ambulance/call_detail.html:23
-msgid "ABORT CALL"
-msgstr "ABORTAR LLAMADA"
-
-#: templates/ambulance/call_detail.html:28
-msgid "Call"
-msgstr "Llamada"
-
-msgid "New Call"
-msgstr "Nueva Llamada"
-
-#: templates/ambulance/call_detail.html:41
-#: templates/ambulance/call_list.html:22 templates/ambulance/call_list.html:56
-#: templates/ambulance/call_list.html:107 templates/ambulance/map.html:194
-#: templates/login/group_detail.html:26 templates/login/group_list.html:24
-msgid "Priority"
-msgstr "Prioridad"
-
-#: templates/ambulance/call_detail.html:46
-msgid "Pending at"
-msgstr "Pendiente en"
-
-#: templates/ambulance/call_detail.html:49
-msgid "Started at"
-msgstr "Empezada en"
-
-#: templates/ambulance/call_detail.html:52
-msgid "Ended at"
-msgstr "Terminada en"
-
-#: templates/ambulance/call_detail.html:73 templates/ambulance/map.html:281
-msgid "Patients"
-msgstr "Pacientes"
-
-msgid "Priority Classification"
-msgstr "Clasificación de Prioridad"
-
-msgid "Priority Code"
-msgstr "Código de Prioridad"
-
-msgid "Radio Code"
-msgstr "Código de Radio"
-
-#: templates/ambulance/call_detail.html:91
-msgid "No patient names are available."
-msgstr "No hay nombres de pacientes disponibles."
-
-#: templates/ambulance/call_detail.html:123
-msgid "Waypoints"
-msgstr "Puntos de ruta"
-
-#: templates/ambulance/call_detail.html:127
-msgid "Order"
-msgstr "Orden"
-
-#: templates/ambulance/call_detail.html:128
-#: templates/ambulance/location_detail.html:20
-#: templates/equipment/equipment_detail.html:20
-#: templates/equipment/equipment_list.html:24
-msgid "Type"
-msgstr "Tipo"
-
-#: templates/ambulance/call_detail.html:129 templates/ambulance/map.html:255
-msgid "Coordinates"
-msgstr "Coordenadas"
-
-#: templates/ambulance/call_detail.html:164
-msgid "Progress"
-msgstr "Progreso"
-
-#: templates/ambulance/call_list.html:11 templates/ambulance/map.html:88
-#: templates/base.html:68
+#: templates/ambulance/call_detail.html:12
+#: templates/ambulance/call_list.html:11 templates/ambulance/map.html:263
+#: templates/base.html:78
 msgid "Calls"
 msgstr "Llamadas"
 
-#: templates/ambulance/call_list.html:20 templates/ambulance/call_list.html:54
-#: templates/ambulance/call_list.html:105
+#: templates/ambulance/call_detail.html:22
+msgid "ABORT CALL"
+msgstr "ABORTAR LLAMADA"
+
+#: templates/ambulance/call_detail.html:44
+#: templates/ambulance/call_list.html:22 templates/ambulance/call_list.html:64
+#: templates/ambulance/call_list.html:123 templates/ambulance/map.html:126
+#: templates/login/group_detail.html:34 templates/login/group_list.html:37
+msgid "Priority"
+msgstr "Prioridad"
+
+#: templates/ambulance/call_detail.html:57
+msgid "Pending at"
+msgstr "Pendiente en"
+
+#: templates/ambulance/call_detail.html:60
+msgid "Started at"
+msgstr "Empezada en"
+
+#: templates/ambulance/call_detail.html:63
+msgid "Ended at"
+msgstr "Terminada en"
+
+#: templates/ambulance/call_detail.html:156
+msgid "No SMS notifications."
+msgstr "No hay notificaciones por SMS."
+
+#: templates/ambulance/call_detail.html:192
+msgid "Order"
+msgstr "Orden"
+
+#: templates/ambulance/call_detail.html:194 templates/ambulance/map.html:202
+msgid "Coordinates"
+msgstr "Coordenadas"
+
+#: templates/ambulance/call_detail.html:231
+msgid "Progress"
+msgstr "Progreso"
+
+#: templates/ambulance/call_list.html:20 templates/ambulance/call_list.html:62
+#: templates/ambulance/call_list.html:121
+#: templates/report/vehicle-mileage.html:56
+#: templates/report/vehicle-mileage.html:59
+#: templates/report/vehicle-mileage.html:94
 msgid "Time"
 msgstr "Hora"
 
-#: templates/ambulance/call_list.html:42
+#: templates/ambulance/call_list.html:50
 msgid "No calls currently pending."
 msgstr "No hay llamadas pendientes."
 
-#: templates/ambulance/call_list.html:76
+#: templates/ambulance/call_list.html:92
 msgid "No calls currently started."
 msgstr "No hay llamadas empezadas."
 
-#: templates/ambulance/call_list.html:127
+#: templates/ambulance/call_list.html:151
 msgid "No calls ended yet."
 msgstr "No hay llamadas terminadas."
+
+#: templates/ambulance/callpriorityclassification_list.html:35
+msgid "Id"
+msgstr "Id"
+
+#: templates/ambulance/callpriorityclassification_list.html:36
+#: templates/ambulance/callprioritycode_list.html:36
+#: templates/ambulance/callradiocode_list.html:36
+msgid "Label"
+msgstr "Mensaje"
+
+#: templates/ambulance/callpriorityclassification_list.html:63
+#, fuzzy
+#| msgid "No bases have been created yet."
+msgid "No priority classifications have been created yet."
+msgstr "No se han creados bases."
+
+#: templates/ambulance/callprioritycode_list.html:35
+#: templates/ambulance/callradiocode_list.html:35
+msgid "Code"
+msgstr "Código"
+
+#: templates/ambulance/callprioritycode_list.html:63
+#, fuzzy
+#| msgid "No incident have been created yet."
+msgid "No priority codes have been created yet."
+msgstr "No se han creados incidentes."
+
+#: templates/ambulance/callradiocode_list.html:63
+#, fuzzy
+#| msgid "No bases have been created yet."
+msgid "No radio codes have been created yet."
+msgstr "No se han creados bases."
 
 #: templates/ambulance/dispatch_list.html:7
 msgid "Dispatch List"
@@ -815,28 +1295,14 @@ msgstr "Hora"
 msgid "Street"
 msgstr "Calle"
 
-#: templates/ambulance/dispatch_list.html:27
-#: templates/ambulance/location_detail.html:24
-#: templates/ambulance/location_list.html:25
-#: templates/ambulance/location_list.html:62
-#: templates/ambulance/location_list.html:115 templates/ambulance/map.html:247
-#: templates/hospital/hospital_detail.html:26
-#: templates/hospital/hospital_list.html:25
-msgid "Address"
-msgstr "Dirección"
-
-#: templates/ambulance/dispatch_list.html:28 templates/ambulance/map.html:230
-#: templates/login/group_detail.html:21 templates/login/group_list.html:23
-#: templates/login/user_detail.html:57
-msgid "Description"
-msgstr "Descripción"
-
 #: templates/ambulance/dispatch_list.html:48
 msgid "No dispatched ambulance."
 msgstr "No hay ambulancias despachadas."
 
-#: templates/ambulance/location_list.html:11 templates/ambulance/map.html:164
-#: templates/base.html:102
+#: templates/ambulance/location_detail.html:11
+#: templates/ambulance/location_form.html:15
+#: templates/ambulance/location_list.html:11 templates/ambulance/map.html:81
+#: templates/base.html:112
 msgid "Locations"
 msgstr "Ubicaciones"
 
@@ -848,140 +1314,117 @@ msgstr "Base"
 msgid "No bases have been created yet."
 msgstr "No se han creados bases."
 
+#: templates/ambulance/location_list.html:54
 msgid "Others"
 msgstr "Otros"
 
-#: templates/ambulance/location_list.html:50
+#: templates/ambulance/location_list.html:87
 msgid "No locations of type other have been created yet."
 msgstr "No se han creados ubicaciones de tipo otro."
 
-#: templates/ambulance/location_list.html:54
+#: templates/ambulance/location_list.html:91
 msgid "AEDs"
 msgstr "AEDs"
 
-#: templates/ambulance/location_list.html:87
+#: templates/ambulance/location_list.html:124
 msgid "No AEDs have been created yet."
 msgstr "No se han creados AEDs."
 
-#: templates/ambulance/location_list.html:138
+#: templates/ambulance/location_list.html:175
 msgid "No incident have been created yet."
 msgstr "No se han creados incidentes."
 
-#: templates/ambulance/map.html:49
-msgid "Dispatch Ambulances"
-msgstr "Despacho de Ambulancias"
+#: templates/ambulance/map.html:41
+msgid "Service"
+msgstr "Unidades en Servicio"
 
-#: templates/ambulance/map.html:57
+#: templates/ambulance/map.html:108
+msgid "New Call"
+msgstr "Nueva Llamada"
+
+#: templates/ambulance/map.html:122
 msgid "Dispatch"
 msgstr "Despachar"
 
-#: templates/ambulance/map.html:68 templates/ambulance/map.html:348
-#: templates/modal.html:65
-msgid "Cancel"
-msgstr "Cancelar"
-
-#: templates/ambulance/map.html:234
-msgid "Describe the incident"
-msgstr "Describe el incidente"
-
-#: templates/ambulance/map.html:239
-msgid "update coordinates"
-msgstr "actualizar coordenadas"
-
-#: templates/ambulance/map.html:243
+#: templates/ambulance/map.html:189
 msgid "Street address"
 msgstr "Calle"
 
-#: templates/ambulance/map.html:250
+#: templates/ambulance/map.html:192
+msgid "update coordinates"
+msgstr "actualizar coordenadas"
+
+#: templates/ambulance/map.html:204
 msgid ""
 "Click to automatically search for address after changing the coordinates"
 msgstr ""
 "Marque para buscar automáticamente la dirección después de cambiar las "
 "coordenadas"
 
-#: templates/ambulance/map.html:251
+#: templates/ambulance/map.html:205
 msgid "update address"
 msgstr "actualizar dirección"
 
-#: templates/ambulance/map.html:260
+#: templates/ambulance/map.html:212
 msgid "Lat"
 msgstr "Lat"
 
-#: templates/ambulance/map.html:263
+#: templates/ambulance/map.html:215
 msgid "Lon"
 msgstr "Lon"
 
-#: templates/ambulance/map.html:276
+#: templates/ambulance/map.html:228
 msgid "Click on or drag ambulances here"
 msgstr "Marque o arrastre ambulancias aquí"
 
-#: templates/ambulance/map.html:345
-msgid "Ok"
-msgstr "Ok"
-
-#: templates/ambulance/map.html:351 templates/index.html:66
-msgid "Close"
-msgstr "Cerrar"
-
-#: templates/base.html:34
+#: templates/base.html:44
 msgid "Ambulance Tracker"
 msgstr "Rastreador de Ambulancias"
 
-#: templates/base.html:62
+#: templates/base.html:72
 msgid "Map"
 msgstr "Mapa"
 
-#: templates/base.html:80 templates/hospital/hospital_list.html:11
-msgid "Hospitals"
-msgstr "Hospitales"
-
-#: templates/base.html:95
+#: templates/base.html:105
 msgid "Admin"
 msgstr "Admin"
 
-#: templates/base.html:98 templates/login/group_detail.html:36
-#: templates/login/user_list.html:11
-msgid "Users"
-msgstr "Usuarios"
-
-#: templates/base.html:99 templates/login/group_list.html:11
-msgid "Groups"
-msgstr "Grupos"
-
-#: templates/base.html:101 templates/equipment/equipmentset_list.html:11
-msgid "Equipment Sets"
-msgstr "Juegos de Equipos"
-
-#: templates/base.html:103
+#: templates/base.html:116 templates/login/client_detail.html:11
 msgid "Clients"
 msgstr "Clientes"
 
-#: templates/base.html:104
+#: templates/base.html:117 templates/report/index.html:12
+#: templates/report/vehicle-activity.html:12
+#: templates/report/vehicle-mileage.html:12
+msgid "Reports"
+msgstr "Informes"
+
+#: templates/base.html:118
 msgid "Reinitialize"
 msgstr "Reinicializar"
 
-#: templates/base.html:115
+#: templates/base.html:129
 msgid "Account"
 msgstr "Cuenta"
 
-#: templates/base.html:118
+#: templates/base.html:132
 msgid "Change password"
 msgstr "Cambiar contraseña"
 
-#: templates/base.html:124
+#: templates/base.html:138
 msgid "Logout"
 msgstr "Cerrar sesíon"
 
-#: templates/base.html:131
+#: templates/base.html:146
 msgid "Sign Up"
 msgstr "Registrar"
 
-#: templates/base.html:138 templates/index.html:15 templates/index.html:65
+#: templates/base.html:154 templates/index.html:15 templates/index.html:65
 msgid "Login"
 msgstr "Iniciar sesión"
 
-#: templates/equipment/equipment_detail.html:24
-#: templates/equipment/equipment_list.html:25
+#: templates/equipment/equipment_detail.html:32
+#: templates/equipment/equipment_list.html:38
 msgid "Default"
 msgstr "Estándar"
 
@@ -993,14 +1436,15 @@ msgctxt "masculine"
 msgid "new"
 msgstr "nuevo"
 
-#: templates/equipment/equipment_list.html:47
+#: templates/equipment/equipment_list.html:71
 msgid "No equipments have been created yet."
 msgstr "No se han creados equipos."
 
 #: templates/equipment/equipmentholder_form.html:17
-#, python-format
-msgid "%(equipmentholder.get_name)s's Equipments "
-msgstr "Equipos de %(equipmentholder.get_name)s"
+#, fuzzy
+#| msgid "equipment"
+msgid "equipments"
+msgstr "equipo"
 
 #: templates/equipment/equipmentholder_form.html:20
 msgid "back to"
@@ -1008,21 +1452,21 @@ msgstr "retornar a"
 
 #: templates/equipment/equipmentholder_form.html:42
 #: templates/equipment/equipmentholder_form.html:56
-#: templates/equipment/equipmentset_form.html:44
+#: templates/equipment/equipmentset_form.html:57
 msgid "Delete form"
 msgstr "Remover formulario"
 
 #: templates/equipment/equipmentholder_form.html:62
-#: templates/equipment/equipmentset_form.html:64
+#: templates/equipment/equipmentset_form.html:77
 msgid "Add another"
 msgstr "Adicionar otro"
 
-#: templates/equipment/equipmentset_detail.html:11
-#: templates/equipment/equipmentset_form.html:17
+#: templates/equipment/equipmentset_detail.html:19
+#: templates/equipment/equipmentset_form.html:30
 msgid "Equipment Set"
 msgstr "Juego de Equipos"
 
-#: templates/equipment/equipmentset_list.html:38
+#: templates/equipment/equipmentset_list.html:62
 msgid "No equipment sets have been created yet."
 msgstr "No se han creados juegos de equipos."
 
@@ -1058,56 +1502,143 @@ msgstr ""
 "outside-of-google-play/\">instrucciones</a>\n"
 "                para instalar la aplicación."
 
-#: templates/hospital/hospital_detail.html:76
+#: templates/hospital/hospital_detail.html:89
 msgid "This hospital has no equipment sets."
 msgstr "Este hospital no tiene juegos de equipos."
 
-#: templates/hospital/hospital_detail.html:123
+#: templates/hospital/hospital_detail.html:136
 msgid "This hospital has no registered equipments."
 msgstr "Este hospital no tiene equipos."
 
-#: templates/hospital/hospital_list.html:50
+#: templates/hospital/hospital_list.html:74
 msgid "No hospitals."
 msgstr "No hospitales."
+
+#: templates/import.html:27
+msgid "Below is a preview of the data to be imported."
+msgstr "A continuación se muestra una vista previa de los datos que se importarán."
+
+#: templates/import.html:30
+msgid "If you are satisfied with the results, click 'Confirm import'."
+msgstr "Si está satisfecho con los resultados, haga clic en 'Confirmar importación'."
+
+#: templates/import.html:33
+#, fuzzy
+msgid "Confirm password"
+msgstr "Confirmar contraseña"
+
+msgid "Confirm import"
+msgstr "Confirmar importación"
+
+#: templates/import.html:42
+msgid "This importer will import the following fields: "
+msgstr "Los siguientes campos serán importados:"
+
+#: templates/import.html:70
+msgid "Submit"
+msgstr "Enviar"
+
+#: templates/import.html:80 templates/import.html:107
+msgid "Errors"
+msgstr "Errores"
+
+#: templates/import.html:89
+#, fuzzy
+msgid "number"
+msgstr "número"
+
+msgid "Line number"
+msgstr "Número de linea"
+
+#: templates/import.html:99
+msgid "Validation Errors"
+msgstr "Errores de validación"
+
+#: templates/import.html:101
+msgid ""
+"Please correct these errors in your data where possible, then reupload it "
+"using the form above."
+msgstr ""
+"Corrija estos errores en sus datos cuando sea posible, luego vuelva a cargarlos "
+"utilizando el formulario de arriba."
+
+#: templates/import.html:106
+msgid "Row"
+msgstr "Línea"
+
+#: templates/import.html:133
+msgid "Non field specific"
+msgstr "No específico de campo"
+
+#: templates/import.html:155
+msgid "Preview"
+msgstr "Vista previa"
+
+#: templates/import.html:160
+#, fuzzy
+msgid "Location"
+msgstr "Ubicación"
+
+msgid "action"
+msgstr "Acción"
+
+#: templates/import.html:170
+#, fuzzy
+msgctxt "feminine"
+msgid "New"
+msgstr "nueva"
+
+#: templates/import.html:174
+#, fuzzy
+msgid "Delete form"
+msgstr "Remover formulario"
+
+msgid "Delete"
+msgstr "Remover"
 
 #: templates/index.html:57
 msgid "Forgot Password?"
 msgstr "¿Olvidó tu contraseña?"
 
-#: templates/index.html:94 templates/index.html:97
+#: templates/index.html:98 templates/index.html:101
 msgid "Signup"
 msgstr "Registrar"
 
-#: templates/leaflet/point_widget.html:29
+#: templates/leaflet/point_widget.html:31
 msgid "Latitude"
 msgstr "Latitud"
 
-#: templates/leaflet/point_widget.html:33
+#: templates/leaflet/point_widget.html:35
 msgid "Longitude"
 msgstr "Longitud"
 
-#: templates/login/client_detail.html:11
+#: templates/login/client_detail.html:19
 msgid "Client"
 msgstr "Cliente"
 
-#: templates/login/client_detail.html:16 templates/login/client_list.html:19
+#: templates/login/client_detail.html:24 templates/login/client_list.html:19
 #: templates/login/client_list.html:91
 msgid "Client ID"
 msgstr "Identificación del cliente"
 
-#: templates/login/client_detail.html:21 templates/login/client_list.html:20
-#: templates/login/client_list.html:92 templates/login/user_detail.html:11
-#: templates/login/user_form.html:11
+#: templates/login/client_detail.html:29 templates/login/client_detail.html:96
+#: templates/login/client_list.html:20 templates/login/client_list.html:92
+#: templates/login/user_create_form.html:19 templates/login/user_detail.html:20
+#: templates/login/user_form.html:24
 msgid "User"
 msgstr "Usuario"
 
-#: templates/login/client_detail.html:54
+#: templates/login/client_detail.html:47
+#, fuzzy
+msgid "disconnected"
+msgstr "desconectado"
+
+msgid "Disconnect"
+msgstr "Desconectar"
+
+#: templates/login/client_detail.html:71
 msgid "Log"
 msgstr "Histórico"
-
-#: templates/login/client_detail.html:60
-msgid "Activity"
-msgstr "Actividad"
 
 #: templates/login/client_list.html:12
 msgid "Online clients"
@@ -1125,145 +1656,251 @@ msgstr "Clientes desconectados"
 msgid "There are no clients offline."
 msgstr "No hay ningún cliente desconectado."
 
-#: templates/login/group_create.html:11 templates/login/group_detail.html:11
-#: templates/login/group_form.html:12
+#: templates/login/group_create.html:24 templates/login/group_detail.html:19
+#: templates/login/group_form.html:25
 msgid "Group"
 msgstr "Grupo"
 
-#: templates/login/group_create.html:23
+#: templates/login/group_create.html:36
 msgid "Edit the group after creation to provide more details."
 msgstr "Edite el grupo después de la creación para entrar más detalles."
 
-#: templates/login/group_detail.html:44 templates/login/user_detail.html:20
-#: templates/login/user_list.html:20
+#: templates/login/group_detail.html:57 templates/login/user_detail.html:29
+#: templates/login/user_list.html:36
 msgid "First"
 msgstr "Nombre"
 
-#: templates/login/group_detail.html:45 templates/login/user_detail.html:24
-#: templates/login/user_list.html:21
+#: templates/login/group_detail.html:58 templates/login/user_detail.html:33
+#: templates/login/user_list.html:37
 msgid "Last"
 msgstr "Apellido"
 
-#: templates/login/group_detail.html:71
+#: templates/login/group_detail.html:84
 msgid "This group has no users yet."
 msgstr "Este grupo no tiene usuarios."
 
-#: templates/login/group_detail.html:81 templates/login/group_form.html:26
-#: templates/login/user_detail.html:86 templates/login/user_form.html:25
+#: templates/login/group_detail.html:94 templates/login/group_form.html:39
+#: templates/login/user_create_form.html:33
+#: templates/login/user_detail.html:106 templates/login/user_form.html:38
 msgid "Permissions"
 msgstr "Permisiónes"
 
-#: templates/login/group_detail.html:89 templates/login/group_detail.html:117
-#: templates/login/user_detail.html:94 templates/login/user_detail.html:125
+#: templates/login/group_detail.html:109 templates/login/group_detail.html:144
+#: templates/login/user_detail.html:114 templates/login/user_detail.html:145
 msgid "Read"
 msgstr "Leer"
 
-#: templates/login/group_detail.html:90 templates/login/group_detail.html:118
-#: templates/login/user_detail.html:95 templates/login/user_detail.html:126
+#: templates/login/group_detail.html:110 templates/login/group_detail.html:145
+#: templates/login/user_detail.html:115 templates/login/user_detail.html:146
 msgid "Write"
 msgstr "Escribir"
 
-#: templates/login/group_detail.html:107
+#: templates/login/group_detail.html:127
 msgid "This group does not have access to any ambulances."
 msgstr "Este grupo no tiene acceso a ninguna ambulancia."
 
-#: templates/login/group_detail.html:134
+#: templates/login/group_detail.html:161
 msgid "This group does not have access to any hospitals."
 msgstr "Este grupo no tiene accesso a ningún hospital."
 
-#: templates/login/group_list.html:25
+#: templates/login/group_list.html:39
 msgid "Number of Users"
 msgstr "Número de Usuarios"
 
-#: templates/login/user_detail.html:32 templates/login/user_list.html:23
+#: templates/login/group_list.html:78
+#, fuzzy
+msgid "No user groups have been created yet."
+msgstr "No se han creados grupos."
+
+msgid "No bases have been created yet."
+msgstr "No se han creados bases."
+
+#: templates/login/user_detail.html:40
+#, fuzzy
+msgid "password"
+msgstr "contraseña"
+
+msgid "Reset password"
+msgstr "Restablecer la contraseña"
+
+#: templates/login/user_detail.html:48 templates/login/user_list.html:39
+msgid "Mobile"
+msgstr "Móvil"
+
+#: templates/login/user_detail.html:52 templates/login/user_list.html:40
 msgid "Staff"
 msgstr "Personal"
 
-#: templates/login/user_detail.html:36 templates/login/user_list.html:25
-msgid "Active"
-msgstr "Activo"
-
-#: templates/login/user_detail.html:76
+#: templates/login/user_detail.html:96
 msgid "This user does not belongs to any group yet."
 msgstr "Este usuario no pertenece a ningún grupo."
 
-#: templates/login/user_detail.html:112
+#: templates/login/user_detail.html:132
 msgid ""
 "This user is staff and does not need permission to access any ambulances."
 msgstr ""
 "Este usuario es personal y no necesita de permisión para accesar ambulancias."
 
-#: templates/login/user_detail.html:114
+#: templates/login/user_detail.html:134
 msgid "This user does not have access to any ambulances."
 msgstr "Este usuario no tiene permisión para accesar ninguna ambulancia."
 
-#: templates/login/user_detail.html:143
+#: templates/login/user_detail.html:163
 msgid ""
 "This user is staff and does not need permission to access any hospitals."
 msgstr ""
 "Este usuario es personal y no necesita de permisión para accesar hospitales."
 
-#: templates/login/user_detail.html:145
+#: templates/login/user_detail.html:165
 msgid "This user does not have access to any hospitals."
 msgstr "Este usuario no tiene permisión para accesar ningún hospital."
+
+#: templates/login/user_list.html:90
+#, fuzzy
+msgid "No users."
+msgstr "Sin usuários."
+
+msgid "user"
+msgstr "usuário"
 
 #: templates/modal.html:64
 msgid "OK"
 msgstr "OK"
 
-msgid "Alert"
-msgstr "Alerta"
+#: templates/registration/password_reset_email.html:4
+#, fuzzy
+msgid "The account"
+msgstr "La cuenta"
 
-msgid "Attention"
-msgstr "Atención"
+msgid "Account"
+msgstr "Cuenta"
 
-msgid "Invalid radio code"
-msgstr "Código de radio inválido"
+#: templates/registration/password_reset_email.html:8
+msgid "at EMSTrack is associated with this email."
+msgstr "en EMSTrack está asociado con este correo electrónico."
 
-msgid "Invalid priority code"
-msgstr "Código de prioridad inválido"
+#: templates/registration/password_reset_email.html:10
+msgid "You or someone acting on your behalf has requested a password reset."
+msgstr "Usted o alguien que actúe en su nombre ha solicitado un restablecimiento de contraseña."
 
-msgid "Please select the priority"
-msgstr "Por favor seleccione la prioridad"
+#: templates/registration/password_reset_email.html:11
+msgid "In order to proceed, click the link below"
+msgstr "Para continuar, haga clic en el enlace a continuación"
 
-msgid "Please dispatch at least one ambulance"
-msgstr "Por favor despacha al menos una ambulancia"
+#: templates/registration/password_reset_email.html:15
+msgid ""
+"If clicking the link above doesn't work, please copy and paste the URL in a "
+"new browser window instead."
+msgstr ""
+"Si hacer clic en el enlace anterior no funciona, copie y pegue la URL en un"
+"nueva ventana del navegador."
 
-msgid "Blank name"
-msgstr "Nombre en blanco"
+#: templates/registration/password_reset_email.html:17
+msgid "Sincerely,"
+msgstr "Atentamente"
 
-msgid "Can only dispatch available ambulances!"
-msgstr "¡Solo se pueden despachar ambulancias disponibles!"
+#: templates/registration/password_reset_email.html:19
+msgid "The EMSTrack Team"
+msgstr "El equipo de EMSTrack"
 
-msgid "Could not update ambulance status"
-msgstr "No se pudo actualizar el estado de la ambulancia"
+#: templates/report/index.html:14 templates/report/vehicle-activity.html:79
+#: templates/report/vehicle-mileage.html:44
+msgid "Vehicles"
+msgstr "Vehículos"
 
-msgid "'%s' is now '%s'"
-msgstr "'%s' está ahora '%s'"
+#: templates/report/vehicle-activity.html:20
+#, fuzzy
+msgid "Activity"
+msgstr "Actividad"
 
-msgid "Abort Call"
-msgstr "Cancelar Llamada"
+msgid "Activity Report"
+msgstr "Informe de Actividades"
 
-msgid "Are you sure?"
-msgstr "¿Tienes certeza?"
+#: templates/report/vehicle-activity.html:25
+msgid "date"
+msgstr "fecha"
 
-msgid "Do you want to abort call %d?"
-msgstr "¿Quieres abortar la llamada %d?"
+#: templates/report/vehicle-activity.html:34
+#: templates/report/vehicle-mileage.html:38
+msgid "Generate Report"
+msgstr "Generar Informe"
 
-msgid "Do you want to modify ambulance <strong>%s</strong> status to <strong>%s</strong>?"
-msgstr "¿Quieres modificar el estado de la ambulancia <strong>%s</strong> a <strong>%s</strong>?"
+#: templates/report/vehicle-activity.html:41
+#, fuzzy
+msgid "time"
+msgstr "hora"
 
-msgid "Roads"
-msgstr "Calles"
+msgid "timestamp"
+msgstr "hora y fecha"
 
-msgid "Satellite"
-msgstr "Satélite"
+#: templates/report/vehicle-activity.html:63
+msgid "category"
+msgstr "categoría"
 
-msgid "Hybrid"
-msgstr "Híbrido"
+#: templates/report/vehicle-activity.html:86
+#: templates/report/vehicle-mileage.html:70
+msgid "Click 'Generate Report' to create a report."
+msgstr "Haga clic en 'Generar Informe' para crear un informe."
 
-msgid "Please select"
-msgstr "Por favor seleccione"
+#: templates/report/vehicle-mileage.html:20
+msgid "Mileage Report"
+msgstr "Informe de Kilometraje"
 
-msgid "Please confirm that you want to skip the current waypoint."
-msgstr "Por favor, confirme que desea saltar el punto de ruta actual."
+#: templates/report/vehicle-mileage.html:25
+msgid "begin"
+msgstr "el comienzo"
+
+#: templates/report/vehicle-mileage.html:31
+#, fuzzy
+msgid "Pending"
+msgstr "Pendientes"
+
+msgid "end"
+msgstr "el fin"
+
+#: templates/report/vehicle-mileage.html:50
+msgid "Total"
+msgstr "Total"
+
+#: templates/report/vehicle-mileage.html:51
+msgid "Moving"
+msgstr "En Movimiento"
+
+#: templates/report/vehicle-mileage.html:54
+msgid "Vehicle"
+msgstr "Vehículo"
+
+#: templates/report/vehicle-mileage.html:55
+#: templates/report/vehicle-mileage.html:58
+#: templates/report/vehicle-mileage.html:90
+msgid "Distance"
+msgstr "Distacia"
+
+#: templates/report/vehicle-mileage.html:57
+#: templates/report/vehicle-mileage.html:60
+msgid "Avg Speed"
+msgstr "Velocidad Media"
+
+#: templates/report/vehicle-mileage.html:61
+msgid "Max Speed"
+msgstr "Velocidade Máxima"
+
+#: templates/report/vehicle-mileage.html:85
+msgid "x-axis"
+msgstr ""
+
+#: templates/report/vehicle-mileage.html:99
+msgid "Reset Zoom"
+msgstr "Reiniciar Zoom"
+
+msgid "id"
+msgstr "id"
+
+msgid "Past Locations"
+msgstr "Ubicaciones pasadas"
+
+msgid "Timestamp"
+msgstr "Hora y Fecha"
+
+msgid "Dispatch Ambulances"
+msgstr "Despacho de Ambulancias"
