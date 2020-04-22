@@ -1131,10 +1131,10 @@ function setCallDetailPopover(call, destroy = false) {
                                 if (retval === Dialog.OK) {
 
                                     const new_note_data = {
-                                        sms_notifications: sms_notifications_new
+                                        comment: new_note
                                     };
                                     const call_data = {
-                                        comment: new_note
+                                        sms_notifications: sms_notifications_new
                                     };
 
                                     Promise.resolve()

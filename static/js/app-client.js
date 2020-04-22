@@ -281,7 +281,7 @@ export class AppClient extends TopicObserver {
     postCallNote(call_id, data) {
 
         // retrieve bases
-        return this.httpClient.post('call/' + call_id + '/note/', data)
+        return this.httpClient.post(`call/${call_id}/note/`, data)
             .then( (response) => {
                 // return call
                 return response.data;
