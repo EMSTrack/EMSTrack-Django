@@ -10,12 +10,12 @@ export class Select {
         this.prefix = properties.prefix;
         this.list = properties.list;
         this.label = properties.label;
-        this.initial_values = properties.initial_values;
         this.onClick = properties.onClick;
 
         // set initial values
         this.values = {};
-        for (const value of this.initial_values) {
+        for (const value of properties.initial_values) {
+            logger.debug('Initial value %s', value);
             const item = $(`#${self.list} option[data-id=${value}]`);
             if (item.length) {
                 // add to list of values
@@ -122,7 +122,6 @@ export class Select {
 
 Select.default = {
     options: {},
-    initial_values: [],
     list: "",
     prefix: "dropdown",
     label: "Select:",
