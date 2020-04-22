@@ -1237,7 +1237,7 @@ msgstr "Mensaje"
 
 #: templates/ambulance/callpriorityclassification_list.html:63
 msgid "No priority classifications have been created yet."
-msgstr "No se han creados classificaciones de prioridad."
+msgstr "No se han creadas classificaciones de prioridad."
 
 #: templates/ambulance/callprioritycode_list.html:35
 #: templates/ambulance/callradiocode_list.html:35
@@ -1285,7 +1285,7 @@ msgstr "Base"
 
 #: templates/ambulance/location_list.html:50
 msgid "No bases have been created yet."
-msgstr "No se han creados bases."
+msgstr "No se han creadas bases."
 
 #: templates/ambulance/location_list.html:54
 msgid "Others"
@@ -1293,7 +1293,7 @@ msgstr "Otros"
 
 #: templates/ambulance/location_list.html:87
 msgid "No locations of type other have been created yet."
-msgstr "No se han creados ubicaciones de tipo otro."
+msgstr "No se han creadas ubicaciones de tipo otro."
 
 #: templates/ambulance/location_list.html:91
 msgid "AEDs"
@@ -1675,13 +1675,6 @@ msgstr "Número de Usuarios"
 #: templates/login/group_list.html:78
 msgid "No user groups have been created yet."
 msgstr "No se han creados grupos."
-
-# msgid "No bases have been created yet."
-# msgstr "No se han creados bases."
-
-#: templates/login/user_detail.html:40
-# msgid "password"
-# msgstr "contraseña"
 
 msgid "Reset password"
 msgstr "Restablecer la contraseña"
