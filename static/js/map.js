@@ -997,6 +997,8 @@ function setCallPatientPopover(call_id, patient_set, destroy = false) {
 
 function setCallDetailPopover(call, destroy = false) {
 
+    console.log('setCallDetailPopover');
+
     // create patient object
     const placeholder = `call-${call.id}-detail`;
     const buttons_placeholder = `call-${call.id}-detail-buttons`;
