@@ -2,6 +2,8 @@ import logging
 import itertools
 
 from django.http import Http404
+from django.utils.translation import ugettext_lazy as _
+
 from rest_framework import viewsets, mixins, exceptions
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
@@ -19,6 +21,8 @@ from equipment.models import EquipmentItem
 from equipment.serializers import EquipmentItemSerializer
 from equipment.viewsets import EquipmentItemViewSet
 
+from emstrack.sms import client as sms_client
+
 from .permissions import CallPermissionMixin
 
 from .models import Location, Ambulance, LocationType, Call, CallNote, AmbulanceUpdate, AmbulanceCall, \
@@ -28,6 +32,7 @@ from .models import Location, Ambulance, LocationType, Call, CallNote, Ambulance
 from .serializers import LocationSerializer, AmbulanceSerializer, AmbulanceUpdateSerializer, CallSerializer, \
     CallPriorityCodeSerializer, CallPriorityClassificationSerializer, CallRadioCodeSerializer, \
     CallAmbulanceSummarySerializer, WaypointSerializer, CallNoteSerializer
+
 
 logger = logging.getLogger(__name__)
 flatten = itertools.chain.from_iterable
@@ -441,6 +446,24 @@ class CallViewSet(mixins.ListModelMixin,
 
         # serialize and return
         serializer = CallAmbulanceSummarySerializer(call)
+        return Response(serializer.data)
+
+    @action(detail=True, methods=['get'], permission_classes=[IsAdminOrSuperOrDispatcher])
+    def sms_notifications(self, request, pk=None, **kwargs):
+        """Trigger SMS notifications."""
+
+        # get call object
+        call = self.get_object()
+
+        # generate message
+        message = "{}:\n* {} {}".format(_("Notification of Emergency Service"), _("Call"), call.to_string())
+
+        # notify users
+        for user in call.sms_notifications():
+            sms_client.notify_user(user, message)
+
+        # serialize and return
+        serializer = CallSerializer(call)
         return Response(serializer.data)
 
 

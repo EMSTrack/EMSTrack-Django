@@ -256,6 +256,16 @@ export class AppClient extends TopicObserver {
             });
     }
 
+    triggerSMSNotifications(call) {
+
+        // trigger SMS notifications for call
+        return this.httpClient.get('call/' + call.id + '/sms_notifications/')
+            .then( (response) => {
+                // return call
+                return response.data;
+            });
+    }
+
     // POST and PATCH methods
 
     postCall(data) {

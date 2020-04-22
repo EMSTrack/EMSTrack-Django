@@ -1110,27 +1110,19 @@ function setCallDetailPopover(call, destroy = false) {
             $('#call-' + call.id + '-detail-save-button')
                 .on('click', function (event) {
 
-                    // retrieve detail
+                    // note?
                     const new_note = $(`#${placeholder}-new-note`).val().trim();
+                    const post_new_note = new_note.lenght > 0
 
-                    // retrieve sms_notifications
+                    // sms_notifications?
                     const sms_notifications_new = Object.keys(sms_notifications.getItems());
-                    const same_sms_notifications = JSON.stringify(sms_notifications_new) === JSON.stringify(call.sms_notifications);
+                    const patch_call = JSON.stringify(sms_notifications_new) === JSON.stringify(call.sms_notifications);
 
-                    // send sms
-                    const send_sms = $(`${placeholder}-checkbox`).prop( "checked");
+                    // send sms_notifications?
+                    const trigger_sms_notifications = $(`${placeholder}-checkbox`).prop( "checked");
 
                     // any changes?
-                    if ( new_note.length === 0 && same_sms_notifications && !send_sms ) {
-
-                        // no changes
-                        logger.log('info', 'No changes, no savings!');
-
-                        $('#call-' + call.id + '-detail-button')
-                            .popover('toggle');
-                        event.stopPropagation();
-
-                    } else {
+                    if ( post_new_note || patch_call || trigger_sms_notifications ) {
 
                         dialog.dialog(
                             sprintf(settings.translation_table["Do you want to save %s?"], settings.translation_table["the call"]),
@@ -1138,36 +1130,20 @@ function setCallDetailPopover(call, destroy = false) {
 
                                 if (retval === Dialog.OK) {
 
-                                    // new note?
-                                    if (new_note.length > 0) {
+                                    const new_note_data = {
+                                        sms_notifications: sms_notifications_new
+                                    };
+                                    const call_data = {
+                                        comment: new_note
+                                    };
 
-                                        // new note
-                                        const data = {
-                                            comment: new_note
-                                        };
-                                        apiClient.postCallNote(call.id, data)
-                                            .then( (call) => {
-                                                logger.log('info', "Successfully posted call note");
-                                            })
-                                            .catch( (error) => {
-                                                logger.log('error', "Could not post call note: '%j'", error);
-                                            });
-                                    }
-
-                                    if (!same_sms_notifications) {
-
-                                        // update call
-                                        const data = {
-                                            sms_notifications: sms_notifications_new
-                                        };
-                                        apiClient.patchCall(call.id, data)
-                                            .then( (call) => {
-                                                logger.log('info', "Successfully updated call");
-                                            })
-                                            .catch( (error) => {
-                                                logger.log('error', "Could not update call: '%j'", error);
-                                            });
-                                    }
+                                    Promise.resolve()
+                                        .then(post_new_note && apiClient.postCallNote(call.id, new_note_data))
+                                        .then(patch_call && apiClient.patchCall(call.id, call_data))
+                                        .then(trigger_sms_notifications && apiClient.triggerSMSNotifications(call.id))
+                                        .catch((error) => {
+                                            logger.log('error', "Could not update call: '%j'", error);
+                                        });
 
                                 }
 
@@ -1177,9 +1153,18 @@ function setCallDetailPopover(call, destroy = false) {
 
                             });
 
+                    } else {
+
+                        // no changes
+                        logger.log('info', 'No changes, no savings!');
+
+                        $('#call-' + call.id + '-detail-button')
+                            .popover('toggle');
+                        event.stopPropagation();
+
                     }
 
-                });
+                })
 
         });
 
