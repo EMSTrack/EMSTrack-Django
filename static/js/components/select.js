@@ -16,17 +16,13 @@ export class Select {
         this.values = {};
         for (const id of properties.initial_values) {
             const item = $(`#${this.list} option[data-id=${id}]`);
-            logger.debug('Initial value %d', id);
-            console.log(item);
             if (item.length) {
                 // add to list of values
-                logger.debug('Adding %d to list of values', id);
+                logger.debug('Adding %d to initial list of values', id);
                 const first = item.first();
                 this.values[id] = first.attr('value');
             }
         }
-
-        console.log(this.values);
 
     }
 
@@ -60,11 +56,8 @@ export class Select {
         // reference to this to be used inside method
         const self = this;
 
-        console.log(this.values);
-
         // set initial values
         for (const id in this.values) {
-            logger.debug('id = %d', id);
             const value = this.values[id];
             this.addItem(id, value, true);
         }
