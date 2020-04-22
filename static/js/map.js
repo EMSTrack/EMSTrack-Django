@@ -1120,19 +1120,26 @@ function setCallDetailPopover(call, destroy = false) {
             $(`#call-${call.id}-detail-save-button`)
                 .on('click', function (event) {
 
+                    const callData = {};
+                    const noteData = {};
+
                     // note?
-                    const new_note = $(`#${placeholder}-new-note`).val().trim();
-                    const post_new_note = new_note.length > 0;
+                    const newNote = $(`#${placeholder}-new-note`).val().trim();
+                    const postNewNote = newNote.length > 0;
 
                     // sms_notifications?
-                    const sms_notifications_new = Object.keys(sms_notifications.getItems());
-                    const patch_call = JSON.stringify(sms_notifications_new) !== JSON.stringify(call.sms_notifications);
+                    const newSMSNotifications = Object.keys(sms_notifications.getItems());
+                    const patchSMSNotifications = JSON.stringify(newSMSNotifications) !== JSON.stringify(call.sms_notifications);
+
+                    // patients?
+                    const newPatients = patients.getData();
+                    const patchPatients = !patients.same(newPatients);
 
                     // send sms_notifications?
-                    const trigger_sms_notifications = $(`#${placeholder}-checkbox`).prop( "checked");
+                    const triggerSMSNotifications = $(`#${placeholder}-checkbox`).prop( "checked");
 
                     // any changes?
-                    if ( post_new_note || patch_call || trigger_sms_notifications ) {
+                    if ( postNewNote || patchSMSNotifications || patchPatients || triggerSMSNotifications ) {
 
                         dialog.dialog(
                             sprintf(settings.translation_table["Do you want to save %s?"], settings.translation_table["the call"]),
@@ -1140,17 +1147,19 @@ function setCallDetailPopover(call, destroy = false) {
 
                                 if (retval === Dialog.OK) {
 
-                                    const new_note_data = {
-                                        comment: new_note
-                                    };
-                                    const call_data = {
-                                        sms_notifications: sms_notifications_new
-                                    };
+                                    if (postNewNote)
+                                        noteData['comment'] = newNote;
+
+                                    if (patchSMSNotifications)
+                                        callData['sms_notifications'] = newSMSNotifications;
+
+                                    if (patchPatients)
+                                        callData['patient_set'] = newPatients;
 
                                     Promise.resolve()
-                                        .then(post_new_note && apiClient.postCallNote(call.id, new_note_data))
-                                        .then(patch_call && apiClient.patchCall(call.id, call_data))
-                                        .then(trigger_sms_notifications && apiClient.triggerSMSNotifications(call.id))
+                                        .then(postNewNote && apiClient.postCallNote(call.id, noteData))
+                                        .then(patchCall && apiClient.patchCall(call.id, callData))
+                                        .then(triggerSMSNotifications && apiClient.triggerSMSNotifications(call.id))
                                         .catch((error) => {
                                             logger.log('error', "Could not update call: '%j'", error);
                                         });
