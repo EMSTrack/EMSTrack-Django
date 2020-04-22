@@ -644,8 +644,8 @@ msgstr "¿Tienes certeza?"
 #: ambulance/views.py:556 ambulance/views.py:568
 #: templates/ambulance/callradiocode_list.html:12 templates/base.html:113
 #, fuzzy
-# msgid "Radio Code"
-# msgstr "Código de Radio"
+msgid "Radio Codes"
+msgstr "Códigos de Radio"
 
 #: ambulance/views.py:536
 msgid "Successfully imported ambulances"
@@ -667,14 +667,14 @@ msgstr "Classificaciones de prioridad importadas exitosamente"
 #: ambulance/views.py:585 ambulance/views.py:597
 #: templates/ambulance/callprioritycode_list.html:12 templates/base.html:114
 #, fuzzy
-# msgid "Priority Code"
-# msgstr "Código de Prioridad"
+msgid "Priority Codes"
+msgstr "Códigos de Prioridad"
 
 #: ambulance/views.py:614 ambulance/views.py:626
 #: templates/ambulance/callpriorityclassification_list.html:12
 #: templates/base.html:115
 #, fuzzy
-# msgid "Priority Classification"
+# msgid "Priority Classifications"
 # msgstr "Clasificación de Prioridad"
 
 msgid "Priority Classifications"
