@@ -524,7 +524,7 @@ msgstr "Notificaciones por SMS"
 
 #: ambulance/views.py:292
 msgid "Do you want to save the %s?"
-msgstr "¿Quieres actualizar %d?"
+msgstr "¿Quieres actualizar %s?"
 
 #: ambulance/views.py:293
 msgid "Select username"
