@@ -137,7 +137,7 @@ msgstr "ubicación"
 
 #: ambulance/models.py:163 ambulance/models.py:323
 msgid "timestamp"
-msgstr "hora"
+msgstr "hora y fecha"
 
 #: ambulance/models.py:166 hospital/models.py:21
 #, fuzzy
@@ -511,40 +511,40 @@ msgstr "Describe el incidente"
 #: templates/ambulance/call_detail.html:141 templates/ambulance/map.html:239
 #: templates/login/group_detail.html:39 templates/login/group_list.html:38
 #, fuzzy
-msgid "Locations"
-msgstr "Ubicaciones"
+# msgid "Locations"
+# msgstr "Ubicaciones"
 
 msgid "SMS Notifications"
 msgstr "Notificaciones por SMS"
 
 #: ambulance/views.py:292
 #, fuzzy, python-format
-msgid "Do you want to abort call %d?"
-msgstr "¿Quieres abortar la llamada %d?"
+# msgid "Do you want to abort call %d?"
+# msgstr "¿Quieres abortar la llamada %d?"
 
 msgid "Do you want to save the %s?"
 msgstr "¿Quieres actualizar %d?"
 
 #: ambulance/views.py:293
 #, fuzzy
-msgid "Username"
-msgstr "Usuario"
+# msgid "Username"
+# msgstr "Usuario"
 
 msgid "Select username"
 msgstr "Elija un usuario"
 
 #: ambulance/views.py:294
 #, fuzzy
-msgid "call"
-msgstr "llamada"
+# msgid "call"
+# msgstr "llamada"
 
 msgid "the call"
 msgstr "la llamada"
 
 #: ambulance/views.py:295
 #, fuzzy
-msgid "Patients"
-msgstr "Pacientes"
+# msgid "Patients"
+# msgstr "Pacientes"
 
 msgid "the patients"
 msgstr "los pacientes"
@@ -644,8 +644,8 @@ msgstr "¿Tienes certeza?"
 #: ambulance/views.py:556 ambulance/views.py:568
 #: templates/ambulance/callradiocode_list.html:12 templates/base.html:113
 #, fuzzy
-msgid "Radio Code"
-msgstr "Código de Radio"
+# msgid "Radio Code"
+# msgstr "Código de Radio"
 
 #: ambulance/views.py:536
 msgid "Successfully imported ambulances"
@@ -667,15 +667,15 @@ msgstr "Classificaciones de prioridad importadas exitosamente"
 #: ambulance/views.py:585 ambulance/views.py:597
 #: templates/ambulance/callprioritycode_list.html:12 templates/base.html:114
 #, fuzzy
-msgid "Priority Code"
-msgstr "Código de Prioridad"
+# msgid "Priority Code"
+# msgstr "Código de Prioridad"
 
 #: ambulance/views.py:614 ambulance/views.py:626
 #: templates/ambulance/callpriorityclassification_list.html:12
 #: templates/base.html:115
 #, fuzzy
-msgid "Priority Classification"
-msgstr "Clasificación de Prioridad"
+# msgid "Priority Classification"
+# msgstr "Clasificación de Prioridad"
 
 msgid "Priority Classifications"
 msgstr "Clasificaciones de Prioridad"
@@ -713,8 +713,8 @@ msgid "state"
 msgstr "estado"
 
 #: emstrack/models.py:56
-msgid "zipcode"
-msgstr "código postal"
+# msgid "zipcode"
+# msgstr "código postal"
 
 #: emstrack/models.py:57
 msgid "country"
@@ -778,8 +778,8 @@ msgstr "valor"
 msgid "Equipments"
 msgstr "Equipo"
 
-msgid "Equipment"
-msgstr "Equipo"
+# msgid "Equipment"
+# msgstr "Equipo"
 
 #: equipment/views.py:165
 msgid "Successfully imported equipments"
@@ -910,8 +910,8 @@ msgstr "desconectado"
 msgid "reconnected"
 msgstr "reconectado"
 
-msgid "disconnected"
-msgstr "desconectado"
+# msgid "disconnected"
+# msgstr "desconectado"
 
 #: login/models.py:217
 msgid "client_id"
@@ -919,8 +919,8 @@ msgstr "cliente_id"
 
 #: login/models.py:426
 #, fuzzy
-msgid "No dispatched ambulance."
-msgstr "No hay ambulancias despachadas."
+# msgid "No dispatched ambulance."
+# msgstr "No hay ambulancias despachadas."
 
 msgid "Cannot write on ambulance"
 msgstr "No se puede modificar ambulancia"
@@ -1101,8 +1101,8 @@ msgstr "superposición"
 
 #: templates/ambulance/ambulance_detail.html:165
 #, fuzzy
-msgid "Number of Users"
-msgstr "Número de Usuarios"
+# msgid "Number of Users"
+# msgstr "Número de Usuarios"
 
 msgid "number of records"
 msgstr "número de registros"
@@ -1119,8 +1119,8 @@ msgstr "Recuperando datos..."
 #: templates/login/group_create.html:14 templates/login/group_form.html:15
 #: templates/login/user_form.html:14
 #, fuzzy
-msgid "Updated on"
-msgstr "Actualizado en"
+# msgid "Updated on"
+# msgstr "Actualizado en"
 
 msgid "Update"
 msgstr "Actualizar"
@@ -1133,8 +1133,8 @@ msgstr "Actualizar"
 #: templates/login/group_create.html:16 templates/login/group_form.html:17
 #: templates/login/user_create_form.html:12 templates/login/user_form.html:16
 #, fuzzy
-msgid "Created"
-msgstr "Creado"
+# msgid "Created"
+# msgstr "Creado"
 
 msgid "Create"
 msgstr "Crear"
@@ -1524,8 +1524,8 @@ msgstr "Si está satisfecho con los resultados, haga clic en 'Confirmar importac
 
 #: templates/import.html:33
 #, fuzzy
-msgid "Confirm password"
-msgstr "Confirmar contraseña"
+# msgid "Confirm password"
+# msgstr "Confirmar contraseña"
 
 msgid "Confirm import"
 msgstr "Confirmar importación"
@@ -1544,8 +1544,8 @@ msgstr "Errores"
 
 #: templates/import.html:89
 #, fuzzy
-msgid "number"
-msgstr "número"
+# msgid "number"
+# msgstr "número"
 
 msgid "Line number"
 msgstr "Número de linea"
@@ -1576,8 +1576,8 @@ msgstr "Vista previa"
 
 #: templates/import.html:160
 #, fuzzy
-msgid "Location"
-msgstr "Ubicación"
+# msgid "Location"
+# msgstr "Ubicación"
 
 msgid "action"
 msgstr "Acción"
@@ -1590,8 +1590,8 @@ msgstr "nueva"
 
 #: templates/import.html:174
 #, fuzzy
-msgid "Delete form"
-msgstr "Remover formulario"
+# msgid "Delete form"
+# msgstr "Remover formulario"
 
 msgid "Delete"
 msgstr "Remover"
@@ -1630,8 +1630,8 @@ msgstr "Usuario"
 
 #: templates/login/client_detail.html:47
 #, fuzzy
-msgid "disconnected"
-msgstr "desconectado"
+# msgid "disconnected"
+# msgstr "desconectado"
 
 msgid "Disconnect"
 msgstr "Desconectar"
@@ -1712,13 +1712,13 @@ msgstr "Número de Usuarios"
 msgid "No user groups have been created yet."
 msgstr "No se han creados grupos."
 
-msgid "No bases have been created yet."
-msgstr "No se han creados bases."
+# msgid "No bases have been created yet."
+# msgstr "No se han creados bases."
 
 #: templates/login/user_detail.html:40
 #, fuzzy
-msgid "password"
-msgstr "contraseña"
+# msgid "password"
+# msgstr "contraseña"
 
 msgid "Reset password"
 msgstr "Restablecer la contraseña"
@@ -1760,8 +1760,8 @@ msgstr "Este usuario no tiene permisión para accesar ningún hospital."
 msgid "No users."
 msgstr "Sin usuários."
 
-msgid "user"
-msgstr "usuário"
+# msgid "user"
+# msgstr "usuário"
 
 #: templates/modal.html:64
 msgid "OK"
@@ -1772,8 +1772,8 @@ msgstr "OK"
 msgid "The account"
 msgstr "La cuenta"
 
-msgid "Account"
-msgstr "Cuenta"
+# msgid "Account"
+# msgstr "Cuenta"
 
 #: templates/registration/password_reset_email.html:8
 msgid "at EMSTrack is associated with this email."
@@ -1810,8 +1810,8 @@ msgstr "Vehículos"
 
 #: templates/report/vehicle-activity.html:20
 #, fuzzy
-msgid "Activity"
-msgstr "Actividad"
+# msgid "Activity"
+# msgstr "Actividad"
 
 msgid "Activity Report"
 msgstr "Informe de Actividades"
@@ -1830,8 +1830,8 @@ msgstr "Generar Informe"
 msgid "time"
 msgstr "hora"
 
-msgid "timestamp"
-msgstr "hora y fecha"
+# msgid "timestamp"
+# msgstr "hora y fecha"
 
 #: templates/report/vehicle-activity.html:63
 msgid "category"
@@ -1852,8 +1852,8 @@ msgstr "el comienzo"
 
 #: templates/report/vehicle-mileage.html:31
 #, fuzzy
-msgid "Pending"
-msgstr "Pendientes"
+# msgid "Pending"
+# msgstr "Pendientes"
 
 msgid "end"
 msgstr "el fin"
