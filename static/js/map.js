@@ -997,8 +997,6 @@ function setCallPatientPopover(call_id, patient_set, destroy = false) {
 
 function setCallDetailPopover(call, destroy = false) {
 
-    console.log('setCallDetailPopover');
-
     // create patient object
     const placeholder = `call-${call.id}-detail`;
     const buttons_placeholder = `call-${call.id}-detail-buttons`;
@@ -1008,6 +1006,7 @@ function setCallDetailPopover(call, destroy = false) {
         label: settings.translation_table['Select username'],
         initial_values: call.sms_notifications
     });
+    const patients = new Patients(call.patient_set, call.id, `#${placeholder}-patients`);
     const selector = $(`#call-${call.id}-detail-button`);
 
     // destroy?
@@ -1025,20 +1024,21 @@ function setCallDetailPopover(call, destroy = false) {
         <h5>
           ${settings.translation_table["Description"]}
         </h5>
-        <div id="${placeholder}-details">
-        </div>
+        <div id="${placeholder}-details"></div>
         <h6>
           ${settings.translation_table["Notes"]}
         </h6>
-        <div id="${placeholder}-notes">
-        </div>
+        <div id="${placeholder}-notes"></div>
         <div id="${placeholder}-textarea">
         </div>
         <h5>
+          ${settings.translation_table["Patients"]}
+        </h5>
+        <div id="${placeholder}-patients"></div>
+        <h5>
           ${settings.translation_table['SMS Notifications']}
         </h5>
-        <div id="${placeholder}-select">
-        </div>
+        <div id="${placeholder}-select"></div>
         <div>
             <span id="${placeholder}-notify"></span>
             ${settings.translation_table['Send SMS notifications?']}
@@ -1072,6 +1072,9 @@ function setCallDetailPopover(call, destroy = false) {
             notes += '</p>';
             $(`#${placeholder}-notes`)
                 .html(notes);
+
+            // create patient form
+            patients.render();
 
             // create detail form
             $(`#${placeholder}-select`)
