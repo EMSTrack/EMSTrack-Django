@@ -1585,7 +1585,7 @@ msgstr "Acción"
 #, fuzzy
 msgctxt "feminine"
 msgid "New"
-msgstr "nueva"
+msgstr "Nueva"
 
 #: templates/import.html:174
 #, fuzzy
