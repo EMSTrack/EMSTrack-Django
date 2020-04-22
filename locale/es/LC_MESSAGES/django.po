@@ -140,8 +140,11 @@ msgid "timestamp"
 msgstr "hora y fecha"
 
 #: ambulance/models.py:166 hospital/models.py:21
-#, fuzzy
-#| msgid "Active"
+msgctxt "feminine"
+msgid "active"
+msgstr "Activa"
+
+msgctxt "masculine"
 msgid "active"
 msgstr "Activo"
 
@@ -203,7 +206,6 @@ msgid "suffix"
 msgstr "sufijo"
 
 #: ambulance/models.py:396
-#, fuzzy
 msgid "zipcode"
 msgstr "código postal"
 
@@ -212,12 +214,10 @@ msgid "details"
 msgstr "detalles"
 
 #: ambulance/models.py:422
-#, fuzzy
 msgid "priority_code"
 msgstr "codigo_de_prioridad"
 
 #: ambulance/models.py:428
-#, fuzzy
 msgid "radio_code"
 msgstr "codigo_de_radio"
 
@@ -510,39 +510,23 @@ msgstr "Describe el incidente"
 #: ambulance/views.py:291 login/forms.py:219
 #: templates/ambulance/call_detail.html:141 templates/ambulance/map.html:239
 #: templates/login/group_detail.html:39 templates/login/group_list.html:38
-#, fuzzy
-# msgid "Locations"
-# msgstr "Ubicaciones"
 
 msgid "SMS Notifications"
 msgstr "Notificaciones por SMS"
 
 #: ambulance/views.py:292
-#, fuzzy, python-format
-# msgid "Do you want to abort call %d?"
-# msgstr "¿Quieres abortar la llamada %d?"
-
 msgid "Do you want to save the %s?"
 msgstr "¿Quieres actualizar %d?"
 
 #: ambulance/views.py:293
-#, fuzzy
-# msgid "Username"
-# msgstr "Usuario"
-
 msgid "Select username"
 msgstr "Elija un usuario"
 
 #: ambulance/views.py:294
-#, fuzzy
-# msgid "call"
-# msgstr "llamada"
-
 msgid "the call"
 msgstr "la llamada"
 
 #: ambulance/views.py:295
-#, fuzzy
 # msgid "Patients"
 # msgstr "Pacientes"
 
@@ -643,7 +627,6 @@ msgstr "¿Tienes certeza?"
 
 #: ambulance/views.py:556 ambulance/views.py:568
 #: templates/ambulance/callradiocode_list.html:12 templates/base.html:113
-#, fuzzy
 msgid "Radio Codes"
 msgstr "Códigos de Radio"
 
@@ -660,20 +643,17 @@ msgid "Successfully imported call priority codes"
 msgstr "Códigos de prioridad importados exitosamente"
 
 #: ambulance/views.py:623
-#, fuzzy
 msgid "Successfully imported call priority classifications"
 msgstr "Classificaciones de prioridad importadas exitosamente"
 
 #: ambulance/views.py:585 ambulance/views.py:597
 #: templates/ambulance/callprioritycode_list.html:12 templates/base.html:114
-#, fuzzy
 msgid "Priority Codes"
 msgstr "Códigos de Prioridad"
 
 #: ambulance/views.py:614 ambulance/views.py:626
 #: templates/ambulance/callpriorityclassification_list.html:12
 #: templates/base.html:115
-#, fuzzy
 # msgid "Priority Classifications"
 # msgstr "Clasificación de Prioridad"
 msgid "Priority Classifications"
@@ -772,7 +752,6 @@ msgstr "valor"
 #: equipment/views.py:156 equipment/views.py:168
 #: templates/equipment/equipment_detail.html:11
 #: templates/equipment/equipment_form.html:11
-#, fuzzy
 #| msgid "Equipment"
 msgid "Equipments"
 msgstr "Equipo"
@@ -904,7 +883,6 @@ msgid "disconnected"
 msgstr "desconectado"
 
 #: login/models.py:207
-#, fuzzy
 #| msgid "disconnected"
 msgid "reconnected"
 msgstr "reconectado"
@@ -917,7 +895,6 @@ msgid "client_id"
 msgstr "cliente_id"
 
 #: login/models.py:426
-#, fuzzy
 # msgid "No dispatched ambulance."
 # msgstr "No hay ambulancias despachadas."
 
@@ -1099,7 +1076,6 @@ msgid "overlap"
 msgstr "superposición"
 
 #: templates/ambulance/ambulance_detail.html:165
-#, fuzzy
 # msgid "Number of Users"
 # msgstr "Número de Usuarios"
 
@@ -1117,7 +1093,6 @@ msgstr "Recuperando datos..."
 #: templates/hospital/hospital_form.html:18 templates/import.html:176
 #: templates/login/group_create.html:14 templates/login/group_form.html:15
 #: templates/login/user_form.html:14
-#, fuzzy
 # msgid "Updated on"
 # msgstr "Actualizado en"
 
@@ -1131,7 +1106,6 @@ msgstr "Actualizar"
 #: templates/hospital/hospital_form.html:20
 #: templates/login/group_create.html:16 templates/login/group_form.html:17
 #: templates/login/user_create_form.html:12 templates/login/user_form.html:16
-#, fuzzy
 # msgid "Created"
 # msgstr "Creado"
 
@@ -1256,7 +1230,6 @@ msgid "Label"
 msgstr "Mensaje"
 
 #: templates/ambulance/callpriorityclassification_list.html:63
-#, fuzzy
 #| msgid "No bases have been created yet."
 msgid "No priority classifications have been created yet."
 msgstr "No se han creados bases."
@@ -1267,13 +1240,11 @@ msgid "Code"
 msgstr "Código"
 
 #: templates/ambulance/callprioritycode_list.html:63
-#, fuzzy
 #| msgid "No incident have been created yet."
 msgid "No priority codes have been created yet."
 msgstr "No se han creados incidentes."
 
 #: templates/ambulance/callradiocode_list.html:63
-#, fuzzy
 #| msgid "No bases have been created yet."
 msgid "No radio codes have been created yet."
 msgstr "No se han creados bases."
@@ -1440,7 +1411,6 @@ msgid "No equipments have been created yet."
 msgstr "No se han creados equipos."
 
 #: templates/equipment/equipmentholder_form.html:17
-#, fuzzy
 #| msgid "equipment"
 msgid "equipments"
 msgstr "equipo"
@@ -1522,7 +1492,6 @@ msgid "If you are satisfied with the results, click 'Confirm import'."
 msgstr "Si está satisfecho con los resultados, haga clic en 'Confirmar importación'."
 
 #: templates/import.html:33
-#, fuzzy
 # msgid "Confirm password"
 # msgstr "Confirmar contraseña"
 
@@ -1542,7 +1511,6 @@ msgid "Errors"
 msgstr "Errores"
 
 #: templates/import.html:89
-#, fuzzy
 # msgid "number"
 # msgstr "número"
 
@@ -1574,7 +1542,6 @@ msgid "Preview"
 msgstr "Vista previa"
 
 #: templates/import.html:160
-#, fuzzy
 # msgid "Location"
 # msgstr "Ubicación"
 
@@ -1582,13 +1549,11 @@ msgid "action"
 msgstr "Acción"
 
 #: templates/import.html:170
-#, fuzzy
 msgctxt "feminine"
 msgid "New"
 msgstr "Nueva"
 
 #: templates/import.html:174
-#, fuzzy
 # msgid "Delete form"
 # msgstr "Remover formulario"
 
@@ -1628,7 +1593,6 @@ msgid "User"
 msgstr "Usuario"
 
 #: templates/login/client_detail.html:47
-#, fuzzy
 # msgid "disconnected"
 # msgstr "desconectado"
 
@@ -1707,7 +1671,6 @@ msgid "Number of Users"
 msgstr "Número de Usuarios"
 
 #: templates/login/group_list.html:78
-#, fuzzy
 msgid "No user groups have been created yet."
 msgstr "No se han creados grupos."
 
@@ -1715,7 +1678,6 @@ msgstr "No se han creados grupos."
 # msgstr "No se han creados bases."
 
 #: templates/login/user_detail.html:40
-#, fuzzy
 # msgid "password"
 # msgstr "contraseña"
 
@@ -1755,7 +1717,6 @@ msgid "This user does not have access to any hospitals."
 msgstr "Este usuario no tiene permisión para accesar ningún hospital."
 
 #: templates/login/user_list.html:90
-#, fuzzy
 msgid "No users."
 msgstr "Sin usuários."
 
@@ -1767,7 +1728,6 @@ msgid "OK"
 msgstr "OK"
 
 #: templates/registration/password_reset_email.html:4
-#, fuzzy
 msgid "The account"
 msgstr "La cuenta"
 
@@ -1808,7 +1768,6 @@ msgid "Vehicles"
 msgstr "Vehículos"
 
 #: templates/report/vehicle-activity.html:20
-#, fuzzy
 # msgid "Activity"
 # msgstr "Actividad"
 
@@ -1825,7 +1784,6 @@ msgid "Generate Report"
 msgstr "Generar Informe"
 
 #: templates/report/vehicle-activity.html:41
-#, fuzzy
 msgid "time"
 msgstr "hora"
 
@@ -1850,7 +1808,6 @@ msgid "begin"
 msgstr "comienzo"
 
 #: templates/report/vehicle-mileage.html:31
-#, fuzzy
 # msgid "Pending"
 # msgstr "Pendientes"
 
