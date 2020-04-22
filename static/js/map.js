@@ -726,7 +726,7 @@ function abortCall(call) {
             if (retval === Dialog.OK) {
 
                 // Abort call
-                apiClient.abortCall(call)
+                apiClient.abortCall(call_id)
                     .then( (call) => {
                         logger.log('info', 'call %d successfully aborted', call.id);
                     })

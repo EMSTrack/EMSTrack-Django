@@ -246,20 +246,20 @@ export class AppClient extends TopicObserver {
             });
     }
 
-    abortCall(call) {
+    abortCall(call_id) {
 
         // abort call
-        return this.httpClient.get(`call/${call.id}/abort/`)
+        return this.httpClient.get(`call/${call_id}/abort/`)
             .then( (response) => {
                 // return aborted call
                 return response.data;
             });
     }
 
-    triggerSMSNotifications(call) {
+    triggerSMSNotifications(call_id) {
 
         // trigger SMS notifications for call
-        return this.httpClient.get(`call/${call.id}/sms_notifications/`)
+        return this.httpClient.get(`call/${call_id}/sms_notifications/`)
             .then( (response) => {
                 // return call
                 return response.data;
@@ -291,7 +291,7 @@ export class AppClient extends TopicObserver {
     patchCall(call_id, data) {
 
         // retrieve bases
-        return this.httpClient.patch('call/' + call_id + '/', data)
+        return this.httpClient.patch(`call/${call_id}/`, data)
             .then( (response) => {
                 // return modified call
                 return response.data;
