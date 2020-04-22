@@ -249,7 +249,7 @@ export class AppClient extends TopicObserver {
     abortCall(call) {
 
         // abort call
-        return this.httpClient.get('call/' + call.id + '/abort/')
+        return this.httpClient.get(`call/${call.id}/abort/`)
             .then( (response) => {
                 // return aborted call
                 return response.data;
@@ -259,7 +259,7 @@ export class AppClient extends TopicObserver {
     triggerSMSNotifications(call) {
 
         // trigger SMS notifications for call
-        return this.httpClient.get('call/' + call.id + '/sms_notifications/')
+        return this.httpClient.get(`call/${call.id}/sms_notifications/`)
             .then( (response) => {
                 // return call
                 return response.data;
