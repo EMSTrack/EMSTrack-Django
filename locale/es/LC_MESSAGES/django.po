@@ -142,10 +142,18 @@ msgstr "hora y fecha"
 #: ambulance/models.py:166 hospital/models.py:21
 msgctxt "feminine"
 msgid "active"
+msgstr "activa"
+
+msgctxt "feminine"
+msgid "Active"
 msgstr "Activa"
 
 msgctxt "masculine"
 msgid "active"
+msgstr "activo"
+
+msgctxt "masculine"
+msgid "Active"
 msgstr "Activo"
 
 #: ambulance/models.py:307 ambulance/models.py:576 login/models.py:110
@@ -1229,7 +1237,7 @@ msgstr "Mensaje"
 
 #: templates/ambulance/callpriorityclassification_list.html:63
 msgid "No priority classifications have been created yet."
-msgstr "No se han creados bases."
+msgstr "No se han creados classificaciones de prioridad."
 
 #: templates/ambulance/callprioritycode_list.html:35
 #: templates/ambulance/callradiocode_list.html:35
@@ -1238,11 +1246,11 @@ msgstr "Código"
 
 #: templates/ambulance/callprioritycode_list.html:63
 msgid "No priority codes have been created yet."
-msgstr "No se han creados incidentes."
+msgstr "No se han creados códigos de prioridad."
 
 #: templates/ambulance/callradiocode_list.html:63
 msgid "No radio codes have been created yet."
-msgstr "No se han creados bases."
+msgstr "No se han creados códigos de radio."
 
 #: templates/ambulance/dispatch_list.html:7
 msgid "Dispatch List"
