@@ -1112,14 +1112,14 @@ function setCallDetailPopover(call, destroy = false) {
 
                     // note?
                     const new_note = $(`#${placeholder}-new-note`).val().trim();
-                    const post_new_note = new_note.lenght > 0
+                    const post_new_note = new_note.length > 0;
 
                     // sms_notifications?
                     const sms_notifications_new = Object.keys(sms_notifications.getItems());
-                    const patch_call = JSON.stringify(sms_notifications_new) === JSON.stringify(call.sms_notifications);
+                    const patch_call = JSON.stringify(sms_notifications_new) !== JSON.stringify(call.sms_notifications);
 
                     // send sms_notifications?
-                    const trigger_sms_notifications = $(`${placeholder}-checkbox`).prop( "checked");
+                    const trigger_sms_notifications = $(`#${placeholder}-checkbox`).prop( "checked");
 
                     // any changes?
                     if ( post_new_note || patch_call || trigger_sms_notifications ) {
