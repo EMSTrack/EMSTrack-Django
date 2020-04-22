@@ -459,7 +459,7 @@ class CallViewSet(mixins.ListModelMixin,
         message = "{}:\n* {} {}".format(_("Notification of Emergency Service"), _("Call"), call.to_string())
 
         # notify users
-        for user in call.sms_notifications():
+        for user in call.sms_notifications.all():
             sms_client.notify_user(user, message)
 
         # serialize and return
