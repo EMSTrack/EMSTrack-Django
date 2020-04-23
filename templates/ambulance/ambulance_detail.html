@@ -183,14 +183,6 @@
 
 {% block scripts %}
 
-{% autoescape off %}
-<script>
-    const ambulance_id = {{ ambulance.id }};
-    const ambulance_status = {{ ambulance.status }};
-    let page_size = {{ page_size }};
-</script>
-{% endautoescape %}
-
 {% render_bundle 'main' 'js' 'AMBULANCE' %}
 
 {% endblock %}
