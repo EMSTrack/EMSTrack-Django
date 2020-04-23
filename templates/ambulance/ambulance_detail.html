@@ -181,6 +181,26 @@
 </div>
 {% endblock %}
 
+{% autoescape off %}
+<script>
+    const ambulance_status = {{ ambulance_status}};
+    const ambulance_status_order = {{ ambulance_status_order}};
+    const location_type= {{ location_type }};
+    const location_type_order= {{ location_type_order }};
+    // const ambulance_css = {{ ambulance_css }};
+    const translation_table = {{ translation_table }};
+
+    const html_settings = {
+        ambulance_status: {{ ambulance_status }},
+        ambulance_status_order: {{ ambulance_status_order }},
+        location_type: {{ location_type }},
+        location_type_order: {{ location_type_order }},
+        // ambulance_css: {{ ambulance_css }},
+        translation_table: {{ translation_table }},
+    }
+</script>
+{% endautoescape %}
+
 {% block scripts %}
 
 {% render_bundle 'main' 'js' 'AMBULANCE' %}

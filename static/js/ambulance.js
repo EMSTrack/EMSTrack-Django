@@ -8,7 +8,9 @@ import { Pagination, Pages } from './components/pagination';
 
 import {addAmbulanceRoute} from "./map-tools";
 
-const settings = new Settings();
+// Initialize settings
+const settings = new Settings(html_settings);
+console.log(settings);
 
 let map;
 let apiClient;
