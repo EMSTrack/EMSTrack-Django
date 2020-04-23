@@ -31,7 +31,7 @@ from .models import Location, Ambulance, LocationType, Call, CallNote, Ambulance
 
 from .serializers import LocationSerializer, AmbulanceSerializer, AmbulanceUpdateSerializer, CallSerializer, \
     CallPriorityCodeSerializer, CallPriorityClassificationSerializer, CallRadioCodeSerializer, \
-    CallAmbulanceSummarySerializer, WaypointSerializer, CallNoteSerializer
+    CallAmbulanceSummarySerializer, WaypointSerializer, CallNoteSerializer, AmbulanceUpdateCompactSerializer
 
 
 logger = logging.getLogger(__name__)
@@ -271,7 +271,7 @@ class AmbulanceViewSet(mixins.ListModelMixin,
                     # ambulance_updates = ambulance_updates.filter(timestamp__range=(call.started_at, call.ended_at))
                     filter_range = (call.started_at, call.ended_at)
 
-                # iff the call is still active
+                # if the call is still active
                 elif call.started_at is not None:
                     # ambulance_updates = ambulance_updates.filter(timestamp__gte=call.started_at)
                     filter_range = (call.started_at, None)
@@ -306,11 +306,11 @@ class AmbulanceViewSet(mixins.ListModelMixin,
         page = self.paginate_queryset(ambulance_updates)
 
         if page is not None:
-            serializer = AmbulanceUpdateSerializer(page, many=True)
+            serializer = AmbulanceUpdateCompactSerializer(page, many=True)
             return self.get_paginated_response(serializer.data)
 
         # return all if not paginated
-        serializer = AmbulanceUpdateSerializer(ambulance_updates, many=True)
+        serializer = AmbulanceUpdateCompactSerializer(ambulance_updates, many=True)
         return Response(serializer.data)
 
     def updates_put(self, request, pk=None, **kwargs):

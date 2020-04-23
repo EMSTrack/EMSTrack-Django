@@ -168,6 +168,17 @@ class AmbulanceUpdateSerializer(serializers.ModelSerializer):
                             'updated_by_username', 'updated_on']
 
 
+class AmbulanceUpdateCompactSerializer(serializers.ModelSerializer):
+
+    location = PointField(required=False)
+    updated_by_username = serializers.CharField(source='updated_by.username', required=False)
+
+    class Meta:
+        model = AmbulanceUpdate
+        fields = ['status', 'orientation', 'location', 'timestamp', 'updated_by_username', 'updated_on']
+        read_only_fields = ['updated_by_username', 'updated_on']
+
+
 # Location serializers
 
 class LocationSerializer(serializers.ModelSerializer):
