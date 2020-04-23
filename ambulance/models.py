@@ -521,11 +521,32 @@ class Call(PublishMixin,
                                                  AmbulanceStatus[ac.ambulance.status].value)
                                for ac in self.ambulancecall_set.all())
 
+        # message
+        if self.callnote_set.all().order_by('updated_on'):
+            note = self.callnote_set.last()
+            message = note.comment
+        else:
+            message = self.details
+
         # id, priority, details, ambulances
-        return "#{}({}):\n- {}\n* {}:\n{}".format(self.id, priority, self.details, _('Ambulances'), ambulances)
+        return "#{}({}):\n- {}\n* {}:\n{}".format(self.id, priority, message, _('Ambulances'), ambulances)
 
     def __str__(self):
         return "{} ({})".format(self.status, self.priority)
+
+
+class CallNote(PublishMixin,
+               UpdatedByModel):
+
+    # call
+    call = models.ForeignKey(Call,
+                             on_delete=models.CASCADE,
+                             verbose_name=_('call'))
+
+    def publish(self, **kwargs):
+        # publish to mqtt
+        from mqtt.publish import SingletonPublishClient
+        SingletonPublishClient().publish_call(self.call, **kwargs)
 
 
 class AmbulanceCallStatus(Enum):

@@ -13,7 +13,7 @@ from login.views import PasswordView, SettingsView, VersionView
 
 from ambulance.viewsets import AmbulanceEquipmentItemViewSet, AmbulanceViewSet, \
     LocationViewSet, LocationTypeViewSet, CallViewSet, CallPriorityViewSet, \
-    CallRadioViewSet, AmbulanceCallWaypointViewSet
+    CallRadioViewSet, AmbulanceCallWaypointViewSet, CallNoteViewSet
 
 from hospital.viewsets import HospitalViewSet, HospitalEquipmentItemViewSet
 from equipment.viewsets import EquipmentItemViewSet, EquipmentViewSet
@@ -71,6 +71,10 @@ router.register(r'equipment',
 router.register(r'call',
                 CallViewSet,
                 basename='api-call')
+
+router.register(r'call/(?P<call_id>[0-9]+)/note',
+                CallNoteViewSet,
+                basename='api-call-note')
 
 router.register(r'call/(?P<call_id>[0-9]+)/ambulance/(?P<ambulance_id>[0-9]+)/waypoint',
                 AmbulanceCallWaypointViewSet,

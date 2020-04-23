@@ -25,15 +25,9 @@
 
             <h1>{% trans "Call" %}</h1>
 
-            <h3>{% trans "Details" %}:</h3>
-
             <p>
                 <strong>{% trans "Status" %}:</strong>
                 {{ call.status|get_call_status }}
-            </p>
-            <p>
-                <strong>{% trans "Details" %}:</strong>
-                {{ call.details }}
             </p>
             {% if call.priority_code %}
             <p>
@@ -80,6 +74,37 @@
                 {{ call.ended_at }}
                 </div>
             </div>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+
+            <h3>{% trans "Description" %}:</h3>
+            <p>
+                {{ call.details }}
+            </p>
+            {% if call.callnote_set.all %}
+            <p>
+                <strong>{% trans "Notes" %}:</strong>
+            </p>
+            <table class="table table-striped table-sm">
+                <tbody>
+                {% for note in call.callnote_set.all|dictsort:"updated_on" %}
+                    <tr>
+                        <td>
+                            {{ note.updated_on|date:"DATE_FORMAT" }},
+                            {{ note.updated_on|date:"H:i:s" }}
+                        </td>
+                        <td>
+                            {{ note.comment }}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% endif %}
 
         </div>
     </div>
@@ -151,11 +176,9 @@
                 {% for history in ambulancecall.ambulancecallhistory_set.all|dictsort:"updated_on" %}
                 <tr>
                     <td>
-                        <p>
-                            {{ history.status|get_ambulance_call_status }} @
-                            {{ history.updated_on|date:"DATE_FORMAT" }},
-                            {{ history.updated_on|date:"H:i:s" }}
-                        </p>
+                        {{ history.status|get_ambulance_call_status }} @
+                        {{ history.updated_on|date:"DATE_FORMAT" }},
+                        {{ history.updated_on|date:"H:i:s" }}
                     </td>
                 </tr>
                 {% endfor %}

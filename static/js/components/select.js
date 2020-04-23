@@ -10,9 +10,31 @@ export class Select {
         this.prefix = properties.prefix;
         this.list = properties.list;
         this.label = properties.label;
-        this.values = properties.values;
-        this.initial_values = properties.initial_values;
         this.onClick = properties.onClick;
+
+        // set initial values
+        this.values = {};
+        for (const id of properties.initial_values) {
+            const item = $(`#${this.list} option[data-id=${id}]`);
+            if (item.length) {
+                // add to list of values
+                logger.debug('Adding %d to initial list of values', id);
+                const first = item.first();
+                this.values[id] = first.attr('value');
+            }
+        }
+
+    }
+
+    renderEntry(id, value) {
+        return `<div id="${this.prefix}-select-li-${id}">
+                <li>
+                    ${value}
+                    <button type="button" class="close" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </li>
+            </div>`;
     }
 
     render(classes = "") {
@@ -35,12 +57,9 @@ export class Select {
         const self = this;
 
         // set initial values
-        for (const value of this.initial_values) {
-            const item = $(`#${self.list} option[data-id=${value}]`);
-            if (item.length) {
-                const first = item.first();
-                this.addItem(first.attr('data-id'), first.attr('value'));
-            }
+        for (const id in this.values) {
+            const value = this.values[id];
+            this.addItem(id, value, true);
         }
 
         // initialize select
@@ -77,11 +96,9 @@ export class Select {
         $(`#${this.prefix}-select-li-${id}`).remove();
     }
 
-    addItem(id, value) {
+    addItem(id, value, force=false) {
 
-        logger.debug("Select: got click");
-
-        if (!this.values.hasOwnProperty(id)) {
+        if (force || !this.values.hasOwnProperty(id)) {
 
             logger.debug("Adding '%d -> %s' to list", id, value);
 
@@ -89,16 +106,8 @@ export class Select {
             this.values[id] = value;
 
             // create list entry
-            const li = $(`<div id="${this.prefix}-select-li-${id}">
-                <li>
-                    ${value}
-                    <button type="button" class="close" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </li>
-            </div>`);
+            const li = $(this.renderEntry(id, value));
             li.on('click', () => this.removeItem(id, value));
-
             $(`#${this.prefix}-select-ul`).append(li);
 
         } else {
@@ -113,7 +122,6 @@ export class Select {
 
 Select.default = {
     options: {},
-    values: {},
     initial_values: [],
     list: "",
     prefix: "dropdown",

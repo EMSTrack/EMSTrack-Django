@@ -253,9 +253,9 @@ class AmbulanceMap(TemplateView):
         context['call_priority_css'] = CallPriorityCSS
         context['map_provider'] = {'provider': settings.MAP_PROVIDER, 'access_token': settings.MAP_PROVIDER_TOKEN}
 
-        context['radio_code_list'] = CallRadioCode.objects.all()
-        context['priority_code_list'] = CallPriorityCode.objects.all()
-        context['sms_notifications_list'] = can_sms_notifications()
+        context['radio_code_list'] = CallRadioCode.objects.all().order_by('code')
+        context['priority_code_list'] = CallPriorityCode.objects.all().order_by('prefix', 'priority', 'suffix')
+        context['sms_notifications_list'] = can_sms_notifications().order_by('username')
 
         default_values = defaults.copy()
         default_values['location'] = PointField().to_representation(defaults['location'])
@@ -283,6 +283,9 @@ class AmbulanceMap(TemplateView):
             "Patients": _("Patients"),
             "No patient names are available.": _("No patient names are available."),
             "Details": _("Details"),
+            "Notes": _("Notes"),
+            "Enter new note": _("Enter new note"),
+            "Send SMS notifications?": _("Send SMS notifications?"),
             "Description": _("Description"),
             "Describe the incident": _("Describe the incident"),
             "SMS Notifications": _("SMS Notifications"),
@@ -559,7 +562,7 @@ class CallRadioCodeProcessImportView(SuccessMessageMixin,
     model = CallRadioCode
     resource_class = CallRadioCodeResource
 
-    success_message = _('Successfully imported callRadioCodes')
+    success_message = _('Successfully imported call radio codes')
     success_url = reverse_lazy('ambulance:radio-code-list')
 
     import_breadcrumbs = {'ambulancs:radio-code-list': _("Radio Codes")}
@@ -588,7 +591,7 @@ class CallPriorityCodeProcessImportView(SuccessMessageMixin,
     model = CallPriorityCode
     resource_class = CallPriorityCodeResource
 
-    success_message = _('Successfully imported callPriorityCodes')
+    success_message = _('Successfully imported call priority codes')
     success_url = reverse_lazy('ambulance:priority-code-list')
 
     import_breadcrumbs = {'ambulancs:priority-code-list': _("Priority Codes")}
@@ -617,7 +620,7 @@ class CallPriorityClassificationProcessImportView(SuccessMessageMixin,
     model = CallPriorityClassification
     resource_class = CallPriorityClassificationResource
 
-    success_message = _('Successfully imported callPriorityClassifications')
+    success_message = _('Successfully imported call priority classifications')
     success_url = reverse_lazy('ambulance:priority-classification-list')
 
     import_breadcrumbs = {'ambulancs:priority-classification-list': _("Priority Classifications")}

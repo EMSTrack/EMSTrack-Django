@@ -12,7 +12,7 @@ from login.permissions import get_permissions
 from emstrack.latlon import calculate_orientation
 
 from .models import Ambulance, AmbulanceUpdate, Call, Location, AmbulanceCall, Patient, CallStatus, Waypoint, \
-    LocationType, CallPriorityClassification, CallPriorityCode, CallRadioCode
+    LocationType, CallPriorityClassification, CallPriorityCode, CallRadioCode, CallNote
 
 logger = logging.getLogger(__name__)
 
@@ -394,11 +394,28 @@ class CallRadioCodeSerializer(serializers.ModelSerializer):
 
 # Call serializer
 
+class CallNoteSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CallNote
+        fields = ['comment', 'updated_by', 'updated_on']
+        read_only_fields = ['updated_by', 'updated_on']
+
+    def create(self, validated_data):
+
+        # creates call first, do not publish
+        callnote = CallNote(**validated_data)
+        callnote.save()
+
+        return callnote
+
+
 class CallSerializer(serializers.ModelSerializer):
 
     patient_set = PatientSerializer(many=True, required=False)
     ambulancecall_set = AmbulanceCallSerializer(many=True, required=False)
     sms_notifications = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all(), required=False)
+    callnote_set = CallNoteSerializer(many=True, required=False)
 
     class Meta:
         model = Call
@@ -410,8 +427,9 @@ class CallSerializer(serializers.ModelSerializer):
                   'comment', 'updated_by', 'updated_on',
                   'sms_notifications',
                   'ambulancecall_set',
-                  'patient_set']
-        read_only_fields = ['created_at', 'updated_by']
+                  'patient_set',
+                  'callnote_set']
+        read_only_fields = ['created_at', 'updated_by', 'callnote_set']
 
     def create(self, validated_data):
 
@@ -621,6 +639,7 @@ class CallSummarySerializer(serializers.ModelSerializer):
     patient_set = PatientSerializer(many=True, required=False)
     ambulancecall_set = CallAmbulanceSummarySerializer(many=True, required=False)
     sms_notifications = serializers.PrimaryKeyRelatedField(many=True, read_only=True, required=False)
+    callnote_set = CallNoteSerializer(many=True, required=False)
 
     class Meta:
         model = Call
@@ -632,5 +651,6 @@ class CallSummarySerializer(serializers.ModelSerializer):
                   'comment', 'updated_by', 'updated_on',
                   'sms_notifications',
                   'ambulancecall_set',
-                  'patient_set']
-        read_only_fields = ['created_at', 'updated_by']
+                  'patient_set',
+                  'callnote_set']
+        read_only_fields = ['created_at', 'updated_by', 'callnote_set']
