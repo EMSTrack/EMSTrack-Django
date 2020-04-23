@@ -1529,7 +1529,7 @@ function compilePatients(call) {
         const _patients = [];
         for (const patient of call.patient_set) {
             if (patient['age'] === null)
-                _patients.push(`${patient['name']}`);
+                _patients.push(`${patient['name']} (?)`);
             else
                 _patients.push(`${patient['name']} (${patient['age']})`);
         }
