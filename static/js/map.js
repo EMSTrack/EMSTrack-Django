@@ -1526,12 +1526,12 @@ function compilePatients(call) {
     if (call.patient_set.length === 0) {
         patients = settings.translation_table["No patient names are available."];
     } else {
-        const _patients = []
+        const _patients = [];
         for (const patient of call.patient_set) {
             if (patient['age'] === null)
-                _patients.append(`${patient['name']}`);
+                _patients.push(`${patient['name']}`);
             else
-                _patients.append(`${patient['name']} (${patient['age']})`);
+                _patients.push(`${patient['name']} (${patient['age']})`);
         }
         patients = _patients.join(', ');
     }
