@@ -255,7 +255,7 @@ class AmbulanceMap(TemplateView):
 
         context['radio_code_list'] = CallRadioCode.objects.all().order_by('code')
         context['priority_code_list'] = CallPriorityCode.objects.all().order_by('prefix', 'priority', 'suffix')
-        context['sms_notifications_list'] = can_sms_notifications()
+        context['sms_notifications_list'] = can_sms_notifications().order_by('username')
 
         default_values = defaults.copy()
         default_values['location'] = PointField().to_representation(defaults['location'])
@@ -447,11 +447,11 @@ class CallDetailView(LoginRequiredMixin,
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['location_type'] = {m.name: m.value
-                                       for m in LocationType}
-        context['ambulance_status'] = {m.name: m.value
-                                       for m in AmbulanceStatus}
-        context['map_provider'] = {'provider': settings.MAP_PROVIDER, 'access_token': settings.MAP_PROVIDER_TOKEN}
+        # context['location_type'] = {m.name: m.value
+        #                                for m in LocationType}
+        # context['ambulance_status'] = {m.name: m.value
+        #                                for m in AmbulanceStatus}
+        # context['map_provider'] = {'provider': settings.MAP_PROVIDER, 'access_token': settings.MAP_PROVIDER_TOKEN}
 
         context['translation_table'] = {
             "Abort Call": _("Abort Call"),

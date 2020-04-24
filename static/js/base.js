@@ -2,6 +2,8 @@ import { MqttClient } from "./mqtt-client";
 
 import { AppClient } from "./app-client";
 
+import {Settings} from "./settings";
+
 import { logger } from './logger';
 
 const axios = require('axios');
@@ -72,6 +74,24 @@ $(function () {
             logger.log('info', 'Instantiating ApiClient');
             apiClient = new AppClient(mqttClient, httpClient);
 
+            // connection icon
+            $('#online-icon').css('color', 'Lime')
+
+            // observe lost connection
+            apiClient.observe('lostConnection', () => {
+                // connection icon
+                $('#online-icon').css('color', 'Red')
+            } );
+
+            // retrieve settings
+            logger.log('info', 'Retrieving settings');
+            return apiClient.getSettings();
+
+        })
+        .then( (settings) => {
+            logger.log('info', 'settings retrieved');
+            apiClient.settings = new Settings(settings);
+
             // retrieve ambulances
             logger.log('info', 'Retrieving ambulances');
             return apiClient.getAmbulances();
@@ -92,8 +112,13 @@ $(function () {
             init_functions.forEach( (fn) => fn(apiClient) );
         })
         .catch( (error ) => {
+
+            // connection icon
+            $('#online-icon').css('color', 'Red')
+
             logger.log('error', 'Failed to initialize ApiClient');
             logger.log('error', error);
+
         });
 
 });

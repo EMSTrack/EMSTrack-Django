@@ -319,7 +319,7 @@ export function createSegmentLine(map, updates, color = "red") {
 }
 
 // Add call waypoints
-export function addCallWaypoints(map, waypoints) {
+export function addCallWaypoints(map, waypoints, location_type) {
 
     // loop through waypoints
     waypoints.forEach( (waypoint) => {

@@ -60,6 +60,17 @@ export class AppClient extends TopicObserver {
 
     // GET methods
 
+    getSettings() {
+
+        // retrieve radio code
+        return this.httpClient.get('settings/')
+            .then( (response) => {
+                // return aborted call
+                return response.data;
+            });
+
+    }
+
     getCallRadioCode() {
 
         // initialized if needed
@@ -452,6 +463,8 @@ export class AppClient extends TopicObserver {
             /* ignore */
         } else if (event.event === 'lostConnection') {
             /* ignore */
+            const _topic = 'lostConnection';
+            this.broadcast(_topic, {topic: _topic, payload: {}});
         } else
             logger.log('warn', "Unknown event type '%s'", event.event);
 

@@ -50,11 +50,18 @@ function retrieveCall(map, call_id) {
     // Build url
     const url = 'call/' + call_id + '/?exclude=';
 
+    // set message
+    $('#pleaseWait')
+        .show();
+
     apiClient.httpClient.get(url)
         .then( (response) => {
 
             logger.log('debug', "Got call data from API");
             addCallToMap(map, response.data);
+
+            $('#pleaseWait')
+                .hide();
 
         })
         .catch( (error) => {
@@ -74,7 +81,7 @@ function retrieveAmbulanceUpdates(map, ambulance_id, call_id) {
         .then( (response) => {
 
             logger.log('debug', "Got '%s' ambulance '%d' updates from API", response.data.length, ambulance_id);
-            addAmbulanceRoute(map, response.data, ambulance_status, true);
+            addAmbulanceRoute(map, response.data, apiClient.settings.ambulance_status, true);
 
         })
         .catch( (error) => {
@@ -93,7 +100,7 @@ function addCallToMap(map, call) {
         logger.log('debug', 'Adding ambulancecall');
 
         // add waypoints
-        addCallWaypoints(map, ambulancecall['waypoint_set']);
+        addCallWaypoints(map, ambulancecall['waypoint_set'], apiClient.settings.location_type);
 
         // add ambulance updates
         retrieveAmbulanceUpdates(map, ambulancecall['ambulance_id'], call['id']);
