@@ -112,8 +112,13 @@ $(function () {
             init_functions.forEach( (fn) => fn(apiClient) );
         })
         .catch( (error ) => {
+
+            // connection icon
+            $('#online-icon').css('color', 'Red')
+
             logger.log('error', 'Failed to initialize ApiClient');
             logger.log('error', error);
+
         });
 
 });
