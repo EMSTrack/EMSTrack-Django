@@ -93,7 +93,7 @@ function addCallToMap(map, call) {
         logger.log('debug', 'Adding ambulancecall');
 
         // add waypoints
-        addCallWaypoints(map, ambulancecall['waypoint_set']);
+        addCallWaypoints(map, ambulancecall['waypoint_set'], apiClient.settings.location_type);
 
         // add ambulance updates
         retrieveAmbulanceUpdates(map, ambulancecall['ambulance_id'], call['id']);
