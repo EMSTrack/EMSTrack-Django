@@ -313,7 +313,7 @@ class ClientListView(ListView):
         context = super().get_context_data(**kwargs)
 
         # query
-        not_online_query = (Client.objects.filter(status=ClientStatus.D.name) | Client.objects.filter(status=ClientStatus.O.name)).order_by('-updated_on')
+        not_online_query = (Client.objects.filter(status=ClientStatus.D.name) | Client.objects.filter(status=ClientStatus.F.name)).order_by('-updated_on')
 
         # get current page
         page = self.request.GET.get('page', 1)
