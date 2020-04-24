@@ -50,11 +50,18 @@ function retrieveCall(map, call_id) {
     // Build url
     const url = 'call/' + call_id + '/?exclude=';
 
+    // set message
+    $('#pleaseWait')
+        .show();
+
     apiClient.httpClient.get(url)
         .then( (response) => {
 
             logger.log('debug', "Got call data from API");
             addCallToMap(map, response.data);
+
+            $('#pleaseWait')
+                .hide();
 
         })
         .catch( (error) => {
