@@ -70,6 +70,10 @@ $(function () {
         })
         .then( () => {
 
+            // instantiate client
+            logger.log('info', 'Instantiating ApiClient');
+            apiClient = new AppClient(mqttClient, httpClient);
+
             // connection icon
             $('#online-icon').css('color', 'Lime')
 
@@ -78,10 +82,6 @@ $(function () {
                 // connection icon
                 $('#online-icon').css('color', 'Red')
             } );
-
-            // instantiate client
-            logger.log('info', 'Instantiating ApiClient');
-            apiClient = new AppClient(mqttClient, httpClient);
 
             // retrieve settings
             logger.log('info', 'Retrieving settings');
