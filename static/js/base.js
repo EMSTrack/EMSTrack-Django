@@ -71,7 +71,13 @@ $(function () {
         .then( () => {
 
             // connection icon
-            $('#online-icon').css('color', 'Green')
+            $('#online-icon').css('color', 'Lime')
+
+            // observe lost connection
+            apiClient.observe('lostConnection', () => {
+                // connection icon
+                $('#online-icon').css('color', 'Red')
+            } );
 
             // instantiate client
             logger.log('info', 'Instantiating ApiClient');

@@ -463,6 +463,8 @@ export class AppClient extends TopicObserver {
             /* ignore */
         } else if (event.event === 'lostConnection') {
             /* ignore */
+            const _topic = 'lostConnection';
+            this.broadcast(_topic, {topic: _topic, payload: {}});
         } else
             logger.log('warn', "Unknown event type '%s'", event.event);
 
