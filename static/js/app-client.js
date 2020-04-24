@@ -60,6 +60,17 @@ export class AppClient extends TopicObserver {
 
     // GET methods
 
+    getSettings() {
+
+        // retrieve radio code
+        return this.httpClient.get('settings/')
+            .then( (response) => {
+                // return aborted call
+                return response.data;
+            });
+
+    }
+
     getCallRadioCode() {
 
         // initialized if needed

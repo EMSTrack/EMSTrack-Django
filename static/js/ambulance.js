@@ -8,10 +8,6 @@ import { Pagination, Pages } from './components/pagination';
 
 import {addAmbulanceRoute} from "./map-tools";
 
-// Initialize settings
-const settings = new Settings(html_settings);
-console.log(settings);
-
 let map;
 let apiClient;
 
@@ -94,7 +90,7 @@ function retrieveAmbulanceData(ambulanceId, page, page_size) {
                 .html(pagination.render((pg, options) => render_page_callback(pg, options, ambulanceId, page_size)));
 
             logger.log('debug', "Got '%s' ambulance '%d' updates from API", response.data.length, ambulanceId);
-            addAmbulanceRoute(map, response.data, settings.ambulance_status, true);
+            addAmbulanceRoute(map, response.data, apiClient.settings.ambulance_status, true);
             // addAmbulanceRoute(response.data);
 
             $('#pleaseWait')

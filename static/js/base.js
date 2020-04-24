@@ -2,6 +2,8 @@ import { MqttClient } from "./mqtt-client";
 
 import { AppClient } from "./app-client";
 
+import {Settings} from "./settings";
+
 import { logger } from './logger';
 
 const axios = require('axios');
@@ -71,6 +73,15 @@ $(function () {
             // instantiate client
             logger.log('info', 'Instantiating ApiClient');
             apiClient = new AppClient(mqttClient, httpClient);
+
+            // retrieve settings
+            logger.log('info', 'Retrieving settings');
+            return apiClient.getSettings();
+
+        })
+        .then( (settings) => {
+            logger.log('info', 'settings retrieved');
+            apiClient.settings = new Settings(settings);
 
             // retrieve ambulances
             logger.log('info', 'Retrieving ambulances');
