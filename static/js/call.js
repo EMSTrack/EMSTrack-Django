@@ -74,7 +74,7 @@ function retrieveAmbulanceUpdates(map, ambulance_id, call_id) {
         .then( (response) => {
 
             logger.log('debug', "Got '%s' ambulance '%d' updates from API", response.data.length, ambulance_id);
-            addAmbulanceRoute(map, response.data, ambulance_status, true);
+            addAmbulanceRoute(map, response.data, apiClient.settings.ambulance_status, true);
 
         })
         .catch( (error) => {

@@ -58,21 +58,6 @@ class AmbulanceDetailView(LoginRequiredMixin,
                           DetailView):
     model = Ambulance
 
-    def get_context_data(self, **kwargs):
-
-        context = super().get_context_data(**kwargs)
-        context['ambulance_status'] = {m.name: m.value
-                                       for m in AmbulanceStatus}
-        context['ambulance_status_order'] = [m.name for m in AmbulanceStatusOrder]
-        context['location_type'] = {m.name: m.value
-                                    for m in LocationType}
-        context['location_type_order'] = [m.name for m in LocationTypeOrder]
-
-        context['translation_table'] = {
-        }
-
-        return context
-
 
 class AmbulanceListView(PaginationViewMixin,
                         LoginRequiredMixin,
@@ -462,11 +447,11 @@ class CallDetailView(LoginRequiredMixin,
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['location_type'] = {m.name: m.value
-                                       for m in LocationType}
-        context['ambulance_status'] = {m.name: m.value
-                                       for m in AmbulanceStatus}
-        context['map_provider'] = {'provider': settings.MAP_PROVIDER, 'access_token': settings.MAP_PROVIDER_TOKEN}
+        # context['location_type'] = {m.name: m.value
+        #                                for m in LocationType}
+        # context['ambulance_status'] = {m.name: m.value
+        #                                for m in AmbulanceStatus}
+        # context['map_provider'] = {'provider': settings.MAP_PROVIDER, 'access_token': settings.MAP_PROVIDER_TOKEN}
 
         context['translation_table'] = {
             "Abort Call": _("Abort Call"),
