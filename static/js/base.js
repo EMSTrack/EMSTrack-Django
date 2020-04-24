@@ -71,7 +71,7 @@ $(function () {
         .then( () => {
 
             // connection icon
-            $('#online-icon').css('color: Green;')
+            $('#online-icon').css('color', 'Green')
 
             // instantiate client
             logger.log('info', 'Instantiating ApiClient');
