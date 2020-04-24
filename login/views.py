@@ -302,7 +302,7 @@ class UserAdminUpdateView(SuccessMessageWithInlinesMixin,
 
 class ClientListView(ListView):
     model = Client
-    queryset = Client.objects.filter(status=ClientStatus.O.name)
+    queryset = Client.objects.filter(status=ClientStatus.O.name) | Client.objects.filter(status=ClientStatus.R.name)
     ordering = ['-status', '-updated_on']
 
     def get_context_data(self, **kwargs):
@@ -313,7 +313,7 @@ class ClientListView(ListView):
         context = super().get_context_data(**kwargs)
 
         # query
-        not_online_query = Client.objects.exclude(status=ClientStatus.O.name).order_by('-updated_on')
+        not_online_query = (Client.objects.filter(status=ClientStatus.D.name) | Client.objects.filter(status=ClientStatus.O.name)).order_by('-updated_on')
 
         # get current page
         page = self.request.GET.get('page', 1)
