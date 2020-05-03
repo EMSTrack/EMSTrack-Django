@@ -831,13 +831,13 @@ class TestAmbulanceUpdates(TestSetup):
         queryset = AmbulanceUpdate.objects.filter(ambulance=a)
         answer1 = []
         for u in queryset:
-            serializer = AmbulanceUpdateSerializer(u)
+            serializer = AmbulanceUpdateCompactSerializer(u)
             result = {
-                'id': u.id,
-                'ambulance_id': u.ambulance.id,
-                'ambulance_identifier': u.ambulance.identifier,
-                'comment': u.comment,
-                'capability': u.capability,
+                # 'id': u.id,
+                # 'ambulance_id': u.ambulance.id,
+                # 'ambulance_identifier': u.ambulance.identifier,
+                # 'comment': u.comment,
+                # 'capability': u.capability,
                 'status': u.status,
                 'orientation': u.orientation,
                 'location': point2str(u.location),
@@ -883,13 +883,13 @@ class TestAmbulanceUpdates(TestSetup):
         queryset = AmbulanceUpdate.objects.filter(ambulance=a)
         answer3 = []
         for u in queryset:
-            serializer = AmbulanceUpdateSerializer(u)
+            serializer = AmbulanceUpdateCompactSerializer(u)
             result = {
-                'id': u.id,
-                'ambulance_id': u.ambulance.id,
-                'ambulance_identifier': a.identifier,
-                'comment': u.comment,
-                'capability': u.capability,
+                # 'id': u.id,
+                # 'ambulance_id': u.ambulance.id,
+                # 'ambulance_identifier': a.identifier,
+                # 'comment': u.comment,
+                # 'capability': u.capability,
                 'status': u.status,
                 'orientation': u.orientation,
                 'location': point2str(u.location),
