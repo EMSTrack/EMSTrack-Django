@@ -17,7 +17,7 @@ from ambulance.models import Call, Patient, AmbulanceCall, CallStatus, CallPrior
     AmbulanceUpdate, AmbulanceStatus, Waypoint, Location, LocationType, WaypointStatus, AmbulanceCallStatus
 from ambulance.serializers import CallSerializer, AmbulanceCallSerializer, PatientSerializer, \
     AmbulanceUpdateSerializer, WaypointSerializer, LocationSerializer, CallSummarySerializer, \
-    CallAmbulanceSummarySerializer, CallNoteSerializer
+    CallAmbulanceSummarySerializer, CallNoteSerializer, AmbulanceUpdateCompactSerializer
 
 from emstrack.tests.util import date2iso, point2str
 from emstrack.sms import client as sms_client
@@ -913,12 +913,12 @@ class TestCall(TestSetup):
             .exclude(id=ambulance_update_2.id)
         answer1 = []
         for u in queryset:
-            serializer = AmbulanceUpdateSerializer(u)
+            serializer = AmbulanceUpdateCompactSerializer(u)
             result = {
-                'id': u.id,
-                'ambulance_id': u.ambulance.id,
-                'ambulance_identifier': u.ambulance.identifier,
-                'comment': u.comment,
+                # 'id': u.id,
+                # 'ambulance_id': u.ambulance.id,
+                # 'ambulance_identifier': u.ambulance.identifier,
+                # 'comment': u.comment,
                 'status': u.status,
                 'orientation': u.orientation,
                 'location': point2str(u.location),
