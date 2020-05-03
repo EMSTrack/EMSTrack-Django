@@ -786,6 +786,8 @@ class TestAmbulanceUpdates(TestSetup):
 
     def test(self):
 
+        self.maxDiff = None
+
         # Update ambulance a1
         a = self.a1
         user = self.u1
@@ -906,8 +908,6 @@ class TestAmbulanceUpdates(TestSetup):
         # login as admin
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
-        self.maxDiff = None
-
         # retrieve ambulances updates
         response = client.get('/en/api/ambulance/{}/updates/'.format(self.a1.id),
                               follow=True)
@@ -966,6 +966,8 @@ class TestAmbulanceUpdates(TestSetup):
 class TestAmbulanceBulkUpdates(TestSetup):
 
     def test(self):
+
+        self.maxDiff = None
 
         # Bulk update ambulance a1
         a = self.a1
@@ -1107,8 +1109,8 @@ class TestAmbulanceBulkUpdates(TestSetup):
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        self.assertCountEqual(result, answer1)
         self.assertEqual(len(result), 4)
+        self.assertCountEqual(result, answer1)
 
         # retrieve ambulances updates
         response = client.get('/en/api/ambulance/{}/updates/'.format(self.a3.id),
