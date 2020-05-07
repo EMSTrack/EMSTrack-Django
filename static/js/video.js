@@ -24,11 +24,15 @@ const remoteVideo = document.querySelector('remoteVideo');
 
 // Handles success by adding the MediaStream to the video element.
 function gotLocalMediaStream(mediaStream) {
+    logger.log('info', '> adding camera stream');
+
     localStream = mediaStream;
     localVideo.srcObject = mediaStream;
 }
 
 function setupRTC() {
+
+    logger.log('info', '> setting up WebRTC');
 
     //using Google public stun server
     const configuration = {
@@ -62,11 +66,6 @@ function handleLocalMediaStreamError(error) {
 }
 
 $(function () {
-
-    //**********************
-    //Starting a peer connection
-    //**********************
-    // https://www.tutorialspoint.com/webrtc/webrtc_video_demo.htm
 
     // On this codelab, you will be streaming only video (video: true).
     const mediaStreamConstraints = {
