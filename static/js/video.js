@@ -19,8 +19,8 @@ let RTCConnection;
 let localStream;
 
 // Video element where stream will be placed.
-const localVideo = document.querySelector('localVideo');
-const remoteVideo = document.querySelector('remoteVideo');
+let localVideo;
+let remoteVideo;
 
 // Handles success by adding the MediaStream to the video element.
 function gotLocalMediaStream(mediaStream) {
@@ -67,7 +67,9 @@ function handleLocalMediaStreamError(error) {
 
 $(function () {
 
-    // On this codelab, you will be streaming only video (video: true).
+    localVideo = $('localVideo');
+    remoteVideo = $('remoteVideo');
+
     const mediaStreamConstraints = {
         video: true,
         audio: true,
