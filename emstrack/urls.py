@@ -134,6 +134,9 @@ urlpatterns += i18n_patterns(*[
     # report
     url(r'^report/', include('report.urls')),
 
+    # video
+    url(r'^video/', include('video.urls')),
+
     # admin
     url(r'^admin/', admin.site.urls),
 
