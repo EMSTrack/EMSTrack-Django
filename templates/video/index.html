@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% load i18n %}
+{% load render_bundle from webpack_loader %}
 
 {% block content %}
 
@@ -20,13 +21,6 @@
 
 {% block scripts %}
 
-<script>
-
-    // Ready function
-    $(function () {
-
-    });
-
-</script>
+{% render_bundle 'main' 'js' 'VIDEO' %}
 
 {% endblock %}

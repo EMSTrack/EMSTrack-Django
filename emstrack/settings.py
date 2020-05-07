@@ -265,6 +265,10 @@ WEBPACK_LOADER = {
         'BUNDLE_DIR_NAME': 'bundles/report-vehicle-activity/',
         'STATS_FILE': os.path.join(BASE_DIR, 'webpack/report-vehicle-activity-stats.json'),
     },
+    'VIDEO': {
+        'BUNDLE_DIR_NAME': 'bundles/video/',
+        'STATS_FILE': os.path.join(BASE_DIR, 'webpack/video-stats.json'),
+    },
 }
 
 # Import-export settings
