@@ -27,7 +27,7 @@ function gotLocalMediaStream(mediaStream) {
     logger.log('info', '> adding camera stream');
 
     console.log(mediaStream);
-    
+
     localStream = mediaStream;
     localVideo.srcObject = mediaStream;
 }
