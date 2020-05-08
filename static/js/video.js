@@ -27,11 +27,7 @@ function gotLocalMediaStream(mediaStream) {
     logger.log('info', '> adding camera stream');
 
     localStream = mediaStream;
-    localVideo.srcObject = mediaStream;
-
-    console.log(mediaStream);
-    console.log(localVideo);
-
+    localVideo.attr('src', mediaStream);
 }
 
 function setupRTC() {
@@ -49,7 +45,7 @@ function setupRTC() {
 
     //when a remote user adds stream to the peer connection, we display it
     RTCConnection.onaddstream = function (e) {
-        remoteVideo.srcObject = e.stream;
+        remoteVideo.attr('src', e.stream);
     };
 
     // Setup ice handling
