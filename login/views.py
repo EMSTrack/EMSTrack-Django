@@ -536,20 +536,15 @@ class MQTTAclView(CsrfExemptMixin,
                             topic[2] == 'error'):
                         return HttpResponse('OK')
 
-                #  - user/{username}/client/{client-id}/webrtc/#
-                elif (len(topic) >= 6 and
+                #  - user/{username}/client/{client-id}/webrtc/message
+                elif (len(topic) == 6 and
                         topic[0] == 'user' and
                         topic[1] == user.username and
                         topic[2] == 'client' and
                         topic[3] == clientid and
-                        topic[4] == 'webrtc'):
-
-                    #  - user/{username}/client/{client-id}/webrtc/offer
-                    #  - user/{username}/client/{client-id}/webrtc/answer
-                    #  - user/{username}/client/{client-id}/webrtc/candidate
-                    if (len(topic) == 6 and
-                            (topic[5] == 'offer' or topic[5] == 'answer' or topic[5] == 'candidate')):
-                        return HttpResponse('OK')
+                        topic[4] == 'webrtc' and
+                        topic[5] == 'message'):
+                    return HttpResponse('OK')
 
                 #  - hospital/{hospital-id}/data
                 elif (len(topic) == 3 and
@@ -667,11 +662,9 @@ class MQTTAclView(CsrfExemptMixin,
                             (topic[4] == 'error' or topic[4] == 'status')):
                         return HttpResponse('OK')
 
-                    #  - user/{username}/client/{client-id}/webrtc/offer
-                    #  - user/{username}/client/{client-id}/webrtc/answer
-                    #  - user/{username}/client/{client-id}/webrtc/candidate
-                    elif (len(topic) == 6 and topic[4] == 'webrtc' and
-                            (topic[5] == 'offer' or topic[5] == 'answer' or topic[5] == 'candidate')):
+                    #  - user/{username}/client/{client-id}/webrtc/message
+                    elif len(topic) == 6 and \
+                            topic[4] == 'webrtc' and topic[5] == 'message':
                         return HttpResponse('OK')
 
                     #  - user/{username}/client/{client-id}/ambulance/{ambulance-id}/data

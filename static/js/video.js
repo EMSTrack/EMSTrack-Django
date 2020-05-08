@@ -32,42 +32,26 @@ function init (client) {
 
     // signup for client webrtc updates
     logger.log('info', 'Signing up for client webrtc updates');
-    apiClient.observe(`user/${username}/client/${clientId}/webrtc/offer`, (message) => {
+    apiClient.observe(`user/${username}/client/${clientId}/webrtc/message`, (message) => {
         message = parseMessage(message);
-        if (!isInitiator && !isStarted) {
-            maybeStart();
-        }
-        pc.setRemoteDescription(new RTCSessionDescription(message));
-        doAnswer();
-    });
-
-    apiClient.observe(`user/${username}/client/${clientId}/webrtc/answer`, (message) => {
-        if (isStarted) {
-            message = parseMessage(message);
+        if (message.type === 'offer') {
+            if (!isInitiator && !isStarted) {
+                maybeStart();
+            }
             pc.setRemoteDescription(new RTCSessionDescription(message));
-        } else
-            logger.log('info', "answer received answer but haven't started yet");
-    });
-
-    apiClient.observe(`user/${username}/client/${clientId}/webrtc/candidate`, (message) => {
-        if (isStarted) {
-            message = parseMessage(message);
+            doAnswer();
+        } else if (message.type === 'answer' && isStarted) {
+            pc.setRemoteDescription(new RTCSessionDescription(message));
+        } else if (message.type === 'candidate' && isStarted) {
             const candidate = new RTCIceCandidate({
                 sdpMLineIndex: message.label,
                 candidate: message.candidate
             });
             pc.addIceCandidate(candidate);
-        }
-        else
-            logger.log('info', "candidate received answer but haven't started yet");
-    });
-
-    /*
-    apiClient.observe(`user/${username}/client/${clientId}/webrtc/bye`, (message) => {
-        if (isStarted)
+        } else if (message.type === 'bye' && isStarted) {
             handleRemoteHangup();
+        }
     });
-     */
 
     // set channel as ready
     isChannelReady = true;
@@ -96,6 +80,7 @@ function retrieveOnlineClients() {
                             isInitiator = true;
                             maybeStart();
                         }
+                        // TODO: not possible to start if already started
                     });
 
                 }
@@ -106,15 +91,15 @@ function retrieveOnlineClients() {
         })
 }
 
-function sendMessage(peer, topic, message) {
+function sendMessage(peer, message) {
     if (peer === null) {
-        logger.log('info', 'cannot send message %s/%j without a peer', topic, message);
+        logger.log('info', 'cannot send message %j without a peer', message);
         return;
     }
 
     logger.log('info', 'Client sending message: %j', message);
     //socket.emit('message', message);
-    apiClient.publish(`user/${peer.username}/client/${peer.clientId}/webrtc/${topic}`, JSON.stringify(message), 0, false);
+    apiClient.publish(`user/${peer.username}/client/${peer.client_id}/message`, JSON.stringify(message), 0, false);
 }
 
 function parseMessage(message) {
@@ -261,7 +246,7 @@ function maybeStart() {
 }
 
 window.onbeforeunload = function() {
-    // sendMessage('bye');
+    sendMessage(peer, {type: 'bye'});
 };
 
 /////////////////////////////////////////////////////////
@@ -282,7 +267,7 @@ function createPeerConnection() {
 function handleIceCandidate(event) {
     logger.log('debug', 'icecandidate event: %j', event);
     if (event.candidate) {
-        sendMessage(peer, 'candidate', {
+        sendMessage(peer, {
             type: 'candidate',
             label: event.candidate.sdpMLineIndex,
             id: event.candidate.sdpMid,
@@ -293,17 +278,17 @@ function handleIceCandidate(event) {
     }
 }
 
-function setLocalAndSendMessage(topic, sessionDescription) {
+function setLocalAndSendMessage(sessionDescription) {
     pc.setLocalDescription(sessionDescription);
     logger.log('debug', 'setLocalAndSendMessage: sending message %j', sessionDescription);
-    sendMessage(peer, topic, sessionDescription);
+    sendMessage(peer, sessionDescription);
 }
 
 function doCall() {
     logger.log('info', 'Sending offer to peer');
     pc.createOffer()
         .then( function(offer) {
-            setLocalAndSendMessage('offer', offer);
+            setLocalAndSendMessage(offer);
         })
         .catch( function(reason) {
             logger.log('error', 'createOffer() error: %s', reason);
@@ -314,7 +299,7 @@ function doAnswer() {
     logger.log('info', 'Sending answer to peer.');
     pc.createAnswer()
         .then( function(answer) {
-            setLocalAndSendMessage('answer', answer);
+            setLocalAndSendMessage(answer);
         })
         .catch( function(reason) {
             logger.log('error', 'createAnswer() error: %s', reason);
@@ -363,7 +348,7 @@ function handleRemoteStreamRemoved(event) {
 function hangup() {
     console.log('info', 'Hanging up.');
     stop();
-    // sendMessage('bye');
+    sendMessage(peer, {type: 'bye'});
 }
 
 function handleRemoteHangup() {
