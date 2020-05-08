@@ -28,8 +28,7 @@ function retrieveOnlineClients() {
                 html += `<a class="dropdown-item" href="#">${client.username} @ ${client.client_id}</a>`;
             }
             console.log(html);
-            $('clients-dropdown').html(html);
-            $('.dropdown-toggle').dropdown();
+            $('clients-dropdown').append(html);
         })
         .catch( (error) => {
             logger.log('error', 'Failed to retrieve clients from ApiClient: %j', error);
