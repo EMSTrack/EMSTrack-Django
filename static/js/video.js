@@ -28,6 +28,7 @@ function gotLocalMediaStream(mediaStream) {
 
     localStream = mediaStream;
     localVideo.attr('src', mediaStream);
+    localVideo[0].load();
 }
 
 function setupRTC() {
