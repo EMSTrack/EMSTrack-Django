@@ -38,6 +38,7 @@ function init (client) {
             if (!isInitiator && !isStarted) {
                 maybeStart();
             }
+            peer = message.peer;
             pc.setRemoteDescription(new RTCSessionDescription(message));
             doAnswer();
         } else if (message.type === 'answer' && isStarted) {
