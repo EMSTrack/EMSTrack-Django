@@ -7,7 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from emstrack.mixins import CreateModelUpdateByMixin, UpdateModelUpdateByMixin
-from login.models import Client
+from login.models import Client, ClientStatus
 from login.permissions import IsUserOrAdminOrSuper
 from .serializers import UserProfileSerializer, ClientSerializer
 
