@@ -105,7 +105,7 @@ $(function () {
                 'client_id': clientId,
                 'status': "O",
             });
-            
+
         })
         .then( (client) => {
             logger.log('info', 'client set: %j', client);
