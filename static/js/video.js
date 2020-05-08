@@ -56,6 +56,7 @@ function init (client) {
         else
             logger.log('info', "candidate received answer but haven't started yet");
     });
+
     /*
     apiClient.observe(`user/${username}/client/${clientId}/webrtc/bye`, (message) => {
         if (isStarted)
@@ -71,7 +72,7 @@ function sendMessage(peer, topic, message) {
         return;
     }
 
-    console.log('Client sending message: ', message);
+    logger.log('info', 'Client sending message: %s', message);
     //socket.emit('message', message);
     apiClient.publish(`user/${peer.username}/client/${peer.clientId}/webrtc/${topic}`, JSON.stringify(message), 0, false);
 }
@@ -83,7 +84,7 @@ function parseMessage(message) {
     try {
         data = JSON.parse(message);
     } catch (e) {
-        console.log("Invalid JSON");
+        logger.log('error', "Invalid JSON '%s'", message);
         data = {};
     }
     return data;
@@ -92,7 +93,7 @@ function parseMessage(message) {
 // setup local stream
 
 function gotStream(stream) {
-    console.log('Adding local stream.');
+    logger.log('info', 'Adding local stream.');
     localStream = stream;
     localVideo.srcObject = stream;
     // sendMessage('got user media');
@@ -108,7 +109,7 @@ $(function () {
         video: true
     };
 
-    console.log('Getting user media with constraints', constraints);
+    logger.log('info', "Getting user media with constraints '%s'", constraints);
 
     navigator.mediaDevices.getUserMedia(constraints)
         .then(gotStream)
@@ -206,13 +207,13 @@ socket.on('message', function(message) {
 ////////////////////////////////////////////////////
 
 function maybeStart() {
-    console.log('>>>>>>> maybeStart() ', isStarted, localStream, isChannelReady);
+    logger.log('debug', '>>>>>>> maybeStart() ', isStarted, localStream, isChannelReady);
     if (!isStarted && typeof localStream !== 'undefined' && isChannelReady) {
-        console.log('>>>>>> creating peer connection');
+        logger.log('info', 'creating peer connection');
         createPeerConnection();
         pc.addStream(localStream);
         isStarted = true;
-        console.log('isInitiator', isInitiator);
+        logger.log('debug', 'isInitiator = %s', isInitiator);
         if (isInitiator) {
             doCall();
         }
@@ -231,15 +232,15 @@ function createPeerConnection() {
         pc.onicecandidate = handleIceCandidate;
         pc.onaddstream = handleRemoteStreamAdded;
         pc.onremovestream = handleRemoteStreamRemoved;
-        console.log('Created RTCPeerConnnection');
+        logger.log('info', 'Created RTCPeerConnnection');
     } catch (e) {
-        console.log('Failed to create PeerConnection, exception: ' + e.message);
+        logger.log('error', 'Failed to create PeerConnection, exception: %s' + e.message);
         alert('Cannot create RTCPeerConnection object.');
     }
 }
 
 function handleIceCandidate(event) {
-    console.log('icecandidate event: ', event);
+    logger.log('debug', 'icecandidate event: %s', event);
     if (event.candidate) {
         sendMessage(peer, 'candidate', {
             type: 'candidate',
@@ -248,18 +249,18 @@ function handleIceCandidate(event) {
             candidate: event.candidate.candidate
         });
     } else {
-        console.log('End of candidates.');
+        logger.log('debug', 'End of candidates.');
     }
 }
 
 function setLocalAndSendMessage(topic, sessionDescription) {
     pc.setLocalDescription(sessionDescription);
-    console.log('setLocalAndSendMessage sending message', sessionDescription);
+    logger.log('debug', 'setLocalAndSendMessage: sending message %s', sessionDescription);
     sendMessage(peer, topic, sessionDescription);
 }
 
 function doCall() {
-    console.log('Sending offer to peer');
+    logger.log('info', 'Sending offer to peer');
     pc.createOffer()
         .then( function(offer) {
             setLocalAndSendMessage('offer', offer);
@@ -270,7 +271,7 @@ function doCall() {
 }
 
 function doAnswer() {
-    console.log('Sending answer to peer.');
+    logger.log('info', 'Sending answer to peer.');
     pc.createAnswer()
         .then( function(answer) {
             setLocalAndSendMessage('answer', answer);
@@ -310,23 +311,23 @@ function requestTurn(turnURL) {
 }
 
 function handleRemoteStreamAdded(event) {
-    console.log('Remote stream added.');
+    logger.log('info', 'Remote stream added.');
     remoteStream = event.stream;
     remoteVideo.srcObject = remoteStream;
 }
 
 function handleRemoteStreamRemoved(event) {
-    console.log('Remote stream removed. Event: ', event);
+    logger.log('info', 'Remote stream removed. Event: %s', event);
 }
 
 function hangup() {
-    console.log('Hanging up.');
+    console.log('info', 'Hanging up.');
     stop();
-    sendMessage('bye');
+    // sendMessage('bye');
 }
 
 function handleRemoteHangup() {
-    console.log('Session terminated.');
+    logger.log('info', 'Session terminated.');
     stop();
     isInitiator = false;
 }
