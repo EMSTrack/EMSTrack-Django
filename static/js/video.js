@@ -19,23 +19,6 @@ let peer;
 
 let onlineClients;
 
-function retrieveOnlineClients() {
-    apiClient.getClients()
-        .then( (clients) => {
-            logger.log('info', '%d clients retrieved', Object.keys(clients).length);
-            onlineClients = clients;
-            let html = '';
-            for (const client of onlineClients) {
-                if (client.client_id !== clientId)
-                    html += `<a class="dropdown-item" href="#">${client.username} @ ${client.client_id}</a>`;
-            }
-            $('#clients-dropdown').html(html);
-        })
-        .catch( (error) => {
-            logger.log('error', 'Failed to retrieve clients from ApiClient: %j', error);
-        })
-}
-
 // initialization function
 function init (client) {
 
@@ -86,6 +69,41 @@ function init (client) {
     });
      */
 
+    // set channel as ready
+    isChannelReady = true;
+
+}
+
+// Ready function
+$(function () {
+
+});
+
+function retrieveOnlineClients() {
+    apiClient.getClients()
+        .then( (clients) => {
+            logger.log('info', '%d clients retrieved', Object.keys(clients).length);
+            onlineClients = clients;
+            const dropdown = $('#clients-dropdown');
+            dropdown.empty();
+            for (const client of onlineClients) {
+                if (client.client_id !== clientId) {
+                    const html = `<a class="dropdown-item" href="#" id="${client.username}_${client.client_id}">${client.username} @ ${client.client_id}</a>`;
+                    dropdown.append(html);
+                    $(`#${client.username}_${client.client_id}`).click(function() {
+                        if (!isStarted) {
+                            peer = client;
+                            isInitiator = true;
+                            maybeStart();
+                        }
+                    });
+
+                }
+            }
+        })
+        .catch( (error) => {
+            logger.log('error', 'Failed to retrieve clients from ApiClient: %j', error);
+        })
 }
 
 function sendMessage(peer, topic, message) {
