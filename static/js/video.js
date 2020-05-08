@@ -105,10 +105,9 @@ function sendMessage(peer, message) {
 function parseMessage(message) {
     //accepting only JSON messages
     logger.log('debug', "got message: %s", message);
-    console.log(message);
     let data;
     try {
-        data = JSON.parse(message);
+        data = JSON.parse(message.payload);
     } catch (e) {
         logger.log('error', "Invalid JSON '%s'", message);
         data = {};
