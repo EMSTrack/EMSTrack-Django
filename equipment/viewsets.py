@@ -113,6 +113,7 @@ class EquipmentViewSet(BasePermissionMixin,
     profile_field = 'equipments'
     filter_field = 'id'
     queryset = EquipmentHolder.objects.all()
+    serializer_class = EquipmentSerializer
 
     @action(detail=True)
     def metadata(self, request, pk=None, **kwargs):

@@ -68,7 +68,12 @@ class ClientViewSet(CreateModelUpdateByMixin,
     def list(self, request, *args, **kwargs):
         # override list to restrict clients to online and reconnected only
         queryset = self.get_queryset()
+        logger.debug('** queryset **')
+        logger.debug(queryset)
+
         queryset = self.filter_queryset(queryset.filter(status=ClientStatus.O) | queryset.filter(status=ClientStatus.R))
+        logger.debug('** queryset **')
+        logger.debug(queryset)
 
         page = self.paginate_queryset(queryset)
         if page is not None:
