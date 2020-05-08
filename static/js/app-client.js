@@ -143,7 +143,7 @@ export class AppClient extends TopicObserver {
     subscribeToWebRTC(callback) {
         // subscribe
         // TODO: check if already subscribed
-        this._subscribe(`client/${username}/client/${clientId}/webrtc/message`,
+        this._subscribe(`user/${username}/client/${clientId}/webrtc/message`,
             callback);
     }
 
