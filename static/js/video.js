@@ -19,16 +19,15 @@ let RTCConnection;
 let localStream;
 
 // Video element where stream will be placed.
-let localVideo;
-let remoteVideo;
+const localVideo = document.getElementById("localVideo");
+const remoteVideo = document.getElementById("remoteVideo");
 
 // Handles success by adding the MediaStream to the video element.
 function gotLocalMediaStream(mediaStream) {
     logger.log('info', '> adding camera stream');
 
     localStream = mediaStream;
-    localVideo.attr('src', mediaStream);
-    localVideo[0].load();
+    localVideo.srcObject = mediaStream;
 }
 
 function setupRTC() {
@@ -46,7 +45,7 @@ function setupRTC() {
 
     //when a remote user adds stream to the peer connection, we display it
     RTCConnection.onaddstream = function (e) {
-        remoteVideo.attr('src', e.stream);
+        remoteVideo.srcObject = e.stream;
     };
 
     // Setup ice handling
@@ -67,9 +66,6 @@ function handleLocalMediaStreamError(error) {
 }
 
 $(function () {
-
-    localVideo = $('localVideo');
-    remoteVideo = $('remoteVideo');
 
     const mediaStreamConstraints = {
         video: true,
