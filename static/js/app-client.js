@@ -140,6 +140,13 @@ export class AppClient extends TopicObserver {
             });
     }
 
+    subscribeToWebRTC(callback) {
+        // subscribe
+        // TODO: check if already subscribed
+        this._subscribe(`client/${username}/client/${clientId}/webrtc/message`,
+            callback);
+    }
+
     getAmbulances() {
 
         // initialize if needed

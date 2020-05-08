@@ -32,7 +32,7 @@ function init (client) {
 
     // signup for client webrtc updates
     logger.log('info', 'Signing up for client webrtc updates');
-    apiClient.observe(`user/${username}/client/${clientId}/webrtc/message`, (message) => {
+    apiClient.subscribeToWebRTC((message) => {
         message = parseMessage(message);
         if (message.type === 'offer') {
             if (!isInitiator && !isStarted) {
