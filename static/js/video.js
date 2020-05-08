@@ -99,12 +99,13 @@ function sendMessage(peer, message) {
 
     logger.log('info', 'Client sending message: %j', message);
     //socket.emit('message', message);
+    message.peer = { username: username, client_id:clientId };
     apiClient.publish(`user/${peer.username}/client/${peer.client_id}/webrtc/message`, JSON.stringify(message), 0, false);
 }
 
 function parseMessage(message) {
     //accepting only JSON messages
-    logger.log('debug', "got message: %s", message);
+    logger.log('debug', "got message: %j", message);
     let data = message.payload;
     return data;
 }
