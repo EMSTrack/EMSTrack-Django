@@ -23,9 +23,11 @@ function retrieveOnlineClients() {
     apiClient.getClients()
         .then( (clients) => {
             logger.log('info', '%d clients retrieved', Object.keys(clients).length);
+            onlineClients = clients;
             let html = '';
-            for (const client of clients) {
-                html += `<a class="dropdown-item" href="#">${client.username} @ ${client.client_id}</a>`;
+            for (const client of onlineClients) {
+                if (client.client_id !== clientId)
+                    html += `<a class="dropdown-item" href="#">${client.username} @ ${client.client_id}</a>`;
             }
             $('#clients-dropdown').html(html);
         })
