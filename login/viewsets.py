@@ -43,6 +43,9 @@ class ClientViewSet(CreateModelUpdateByMixin,
     """
     API endpoint for manipulating Clients.
 
+    list:
+    Retrieve list of Client instances.
+
     create:
     Create or update Client instance.
 
@@ -61,3 +64,16 @@ class ClientViewSet(CreateModelUpdateByMixin,
     serializer_class = ClientSerializer
     lookup_field = 'client_id'
     update_by_field = 'user'
+
+    def list(self, request, *args, **kwargs):
+        # override list to restrict clients to online and reconnected only
+        queryset = self.get_queryset()
+        queryset = self.filter_queryset(queryset.filter(status=ClientStatus.O) | queryset.filter(status=ClientStatus.R))
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
