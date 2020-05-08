@@ -257,6 +257,16 @@ export class AppClient extends TopicObserver {
             });
     }
 
+    getClients() {
+
+        // retrieve clients
+        return this.httpClient.get('client/')
+            .then( (response) => {
+                // return aborted call
+                return response.data;
+            });
+    }
+
     abortCall(call_id) {
 
         // abort call

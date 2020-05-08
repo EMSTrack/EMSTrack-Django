@@ -17,6 +17,23 @@ let remoteStream;
 let turnReady;
 let peer;
 
+let onlineClients;
+
+function retrieveOnlineClients() {
+    apiClient.getClients()
+        .then( (clients) => {
+            logger.log('info', '%d clients retrieved', Object.keys(clients).length);
+            let html = '';
+            for (const client of clients) {
+                html += `<a class="dropdown-item" href="#">${client.username} @ ${client.client_id}</a>`;
+            }
+            $('clients-dropdown').html(html);
+        })
+        .catch( (error) => {
+            logger.log('error', 'Failed to retrieve clients from ApiClient: %j', error);
+        })
+}
+
 // initialization function
 function init (client) {
 
@@ -24,6 +41,9 @@ function init (client) {
 
     // set apiClient
     apiClient = client;
+
+    // retrieve online clients
+    retrieveOnlineClients();
 
     // signup for client webrtc updates
     logger.log('info', 'Signing up for client webrtc updates');
