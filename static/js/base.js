@@ -99,6 +99,17 @@ $(function () {
             logger.log('info', 'settings retrieved');
             apiClient.settings = new Settings(settings);
 
+            // set client
+            logger.log('info', 'Setting client');
+            return apiClient.postClient({
+                'client_id': clientId,
+                'status': "O",
+            });
+            
+        })
+        .then( (client) => {
+            logger.log('info', 'client set: %j', client);
+
             // retrieve ambulances
             logger.log('info', 'Retrieving ambulances');
             return apiClient.getAmbulances();

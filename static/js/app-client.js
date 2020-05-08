@@ -279,6 +279,16 @@ export class AppClient extends TopicObserver {
 
     // POST and PATCH methods
 
+    postClient(data) {
+
+        // retrieve bases
+        return this.httpClient.post('client/', data)
+            .then( (response) => {
+                // return call
+                return response.data;
+            });
+    }
+
     postCall(data) {
 
         // retrieve bases
