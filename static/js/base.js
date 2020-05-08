@@ -1,3 +1,5 @@
+import { Message } from 'paho-mqtt';
+
 import { MqttClient } from "./mqtt-client";
 
 import { AppClient } from "./app-client";
@@ -54,7 +56,7 @@ $(function () {
     // retrieve temporary password for mqttClient and connect to broker
     // logger.log('info', 'ApiBaseUrl: ' + apiBaseUrl);
     logger.log('info', 'Retrieving MQTT password');
-    httpClient.get('user/' + username + '/password/')
+    httpClient.get(`user/${username}/password/`)
         .then( (response) => {
 
             // got password
@@ -62,9 +64,14 @@ $(function () {
             mqttClient = new MqttClient(mqttBroker.host, mqttBroker.port, clientId, 2);
 
             logger.log('info', 'Connecting to MQTT broker');
+            const willMessage = new Message("D");
+            willMessage.destinationName = `user/${username}/client/${clientId}/status`;
+            willMessage.qos = 0;
+            willMessage.retained = false;
             return mqttClient.connect({
                 userName: username,
-                password: password
+                password: password,
+                willMessage: willMessage
             });
 
         })
