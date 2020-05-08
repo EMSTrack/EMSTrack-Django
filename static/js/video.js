@@ -27,6 +27,7 @@ function retrieveOnlineClients() {
             for (const client of clients) {
                 html += `<a class="dropdown-item" href="#">${client.username} @ ${client.client_id}</a>`;
             }
+            console.log(html);
             $('clients-dropdown').html(html);
             $('.dropdown-toggle').dropdown();
         })
