@@ -17,10 +17,9 @@
 
             <div class = "row text-center">
                 <div class = "col-md-12">
-                    <input id = "callToUsernameInput" type = "text"
-                           placeholder = "username to call" />
-                    <button id = "callBtn" class = "btn-success btn">Call</button>
-                    <button id = "hangUpBtn" class = "btn-danger btn">Hang Up</button>
+                    <button id="startButton" class="btn-success btn">Start</button>
+                    <button id="callButton" class="btn-success btn">Call</button>
+                    <button id="hangupButton" class="btn-danger btn">Hang Up</button>
                 </div>
             </div>
 
@@ -32,6 +31,8 @@
 {% endblock %}
 
 {% block scripts %}
+
+<script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
 
 {% render_bundle 'main' 'js' 'VIDEO' %}
 
