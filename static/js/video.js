@@ -68,11 +68,11 @@ function init (client) {
 
 function sendMessage(peer, topic, message) {
     if (peer === null) {
-        logger.log('info', 'cannot send message %s/%s without a peer', topic, message);
+        logger.log('info', 'cannot send message %s/%j without a peer', topic, message);
         return;
     }
 
-    logger.log('info', 'Client sending message: %s', message);
+    logger.log('info', 'Client sending message: %j', message);
     //socket.emit('message', message);
     apiClient.publish(`user/${peer.username}/client/${peer.clientId}/webrtc/${topic}`, JSON.stringify(message), 0, false);
 }
@@ -109,7 +109,7 @@ $(function () {
         video: true
     };
 
-    logger.log('info', "Getting user media with constraints '%s'", constraints);
+    logger.log('info', "Getting user media with constraints '%j'", constraints);
 
     navigator.mediaDevices.getUserMedia(constraints)
         .then(gotStream)
@@ -240,7 +240,7 @@ function createPeerConnection() {
 }
 
 function handleIceCandidate(event) {
-    logger.log('debug', 'icecandidate event: %s', event);
+    logger.log('debug', 'icecandidate event: %j', event);
     if (event.candidate) {
         sendMessage(peer, 'candidate', {
             type: 'candidate',
@@ -255,7 +255,7 @@ function handleIceCandidate(event) {
 
 function setLocalAndSendMessage(topic, sessionDescription) {
     pc.setLocalDescription(sessionDescription);
-    logger.log('debug', 'setLocalAndSendMessage: sending message %s', sessionDescription);
+    logger.log('debug', 'setLocalAndSendMessage: sending message %j', sessionDescription);
     sendMessage(peer, topic, sessionDescription);
 }
 
@@ -317,7 +317,7 @@ function handleRemoteStreamAdded(event) {
 }
 
 function handleRemoteStreamRemoved(event) {
-    logger.log('info', 'Remote stream removed. Event: %s', event);
+    logger.log('info', 'Remote stream removed. Event: %j', event);
 }
 
 function hangup() {
