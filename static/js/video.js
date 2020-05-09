@@ -95,6 +95,9 @@ function handleMessages(message) {
 
         logger.log('info', 'GOT OFFER');
 
+        console.log(remoteClient);
+        console.log(message);
+
         if (state === State.WAITING_FOR_OFFER &&
             message.client.username === remoteClient.username &&
             message.client.client_id === remoteClient.client_id) {
