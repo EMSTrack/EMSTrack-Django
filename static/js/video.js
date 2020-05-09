@@ -99,6 +99,7 @@ function sendMessage(peer, message) {
     }
 
     message.peer = { username: username, client_id: clientId };
+    console.log(message);
     logger.log('info', 'Client sending message: %j to %j', message, peer);
     //socket.emit('message', message);
     apiClient.publish(`user/${peer.username}/client/${peer.client_id}/webrtc/message`, JSON.stringify(message), 0, false);
