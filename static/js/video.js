@@ -416,7 +416,7 @@ function handleIceCandidate(event) {
 function setLocalAndSendMessage(sessionDescription) {
     pc.setLocalDescription(sessionDescription);
     logger.log('debug', 'setLocalAndSendMessage: sending message %j', sessionDescription);
-    sendMessage(peer, sessionDescription);
+    sendMessage(remoteClient, sessionDescription);
 }
 
 function doOffer() {
