@@ -55,6 +55,7 @@ export class AppClient extends TopicObserver {
     }
 
     publish(topic, payload, qos, retained) {
+        logger.log('debug', 'topic: %s, payload: %s, qos: %d, retained: %s', topic, payload, qos, retained);
         this.mqttClient.publish(topic, payload, qos, retained);
     }
 
