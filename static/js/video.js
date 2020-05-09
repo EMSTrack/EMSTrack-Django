@@ -246,7 +246,7 @@ function sendMessage(peer, message) {
 
     //socket.emit('message', message);
     logger.log('info', 'Client sending message: %j to %j', message, peer);
-    apiClient.publish(`user/${peer.username}/client/${peer.client_id}/webrtc/message`, JSON.stringify(message), 0, false);
+    apiClient.publish(`user/${peer.username}/client/${peer.client_id}/webrtc/message`, message, 0, false);
 }
 
 function parseMessage(message) {
