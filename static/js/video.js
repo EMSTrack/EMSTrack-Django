@@ -43,13 +43,13 @@ function handleMessages(message) {
         if (state !== State.IDLE) {
             // reply busy, does not change state
             logger.log('info', 'BUSY: rejecting call from %j', message.client);
-            sendMessage(message.client, { type: 'busy', client: localClient });
+            sendMessage(message.client, { type: 'busy' });
         } else {
             // accept call
             state = State.WAITING_FOR_OFFER;
             logger.log('info', 'ACCEPTED: accepting call from %j', message.client);
             remoteClient = {...message.client};
-            sendMessage(message.client, { type: 'accepted', client: localClient });
+            sendMessage(message.client, { type: 'accepted' });
         }
 
     } else if (message.type === 'busy') {
@@ -209,14 +209,15 @@ function retrieveOnlineClients() {
             onlineClients = clients;
             const dropdown = $('#clients-dropdown');
             dropdown.empty();
-            for (const client of onlineClients) {
-                if (client.client_id !== clientId) {
-                    const html = `<a class="dropdown-item" href="#" id="${client.username}_${client.client_id}">${client.username} @ ${client.client_id}</a>`;
+            for (const remote of onlineClients) {
+                if (remote.client_id !== clientId) {
+                    const html = `<a class="dropdown-item" href="#" id="${remote.username}_${remote.client_id}">${remote.username} @ ${remote.client_id}</a>`;
                     dropdown.append(html);
-                    $(`#${client.username}_${client.client_id}`).click(function() {
+                    $(`#${remote.username}_${remote.client_id}`).click(function() {
                         if (state === State.IDLE) {
-                            remoteClient = {...client};
-                            sendMessage(client, {type: 'call', client: localClient});
+                            remoteClient = {...remote};
+                            state = State.CALLING;
+                            sendMessage(remote, {type: 'call' });
                         } else {
                             logger.log('error', 'Cannot initiate call when not IDLE');
                         }
@@ -236,8 +237,7 @@ function sendMessage(peer, message) {
         return;
     }
 
-    message.peer = { username: username, client_id: clientId };
-    console.log(message);
+    message.client = localClient;
     logger.log('info', 'Client sending message: %j to %j', message, peer);
     //socket.emit('message', message);
     apiClient.publish(`user/${peer.username}/client/${peer.client_id}/webrtc/message`, JSON.stringify(message), 0, false);
