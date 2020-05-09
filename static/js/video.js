@@ -61,6 +61,7 @@ function handleMessages(message) {
             message.client.client_id === remoteClient.client_id) {
             // cancel call, remote is busy, go back to idle
             state = State.IDLE;
+            remoteClient = null;
             logger.log('info', 'CANCELLING CALL: remote is busy: %j', message.client);
         } else {
             // ignore
