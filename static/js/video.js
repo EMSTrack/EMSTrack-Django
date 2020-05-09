@@ -11,6 +11,7 @@ const remoteVideo = document.querySelector('#remoteVideo');
 let isChannelReady = false;
 let isInitiator = false;
 let isStarted = false;
+
 let localStream;
 let pc;
 let remoteStream;
@@ -18,6 +19,162 @@ let turnReady;
 let peer;
 
 let onlineClients;
+
+let remoteClient = null;
+const localClient = { username: username, client_id: clientId };
+
+const State = {
+    IDLE: 1,
+    CALLING: 2,
+    WAITING_FOR_ANSWER: 3,
+    WAITING_FOR_OFFER: 4,
+    ACTIVE_CALL: 5,
+};
+Object.freeze(State);
+let state = State.IDLE;
+
+// handle messages
+function handleMessages(message) {
+
+    if (message.type === 'call') {
+
+        logger.log('info', 'GOT CALL');
+
+        if (state !== State.IDLE) {
+            // reply busy, does not change state
+            logger.log('info', 'BUSY: rejecting call from %j', message.client);
+            sendMessage(message.client, { type: 'busy', client: localClient });
+        } else {
+            // accept call
+            state = State.WAITING_FOR_OFFER;
+            logger.log('info', 'ACCEPTED: accepting call from %j', message.client);
+            remoteClient = {...message.client};
+            sendMessage(message.client, { type: 'accepted', client: localClient });
+        }
+
+    } else if (message.type === 'busy') {
+
+        logger.log('info', 'GOT BUSY');
+
+        if (state === State.CALLING &&
+            message.client.username === remoteClient.username &&
+            message.client.client_id === remoteClient.client_id) {
+            // cancel call, remote is busy, go back to idle
+            state = State.IDLE;
+            logger.log('info', 'CANCELLING CALL: remote is busy: %j', message.client);
+        } else {
+            // ignore
+            logger.log('info', 'IGNORING BUSY: %j', message.client);
+        }
+
+    } else if (message.type === 'accepted') {
+
+        logger.log('info', 'GOT ACCEPTED');
+
+        if (state === State.CALLING &&
+            message.client.username === remoteClient.username &&
+            message.client.client_id === remoteClient.client_id) {
+
+            // Make offer
+            state = State.WAITING_FOR_ANSWER;
+            logger.log('info', 'ACCEPTED: will make offer to %j', message.client);
+            isInitiator = true;
+            maybeStart();
+
+        } else {
+
+            // ignore
+            logger.log('info', 'IGNORING ACCEPTED: %j', message.client);
+
+        }
+
+    } else if (message.type === 'offer') {
+
+        logger.log('info', 'GOT OFFER');
+
+        if (state === State.WAITING_FOR_OFFER &&
+            message.client.username === remoteClient.username &&
+            message.client.client_id === remoteClient.client_id) {
+
+            logger.log('info', 'will answer to %j', message.client);
+            state = State.ACTIVE_CALL;
+            if (!isInitiator && !isStarted) {
+                peer = {...message.peer};
+                maybeStart();
+            }
+            pc.setRemoteDescription(new RTCSessionDescription(message));
+            doAnswer();
+
+        } else {
+
+            // ignore
+            logger.log('info', 'IGNORING OFFER: %j', message.client);
+
+        }
+
+    } else if (message.type === 'answer') {
+
+        logger.log('info', 'GOT ANSWER');
+
+        if (state === State.WAITING_FOR_ANSWER &&
+            message.client.username === remoteClient.username &&
+            message.client.client_id === remoteClient.client_id) {
+
+            pc.setRemoteDescription(new RTCSessionDescription(message));
+
+        } else {
+
+            // ignore
+            logger.log('info', 'IGNORING ANSWER: %j', message.client);
+
+        }
+
+    } else if (message.type === 'candidate') {
+
+        logger.log('info', 'GOT CANDIDATE');
+
+        if (state === State.ACTIVE_CALL &&
+            message.client.username === remoteClient.username &&
+            message.client.client_id === remoteClient.client_id) {
+
+            const candidate = new RTCIceCandidate({
+                sdpMLineIndex: message.label,
+                candidate: message.candidate
+            });
+            pc.addIceCandidate(candidate);
+
+        } else {
+
+            // ignore
+            logger.log('info', 'IGNORING CANDIDATE: %j', message.client);
+
+        }
+
+    } else if (message.type === 'bye' && isStarted) {
+
+        logger.log('info', 'GOT BYE');
+
+        if (state === State.ACTIVE_CALL &&
+            message.client.username === remoteClient.username &&
+            message.client.client_id === remoteClient.client_id) {
+
+            handleRemoteHangup();
+
+        } else {
+
+            // ignore
+            logger.log('info', 'IGNORING BYE: %j', message.client);
+
+        }
+
+    } else {
+
+        // error
+        logger.log('error', "Unknown message type '%s' from  %j", message.type, message.client);
+
+    }
+
+}
 
 // initialization function
 function init (client) {
@@ -32,27 +189,7 @@ function init (client) {
 
     // signup for client webrtc updates
     logger.log('info', 'Signing up for client webrtc updates');
-    apiClient.subscribeToWebRTC((message) => {
-        message = parseMessage(message);
-        if (message.type === 'offer') {
-            if (!isInitiator && !isStarted) {
-                peer = {...message.peer};
-                maybeStart();
-            }
-            pc.setRemoteDescription(new RTCSessionDescription(message));
-            doAnswer();
-        } else if (message.type === 'answer' && isStarted) {
-            pc.setRemoteDescription(new RTCSessionDescription(message));
-        } else if (message.type === 'candidate' && isStarted) {
-            const candidate = new RTCIceCandidate({
-                sdpMLineIndex: message.label,
-                candidate: message.candidate
-            });
-            pc.addIceCandidate(candidate);
-        } else if (message.type === 'bye' && isStarted) {
-            handleRemoteHangup();
-        }
-    });
+    apiClient.subscribeToWebRTC((message) => handleMessages(parseMessage(message)) );
 
     // set channel as ready
     isChannelReady = true;
@@ -76,12 +213,12 @@ function retrieveOnlineClients() {
                     const html = `<a class="dropdown-item" href="#" id="${client.username}_${client.client_id}">${client.username} @ ${client.client_id}</a>`;
                     dropdown.append(html);
                     $(`#${client.username}_${client.client_id}`).click(function() {
-                        if (!isStarted) {
-                            peer = {...client};
-                            isInitiator = true;
-                            maybeStart();
+                        if (state === State.IDLE) {
+                            remoteClient = {...client};
+                            sendMessage(message.client, {type: 'call', client: localClient});
+                        } else {
+                            logger.log('error', 'Cannot initiate call when not IDLE');
                         }
-                        // TODO: not possible to start if already started
                     });
 
                 }
@@ -237,7 +374,7 @@ function maybeStart() {
         isStarted = true;
         logger.log('debug', 'isInitiator = %s', isInitiator);
         if (isInitiator) {
-            doCall();
+            doOffer();
         }
     }
 }
@@ -281,7 +418,7 @@ function setLocalAndSendMessage(sessionDescription) {
     sendMessage(peer, sessionDescription);
 }
 
-function doCall() {
+function doOffer() {
     logger.log('info', 'Sending offer to peer');
     pc.createOffer()
         .then( function(offer) {
