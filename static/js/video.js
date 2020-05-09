@@ -215,7 +215,7 @@ function retrieveOnlineClients() {
                     $(`#${client.username}_${client.client_id}`).click(function() {
                         if (state === State.IDLE) {
                             remoteClient = {...client};
-                            sendMessage(message.client, {type: 'call', client: localClient});
+                            sendMessage(client, {type: 'call', client: localClient});
                         } else {
                             logger.log('error', 'Cannot initiate call when not IDLE');
                         }
