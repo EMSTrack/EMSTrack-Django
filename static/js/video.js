@@ -16,7 +16,6 @@ let localStream;
 let pc;
 let remoteStream;
 let turnReady;
-let peer;
 
 let onlineClients;
 
@@ -100,7 +99,6 @@ function handleMessages(message) {
             logger.log('info', 'will answer to %j', message.client);
             state = State.ACTIVE_CALL;
             if (!isInitiator && !isStarted) {
-                peer = {...message.peer};
                 maybeStart();
             }
             pc.setRemoteDescription(new RTCSessionDescription(message));
@@ -381,7 +379,7 @@ function maybeStart() {
 }
 
 window.onbeforeunload = function() {
-    sendMessage(peer, {type: 'bye'});
+    sendMessage(remoteClient, {type: 'bye'});
 };
 
 /////////////////////////////////////////////////////////
@@ -402,7 +400,7 @@ function createPeerConnection() {
 function handleIceCandidate(event) {
     logger.log('debug', 'icecandidate event: %j', event);
     if (event.candidate) {
-        sendMessage(peer, {
+        sendMessage(remoteClient, {
             type: 'candidate',
             label: event.candidate.sdpMLineIndex,
             id: event.candidate.sdpMid,
@@ -483,7 +481,7 @@ function handleRemoteStreamRemoved(event) {
 function hangup() {
     console.log('info', 'Hanging up.');
     stop();
-    sendMessage(peer, {type: 'bye'});
+    sendMessage(remoteClient, {type: 'bye'});
 }
 
 function handleRemoteHangup() {
