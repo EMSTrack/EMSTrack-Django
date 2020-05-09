@@ -36,9 +36,9 @@ function init (client) {
         message = parseMessage(message);
         if (message.type === 'offer') {
             if (!isInitiator && !isStarted) {
+                peer = message.peer;
                 maybeStart();
             }
-            peer = message.peer;
             pc.setRemoteDescription(new RTCSessionDescription(message));
             doAnswer();
         } else if (message.type === 'answer' && isStarted) {
