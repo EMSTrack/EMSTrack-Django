@@ -242,9 +242,7 @@ function sendMessage(peer, message) {
     }
 
     // add client to serializer
-    const json = JSON.parse(JSON.stringify(message));
-    json.client = localClient;
-    message = JSON.stringify(json);
+    message = JSON.stringify(message).slice(0,-1) + "," + JSON.stringify({client: localClient}).slice(1);
 
     //socket.emit('message', message);
     logger.log('info', 'Client sending message: %j to %j', message, peer);
