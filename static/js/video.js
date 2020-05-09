@@ -241,10 +241,13 @@ function sendMessage(peer, message) {
         return;
     }
 
-    message.client = localClient;
-    console.log(message);
-    logger.log('info', 'Client sending message: %j to %j', message, peer);
+    // add client to serializer
+    const json = JSON.parse(JSON.stringify(message));
+    json.client = localClient;
+    message = JSON.stringify(json);
+
     //socket.emit('message', message);
+    logger.log('info', 'Client sending message: %j to %j', message, peer);
     apiClient.publish(`user/${peer.username}/client/${peer.client_id}/webrtc/message`, JSON.stringify(message), 0, false);
 }
 
