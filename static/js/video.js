@@ -71,6 +71,9 @@ function handleMessages(message) {
 
         logger.log('info', 'GOT ACCEPTED');
 
+        console.log(remoteClient);
+        console.log(message);
+
         if (state === State.CALLING &&
             message.client.username === remoteClient.username &&
             message.client.client_id === remoteClient.client_id) {
