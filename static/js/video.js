@@ -77,7 +77,7 @@ function retrieveOnlineClients() {
                     dropdown.append(html);
                     $(`#${client.username}_${client.client_id}`).click(function() {
                         if (!isStarted) {
-                            peer = client;
+                            peer = {...client};
                             isInitiator = true;
                             maybeStart();
                         }
