@@ -58,6 +58,9 @@ $(function () {
     callButton
         .click(function() {
             if (state === State.IDLE && remoteClient !== null) {
+                if (typeof localStream !== 'undefined') {
+                    startStream();
+                }
                 state = State.CALLING;
                 callButton.prop('disabled', true);
                 hangupButton.prop('disabled', false);
