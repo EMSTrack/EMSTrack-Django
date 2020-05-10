@@ -135,16 +135,16 @@ function handleMessages(message) {
             sendMessage(message.client, { type: 'busy' });
         } else {
 
-            // start streaming if not on yet
-            if (typeof localStream !== 'undefined') {
-                startStream();
-            }
+            // start streaming then accept call
+            startStream()
+                .then(function() {
+                    // accept call
+                    state = State.WAITING_FOR_OFFER;
+                    logger.log('info', 'ACCEPTED: accepting call from %j', message.client);
+                    remoteClient = {...message.client};
+                    sendMessage(message.client, { type: 'accepted' });
+                });
 
-            // accept call
-            state = State.WAITING_FOR_OFFER;
-            logger.log('info', 'ACCEPTED: accepting call from %j', message.client);
-            remoteClient = {...message.client};
-            sendMessage(message.client, { type: 'accepted' });
         }
 
     } else if (message.type === 'busy') {
@@ -171,16 +171,15 @@ function handleMessages(message) {
             message.client.username === remoteClient.username &&
             message.client.client_id === remoteClient.client_id) {
 
-            // start streaming if not on yet
-            if (typeof localStream !== 'undefined') {
-                startStream();
-            }
-
-            // Make offer
-            state = State.WAITING_FOR_ANSWER;
-            logger.log('info', 'ACCEPTED: will make offer to %j', message.client);
-            isInitiator = true;
-            maybeStart();
+            // start streaming and make offer
+            startStream()
+                .then(function() {
+                    // Make offer
+                    state = State.WAITING_FOR_ANSWER;
+                    logger.log('info', 'ACCEPTED: will make offer to %j', message.client);
+                    isInitiator = true;
+                    maybeStart();
+                });
 
         } else {
 
@@ -313,6 +312,16 @@ function gotStream(stream) {
 
 function startStream() {
 
+    if (location.hostname !== 'localhost' && turnServer !== null) {
+        requestTurn(turnServer);
+    }
+
+    // if there is nothing to do...
+    if (typeof localStream !== 'undefined') {
+        return Promise.resolve();
+    }
+
+    // otherwise start stream
     const constraints = {
         audio: false,
         video: true
@@ -320,15 +329,11 @@ function startStream() {
 
     logger.log('info', "Getting user media with constraints '%j'", constraints);
 
-    navigator.mediaDevices.getUserMedia(constraints)
+    return navigator.mediaDevices.getUserMedia(constraints)
         .then(gotStream)
         .catch(function(e) {
             alert('getUserMedia() error: ' + e.name);
         });
-
-    if (location.hostname !== 'localhost' && turnServer !== null) {
-        requestTurn(turnServer);
-    }
 
 }
 
