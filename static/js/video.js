@@ -466,12 +466,13 @@ function handleRemoteStreamRemoved(event) {
 
 function hangup() {
     console.log('info', 'Hanging up.');
-    stop();
     sendMessage(remoteClient, {type: 'bye'});
+    stop();
 }
 
 function handleRemoteHangup() {
     logger.log('info', 'Session terminated.');
+    sendMessage(remoteClient, {type: 'bye'});
     stop();
     isInitiator = false;
 }
