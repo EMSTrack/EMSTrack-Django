@@ -45,12 +45,15 @@ function init (client) {
 // Ready function
 let callButton;
 let hangupButton;
+let remoteClientText;
 $(function () {
 
     callButton = $('#callButton');
     hangupButton = $('#hangupButton');
+    remoteClientText = $('#remoteClientText');
 
     // disable buttons
+    remoteClientText.empty();
     callButton.prop('disabled', true);
     hangupButton.prop('disabled', true);
 
@@ -95,6 +98,7 @@ function retrieveOnlineClients() {
                     $(`#${remote.username}_${remote.client_id}`).click(function() {
                         if (state === State.IDLE) {
                             remoteClient = {...remote};
+                            remoteClientText.html(remoteClient.username + ' @ ' + remoteClient.client_id);
                             callButton.prop('disabled', false);
                             hangupButton.prop('disabled', true);
                         } else {
@@ -142,6 +146,8 @@ function handleMessages(message) {
                     state = State.WAITING_FOR_OFFER;
                     logger.log('info', 'ACCEPTED: accepting call from %j', message.client);
                     remoteClient = {...message.client};
+                    remoteClientText.html(remoteClient.username + ' @ ' + remoteClient.client_id);
+                    hangupButton.prop('disabled', false);
                     sendMessage(message.client, { type: 'accepted' });
                 });
 
@@ -157,6 +163,7 @@ function handleMessages(message) {
             // cancel call, remote is busy, go back to idle
             state = State.IDLE;
             remoteClient = null;
+            remoteClientText.empty();
             logger.log('info', 'CANCELLING CALL: remote is busy: %j', message.client);
         } else {
             // ignore
@@ -472,6 +479,7 @@ function handleRemoteHangup() {
 function stop() {
     isStarted = false;
     remoteClient = null;
+    remoteClientText.empty();
     state = State.IDLE;
     pc.close();
     pc = null;
