@@ -61,7 +61,7 @@ $(function () {
                 state = State.CALLING;
                 callButton.prop('disabled', true);
                 hangupButton.prop('disabled', false);
-                sendMessage(remote, {type: 'call'});
+                sendMessage(remoteClient, {type: 'call'});
             }
         });
 
