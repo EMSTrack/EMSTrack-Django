@@ -73,7 +73,6 @@ $(function () {
         .click(function() {
             if (state === State.ACTIVE_CALL) {
                 // reset dropdown
-                $("#clients-dropdown").val('default').selectpicker("refresh");
                 callButton.prop('disabled', true);
                 hangupButton.prop('disabled', true);
                 hangup();
@@ -226,6 +225,7 @@ function handleMessages(message) {
             message.client.username === remoteClient.username &&
             message.client.client_id === remoteClient.client_id) {
 
+            state = State.ACTIVE_CALL;
             pc.setRemoteDescription(new RTCSessionDescription(message));
 
         } else {
