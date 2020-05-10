@@ -95,7 +95,8 @@ function retrieveOnlineClients() {
                     $(`#${remote.username}_${remote.client_id}`).click(function() {
                         if (state === State.IDLE) {
                             remoteClient = {...remote};
-                            $('#callButton').enable();
+                            callButton.prop('disabled', false);
+                            hangupButton.prop('disabled', true);
                         } else {
                             logger.log('error', 'Cannot select client when not IDLE');
                         }
