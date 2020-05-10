@@ -22,6 +22,95 @@ let onlineClients;
 let remoteClient = null;
 const localClient = { username: username, client_id: clientId };
 
+// const turnServer = 'https://computeengineondemand.appspot.com/turn?username=41784574&key=4080218913';
+const turnServer = null;
+
+// initialization function
+function init (client) {
+
+    logger.log('info', '> video.js');
+
+    // set apiClient
+    apiClient = client;
+
+    // retrieve online clients
+    retrieveOnlineClients();
+
+    // signup for client webrtc updates
+    logger.log('info', 'Signing up for client webrtc updates');
+    apiClient.subscribeToWebRTC((message) => handleMessages(parseMessage(message)) );
+
+}
+
+// Ready function
+let callButton;
+let hangupButton;
+$(function () {
+
+    callButton = $('#callButton');
+    hangupButton = $('#hangupButton');
+
+    // disable buttons
+    callButton.prop('disabled', true);
+    hangupButton.prop('disabled', true);
+
+    // call button click
+    callButton
+        .click(function() {
+            if (state === State.IDLE && remoteClient !== null) {
+                state = State.CALLING;
+                callButton.prop('disabled', true);
+                hangupButton.prop('disabled', false);
+                sendMessage(remote, {type: 'call'});
+            }
+        });
+
+    // hangup button click
+    hangupButton
+        .click(function() {
+            if (state === State.ACTIVE_CALL) {
+                // reset dropdown
+                $("#clients-dropdown").val('default').selectpicker("refresh");
+                callButton.prop('disabled', true);
+                hangupButton.prop('disabled', true);
+                hangup();
+            }
+        });
+
+});
+
+// online clients
+
+function retrieveOnlineClients() {
+    apiClient.getClients()
+        .then( (clients) => {
+            logger.log('info', '%d clients retrieved', Object.keys(clients).length);
+            onlineClients = clients;
+            const dropdown = $('#clients-dropdown');
+            dropdown.empty();
+            for (const remote of onlineClients) {
+                if (remote.client_id !== clientId) {
+                    const html = `<a class="dropdown-item" href="#" id="${remote.username}_${remote.client_id}">${remote.username} @ ${remote.client_id}</a>`;
+                    dropdown.append(html);
+                    $(`#${remote.username}_${remote.client_id}`).click(function() {
+                        if (state === State.IDLE) {
+                            remoteClient = {...remote};
+                            $('#callButton').enable();
+                        } else {
+                            logger.log('error', 'Cannot select client when not IDLE');
+                        }
+                    });
+
+                }
+            }
+        })
+        .catch( (error) => {
+            logger.log('error', 'Failed to retrieve clients from ApiClient: %j', error);
+        })
+}
+
+// State machine and message handling
+
 const State = {
     IDLE: 1,
     CALLING: 2,
@@ -71,9 +160,6 @@ function handleMessages(message) {
 
         logger.log('info', 'GOT ACCEPTED');
 
-        console.log(remoteClient);
-        console.log(message);
-
         if (state === State.CALLING &&
             message.client.username === remoteClient.username &&
             message.client.client_id === remoteClient.client_id) {
@@ -94,9 +180,6 @@ function handleMessages(message) {
     } else if (message.type === 'offer') {
 
         logger.log('info', 'GOT OFFER');
-
-        console.log(remoteClient);
-        console.log(message);
 
         if (state === State.WAITING_FOR_OFFER &&
             message.client.username === remoteClient.username &&
@@ -181,60 +264,6 @@ function handleMessages(message) {
 
 }
 
-// initialization function
-function init (client) {
-
-    logger.log('info', '> video.js');
-
-    // set apiClient
-    apiClient = client;
-
-    // retrieve online clients
-    retrieveOnlineClients();
-
-    // signup for client webrtc updates
-    logger.log('info', 'Signing up for client webrtc updates');
-    apiClient.subscribeToWebRTC((message) => handleMessages(parseMessage(message)) );
-
-    // set channel as ready
-    isChannelReady = true;
-
-}
-
-// Ready function
-$(function () {
-
-});
-
-function retrieveOnlineClients() {
-    apiClient.getClients()
-        .then( (clients) => {
-            logger.log('info', '%d clients retrieved', Object.keys(clients).length);
-            onlineClients = clients;
-            const dropdown = $('#clients-dropdown');
-            dropdown.empty();
-            for (const remote of onlineClients) {
-                if (remote.client_id !== clientId) {
-                    const html = `<a class="dropdown-item" href="#" id="${remote.username}_${remote.client_id}">${remote.username} @ ${remote.client_id}</a>`;
-                    dropdown.append(html);
-                    $(`#${remote.username}_${remote.client_id}`).click(function() {
-                        if (state === State.IDLE) {
-                            remoteClient = {...remote};
-                            state = State.CALLING;
-                            sendMessage(remote, {type: 'call' });
-                        } else {
-                            logger.log('error', 'Cannot initiate call when not IDLE');
-                        }
-                    });
-
-                }
-            }
-        })
-        .catch( (error) => {
-            logger.log('error', 'Failed to retrieve clients from ApiClient: %j', error);
-        })
-}
-
 function sendMessage(peer, message) {
     if (peer === null) {
         logger.log('info', 'cannot send message %j without a peer', message);
@@ -262,13 +291,15 @@ function gotStream(stream) {
     logger.log('info', 'Adding local stream.');
     localStream = stream;
     localVideo.srcObject = stream;
+    // set channel as ready
+    isChannelReady = true;
     // sendMessage('got user media');
     if (isInitiator) {
         maybeStart();
     }
 }
 
-$(function () {
+function startStream() {
 
     const constraints = {
         audio: false,
@@ -283,94 +314,17 @@ $(function () {
             alert('getUserMedia() error: ' + e.name);
         });
 
-    if (location.hostname !== 'localhost') {
-        requestTurn(
-            'https://computeengineondemand.appspot.com/turn?username=41784574&key=4080218913'
-        );
+    if (location.hostname !== 'localhost' && turnServer !== null) {
+        requestTurn(turnServer);
     }
 
-})
+}
 
 const pcConfig = {
     'iceServers': [{
         'urls': 'stun:stun.l.google.com:19302'
     }]
 };
-
-// Set up audio and video regardless of what devices are present.
-const sdpConstraints = {
-    offerToReceiveAudio: true,
-    offerToReceiveVideo: true
-};
-
-/////////////////////////////////////////////
-
-const room = 'foo';
-// Could prompt for room name:
-// room = prompt('Enter room name:');
-
-/*
-var socket = io.connect();
-
-if (room !== '') {
-  socket.emit('create or join', room);
-  console.log('Attempted to create or  join room', room);
-}
-
-socket.on('created', function(room) {
-  console.log('Created room ' + room);
-  isInitiator = true;
-});
-
-socket.on('full', function(room) {
-  console.log('Room ' + room + ' is full');
-});
-
-socket.on('join', function (room){
-  console.log('Another peer made a request to join room ' + room);
-  console.log('This peer is the initiator of room ' + room + '!');
-  isChannelReady = true;
-});
-
-socket.on('joined', function(room) {
-  console.log('joined: ' + room);
-  isChannelReady = true;
-});
-
-socket.on('log', function(array) {
-  console.log.apply(console, array);
-});
-*/
-
-////////////////////////////////////////////////
-
-/*
-// This client receives a message
-socket.on('message', function(message) {
-    console.log('Client received message:', message);
-    if (message === 'got user media') {
-        maybeStart();
-    } else if (message.type === 'offer') {
-        if (!isInitiator && !isStarted) {
-            maybeStart();
-        }
-        pc.setRemoteDescription(new RTCSessionDescription(message));
-        doAnswer();
-    } else if (message.type === 'answer' && isStarted) {
-        pc.setRemoteDescription(new RTCSessionDescription(message));
-    } else if (message.type === 'candidate' && isStarted) {
-        var candidate = new RTCIceCandidate({
-            sdpMLineIndex: message.label,
-            candidate: message.candidate
-        });
-        pc.addIceCandidate(candidate);
-    } else if (message === 'bye' && isStarted) {
-        handleRemoteHangup();
-    }
-});
-*/
-
-////////////////////////////////////////////////////
 
 function maybeStart() {
     logger.log('debug', '>>>>>>> maybeStart() ', isStarted, localStream, isChannelReady);
@@ -500,6 +454,8 @@ function handleRemoteHangup() {
 
 function stop() {
     isStarted = false;
+    remoteClient = null;
+    state = State.IDLE;
     pc.close();
     pc = null;
 }
