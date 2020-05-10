@@ -58,9 +58,6 @@ $(function () {
     callButton
         .click(function() {
             if (state === State.IDLE && remoteClient !== null) {
-                if (typeof localStream !== 'undefined') {
-                    startStream();
-                }
                 state = State.CALLING;
                 callButton.prop('disabled', true);
                 hangupButton.prop('disabled', false);
@@ -137,6 +134,12 @@ function handleMessages(message) {
             logger.log('info', 'BUSY: rejecting call from %j', message.client);
             sendMessage(message.client, { type: 'busy' });
         } else {
+
+            // start streaming if not on yet
+            if (typeof localStream !== 'undefined') {
+                startStream();
+            }
+
             // accept call
             state = State.WAITING_FOR_OFFER;
             logger.log('info', 'ACCEPTED: accepting call from %j', message.client);
@@ -167,6 +170,11 @@ function handleMessages(message) {
         if (state === State.CALLING &&
             message.client.username === remoteClient.username &&
             message.client.client_id === remoteClient.client_id) {
+
+            // start streaming if not on yet
+            if (typeof localStream !== 'undefined') {
+                startStream();
+            }
 
             // Make offer
             state = State.WAITING_FOR_ANSWER;
