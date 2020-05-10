@@ -72,9 +72,6 @@ $(function () {
     hangupButton
         .click(function() {
             if (state === State.ACTIVE_CALL) {
-                // reset dropdown
-                callButton.prop('disabled', true);
-                hangupButton.prop('disabled', true);
                 hangup();
             }
         });
@@ -256,7 +253,7 @@ function handleMessages(message) {
 
         }
 
-    } else if (message.type === 'bye' && isStarted) {
+    } else if (message.type === 'bye') {
 
         logger.log('info', 'GOT BYE');
 
@@ -484,4 +481,6 @@ function stop() {
     state = State.IDLE;
     pc.close();
     pc = null;
+    callButton.prop('disabled', true);
+    hangupButton.prop('disabled', true);
 }
