@@ -177,6 +177,33 @@
     {% include 'messages.html' %}
 </div>
 
+<!-- NEW VIDEO CALL MODAL -->
+<div class="modal fade" tabindex="-1" role="dialog" id="newVideoCallModalWindow" aria-labelledby="newVideoCallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="newVideoCallModalTitle" class="modal-title">EMSTrack {% trans "Video" %}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="col" id="newVideoCallBody">
+                            {% trans "You have a new video call from" %} <span id="newVideoCallUser"></span>.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="newVideoCallAcceptButton">{% trans "Accept" %}</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans "Decline" %}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- VIDEO MODAL -->
 <div class="modal fade" tabindex="-1" role="dialog" id="videoModalWindow" aria-labelledby="videoModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -188,7 +215,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="contaioner">
+                <div class="container">
                     {% include 'video/modal.html' %}
                 </div>
             </div>

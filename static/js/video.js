@@ -90,8 +90,46 @@ $(function () {
 
     });
 
+    // configure newVideoCallAccept button
+    $('#newVideoCallAcceptButton').click(function() {
 
+        // accept call
 
+        // display video modal
+        $('#videoModalWindow').modal({
+            backdrop: 'static',
+            keyboard: false,
+            show: true
+        });
+
+        // start streaming then accept call
+        startStream()
+            .then(function() {
+                // accept call
+                state = State.WAITING_FOR_OFFER;
+                logger.log('info', 'ACCEPTED: accepting call from %j', remoteClient);
+                remoteClientText.html(remoteClient.username + ' @ ' + remoteClient.client_id);
+                hangupButton.prop('disabled', false);
+                sendMessage(remoteClient, { type: 'accepted' });
+
+                // hide new video call window
+                $('#newVideoCallModalWindow').modal('hide');
+
+            });
+
+    });
+
+    $('#newVideoCallModalWindow').on('hidden.bs.modal', function (e) {
+        if (state === State.PROMPT) {
+            // decline call
+            state = State.IDLE;
+            logger.log('info', 'DECLINE: declining call from %j', remoteClient);
+            sendMessage(remoteClient, { type: 'decline' });
+            remoteClient = null;
+        } else {
+            logger.log('info', 'Unexpected state %s', state);
+        }
+    });
 
 });
 
@@ -135,6 +173,7 @@ const State = {
     WAITING_FOR_ANSWER: 3,
     WAITING_FOR_OFFER: 4,
     ACTIVE_CALL: 5,
+    PROMPT: 6,
 };
 Object.freeze(State);
 let state = State.IDLE;
@@ -147,11 +186,23 @@ function handleMessages(message) {
         logger.log('info', 'GOT CALL');
 
         if (state !== State.IDLE) {
+
             // reply busy, does not change state
             logger.log('info', 'BUSY: rejecting call from %j', message.client);
             sendMessage(message.client, { type: 'busy' });
+
         } else {
 
+            // set state as user prompt
+            state = State.PROMPT;
+            remoteClient = {...message.client};
+
+            // display new video call modal
+            $('#newVideoCallModalWindow').modal({
+                show: true
+            });
+
+            /*
             // start streaming then accept call
             startStream()
                 .then(function() {
@@ -163,12 +214,13 @@ function handleMessages(message) {
                     hangupButton.prop('disabled', false);
                     sendMessage(message.client, { type: 'accepted' });
                 });
+            */
 
         }
 
-    } else if (message.type === 'busy') {
+    } else if (message.type === 'busy' || message.type === 'decline') {
 
-        logger.log('info', 'GOT BUSY');
+        logger.log('info', 'GOT BUSY OR DECLINE');
 
         if (state === State.CALLING &&
             message.client.username === remoteClient.username &&
@@ -177,10 +229,10 @@ function handleMessages(message) {
             state = State.IDLE;
             remoteClient = null;
             remoteClientText.empty();
-            logger.log('info', 'CANCELLING CALL: remote is busy: %j', message.client);
+            logger.log('info', 'CANCELLING CALL: remote is busy or declined: %j', message.client);
         } else {
             // ignore
-            logger.log('info', 'IGNORING BUSY: %j', message.client);
+            logger.log('info', 'IGNORING BUSY OR DECLINE: %j', message.client);
         }
 
     } else if (message.type === 'accepted') {
