@@ -40,6 +40,8 @@
             crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.7.0/js/all.js"></script>
 
+    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+
     <!-- title -->
     <title>{% block title %}EMSTrack - {% trans "Ambulance Tracker" %}{% endblock %}</title>
     {% block head %}
@@ -232,15 +234,12 @@
 </script>
 {% endautoescape %}
 
-{% block scripts %}
-
-    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
-
-    {% render_bundle 'main' 'js' 'BASE' %}
-
-{% endblock %}
+{% render_bundle 'main' 'js' 'BASE' %}
 
 {% render_bundle 'main' 'js' 'VIDEO' %}
+
+{% block scripts %}
+{% endblock %}
 
 </body>
 </html>
