@@ -2,17 +2,20 @@
 {% load i18n %}
 
 <div class="container">
-
     <div class="row">
         <div class="col">
 
-            <h1>{% trans "Video" %}</h1>
-
-            <video id="localVideo" autoplay playsinline></video>
-            <video id="remoteVideo" autoplay playsinline></video>
+            <div class = "row text-center">
+                <div class = "col-md-6">
+                    <video id="localVideo" autoplay playsinline></video>
+                </div>
+                <div class = "col-md-6">
+                    <video id="remoteVideo" autoplay playsinline></video>
+                </div>
+            </div>
 
             <div class = "row text-center">
-                <div class = "col-md-12">
+                <div class = "col-md-3">
                     <div class="dropdown">
                         <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                             {% trans "Select user..." %}
@@ -20,8 +23,14 @@
                         <div class="dropdown-menu" id="clients-dropdown">
                         </div>
                     </div>
+                </div>
+                <div class = "col-md-5">
                     <span id="remoteClientText"></span>
+                </div>
+                <div class = "col-md-2">
                     <button id="callButton" class="btn-success btn">Call</button>
+                </div>
+                <div class = "col-md-2">
                     <button id="hangupButton" class="btn-danger btn">Hang Up</button>
                 </div>
             </div>
