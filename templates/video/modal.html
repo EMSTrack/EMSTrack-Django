@@ -1,39 +1,30 @@
 {% load static %}
 {% load i18n %}
 
-<div class="container">
-    <div class="row">
-        <div class="col">
+<div class = "row text-center">
+    <div class = "col-md-6">
+        <video id="localVideo" autoplay playsinline></video>
+    </div>
+    <div class = "col-md-6">
+        <video id="remoteVideo" autoplay playsinline></video>
+    </div>
+</div>
 
-            <div class = "row text-center">
-                <div class = "col-md-6">
-                    <video id="localVideo" autoplay playsinline></video>
-                </div>
-                <div class = "col-md-6">
-                    <video id="remoteVideo" autoplay playsinline></video>
-                </div>
+<div class = "row text-center">
+    <div class = "col-md-3">
+        <div class="dropdown">
+            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                {% trans "Select user..." %}
+            </button>
+            <div class="dropdown-menu" id="clients-dropdown">
             </div>
-
-            <div class = "row text-center">
-                <div class = "col-md-3">
-                    <div class="dropdown">
-                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                            {% trans "Select user..." %}
-                        </button>
-                        <div class="dropdown-menu" id="clients-dropdown">
-                        </div>
-                    </div>
-                </div>
-                <div class = "col-md-5">
-                    <span id="remoteClientText"></span>
-                </div>
-                <div class = "col-md-4">
-                    <button id="callButton" class="btn-success btn">Call</button>
-                    <button id="hangupButton" class="btn-danger btn">Hang Up</button>
-                </div>
-            </div>
-
         </div>
     </div>
-
+    <div class = "col-md-5">
+        <span id="remoteClientText"></span>
+    </div>
+    <div class = "col-md-4">
+        <button id="callButton" class="btn-success btn">Call</button>
+        <button id="hangupButton" class="btn-danger btn">Hang Up</button>
+    </div>
 </div>

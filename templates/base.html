@@ -186,7 +186,9 @@
                 </button>
             </div>
             <div class="modal-body">
-                {% include 'video/modal.html' %}
+                <div class="contaioner">
+                    {% include 'video/modal.html' %}
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans "Close" %}</button>
@@ -230,10 +232,15 @@
 </script>
 {% endautoescape %}
 
+{% block scripts %}
+
+<script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+
+{% endblock %}
+
 {% render_bundle 'main' 'js' 'BASE' %}
 
-{% block scripts %}
-{% endblock %}
+{% render_bundle 'main' 'js' 'VIDEO' %}
 
 </body>
 </html>
