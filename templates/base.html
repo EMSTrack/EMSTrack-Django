@@ -177,11 +177,22 @@
 
 <!-- VIDEO MODAL -->
 <div class="modal fade" tabindex="-1" role="dialog" id="videoModalWindow" aria-labelledby="videoModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      {% include 'video/modal.html' %}
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="videoTitle" class="modal-title">EMSTrack {% trans "Video" %}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {% include 'video/modal.html' %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans "Close" %}</button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 <!-- TODO: Set timezone in settings/defaults -->
