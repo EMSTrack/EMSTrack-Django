@@ -53,3 +53,14 @@
 .carousel-indicators {
     bottom: 0px;
 }
+
+.localVideo {
+    width: 320px;
+    height: 240px;
+    transform: scale(-1, 1);
+}
+
+.remoteVideo {
+    width: 320px;
+    height: 240px;
+}
