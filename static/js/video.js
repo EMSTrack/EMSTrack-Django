@@ -3,7 +3,7 @@ import { logger } from './logger';
 let apiClient;
 
 // add initialization hook
-add_init_function(init);
+add_init_function(initVideo);
 
 const localVideo = document.querySelector('#localVideo');
 const remoteVideo = document.querySelector('#remoteVideo');
@@ -26,7 +26,7 @@ const localClient = { username: username, client_id: clientId };
 const turnServer = null;
 
 // initialization function
-function init (client) {
+function initVideo(client) {
 
     logger.log('info', '> video.js');
 
