@@ -91,7 +91,8 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'video:index' %}">
+                <!-- <a class="nav-link" href="{% url 'video:index' %}"> -->
+                <a class="nav-link" href="#" id="videoMenuItem">
                     <span class="fas fa-video"></span>
                     {% trans "Video" %}
                 </a>
@@ -175,7 +176,7 @@
 </div>
 
 <!-- VIDEO MODAL -->
-<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="videoModalLabel" aria-hidden="true">
+<div class="modal fade" tabindex="-1" role="dialog" id="videoModalWindow" aria-labelledby="videoModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       {% include 'video/modal.html' %}
