@@ -76,6 +76,23 @@ $(function () {
             }
         });
 
+    // enable video modal button
+    $('#videoMenuItem').click(function() {
+
+        // retrieve online clients
+        retrieveOnlineClients();
+
+        $('#videoModalWindow').modal({
+            backdrop: 'static',
+            keyboard: false,
+            show: true
+        });
+
+    });
+
+
+
+
 });
 
 // online clients

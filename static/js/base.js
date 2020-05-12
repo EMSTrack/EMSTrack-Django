@@ -139,15 +139,4 @@ $(function () {
 
         });
 
-    // enable video modal button
-    $('#videoMenuItem').click(function() {
-        $('#videoModalWindow').modal({
-            backdrop: 'static',
-            keyboard: false,
-            show: true
-        });
-
-    });
-
-
 });
