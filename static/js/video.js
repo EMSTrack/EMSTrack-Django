@@ -129,9 +129,6 @@ function retrieveOnlineClients() {
 
 function acceptCall() {
 
-    // close alert
-    $('#videoAlertAlert').alert('close');
-
     // retrieve online clients
     retrieveOnlineClients();
 
@@ -151,6 +148,9 @@ function acceptCall() {
             remoteClientText.html(remoteClient.username + ' @ ' + remoteClient.client_id);
             hangupButton.prop('disabled', false);
             sendMessage(remoteClient, { type: 'accepted' });
+
+            // close alert
+            $('#videoAlertAlert').alert('close');
         });
 
 }
