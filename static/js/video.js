@@ -165,7 +165,7 @@ function promptCall() {
     // add alert
     $('#videoAlert').html(`<div class="alert alert-warning alert-dismissible fade show" id="videoAlertAlert" role="alert">
   <h4 class="alert-heading">New Video Call</h4>
-  <strong>New video call</strong> From ${remoteClient.username}@${remoteClient.client_id}
+  From ${remoteClient.username}@${remoteClient.client_id}
   <hr>
   <button type="button" class="btn btn-primary" id="newVideoCallAcceptButton">Accept</button>
   <button type="button" class="btn btn-secondary" data-dismiss="modal">Decline</button>
