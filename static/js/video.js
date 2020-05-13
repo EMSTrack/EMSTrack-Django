@@ -606,7 +606,7 @@ function modalAlert(body, title) {
     // add title
     if (title === '')
         html += `<h4 class="alert-heading">${title}</h4>`;
-    
+
     // add body
     html += body;
 
