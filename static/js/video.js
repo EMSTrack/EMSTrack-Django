@@ -369,6 +369,9 @@ function handleMessages(message) {
 
             handleRemoteHangup();
 
+            // alert
+            modalAlert('Call terminated');
+
         } else {
 
             // ignore
