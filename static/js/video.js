@@ -200,7 +200,7 @@ function handleMessages(message) {
             $('#newVideoCallUser').html(remoteClient.username + ' @ ' + remoteClient.client_id);
 
             // show notification
-            showNotification('EMSTrack', 'You have a new video call request');
+            showNotification('EMSTrack', 'You have a new video call request', './static/favicon.png');
 
             // display new video call modal
             $('#newVideoCallModalWindow').modal({

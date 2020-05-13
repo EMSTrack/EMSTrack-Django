@@ -1,6 +1,6 @@
 import {logger} from "../logger";
 
-export function showNotification(title, message) {
+export function showNotification(title, message, icon) {
     if (!window.Notification) {
         logger.log('warning', 'Browser does not support notifications.');
     } else {
@@ -9,7 +9,7 @@ export function showNotification(title, message) {
             // show notification here
             new Notification(title, {
                 body: message,
-                icon: 'https://bit.ly/2DYqRrh',
+                icon: icon,
             });
         } else {
             // request permission from user
@@ -18,7 +18,7 @@ export function showNotification(title, message) {
                     // show notification here
                     new Notification(title, {
                         body: message,
-                        icon: 'https://bit.ly/2DYqRrh',
+                        icon: icon,
                     });
                } else {
                     logger.log('warn', 'User blocked notifications.');
