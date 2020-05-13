@@ -202,29 +202,31 @@ function handleMessages(message) {
             // set state as user prompt
             state = State.PROMPT;
             remoteClient = {...message.client};
-            $('#newVideoCallUser').html(remoteClient.username + ' @ ' + remoteClient.client_id);
+
+            // retrieve online clients
+            retrieveOnlineClients();
+
+            // add alert
+            $('#videoAlert').html(`<div class="alert alert-warning alert-dismissible fade show" role="alert">
+  <h4 class="alert-heading">New Video Call</h4>
+  <strong>New video call</strong> From ${remoteClient.username}@${remoteClient.client_id}
+  <hr>
+  <button type="button" class="btn btn-primary" id="newVideoCallAcceptButton">Accept</button>
+  <button type="button" class="btn btn-secondary" data-dismiss="modal">Decline</button>
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>`);
 
             // show notification
             showNotification('EMSTrack', 'You have a new video call request', '/static/favicon.png');
 
-            // display new video call modal
-            $('#newVideoCallModalWindow').modal({
+            // display video modal
+            $('#videoModalWindow').modal({
+                backdrop: 'static',
+                keyboard: false,
                 show: true
             });
-
-            /*
-            // start streaming then accept call
-            startStream()
-                .then(function() {
-                    // accept call
-                    state = State.WAITING_FOR_OFFER;
-                    logger.log('info', 'ACCEPTED: accepting call from %j', message.client);
-                    remoteClient = {...message.client};
-                    remoteClientText.html(remoteClient.username + ' @ ' + remoteClient.client_id);
-                    hangupButton.prop('disabled', false);
-                    sendMessage(message.client, { type: 'accepted' });
-                });
-            */
 
         }
 
