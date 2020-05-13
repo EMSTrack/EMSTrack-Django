@@ -165,7 +165,7 @@ function promptCall() {
   <h4 class="alert-heading">New Video Call</h4>
   <strong>New video call</strong> From ${remoteClient.username}@${remoteClient.client_id}
   <hr>
-  <button type="button" class="btn btn-primary" id="newVideoCallAcceptButton" onClick="acceptCall()">Accept</button>
+  <button type="button" class="btn btn-primary" id="newVideoCallAcceptButton">Accept</button>
   <button type="button" class="btn btn-secondary" data-dismiss="modal">Decline</button>
   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
     <span aria-hidden="true">&times;</span>
