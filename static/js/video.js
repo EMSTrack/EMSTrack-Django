@@ -96,6 +96,9 @@ $(function () {
 
         // accept call
 
+        // retrieve online clients
+        retrieveOnlineClients();
+
         // display video modal
         $('#videoModalWindow').modal({
             backdrop: 'static',
@@ -193,6 +196,8 @@ function handleMessages(message) {
             sendMessage(message.client, { type: 'busy' });
 
         } else {
+
+            logger.log('info', 'PROMPT: will prompt user for video call from %j', message.client);
 
             // set state as user prompt
             state = State.PROMPT;
