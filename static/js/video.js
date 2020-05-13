@@ -599,13 +599,14 @@ function modalReset() {
 }
 
 function modalAlert(body, title) {
+    title |= ''
 
     let html = '<div class="alert alert-warning alert-dismissible fade show" role="alert">';
 
     // add title
-    if (title === undefined)
+    if (title === '')
         html += `<h4 class="alert-heading">${title}</h4>`;
-
+    
     // add body
     html += body;
 
