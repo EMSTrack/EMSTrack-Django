@@ -172,7 +172,7 @@ function promptCall() {
   </button>
 </div>`);
 
-    $('#newVideoCallAcceptButton').click(acceptCall);
+    $('#newVideoCallAcceptButton').click(() => { acceptCall(); } );
 
     $('#videoAlertAlert').on('closed.bs.alert', function (e) {
         if (state === State.PROMPT) {
