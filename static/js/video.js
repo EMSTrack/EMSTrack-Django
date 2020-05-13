@@ -179,6 +179,7 @@ function promptCall() {
     $('#videoAlertAlert').on('closed.bs.alert', function (e) {
         if (state === State.PROMPT) {
             // decline call
+            isStarted = false;
             state = State.IDLE;
             logger.log('info', 'DECLINE: declining call from %j', remoteClient);
             sendMessage(remoteClient, { type: 'decline' });
@@ -249,6 +250,7 @@ function handleMessages(message) {
             message.client.client_id === remoteClient.client_id) {
 
             // cancel call, remote is busy, go back to idle
+            isStarted = false;
             state = State.IDLE;
             modalReset();
 
@@ -585,6 +587,7 @@ function handleRemoteHangup() {
 
 function stop() {
     isStarted = false;
+    isInitiator = false;
     state = State.IDLE;
     pc.close();
     pc = null;
