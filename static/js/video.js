@@ -212,6 +212,8 @@ function handleMessages(message) {
                 show: true
             });
 
+            logger.log('info', 'PROMPT');
+
             /*
             // start streaming then accept call
             startStream()
