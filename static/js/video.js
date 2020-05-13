@@ -125,7 +125,7 @@ function retrieveOnlineClients() {
         })
 }
 
-// prompt call
+// accept call
 
 function acceptCall() {
 
@@ -154,6 +154,8 @@ function acceptCall() {
         });
 
 }
+
+// prompt call
 
 function promptCall() {
 
