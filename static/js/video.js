@@ -91,50 +91,6 @@ $(function () {
 
     });
 
-    // configure newVideoCallAccept button
-    $('#newVideoCallAcceptButton').click(function() {
-
-        // accept call
-
-        // retrieve online clients
-        retrieveOnlineClients();
-
-        // display video modal
-        $('#videoModalWindow').modal({
-            backdrop: 'static',
-            keyboard: false,
-            show: true
-        });
-
-        // start streaming then accept call
-        startStream()
-            .then(function() {
-                // accept call
-                state = State.WAITING_FOR_OFFER;
-                logger.log('info', 'ACCEPTED: accepting call from %j', remoteClient);
-                remoteClientText.html(remoteClient.username + ' @ ' + remoteClient.client_id);
-                hangupButton.prop('disabled', false);
-                sendMessage(remoteClient, { type: 'accepted' });
-
-                // hide new video call window
-                $('#newVideoCallModalWindow').modal('hide');
-
-            });
-
-    });
-
-    $('#newVideoCallModalWindow').on('hidden.bs.modal', function (e) {
-        if (state === State.PROMPT) {
-            // decline call
-            state = State.IDLE;
-            logger.log('info', 'DECLINE: declining call from %j', remoteClient);
-            sendMessage(remoteClient, { type: 'decline' });
-            remoteClient = null;
-        } else {
-            logger.log('info', 'Unexpected state %s', state);
-        }
-    });
-
 });
 
 // online clients
@@ -167,6 +123,77 @@ function retrieveOnlineClients() {
         .catch( (error) => {
             logger.log('error', 'Failed to retrieve clients from ApiClient: %j', error);
         })
+}
+
+// prompt call
+
+function acceptCall() {
+
+    // close alert
+    $('#videoAlertAlert').alert('close');
+
+    // retrieve online clients
+    retrieveOnlineClients();
+
+    // display video modal
+    $('#videoModalWindow').modal({
+        backdrop: 'static',
+        keyboard: false,
+        show: true
+    });
+
+    // start streaming then accept call
+    startStream()
+        .then(function() {
+            // accept call
+            state = State.WAITING_FOR_OFFER;
+            logger.log('info', 'ACCEPTED: accepting call from %j', remoteClient);
+            remoteClientText.html(remoteClient.username + ' @ ' + remoteClient.client_id);
+            hangupButton.prop('disabled', false);
+            sendMessage(remoteClient, { type: 'accepted' });
+        });
+
+}
+
+function promptCall() {
+
+    // retrieve online clients
+    retrieveOnlineClients();
+
+    // add alert
+    $('#videoAlert').html(`<div class="alert alert-warning alert-dismissible fade show" id="videoAlertAlert" role="alert">
+  <h4 class="alert-heading">New Video Call</h4>
+  <strong>New video call</strong> From ${remoteClient.username}@${remoteClient.client_id}
+  <hr>
+  <button type="button" class="btn btn-primary" id="newVideoCallAcceptButton" onClick="acceptCall()">Accept</button>
+  <button type="button" class="btn btn-secondary" data-dismiss="modal">Decline</button>
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>`);
+
+    $('#videoAlertAlert').on('closed.bs.alert', function (e) {
+        if (state === State.PROMPT) {
+            // decline call
+            state = State.IDLE;
+            logger.log('info', 'DECLINE: declining call from %j', remoteClient);
+            sendMessage(remoteClient, { type: 'decline' });
+            remoteClient = null;
+        } else {
+            logger.log('info', 'Unexpected state %s', state);
+        }
+    });
+
+    // show notification
+    showNotification('EMSTrack', 'You have a new video call request', '/static/favicon.png');
+
+    // display video modal
+    $('#videoModalWindow').modal({
+        backdrop: 'static',
+        keyboard: false,
+        show: true
+    });
+
 }
 
 // State machine and message handling
@@ -203,30 +230,8 @@ function handleMessages(message) {
             state = State.PROMPT;
             remoteClient = {...message.client};
 
-            // retrieve online clients
-            retrieveOnlineClients();
-
-            // add alert
-            $('#videoAlert').html(`<div class="alert alert-warning alert-dismissible fade show" role="alert">
-  <h4 class="alert-heading">New Video Call</h4>
-  <strong>New video call</strong> From ${remoteClient.username}@${remoteClient.client_id}
-  <hr>
-  <button type="button" class="btn btn-primary" id="newVideoCallAcceptButton">Accept</button>
-  <button type="button" class="btn btn-secondary" data-dismiss="modal">Decline</button>
-  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-  </button>
-</div>`);
-
-            // show notification
-            showNotification('EMSTrack', 'You have a new video call request', '/static/favicon.png');
-
-            // display video modal
-            $('#videoModalWindow').modal({
-                backdrop: 'static',
-                keyboard: false,
-                show: true
-            });
+            // prompt user for new call
+            promptCall();
 
         }
 
