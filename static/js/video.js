@@ -196,6 +196,10 @@ function handleMessages(message) {
             // set state as user prompt
             state = State.PROMPT;
             remoteClient = {...message.client};
+            $('#newVideoCallUser').html(remoteClient.username + ' @ ' + remoteClient.client_id);
+
+            // show notification
+            showNotification('EMSTrack', 'You have a new video call request');
 
             // display new video call modal
             $('#newVideoCallModalWindow').modal({
