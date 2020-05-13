@@ -163,7 +163,7 @@ function promptCall() {
     retrieveOnlineClients();
 
     // add alert
-    $('#videoAlert').html(`<div class="alert alert-warning alert-dismissible fade show" id="videoAlertAlert" role="alert">
+    $('#videoAlert').append(`<div class="alert alert-warning alert-dismissible fade show" id="videoAlertAlert" role="alert">
   <h4 class="alert-heading">New Video Call</h4>
   From ${remoteClient.username}@${remoteClient.client_id}
   <hr>
@@ -182,7 +182,7 @@ function promptCall() {
             state = State.IDLE;
             logger.log('info', 'DECLINE: declining call from %j', remoteClient);
             sendMessage(remoteClient, { type: 'decline' });
-            remoteClient = null;
+            modalReset();
         } else {
             logger.log('info', 'Unexpected state %s', state);
         }
@@ -244,16 +244,27 @@ function handleMessages(message) {
         logger.log('info', 'GOT BUSY OR DECLINE');
 
         if (state === State.CALLING &&
+
             message.client.username === remoteClient.username &&
             message.client.client_id === remoteClient.client_id) {
+
             // cancel call, remote is busy, go back to idle
             state = State.IDLE;
-            remoteClient = null;
-            remoteClientText.empty();
+            modalReset();
+
+            // alert
+            if (message.type === 'busy')
+                modalAlert('Callee is busy');
+            else if (message.type === 'decline')
+                modalAlert('Call declined');
+
             logger.log('info', 'CANCELLING CALL: remote is busy or declined: %j', message.client);
+
         } else {
+
             // ignore
             logger.log('info', 'IGNORING BUSY OR DECLINE: %j', message.client);
+
         }
 
     } else if (message.type === 'accepted') {
@@ -267,11 +278,16 @@ function handleMessages(message) {
             // start streaming and make offer
             startStream()
                 .then(function() {
+
                     // Make offer
                     state = State.WAITING_FOR_ANSWER;
                     logger.log('info', 'ACCEPTED: will make offer to %j', message.client);
                     isInitiator = true;
                     maybeStart();
+
+                    // alert
+                    modalAlert('Call accepted');
+
                 });
 
         } else {
@@ -566,11 +582,34 @@ function handleRemoteHangup() {
 
 function stop() {
     isStarted = false;
-    remoteClient = null;
-    remoteClientText.empty();
     state = State.IDLE;
     pc.close();
     pc = null;
+    modalReset();
+}
+
+function modalReset() {
+    remoteClient = null;
+    remoteClientText.empty();
     callButton.prop('disabled', true);
     hangupButton.prop('disabled', true);
+}
+
+function modalAlert(body, title) {
+
+    let html = '<div class="alert alert-warning alert-dismissible fade show" role="alert">';
+
+    // add title
+    if (title === undefined)
+        html += `<h4 class="alert-heading">${title}</h4>`;
+
+    // add body
+    html += body;
+
+    html += `<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>`;
+
+    $('#videoAlert').append(html);
 }
