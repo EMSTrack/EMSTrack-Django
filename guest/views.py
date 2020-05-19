@@ -27,6 +27,7 @@ class VideoView(View):
         user_profile = UserProfile.objects.create(mobile_number=receiver_info,
                 user=temp_user)
         user_profile.is_guest = True
+        user_profile.save()
         return HttpResponse(user_profile)
 
         #response = redirect('/redirect-success/')
