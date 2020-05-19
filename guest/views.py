@@ -1,7 +1,7 @@
 import logging
 
 from django.conf import settings
-from django.views.generic.base import TemplateView
+from django.views.generic.base import TemplateView, View
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.http import HttpResponse
