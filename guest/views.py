@@ -24,10 +24,10 @@ class VideoView(View):
                 username=receiver_info,
                 email='',
                 password='top_secret')
-        UserProfile.objects.create(is_guest=True, 
-                mobile_number=receiver_info,
+        user_profile = UserProfile.objects.create(mobile_number=receiver_info,
                 user=temp_user)
-        return HttpResponse(UserProfile)
+        user_profile.is_guest = True
+        return HttpResponse(user_profile)
 
         #response = redirect('/redirect-success/')
         #return response
