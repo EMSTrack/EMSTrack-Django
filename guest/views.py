@@ -4,7 +4,6 @@ from django.conf import settings
 from django.views.generic.base import TemplateView
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
-from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from django.shortcuts import redirect
@@ -18,7 +17,7 @@ class IndexView(TemplateView):
 
 
 
-class VideoView(APIView):
+class VideoView(TemplateView):
 
     def get(self, request, receiver_info=None):
         temp_user = User.objects.create_user(

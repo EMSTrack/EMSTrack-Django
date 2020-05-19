@@ -7,7 +7,7 @@ from . import views
 app_name = 'guest'
 urlpatterns = [
 
-    url(r'^video/(?P<receiver_info>)$',
+    url(r'^video/(?P<receiver_info>.+)$',
         views.VideoView.as_view(),
         name="video"
     ),
