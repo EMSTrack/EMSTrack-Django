@@ -66,7 +66,7 @@
 
     <!-- Navbar Menu -->
     <div class="collapse navbar-collapse" id="myNavbar">
-        {% if request.user.is_authenticated %}
+        {% if request.user.is_authenticated and not request.user.userprofile.is_guest %}
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'ambulance:map' %}">
