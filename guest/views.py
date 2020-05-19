@@ -4,7 +4,7 @@ from django.conf import settings
 from django.views.generic.base import TemplateView
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
-from rest_framework.response import Response
+from django.http import HttpResponse
 
 from django.shortcuts import redirect
 
@@ -17,7 +17,7 @@ class IndexView(TemplateView):
 
 
 
-class VideoView(TemplateView):
+class VideoView(View):
 
     def get(self, request, receiver_info=None):
         temp_user = User.objects.create_user(
@@ -27,7 +27,7 @@ class VideoView(TemplateView):
         UserProfile.objects.create(is_guest=True, 
                 mobile_number=receiver_info,
                 user=temp_user)
-        return Response(UserProfile)
+        return HttpResponse(UserProfile)
 
         #response = redirect('/redirect-success/')
         #return response
