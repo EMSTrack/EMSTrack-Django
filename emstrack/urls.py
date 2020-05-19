@@ -138,6 +138,9 @@ urlpatterns += i18n_patterns(*[
     # video
     url(r'^video/', include('video.urls')),
 
+    # guest
+    url(r'^guest/', include('guest.urls')),
+
     # admin
     url(r'^admin/', admin.site.urls),
 
