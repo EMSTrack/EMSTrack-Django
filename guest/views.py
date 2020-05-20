@@ -33,5 +33,9 @@ class VideoView(View):
         #response = redirect('/redirect-success/')
         #return response
 
+class RedirectView(View):
+    def get(self, request, receiver_info=None):
+        response = redirect('/')
+        return response
 
 

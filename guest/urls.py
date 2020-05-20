@@ -12,6 +12,11 @@ urlpatterns = [
         name="video"
     ),
 
+    url(r'^redirect$',
+        views.RedirectView.as_view(),
+        name="redirect"
+    ),
+
 
     url(r'^$',
         guest_login_required(views.IndexView.as_view()),
