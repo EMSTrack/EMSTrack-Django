@@ -452,11 +452,20 @@ function startStream() {
 
 }
 
+/*
 const pcConfig = {
     'iceServers': [{
         'urls': 'stun:stun.l.google.com:19302'
     }]
 };
+*/
+
+const pcConfig = {
+    'iceServers': [
+        {'urls': 'stun:stun.l.google.com:19302'},
+        {'urls': 'turn:adminsean@3.133.116.164', 'credential': 'cruzrojaucsd'}
+    ]
+}
 
 function maybeStart() {
     logger.log('debug', '>>>>>>> maybeStart() ', isStarted, localStream, isChannelReady);
