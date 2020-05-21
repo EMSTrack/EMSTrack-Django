@@ -427,7 +427,7 @@ function gotStream(stream) {
 
 function startStream() {
 
-    if (location.hostname !== 'localhost' && turnServer !== null) {
+    if (location.hostname !== 'localhost') {
         requestTurn(turnServer);
     }
 
@@ -544,21 +544,23 @@ function doAnswer() {
 
 function requestTurn(turnURL) {
     let turnExists = false;
-    for (var i in pcConfig.iceServers) {
+    logger.log('info', 'Looking for TURN server.');
+    for (const i in pcConfig.iceServers) {
         if (pcConfig.iceServers[i].urls.substr(0, 5) === 'turn:') {
+            logger.log('info', "Setting up turn server '%s'", pcConfig.iceServers[i]);
             turnExists = true;
             turnReady = true;
             break;
         }
     }
-    if (!turnExists) {
-        console.log('Getting TURN server from ', turnURL);
+    if (!turnExists && turnURL !== null) {
+        logger.log('info', 'Getting TURN server from %s', turnURL);
         // No TURN server. Get one from computeengineondemand.appspot.com:
-        var xhr = new XMLHttpRequest();
+        const xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4 && xhr.status === 200) {
-                var turnServer = JSON.parse(xhr.responseText);
-                console.log('Got TURN server: ', turnServer);
+                const turnServer = JSON.parse(xhr.responseText);
+                logger.log('info', 'Got TURN server from %s', turnServer);
                 pcConfig.iceServers.push({
                     'urls': 'turn:' + turnServer.username + '@' + turnServer.turn,
                     'credential': turnServer.password
@@ -568,6 +570,9 @@ function requestTurn(turnURL) {
         };
         xhr.open('GET', turnURL, true);
         xhr.send();
+    }
+    if (!turnReady) {
+        logger.log('warning', 'Could not find TURN server');
     }
 }
 
