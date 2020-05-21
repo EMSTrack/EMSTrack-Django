@@ -462,9 +462,11 @@ const pcConfig = {
 
 const pcConfig = {
     'iceServers': [
-        {'urls': 'stun:stun.l.google.com:19302'},
         {
-            'urls': 'turn:3.133.116.164:3478?transport=tcp',
+            'url': 'stun:stun.l.google.com:19302'
+        },
+        {
+            'url': 'turn:3.133.116.164:3478?transport=tcp',
             'username': 'adminsean',
             'credential': 'cruzrojaucsd'
         }
@@ -566,7 +568,7 @@ function requestTurn(turnURL) {
                 const turnServer = JSON.parse(xhr.responseText);
                 logger.log('info', 'Got TURN server from %s', turnServer);
                 pcConfig.iceServers.push({
-                    'urls': 'turn:' + turnServer.username + '@' + turnServer.turn,
+                    'url': 'turn:' + turnServer.username + '@' + turnServer.turn,
                     'credential': turnServer.password
                 });
                 turnReady = true;
