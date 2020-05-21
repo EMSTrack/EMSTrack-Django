@@ -438,7 +438,7 @@ function startStream() {
 
     // otherwise start stream
     const constraints = {
-        audio: false,
+        audio: true,
         video: true
     };
 
