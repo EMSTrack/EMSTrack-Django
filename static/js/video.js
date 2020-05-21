@@ -463,7 +463,7 @@ const pcConfig = {
 const pcConfig = {
     'iceServers': [
         {'urls': 'stun:stun.l.google.com:19302'},
-        {'urls': 'turn:adminsean@3.133.116.164:3478', 'credential': 'cruzrojaucsd'}
+        {'urls': 'turn:adminsean@3.133.116.164:3478?transport=tcp', 'credential': 'cruzrojaucsd'}
     ]
 }
 
