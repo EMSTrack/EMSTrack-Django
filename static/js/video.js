@@ -552,7 +552,7 @@ function requestTurn(turnURL) {
     let turnExists = false;
     logger.log('info', 'Looking for TURN server.');
     for (const i in pcConfig.iceServers) {
-        if (pcConfig.iceServers[i].urls.substr(0, 5) === 'turn:') {
+        if (pcConfig.iceServers[i].url.substr(0, 5) === 'turn:') {
             logger.log('info', "Setting up turn server '%j'", pcConfig.iceServers[i]);
             turnExists = true;
             turnReady = true;
