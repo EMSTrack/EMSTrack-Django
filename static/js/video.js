@@ -463,7 +463,7 @@ const pcConfig = {
 const pcConfig = {
     'iceServers': [
         {'urls': 'stun:stun.l.google.com:19302'},
-        {'urls': 'turn:adminsean@3.133.116.164', 'credential': 'cruzrojaucsd'}
+        {'urls': 'turn:adminsean@3.133.116.164:3478', 'credential': 'cruzrojaucsd'}
     ]
 }
 
@@ -547,7 +547,7 @@ function requestTurn(turnURL) {
     logger.log('info', 'Looking for TURN server.');
     for (const i in pcConfig.iceServers) {
         if (pcConfig.iceServers[i].urls.substr(0, 5) === 'turn:') {
-            logger.log('info', "Setting up turn server '%s'", pcConfig.iceServers[i]);
+            logger.log('info', "Setting up turn server '%j'", pcConfig.iceServers[i]);
             turnExists = true;
             turnReady = true;
             break;
