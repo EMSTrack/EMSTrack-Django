@@ -17,12 +17,7 @@ class EquipmentItemSerializer(serializers.ModelSerializer):
                             'equipment_id', 'equipment_name', 'equipment_type',
                             'updated_by',)
 
-    # def validate(self, data):
-    #     # call super
-    #     validated_data = super().validate(data)
-    #
-    #     # TODO: validate equipment value using equipment_type
-    #     return validated_data
+
 
 
 class EquipmentSerializer(serializers.ModelSerializer):
