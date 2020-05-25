@@ -1,23 +1,25 @@
   
-{% extends "base.html" %}
-{% load static %}
 {% load i18n %}
 {% load render_bundle from webpack_loader %}
 
 {% block content %}
 <style>
-    video#remoteVideo {
+    #remoteVideo {
         position: absolute;
-        z-index: 1;
-        height: 100% !important;
-        width: 100%;
-        max-width: 500px;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
     }
-    video#localVideo {
+    #remoteVideo video,
+    #localVideo video {
+        width: 100%;
+    }
+    #localVideo {
         position: absolute;
-        z-index: 1;
-        height: 20vh;
-        max-width: 100%;
+        width: 25%;
+        bottom: 5%;
+        right: 5%;
     }
 
 
