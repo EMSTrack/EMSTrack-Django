@@ -15,8 +15,8 @@ logger = logging.getLogger(__name__)
 
 
 class IndexView(TemplateView):
-    template_name = 'guest/video.html'
-
+    #template_name = 'video/index.html'
+    template_name = 'index.html'
 
 
 class VideoView(View):
