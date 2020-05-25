@@ -21,7 +21,7 @@ class IndexView(TemplateView):
 
 class VideoView(View):
 
-    def get(self, request, receiver_info=None):
+    def get(self, request, sender_info=None):
         # username = receiver_info
         # password = 'top_sercret'
         # temp_user = User.objects.create_user(
@@ -47,7 +47,7 @@ class VideoView(View):
         login(request, user)
         
 
-        response = redirect('/guest')
+        response = redirect('/guest/')
         return response
 
 class RedirectView(View):
