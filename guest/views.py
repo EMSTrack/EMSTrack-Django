@@ -47,7 +47,7 @@ class VideoView(View):
         login(request, user)
         
 
-        response = redirect('/guest/')
+        response = redirect('/guest')
         return response
 
 class RedirectView(View):
