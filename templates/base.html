@@ -128,19 +128,21 @@
                     </div>
                 </li>
                 {% endif %}
-            <li class="nav-item dropdown" id="navitemAccountDropdown">
-                <a class="nav-link dropdown-toggle"
-                   id="navbarAccountDropdown"
-                   role="button" data-toggle="dropdown" aria-haspopup="true"
-                   aria-expanded="false"
-                   href="#">
-                    <span class="fas fa-user"></span>
-                    {% trans "Account" %}
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarAccountDropdown">
-                    <a class="dropdown-item" href="{% url 'password_change' %}">{% trans "Change password" %}</a>
-                </div>
-            </li>
+                {% if  not request.user.userprofile.is_guest %}
+                <li class="nav-item dropdown" id="navitemAccountDropdown">
+                    <a class="nav-link dropdown-toggle"
+                    id="navbarAccountDropdown"
+                    role="button" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false"
+                    href="#">
+                        <span class="fas fa-user"></span>
+                        {% trans "Account" %}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarAccountDropdown">
+                        <a class="dropdown-item" href="{% url 'password_change' %}">{% trans "Change password" %}</a>
+                    </div>
+                </li>
+                {% endif %}
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'login:logout' %}">
                     <span class="fas fa-sign-out-alt"></span>
