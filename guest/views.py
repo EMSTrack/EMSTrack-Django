@@ -4,6 +4,8 @@ from django.conf import settings
 from django.views.generic.base import TemplateView, View
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login
+
 from django.http import HttpResponse
 
 from django.shortcuts import redirect
@@ -20,22 +22,36 @@ class IndexView(TemplateView):
 class VideoView(View):
 
     def get(self, request, receiver_info=None):
-        temp_user = User.objects.create_user(
-                username=receiver_info,
-                email='',
-                password='top_secret')
-        user_profile = UserProfile.objects.create(mobile_number=receiver_info,
-                user=temp_user)
-        user_profile.is_guest = True
-        user_profile.save()
-        return HttpResponse(user_profile)
+        # username = receiver_info
+        # password = 'top_sercret'
+        # temp_user = User.objects.create_user(
+        #         username=username,
+        #         email='',
+        #         password=password)
+        # user_profile = UserProfile.objects.create(mobile_number=username,
+        #         user=temp_user)
+        # user_profile.is_guest = True
+        # user_profile.save()
 
-        #response = redirect('/redirect-success/')
-        #return response
+        # new_user = authenticate(username=username,
+        #                             password=password,
+        #                             )
+        # login(request, new_user)
+        
+        # return HttpResponse(user_profile)
+
+        username = 'guest'
+        password = 'pandapanda'
+        #authenticate user then login
+        user = authenticate(username=username, password=password)
+        login(request, user)
+        
+
+        response = redirect('/guest')
+        return response
 
 class RedirectView(View):
     def get(self, request, receiver_info=None):
         response = redirect('/')
         return response
-
 
