@@ -71,7 +71,7 @@
 
 
 .video_box {
-   width:90%;
+   width:100%;
    margin: 0 auto;
    background-color:black;
    display:flex;
@@ -125,10 +125,10 @@
 
 
 .main_box_buttons{
-   width:90%;
+   width:100%;
    margin: 0 auto;
-   padding:30px 10px 30px 10px;
-   background-color:black; 
+   padding:30px 10px 70px 10px;
+   background-color:black;
    display: flex;
    justify-content: center;
    align-items: center;
