@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+{% load render_bundle from webpack_loader %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="row">
+        <div class="col">
+            <h1>{% trans "Video" %}</h1>
+        </div>
+    </div>
+
+    {% include 'video/modal.html' %}
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+
+{% render_bundle 'main' 'js' 'VIDEO' %}
+
+{% endblock %}

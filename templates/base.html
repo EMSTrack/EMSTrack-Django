@@ -40,6 +40,8 @@
             crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.7.0/js/all.js"></script>
 
+    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+
     <!-- title -->
     <title>{% block title %}EMSTrack - {% trans "Ambulance Tracker" %}{% endblock %}</title>
     {% block head %}
@@ -88,6 +90,13 @@
                 <a class="nav-link" href="{% url 'hospital:list' %}">
                     <span class="fas fa-hospital"></span>
                     {% trans "Hospitals" %}
+                </a>
+            </li>
+            <li class="nav-item">
+                <!-- <a class="nav-link" href="{% url 'video:index' %}"> -->
+                <a class="nav-link" href="#" id="videoMenuItem">
+                    <span class="fas fa-video"></span>
+                    {% trans "Video" %}
                 </a>
             </li>
         </ul>
@@ -168,6 +177,30 @@
     {% include 'messages.html' %}
 </div>
 
+<!-- VIDEO MODAL -->
+<div class="modal fade" tabindex="-1" role="dialog" id="videoModalWindow" aria-labelledby="videoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="videoModalTitle" class="modal-title">EMSTrack {% trans "Video" %}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="videoAlert">
+                </div>
+                <div class="container">
+                    {% include 'video/modal.html' %}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans "Close" %}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- TODO: Set timezone in settings/defaults -->
 
 <!-- Content block -->
@@ -204,6 +237,8 @@
 {% endautoescape %}
 
 {% render_bundle 'main' 'js' 'BASE' %}
+
+{% render_bundle 'main' 'js' 'VIDEO' %}
 
 {% block scripts %}
 {% endblock %}

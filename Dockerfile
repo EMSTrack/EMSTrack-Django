@@ -67,7 +67,8 @@ RUN set -x && \
     # log directories
     mkdir -p /etc/emstrack/log && \
     touch /etc/emstrack/log/django.log && \
-    touch /etc/emstrack/log/emstrack.log
+    touch /etc/emstrack/log/emstrack.log && \
+    ln -s /etc/emstrack/log $APP_HOME/log
 
 # Clone application
 COPY . .

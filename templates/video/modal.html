@@ -1,0 +1,30 @@
+{% load static %}
+{% load i18n %}
+
+<div class = "row text-center">
+    <div class = "col-md-6">
+        <video id="localVideo" class="localVideo" autoplay playsinline controls></video>
+    </div>
+    <div class = "col-md-6">
+        <video id="remoteVideo" class="remoteVideo" autoplay playsinline controls></video>
+    </div>
+</div>
+
+<div class = "row">
+    <div class = "col-md-3">
+        <div class="dropdown">
+            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                {% trans "Select user..." %}
+            </button>
+            <div class="dropdown-menu" id="clients-dropdown">
+            </div>
+        </div>
+    </div>
+    <div class = "col-md-5">
+        <span id="remoteClientText"></span>
+    </div>
+    <div class = "col-md-4 text-right">
+        <button id="callButton" class="btn-success btn">Call</button>
+        <button id="hangupButton" class="btn-danger btn">Hang Up</button>
+    </div>
+</div>
