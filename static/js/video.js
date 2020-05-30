@@ -24,7 +24,7 @@ let remoteClient = null;
 const localClient = { username: username, client_id: clientId };
 
 // const turnServer = 'https://computeengineondemand.appspot.com/turn?username=41784574&key=4080218913';
-const turnServer = null;
+const turnServerHost = null;
 
 // initialization function
 function initVideo(client) {
@@ -428,7 +428,7 @@ function gotStream(stream) {
 function startStream() {
 
     if (location.hostname !== 'localhost') {
-        requestTurn(turnServer);
+        requestTurn(turnServerHost);
     }
 
     // if there is nothing to do...
