@@ -235,6 +235,12 @@ SMS_KEY = env.str('SMS_KEY')
 SMS_PASS = env.str('SMS_PASS')
 SMS_FROM = env.str('SMS_FROM')
 
+# turn server
+TURN_IP = env.str('TURN_IP')
+TURN_PORT = env.str('TURN_PORT')
+TURN_USER = env.str('TURN_USER')
+TURN_PASS = env.str('TURN_PASS')
+
 # Webpack Loader
 WEBPACK_LOADER = {
     'BASE': {

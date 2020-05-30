@@ -466,9 +466,12 @@ const pcConfig = {
             'url': 'stun:stun.l.google.com:19302'
         },
         {
-            'url': 'turn:3.133.116.164:3478?transport=tcp',
-            'username': 'adminsean',
-            'credential': 'cruzrojaucsd'
+            // 'url': 'turn:3.133.116.164:3478?transport=tcp',
+            // 'username': 'adminsean',
+            // 'credential': 'cruzrojaucsd'
+            'url':`turn:${turnServer['host']}:${turnServer['port']}?transport=tcp`,
+            'username': `${turnServer['username']}`,
+            'credential': `${turnServer['password']}`
         }
     ]
 }

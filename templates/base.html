@@ -227,6 +227,7 @@
         const mqttBroker = {{ mqtt_broker }};
         const clientId = '{{ client_id }}';
         const mapProvider = {{ map_provider }};
+        const turnServer = {{ turn_server }};
         {% if request.user.is_staff %}
             const adminUrls = {{ admin_urls }};
         {% else %}
