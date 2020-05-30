@@ -23,10 +23,10 @@ def jstags(request):
             'access_token': settings.MAP_PROVIDER_TOKEN
         },
         'turn_server': {
-            'host': setting.TURN_IP,
-            'port': setting.TURN_PORT,
-            'username': setting.TURN_USER,
-            'password': setting.TURN_PASS,
+            'host': settings.TURN_IP,
+            'port': settings.TURN_PORT,
+            'username': settings.TURN_USER,
+            'password': settings.TURN_PASS,
         }
     }
 
