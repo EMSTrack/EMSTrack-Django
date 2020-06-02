@@ -107,6 +107,9 @@ heeeeeeeyyyy
 
 }
 
+.end_button{
+    background-image: url("/static/icons/call_end.png");
+}
 .phone_buttons{
    float:right;
 
