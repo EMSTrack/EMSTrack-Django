@@ -100,14 +100,13 @@ heeeeeeeyyyy
 }
 
 .call_button {
-   border-radius: 100%;
    width:50px;
    height:50px;
    margin-right:20px;
 
 }
 
-.end_button{
+.call_img{
     width:50px;
    height:50px;
 
@@ -124,8 +123,6 @@ heeeeeeeyyyy
    display: flex;
    justify-content: center;
    align-items: center;
-
-
 
 }
 .localVideo {
@@ -149,9 +146,6 @@ color:white;
    margin: 0 auto;
    padding:30px 10px 70px 10px;
    background-color:black;
-   /*display: flex;
-   justify-content: center;
-   align-items: center;*/
 }
 
 
