@@ -39,13 +39,18 @@ def get_client_activity(key):
 def is_dispatcher(user):
     return user.is_superuser or user.is_staff or user.userprofile.is_dispatcher
 
-
+@register.filter
+def is_guest(user):
+    return user.userprofile.is_guest
+    
 class UserProfile(ClearPermissionCacheMixin,
                   models.Model):
     user = models.OneToOneField(User,
                                 on_delete=models.CASCADE,
                                 verbose_name=_('user'))
     is_dispatcher = models.BooleanField(_('is_dispatcher'), default=False)
+    is_guest = models.BooleanField(_('is_guest'), default=False)
+    
     mobile_number = PhoneNumberField(blank=True)
 
     def get_absolute_url(self):

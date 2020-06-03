@@ -1,7 +1,8 @@
 from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls import url, include
 from django.contrib import admin
-from django.contrib.auth.decorators import login_required
+#from django.contrib.auth.decorators import login_required
+from login.decorator import login_required
 from django.contrib.auth import views as auth_views
 
 from rest_framework import routers, permissions
@@ -136,6 +137,9 @@ urlpatterns += i18n_patterns(*[
 
     # video
     url(r'^video/', include('video.urls')),
+
+    # guest
+    url(r'^guest/', include('guest.urls')),
 
     # admin
     url(r'^admin/', admin.site.urls),
