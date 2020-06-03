@@ -131,9 +131,10 @@ const locationIcon = L.icon({
 
 });
 
+// TODO: SETUP CHECKBOX FOR NOTIFICATIONS
 const notifications = {
-    'ambulance-status': { enabled: true, style: 'success' },
-    'ambulance-online': { enabled: true, style: 'warning' }
+    'ambulance-status': { enabled: false, style: 'success' },
+    'ambulance-online': { enabled: false, style: 'warning' }
 };
 
 let priority_classification = {};
