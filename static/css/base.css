@@ -54,24 +54,6 @@
     bottom: 0px;
 }
 
-/*
-.localVideo {
-    width: 200px;
-    height: 120px;
-    float:right;
-}
-
-.remoteVideo {
-    width: 320px;
-    height: 240px;
-}
-*/
-
-/*
-heeeeeeeyyyy
-*/
-
-
 
 .video_box {
    width:100%;
@@ -112,13 +94,11 @@ heeeeeeeyyyy
 }
 .phone_buttons{
    float:right;
-
 }
 
 .left_bar{
    width:30%;
    padding:0px 4px;
-
    display: flex;
    justify-content: center;
    align-items: center;
@@ -137,7 +117,6 @@ heeeeeeeyyyy
 
 .dropdown_vid_text {
 color:white;
-
 }
 
 .main_box_buttons{
