@@ -1,4 +1,8 @@
 import logging
+import random
+
+from datetime import timedelta
+
 from enum import Enum
 
 from django.contrib.auth.models import Group
@@ -9,6 +13,7 @@ from django.core.validators import MinValueValidator
 from django.template.defaulttags import register
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
+from django.utils import timezone
 
 from phonenumber_field.modelfields import PhoneNumberField
 
@@ -39,10 +44,12 @@ def get_client_activity(key):
 def is_dispatcher(user):
     return user.is_superuser or user.is_staff or user.userprofile.is_dispatcher
 
+
 @register.filter
 def is_guest(user):
     return user.userprofile.is_guest
     
+
 class UserProfile(ClearPermissionCacheMixin,
                   models.Model):
     user = models.OneToOneField(User,
@@ -50,7 +57,6 @@ class UserProfile(ClearPermissionCacheMixin,
                                 verbose_name=_('user'))
     is_dispatcher = models.BooleanField(_('is_dispatcher'), default=False)
     is_guest = models.BooleanField(_('is_guest'), default=False)
-    
     mobile_number = PhoneNumberField(blank=True)
 
     def get_absolute_url(self):
@@ -205,6 +211,51 @@ class TemporaryPassword(models.Model):
 
     def __str__(self):
         return '"{}" (created on: {})'.format(self.password, self.created_on)
+
+    @staticmethod
+    def generate_password(size=20,
+                          chars=(string.ascii_letters +
+                                 string.digits +
+                                 string.punctuation)):
+        return ''.join(random.choice(chars) for _ in range(size))
+
+    @staticmethod
+    def get_or_create_password(user):
+
+        try:
+
+            # Retrieve current password
+            pwd = TemporaryPassword.objects.get(user=user)
+            password = pwd.password
+            valid_until = pwd.created_on + timedelta(seconds=120)
+
+            # Invalidate password if it is expired
+            if timezone.now() > valid_until:
+                password = None
+
+        except ObjectDoesNotExist:
+
+            pwd = None
+            password = None
+
+        if password is None:
+
+            # Generate password
+            password = TemporaryPassword.generate_password()
+
+            if pwd is None:
+
+                # create password
+                pwd = TemporaryPassword(user=user,
+                                        password=password)
+
+            else:
+
+                # update password
+                pwd.password = password
+
+            # save password
+            pwd.save()
 
 
 # Client status

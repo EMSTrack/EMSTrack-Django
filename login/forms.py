@@ -239,7 +239,7 @@ class UserProfileAdminForm(forms.ModelForm):
         model = UserProfile
         labels = {
             'is_dispatcher': _('Dispatcher'),
-            'is_guest' : _('Guest'),
+            'is_guest': _('Guest'),
         }
         exclude = ['user']
 
