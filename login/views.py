@@ -741,12 +741,12 @@ class PasswordView(APIView):
     Retrieve password to use with MQTT.
     """
 
-    @staticmethod
-    def generate_password(size=20,
-                          chars=(string.ascii_letters +
-                                 string.digits +
-                                 string.punctuation)):
-        return ''.join(random.choice(chars) for _ in range(size))
+    # @staticmethod
+    # def generate_password(size=20,
+    #                       chars=(string.ascii_letters +
+    #                              string.digits +
+    #                              string.punctuation)):
+    #     return ''.join(random.choice(chars) for _ in range(size))
 
     def get(self, request, user__username=None):
         """
@@ -764,43 +764,46 @@ class PasswordView(APIView):
         if user.username != user__username:
             raise PermissionDenied()
 
-        try:
+        # get or create password
+        pwd = TemporaryPassword.get_or_create_password(user)
 
-            # Retrieve current password
-            pwd = TemporaryPassword.objects.get(user=user.id)
-            password = pwd.password
-            valid_until = pwd.created_on + timedelta(seconds=120)
-
-            # Invalidate password if it is expired
-            if timezone.now() > valid_until:
-                password = None
-
-        except ObjectDoesNotExist:
-
-            pwd = None
-            password = None
-
-        if password is None:
-
-            # Generate password
-            password = self.generate_password()
-
-            if pwd is None:
-
-                # create password
-                pwd = TemporaryPassword(user=user,
-                                        password=password)
-
-            else:
-
-                # update password
-                pwd.password = password
-
-            # save password
-            pwd.save()
+        # try:
+        #
+        #     # Retrieve current password
+        #     pwd = TemporaryPassword.objects.get(user=user.id)
+        #     password = pwd.password
+        #     valid_until = pwd.created_on + timedelta(seconds=120)
+        #
+        #     # Invalidate password if it is expired
+        #     if timezone.now() > valid_until:
+        #         password = None
+        #
+        # except ObjectDoesNotExist:
+        #
+        #     pwd = None
+        #     password = None
+        #
+        # if password is None:
+        #
+        #     # Generate password
+        #     password = self.generate_password()
+        #
+        #     if pwd is None:
+        #
+        #         # create password
+        #         pwd = TemporaryPassword(user=user,
+        #                                 password=password)
+        #
+        #     else:
+        #
+        #         # update password
+        #         pwd.password = password
+        #
+        #     # save password
+        #     pwd.save()
 
         # Return password hash
-        password_hash = make_password(password=password)
+        password_hash = make_password(password=pwd.password)
 
         return Response(password_hash)
 

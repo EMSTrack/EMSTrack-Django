@@ -258,6 +258,8 @@ class TemporaryPassword(models.Model):
             # save password
             pwd.save()
 
+        return pwd
+
 
 # Client status
 class ClientStatus(Enum):
