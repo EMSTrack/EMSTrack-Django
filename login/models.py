@@ -15,6 +15,7 @@ from django.template.defaulttags import register
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
+from django.utils.text import slugify
 
 from phonenumber_field.modelfields import PhoneNumberField
 
