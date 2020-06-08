@@ -6,6 +6,7 @@ from django.utils.translation import activate
 
 from login.tests.setup_data import TestSetup
 
+from login.models import TokenLogin
 from login.serializers import TokenLoginSerializer
 
 logger = logging.getLogger(__name__)
