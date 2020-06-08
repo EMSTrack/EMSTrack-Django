@@ -59,7 +59,7 @@ class TokenLoginSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TokenLogin
-        fields = ('username', 'token', 'url')
+        fields = ('token', 'url')
         read_only_fields = ('token', )
         write_only_fields = ('username', )
 
