@@ -32,6 +32,7 @@ class TestTokenLogin(TestSetup):
         data = {'user': self.u2.id}
         serializer = TokenLoginSerializer(obj, data=data)
         self.assertTrue(serializer.is_valid())
+        serializer.save()
 
         obj = TokenLogin.objects.get(user=self.u2)
         serializer = TokenLoginSerializer(obj)
