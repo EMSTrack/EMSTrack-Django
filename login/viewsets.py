@@ -27,7 +27,7 @@ class TokenLoginViewSet(mixins.RetrieveModelMixin,
     def get_object(self):
 
         # get current user
-        user = self.context['request'].user
+        user = self.request.user
 
         # make sure current user is the one requesting token or username is guest
         username = self.kwargs['username']
