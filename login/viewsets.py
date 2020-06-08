@@ -9,11 +9,18 @@ from rest_framework.response import Response
 from emstrack.mixins import CreateModelUpdateByMixin, UpdateModelUpdateByMixin
 from login.models import Client, ClientStatus
 from login.permissions import IsUserOrAdminOrSuper
-from .serializers import UserProfileSerializer, ClientSerializer
+from .serializers import UserProfileSerializer, ClientSerializer, LoginTokenSerializer
 
 logger = logging.getLogger(__name__)
 
 # Django REST Framework Viewsets
+
+
+# LoginToken view
+
+class LoginTokenViewSet(mixins.RetrieveModelMixin):
+    serializer_class = LoginTokenSerializer
+    lookup_field = 'username'
 
 
 # Profile viewset

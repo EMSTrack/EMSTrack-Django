@@ -201,6 +201,40 @@ class GroupHospitalPermission(ClearPermissionCacheMixin,
                                                          self.can_write)
 
 
+# random string
+def random_string_generator(size=20,
+                            chars=(string.ascii_letters +
+                                   string.digits +
+                                   string.punctuation)):
+    return ''.join(random.choice(chars) for _ in range(size))
+
+
+# LoginToken
+
+class TokenLogin(models.Model):
+    user = models.ForeignKey(User,
+                             on_delete=models.CASCADE)
+    token = models.SlugField(max_lenght=50, default=TokenLogin.unique_slug_generator(),
+                             unique=True,
+                             null=False)
+    url = models.URLField(null=True)
+    created_on = models.DateTimeField(_('created_on'),
+                                      auto_now=True)
+
+    @staticmethod
+    def unique_slug_generator(new_slug=None):
+        # generate slug
+        if new_slug is not None:
+            slug = new_slug
+        else:
+            slug = slugify(random_string_generator(size=50))
+
+        # if exists, try again
+        if TokenLogin.objects.filter(slug=slug).exists():
+            return unique_slug_generator(instance, new_slug=random_string_generator(size=50))
+        return slug
+
+
 # TemporaryPassword
 
 class TemporaryPassword(models.Model):
@@ -212,13 +246,6 @@ class TemporaryPassword(models.Model):
 
     def __str__(self):
         return '"{}" (created on: {})'.format(self.password, self.created_on)
-
-    @staticmethod
-    def generate_password(size=20,
-                          chars=(string.ascii_letters +
-                                 string.digits +
-                                 string.punctuation)):
-        return ''.join(random.choice(chars) for _ in range(size))
 
     @staticmethod
     def get_or_create_password(user):
@@ -242,7 +269,7 @@ class TemporaryPassword(models.Model):
         if password is None:
 
             # Generate password
-            password = TemporaryPassword.generate_password()
+            password = random_string_generator()
 
             if pwd is None:
 

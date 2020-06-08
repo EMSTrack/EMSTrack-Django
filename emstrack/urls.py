@@ -8,7 +8,7 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
 from login.decorator import login_required
-from login.viewsets import ProfileViewSet, ClientViewSet
+from login.viewsets import ProfileViewSet, ClientViewSet, TokenLoginViewSet
 from login.views import PasswordView, SettingsView, VersionView
 
 from ambulance.viewsets import AmbulanceEquipmentItemViewSet, AmbulanceViewSet, \
@@ -91,6 +91,11 @@ router.register(r'radio',
 router.register(r'client',
                 ClientViewSet,
                 basename='api-client')
+
+router.register(r'tokenlogin',
+                TokenLoginViewSet,
+                basename='api-tokenlogin')
+
 
 urlpatterns = i18n_patterns(*[
 

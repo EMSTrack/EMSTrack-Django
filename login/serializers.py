@@ -1,8 +1,9 @@
 import logging
 
 from rest_framework import serializers
+from rest_framework.generics import get_object_or_404
 
-from .models import UserAmbulancePermission, UserHospitalPermission, Client
+from .models import UserAmbulancePermission, UserHospitalPermission, Client, TokenLogin
 
 from .permissions import get_permissions
 
@@ -50,6 +51,32 @@ class UserProfileSerializer(serializers.Serializer):
 
     def get_hospitals(self, user):
         return HospitalPermissionSerializer(self._permissions.get_permissions('hospitals').values(), many=True).data
+
+
+# TokenLogin serializer
+class TokenLoginSerializer(serializers.NodelSerializer):
+
+    class Meta:
+        model = TokenLogin
+        fields = ('token', 'url')
+
+    def get_object(self):
+
+        # get current user
+        user = self.context['request'].user
+
+        # make sure current user is the one requesting token or username is guest
+        username = self.kwargs['username']
+        if user.username != username:
+            # override user if guest
+            user = get_object_or_404(User, username=username)
+            if not user.userprofile.is_guest:
+                raise Http404
+
+        # create slug
+        obj = TokenLogin.objects.create(user=user)
+
+        return obj
 
 
 # Client serializers
