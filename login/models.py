@@ -221,7 +221,9 @@ def unique_slug_generator(new_slug=None):
 
     # if exists, try again
     if TokenLogin.objects.filter(token=slug).exists():
-        return unique_slug_generator(new_slug=random_string_generator(size=50))
+        return unique_slug_generator(new_slug=random_string_generator(size=50,
+                                                                      chars=(string.ascii_letters +
+                                                                             string.digits)))
     return slug
 
 
