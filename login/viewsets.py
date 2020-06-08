@@ -5,9 +5,10 @@ from rest_framework import viewsets, mixins
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.generics import get_object_or_404
 
 from emstrack.mixins import CreateModelUpdateByMixin, UpdateModelUpdateByMixin
-from login.models import Client, ClientStatus
+from login.models import Client, ClientStatus, TokenLogin
 from login.permissions import IsUserOrAdminOrSuper
 from .serializers import UserProfileSerializer, ClientSerializer, TokenLoginSerializer
 
@@ -22,6 +23,24 @@ class TokenLoginViewSet(mixins.RetrieveModelMixin,
                         viewsets.GenericViewSet):
     serializer_class = TokenLoginSerializer
     lookup_field = 'username'
+
+    def get_object(self):
+
+        # get current user
+        user = self.context['request'].user
+
+        # make sure current user is the one requesting token or username is guest
+        username = self.kwargs['username']
+        if user.username != username:
+            # override user if guest
+            user = get_object_or_404(User, username=username)
+            if not user.userprofile.is_guest:
+                raise Http404
+
+        # create slug
+        obj = TokenLogin.objects.create(user=user)
+
+        return obj
 
 
 # Profile viewset
