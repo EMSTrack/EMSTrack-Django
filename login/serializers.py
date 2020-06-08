@@ -57,7 +57,19 @@ class TokenLoginSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TokenLogin
-        fields = ('token', 'url')
+        fields = ('user', 'token', 'url')
+        read_only_fields = ('token', )
+        write_only_fields = ('user', )
+
+    def create(self, validated_data):
+        """
+        This will create a token
+        """
+        # create token
+        instance = TokenLogin.objects.create(user=validated_data.get('url'),
+                                             url=validated_data.get('url', None))
+
+        return instance
 
 
 # Client serializers
