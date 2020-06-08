@@ -749,6 +749,7 @@ class TokenLoginView(APIView):
         try:
 
             login_token = TokenLogin.objects.get(token=token)
+            logger.debug("login_token: '{}'".format(login_token))
             if login_token.user is not None:
                 login(request, login_token.user)
                 if login_token.url is not None:
@@ -758,7 +759,10 @@ class TokenLoginView(APIView):
 
         except TokenLogin.DoesNotExist:
             # TODO: should we inform the user that the token is invalid?
-            logger.warning(_("Attempt to login with invalid token:") + '{}'.format(token))
+            logger.warning("Attempt to login with invalid token: '{}'".format(token))
+
+        except Exception as e:
+            logger.error("Token: {}\nException: '{}'".format(token, e))
 
         finally:
             return HttpResponseForbidden()
