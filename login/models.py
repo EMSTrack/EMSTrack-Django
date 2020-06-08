@@ -227,7 +227,8 @@ def unique_slug_generator(new_slug=None):
 class TokenLogin(models.Model):
     user = models.ForeignKey(User,
                              on_delete=models.CASCADE)
-    token = models.SlugField(max_lenght=50, default=unique_slug_generator,
+    token = models.SlugField(max_length=50,
+                             default=unique_slug_generator,
                              unique=True,
                              null=False)
     url = models.URLField(null=True)
