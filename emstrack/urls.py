@@ -92,7 +92,7 @@ router.register(r'client',
                 ClientViewSet,
                 basename='api-client')
 
-router.register(r'user/(?P<username>.+)/tokenlogin/',
+router.register(r'user/(?P<username>.+)/tokenlogin',
                 TokenLoginViewSet,
                 basename='api-tokenlogin')
 
