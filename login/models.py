@@ -209,7 +209,7 @@ def random_string_generator(size=20,
     return ''.join(random.choice(chars) for _ in range(size))
 
 
-# LoginToken
+# TokenLogin
 
 def unique_slug_generator(new_slug=None):
     # generate slug
