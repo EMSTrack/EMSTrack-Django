@@ -4,7 +4,8 @@ from django.conf import settings
 from django.urls import reverse
 from django.utils.translation import activate
 
-from rest_framework.test import APIClient as Client
+from django.test import Client
+from rest_framework.test import APIClient
 
 from rest_framework.parsers import JSONParser
 from io import BytesIO
@@ -43,7 +44,7 @@ class TestTokenLogin(TestSetup):
 
     def test_viewset(self):
         # instantiate client
-        client = Client()
+        client = APIClient()
 
         # login as admin
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
@@ -76,8 +77,9 @@ class TestTokenLogin(TestSetup):
         client.logout()
 
     def test_login(self):
+
         # instantiate client
-        client = Client()
+        client = APIClient()
 
         # login as admin
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
@@ -89,6 +91,9 @@ class TestTokenLogin(TestSetup):
 
         # logout
         client.logout()
+
+        # instantiate client
+        client = Client()
 
         # login with token
         response = client.get('/en/auth/login/{}/'.format(str(token['token'])), follow=True)
