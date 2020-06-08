@@ -23,14 +23,13 @@ class TestTokenLogin(TestSetup):
 
         # retrieve token
         obj = TokenLogin.objects.create(user=self.u1)
-
         serializer = TokenLoginSerializer(obj)
         self.assertEqual(serializer.data['url'], None)
         logger.debug(len(serializer.data['token']))
         self.assertTrue(len(serializer.data['token']) == 50)
 
         # create token
-        data = {'user': self.u2}
+        data = {'user': self.u2.id}
         serializer = TokenLoginSerializer(obj, data=data)
         serializer.is_valid()
         logger.debug(serializer.errors)
