@@ -20,6 +20,8 @@ class TestTokenLogin(TestSetup):
 
         # super will see all ambulances and hospitals
         u = self.u1
-        serializer = TokenLoginSerializer(username=u.username)
+        obj = TokenLogin.objects.create(user=u)
+
+        serializer = TokenLoginSerializer(obj)
         self.assertEqual(serializer.data['url'], None)
         self.assertTrue(len(serializer.data['token']) == 50)
