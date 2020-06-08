@@ -743,11 +743,7 @@ class TokenLoginView(APIView):
 
     def get(self, request, token):
         """
-        Generate temporary password if one does not exist or is invalid.
-        Stores password in the database and returns a hash. Users in
-        possesion of this hash will be able to login through MQTT.
-        Passwords are valid for 120 seconds.
-        A new hash is however returned every time.
+        Login user using token
         """
 
         try:
@@ -756,13 +752,14 @@ class TokenLoginView(APIView):
             if login_token.user is not None:
                 login(request, login_token.user)
                 if login_token.url is not None:
-                    redirect(login_token.url)
+                    return redirect(login_token.url)
                 else:
-                    redirect('/')
+                    return redirect('/')
 
         except TokenLogin.DoesNotExist:
             # TODO: should we inform the user that the token is invalid?
-            pass
+            logger.warning(_("Attempt to login with invalid token:") + '{}'.format(token))
+
         finally:
             return HttpResponseForbidden()
 
