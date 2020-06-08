@@ -21,6 +21,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http.response import HttpResponse, HttpResponseForbidden
 from django.shortcuts import redirect, render
 from django.utils import timezone
+from django.views import View
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import View, TemplateView
 from django.views.generic.detail import BaseDetailView
@@ -736,7 +737,7 @@ class MQTTAclView(CsrfExemptMixin,
         return HttpResponseForbidden()
 
 
-class TokenLoginView(APIView):
+class TokenLoginView(View):
     """
     Login with token.
     """
