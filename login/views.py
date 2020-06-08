@@ -7,6 +7,7 @@ from datetime import timedelta
 from django.conf import settings
 from django.urls import reverse_lazy
 from django.utils.http import is_safe_url
+from django.contrib.auth import authenticate, login
 from tablib import Dataset
 
 from braces.views import CsrfExemptMixin
