@@ -211,28 +211,28 @@ def random_string_generator(size=20,
 
 # LoginToken
 
+def unique_slug_generator(new_slug=None):
+    # generate slug
+    if new_slug is not None:
+        slug = new_slug
+    else:
+        slug = slugify(random_string_generator(size=50))
+
+    # if exists, try again
+    if TokenLogin.objects.filter(slug=slug).exists():
+        return unique_slug_generator(new_slug=random_string_generator(size=50))
+    return slug
+
+
 class TokenLogin(models.Model):
     user = models.ForeignKey(User,
                              on_delete=models.CASCADE)
-    token = models.SlugField(max_lenght=50, default=TokenLogin.unique_slug_generator,
+    token = models.SlugField(max_lenght=50, default=unique_slug_generator,
                              unique=True,
                              null=False)
     url = models.URLField(null=True)
     created_on = models.DateTimeField(_('created_on'),
                                       auto_now=True)
-
-    @staticmethod
-    def unique_slug_generator(new_slug=None):
-        # generate slug
-        if new_slug is not None:
-            slug = new_slug
-        else:
-            slug = slugify(random_string_generator(size=50))
-
-        # if exists, try again
-        if TokenLogin.objects.filter(slug=slug).exists():
-            return unique_slug_generator(instance, new_slug=random_string_generator(size=50))
-        return slug
 
 
 # TemporaryPassword
