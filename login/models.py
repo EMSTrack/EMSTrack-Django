@@ -262,7 +262,7 @@ class TemporaryPassword(models.Model):
             if timezone.now() > valid_until:
                 password = None
 
-        except ObjectDoesNotExist:
+        except TemporaryPassword.DoesNotExist:
 
             pwd = None
             password = None
