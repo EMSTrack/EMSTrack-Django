@@ -49,8 +49,8 @@ class TestTokenLogin(TestSetup):
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
         # create own
-        response = client.post('/en/api/tokenlogin/{}/'.format(str(self.u1.username)), {}, format='json')
-        self.assertEqual(response.status_code, 200)
+        response = client.post('/en/api/user/{}/tokenlogin/'.format(str(self.u1.username)), {}, format='json')
+        self.assertEqual(response.status_code, 201)
         result = JSONParser().parse(BytesIO(response.content))
 
         obj = TokenLogin.objects.get(user=self.u1)
@@ -58,7 +58,7 @@ class TestTokenLogin(TestSetup):
         self.assertDictEqual(result, answer)
 
         # create someone else's
-        response = client.post('/en/api/tokenlogin/{}/'.format(str(self.u2.username)), {}, format='json')
+        response = client.post('/en/api/user/{}/tokenlogin/'.format(str(self.u2.username)), {}, format='json')
         self.assertEqual(response.status_code, 404)
 
         # logout

@@ -24,7 +24,6 @@ logger = logging.getLogger(__name__)
 class TokenLoginViewSet(mixins.CreateModelMixin,
                         viewsets.GenericViewSet):
     serializer_class = TokenLoginSerializer
-    lookup_field = 'username'
 
     def create(self, request, *args, **kwargs):
 
