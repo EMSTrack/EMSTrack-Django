@@ -55,11 +55,11 @@ class UserProfileSerializer(serializers.Serializer):
 # TokenLogin serializer
 class TokenLoginSerializer(serializers.ModelSerializer):
 
-    username = serializers.CharField(max_length=254)
+    username = serializers.CharField(source='user.username', required=True)
 
     class Meta:
         model = TokenLogin
-        fields = ('token', 'url')
+        fields = ('username', 'token', 'url')
         read_only_fields = ('token', )
         write_only_fields = ('username', )
 
