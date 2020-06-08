@@ -5,6 +5,9 @@ from django.conf import settings
 from django.urls import reverse
 from django.utils.translation import activate
 
+from rest_framework.parsers import JSONParser
+from io import BytesIO
+
 from login.tests.setup_data import TestSetup
 
 from login.models import TokenLogin
