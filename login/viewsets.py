@@ -21,15 +21,15 @@ logger = logging.getLogger(__name__)
 
 # TokenLogin view
 
-class TokenLoginViewSet(mixins.RetrieveModelMixin,
+class TokenLoginViewSet(mixins.CreateModelMixin,
                         viewsets.GenericViewSet):
     serializer_class = TokenLoginSerializer
     lookup_field = 'username'
 
-    def get_object(self):
+    def create(self, request, *args, **kwargs):
 
         # get current user
-        user = self.request.user
+        user = request.user
 
         # make sure current user is the one requesting token or username is guest
         username = self.kwargs['username']
@@ -39,10 +39,10 @@ class TokenLoginViewSet(mixins.RetrieveModelMixin,
             if not user.userprofile.is_guest:
                 raise Http404
 
-        # create token
-        obj = TokenLogin.objects.create(user=user)
+        # override username in data and call super
+        request.data['username'] = user.username
 
-        return obj
+        return super().create(request, *args, **kwargs)
 
 
 # Profile viewset

@@ -1,9 +1,10 @@
 import logging
 
-from django.test import Client
 from django.conf import settings
 from django.urls import reverse
 from django.utils.translation import activate
+
+from rest_framework.test import APIClient as Client
 
 from rest_framework.parsers import JSONParser
 from io import BytesIO
@@ -47,9 +48,9 @@ class TestTokenLogin(TestSetup):
         # login as admin
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
-        # retrieve own
-        response = client.get('/en/api/tokenlogin/{}/'.format(str(self.u1.username)),
-                              follow=True)
+        # create own
+        response = client.post('/en/api/tokenlogin/{}/'.format(str(self.u1.username)),
+                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
 
@@ -57,9 +58,9 @@ class TestTokenLogin(TestSetup):
         answer = TokenLoginSerializer(obj).data
         self.assertDictEqual(result, answer)
 
-        # retrieve someone else's
-        response = client.get('/en/api/tokenlogin/{}/'.format(str(self.u2.username)),
-                              follow=True)
+        # create someone else's
+        response = client.post('/en/api/tokenlogin/{}/'.format(str(self.u2.username)),
+                               follow=True)
         self.assertEqual(response.status_code, 404)
 
         # logout
