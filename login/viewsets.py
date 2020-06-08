@@ -1,6 +1,8 @@
 import logging
 
 from django.contrib.auth.models import User
+from django.http import Http404
+
 from rest_framework import viewsets, mixins
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
