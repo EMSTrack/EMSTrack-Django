@@ -25,5 +25,5 @@ class TestTokenLogin(TestSetup):
 
         serializer = TokenLoginSerializer(obj)
         self.assertEqual(serializer.data['url'], None)
-        logger.debug(serializer.data)
+        logger.debug(len(serializer.data['token']))
         self.assertTrue(len(serializer.data['token']) == 50)
