@@ -69,6 +69,8 @@ class TokenLoginSerializer(serializers.ModelSerializer):
         """
         This will create a token
         """
+        logger.debug(validated_data)
+
         # get user
         user = User.objects.get(username=validated_data.get('username'))
 
