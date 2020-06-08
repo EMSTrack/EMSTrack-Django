@@ -43,7 +43,7 @@ class TestTokenLogin(TestSetup):
         result = JSONParser().parse(BytesIO(response.content))
 
         obj = TokenLogin.objects.get(user=self.u1)
-        answer = TokennLoginSerializer(obj).data
+        answer = TokenLoginSerializer(obj).data
         self.assertDictEqual(result, answer)
 
         # retrieve someone else's
