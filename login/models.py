@@ -214,7 +214,7 @@ def random_string_generator(size=20,
 class TokenLogin(models.Model):
     user = models.ForeignKey(User,
                              on_delete=models.CASCADE)
-    token = models.SlugField(max_lenght=50, default=TokenLogin.unique_slug_generator(),
+    token = models.SlugField(max_lenght=50, default=TokenLogin.unique_slug_generator,
                              unique=True,
                              null=False)
     url = models.URLField(null=True)
