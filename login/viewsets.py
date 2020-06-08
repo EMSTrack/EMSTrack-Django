@@ -37,7 +37,7 @@ class TokenLoginViewSet(mixins.RetrieveModelMixin,
             if not user.userprofile.is_guest:
                 raise Http404
 
-        # create slug
+        # create token
         obj = TokenLogin.objects.create(user=user)
 
         return obj

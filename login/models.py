@@ -220,7 +220,7 @@ def unique_slug_generator(new_slug=None):
         slug = slugify(random_string_generator(size=50))
 
     # if exists, try again
-    if TokenLogin.objects.filter(slug=slug).exists():
+    if TokenLogin.objects.filter(token=slug).exists():
         return unique_slug_generator(new_slug=random_string_generator(size=50))
     return slug
 
