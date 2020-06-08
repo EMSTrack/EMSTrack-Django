@@ -72,7 +72,7 @@ class TokenLoginSerializer(serializers.ModelSerializer):
         logger.debug(validated_data)
 
         # get user
-        user = User.objects.get(username=validated_data.get('username'))
+        user = User.objects.get(username=validated_data.get('user').get('username'))
 
         # create token
         instance = TokenLogin.objects.create(user=user,
