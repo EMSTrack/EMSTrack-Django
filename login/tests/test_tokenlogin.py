@@ -62,7 +62,7 @@ class TestTokenLogin(TestSetup):
         self.assertEqual(response.status_code, 404)
 
         # create own with url
-        url = '/en/test/'
+        url = 'http://localhost/en/test/'
         response = client.post('/en/api/user/{}/tokenlogin/'.format(str(self.u1.username)), {'url': url}, format='json')
         logger.debug(response.content)
         self.assertEqual(response.status_code, 201)
