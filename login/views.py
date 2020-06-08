@@ -51,7 +51,7 @@ from .forms import MQTTAuthenticationForm, AuthenticationForm, SignupForm, \
 from .models import TemporaryPassword, \
     UserAmbulancePermission, UserHospitalPermission, \
     GroupProfile, GroupAmbulancePermission, \
-    GroupHospitalPermission, Client, ClientStatus, UserProfile
+    GroupHospitalPermission, Client, ClientStatus, UserProfile, TokenLogin
 from .permissions import get_permissions
 from .resources import UserResource, GroupResource, GroupAmbulancePermissionResource, GroupHospitalPermissionResource, \
     UserImportResource
