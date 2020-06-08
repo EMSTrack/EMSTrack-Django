@@ -55,18 +55,23 @@ class UserProfileSerializer(serializers.Serializer):
 # TokenLogin serializer
 class TokenLoginSerializer(serializers.ModelSerializer):
 
+    username = serializers.CharField(max_length=254)
+
     class Meta:
         model = TokenLogin
-        fields = ('user', 'token', 'url')
+        fields = ('username', 'token', 'url')
         read_only_fields = ('token', )
-        write_only_fields = ('user', )
+        write_only_fields = ('username', )
 
     def create(self, validated_data):
         """
         This will create a token
         """
+        # get user
+        user = User.objects.get(username=validated_data.get('username'))
+
         # create token
-        instance = TokenLogin.objects.create(user=validated_data.get('url'),
+        instance = TokenLogin.objects.create(user=user,
                                              url=validated_data.get('url', None))
 
         return instance

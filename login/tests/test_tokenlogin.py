@@ -29,7 +29,7 @@ class TestTokenLogin(TestSetup):
         self.assertTrue(len(serializer.data['token']) == 50)
 
         # create token
-        data = {'user': self.u2.id}
+        data = {'username': self.u2.username}
         serializer = TokenLoginSerializer(obj, data=data)
         self.assertTrue(serializer.is_valid())
         serializer.save()
