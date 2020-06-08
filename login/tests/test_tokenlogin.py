@@ -48,7 +48,7 @@ class TestTokenLogin(TestSetup):
         # login as admin
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
-        # create own
+        # create own token
         response = client.post('/en/api/user/{}/tokenlogin/'.format(str(self.u1.username)), {}, format='json')
         self.assertEqual(response.status_code, 201)
         result = JSONParser().parse(BytesIO(response.content))
@@ -61,7 +61,7 @@ class TestTokenLogin(TestSetup):
         response = client.post('/en/api/user/{}/tokenlogin/'.format(str(self.u2.username)), {}, format='json')
         self.assertEqual(response.status_code, 404)
 
-        # create own with url
+        # create own token with url
         url = 'http://localhost/en/test/'
         response = client.post('/en/api/user/{}/tokenlogin/'.format(str(self.u1.username)), {'url': url}, format='json')
         logger.debug(response.content)
@@ -74,4 +74,23 @@ class TestTokenLogin(TestSetup):
 
         # logout
         client.logout()
+
+    def test_login(self):
+        # instantiate client
+        client = Client()
+
+        # login as admin
+        client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
+
+        # create own token
+        response = client.post('/en/api/user/{}/tokenlogin/'.format(str(self.u1.username)), {}, format='json')
+        self.assertEqual(response.status_code, 201)
+        token = JSONParser().parse(BytesIO(response.content))
+
+        # logout
+        client.logout()
+
+        # login with token
+        response = client.get('/en/auth/login/{}/'.format(str(token['token'])), follow=True)
+        self.assertEqual(response.status_code, 200)
 

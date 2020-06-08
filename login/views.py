@@ -741,7 +741,7 @@ class TokenLoginView(APIView):
     Login with token.
     """
 
-    def get(self, request, user__username=None):
+    def get(self, request, token):
         """
         Generate temporary password if one does not exist or is invalid.
         Stores password in the database and returns a hash. Users in
@@ -750,20 +750,21 @@ class TokenLoginView(APIView):
         A new hash is however returned every time.
         """
 
-        # retrieve current user
-        user = request.user
+        try:
 
-        # make sure user and username are the same
-        if user.username != user__username:
-            raise PermissionDenied()
+            login_token = TokenLogin.objects.get(token=token)
+            if login_token.user is not None:
+                login(request, login_token.user)
+                if login_token.url is not None:
+                    redirect(login_token.url)
+                else:
+                    redirect('/')
 
-        # get or create password
-        pwd = TemporaryPassword.get_or_create_password(user)
-
-        # Return password hash
-        password_hash = make_password(password=pwd.password)
-
-        return Response(password_hash)
+        except TokenLogin.DoesNotExist:
+            # TODO: should we inform the user that the token is invalid?
+            pass
+        finally:
+            return HttpResponseForbidden()
 
 
 class PasswordView(APIView):
