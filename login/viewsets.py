@@ -18,7 +18,8 @@ logger = logging.getLogger(__name__)
 
 # TokenLogin view
 
-class TokenLoginViewSet(mixins.RetrieveModelMixin):
+class TokenLoginViewSet(mixins.RetrieveModelMixin,
+                        viewsets.GenericViewSet):
     serializer_class = TokenLoginSerializer
     lookup_field = 'username'
 
