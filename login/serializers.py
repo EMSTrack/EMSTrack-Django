@@ -54,7 +54,7 @@ class UserProfileSerializer(serializers.Serializer):
 
 
 # TokenLogin serializer
-class TokenLoginSerializer(serializers.NodelSerializer):
+class TokenLoginSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TokenLogin
