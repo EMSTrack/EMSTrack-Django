@@ -104,7 +104,6 @@ class TestTokenLogin(TestSetup):
         client.logout()
 
     def test_login_redirect(self):
-
         # instantiate client
         client = APIClient()
 
@@ -134,3 +133,4 @@ class TestTokenLogin(TestSetup):
 
         # logout
         client.logout()
+
