@@ -12,11 +12,31 @@
 
 <script>
 
+    // add initialization hook
+    add_init_function(initGuest);
+
     // Ready function
-    $(function () {
+    function initGuest(client) {
 
         const urlParams = new URLSearchParams(window.location.search);
-        if ( urlParams.get('open_video_modal') ) {
+        const callUsername = urlParams.get('callUsername');
+        const callClientId = urlParams.get('callClientId');
+        const callMode = urlParams.get('callMode');
+
+        // new call?
+        const handleCall = (callUsername !== null && callClientId !== null);
+        if (handleCall) {
+
+            const remoteClient = {
+                username: callUsername,
+                client_id: callClientId
+            };
+
+            if (callMode === 'new') {
+                newCall(remoteClient);
+            } else if (callMode === 'answer') {
+                acceptCall(remoteClient);
+            }
 
             // bring up modal
             $('#videoModalWindow').modal({
@@ -24,8 +44,7 @@
             });
 
         }
-
-    });
+    }
 
 </script>
 

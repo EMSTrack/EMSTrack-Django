@@ -59,15 +59,7 @@ $(function () {
     hangupButton.prop('disabled', true);
 
     // call button click
-    callButton
-        .click(function() {
-            if (state === State.IDLE && remoteClient !== null) {
-                state = State.CALLING;
-                callButton.prop('disabled', true);
-                hangupButton.prop('disabled', false);
-                sendMessage(remoteClient, {type: 'call'});
-            }
-        });
+    callButton.click(() => { newCall(); });
 
     // hangup button click
     hangupButton
@@ -125,9 +117,34 @@ function retrieveOnlineClients() {
         })
 }
 
+// new call
+
+function newCall(newRemoteClient = null) {
+
+    // set remote client?
+    if (newRemoteClient !== null) {
+        remoteClient = {...newRemoteClient};
+    }
+
+    // initiate new call
+    if (state === State.IDLE && remoteClient !== null) {
+        state = State.CALLING;
+        callButton.prop('disabled', true);
+        hangupButton.prop('disabled', false);
+        sendMessage(remoteClient, {type: 'call'});
+    }
+}
+
 // accept call
 
-function acceptCall() {
+function acceptCall(newRemoteClient = null) {
+
+    // set remote client?
+    let reroute = false;
+    if (newRemoteClient !== null) {
+        remoteClient = {...newRemoteClient};
+        reroute = true;
+    }
 
     // retrieve online clients
     retrieveOnlineClients();
@@ -147,12 +164,11 @@ function acceptCall() {
             logger.log('info', 'ACCEPTED: accepting call from %j', remoteClient);
             remoteClientText.html(remoteClient.username + ' @ ' + remoteClient.client_id);
             hangupButton.prop('disabled', false);
-            sendMessage(remoteClient, { type: 'accepted' });
+            sendMessage(remoteClient, { type: 'accepted', reroute: reroute });
 
             // close alert
             $('#videoAlertAlert').alert('close');
         });
-
 }
 
 // prompt call
@@ -273,6 +289,12 @@ function handleMessages(message) {
 
         logger.log('info', 'GOT ACCEPTED');
 
+        // reroute?
+        if (state === State.CALLING && message.reroute) {
+            remoteClient = {...message.client};
+        }
+
+        // accepted?
         if (state === State.CALLING &&
             message.client.username === remoteClient.username &&
             message.client.client_id === remoteClient.client_id) {
