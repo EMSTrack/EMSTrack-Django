@@ -112,7 +112,8 @@ class TestTokenLogin(TestSetup):
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
         # create own token
-        url = request.build_absolute_uri(reverse('login:login'))
+        # url = request.build_absolute_uri(reverse('login:login'))
+        url = 'http://localhost/'
         logger.debug("url = '%s'", url)
         response = client.post('/en/api/user/{}/tokenlogin/'.format(str(self.u1.username)),
                                {'url': url},
