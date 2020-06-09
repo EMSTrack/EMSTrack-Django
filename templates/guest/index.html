@@ -7,3 +7,21 @@
 {% include 'homepage.html' %}
 
 {% endblock %}
+
+{% block scripts %}
+
+<script>
+
+    // Ready function
+    $(function () {
+
+        // bring up modal
+        $('#videoModalWindow').modal({
+            keyboard: false
+        });
+
+    });
+
+</script>
+
+{% endblock %}
