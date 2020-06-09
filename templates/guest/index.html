@@ -15,10 +15,15 @@
     // Ready function
     $(function () {
 
-        // bring up modal
-        $('#videoModalWindow').modal({
-            keyboard: false
-        });
+        const urlParams = new URLSearchParams(window.location.search);
+        if ( urlParams.get('open_video_modal') ) {
+
+            // bring up modal
+            $('#videoModalWindow').modal({
+                keyboard: false
+            });
+            
+        }
 
     });
 
