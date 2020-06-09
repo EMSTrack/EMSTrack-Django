@@ -758,8 +758,8 @@ class TokenLoginView(View):
                     logger.debug("redirecting: '{}'".format(login_token.url))
                     return redirect(login_token.url)
                 else:
-                    logger.debug("redirecting: '/'")
-                    return redirect('/')
+                    logger.debug("redirecting: 'index'")
+                    return redirect('index')
 
         except TokenLogin.DoesNotExist:
             # TODO: should we inform the user that the token is invalid?
