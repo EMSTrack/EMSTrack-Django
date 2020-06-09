@@ -112,7 +112,7 @@ class TestTokenLogin(TestSetup):
 
         # create own token
         # url = request.build_absolute_uri(reverse('login:login'))
-        url = 'http://localhost/'
+        url = 'http://localhost/?next=something+other=another'
         logger.debug("url = '%s'", url)
         response = client.post('/en/api/user/{}/tokenlogin/'.format(str(self.u1.username)),
                                {'url': url},
