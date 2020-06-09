@@ -100,7 +100,7 @@ class TestTokenLogin(TestSetup):
 
         # login with token
         response = client.get('/en/auth/login/{}'.format(str(token['token'])), follow=True)
-        logger.debug(response.content)
+        logger.debug(response)
         self.assertEqual(response.status_code, 200)
 
         # logout
