@@ -111,6 +111,8 @@ class TestTokenLogin(TestSetup):
         # login as admin
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
+        logger.debug("url = '%s'", reverse('login:login'))
+
         # create own token
         response = client.post('/en/api/user/{}/tokenlogin/'.format(str(self.u1.username)),
                                {'url': reverse('login:login')},
