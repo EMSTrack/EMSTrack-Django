@@ -113,7 +113,7 @@ class TestTokenLogin(TestSetup):
 
         # create own token
         response = client.post('/en/api/user/{}/tokenlogin/'.format(str(self.u1.username)),
-                               {'url': 'http://localhost/'},
+                               {'url': reverse('login:login')},
                                format='json')
         self.assertEqual(response.status_code, 201)
         token = JSONParser().parse(BytesIO(response.content))
