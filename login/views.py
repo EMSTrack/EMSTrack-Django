@@ -755,8 +755,10 @@ class TokenLoginView(View):
             if login_token.user is not None:
                 login(request, login_token.user)
                 if login_token.url is not None:
+                    logger.debug("redirecting: '{}'".format(login_token.url))
                     return redirect(login_token.url)
                 else:
+                    logger.debug("redirecting: '/'")
                     return redirect('/')
 
         except TokenLogin.DoesNotExist:
