@@ -112,7 +112,9 @@ class TestTokenLogin(TestSetup):
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
         # create own token
-        response = client.post('/en/api/user/{}/tokenlogin/'.format(str(self.u1.username)), {'url': '/'}, format='json')
+        response = client.post('/en/api/user/{}/tokenlogin/'.format(str(self.u1.username)),
+                               {'url': 'http://localhost/'},
+                               format='json')
         self.assertEqual(response.status_code, 201)
         token = JSONParser().parse(BytesIO(response.content))
 
