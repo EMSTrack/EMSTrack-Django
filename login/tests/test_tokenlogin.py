@@ -95,8 +95,11 @@ class TestTokenLogin(TestSetup):
         # instantiate client
         client = Client()
 
+        response = client.get('/', follow=True)
+        self.assertEqual(response.status_code, 200)
+
         # login with token
-        response = client.get('/en/auth/login/{}'.format(str(token['token'])))
+        response = client.get('/en/auth/login/{}'.format(str(token['token'])), follow=True)
         logger.debug(response.content)
         self.assertEqual(response.status_code, 200)
 
