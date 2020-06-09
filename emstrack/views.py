@@ -47,7 +47,6 @@ def get_page_size_links(request, page, page_sizes, page_query_param='page', page
 
 
 class IndexView(TemplateView):
-
     template_name = 'index.html'
 
 
