@@ -230,7 +230,7 @@ def unique_slug_generator(new_slug=None):
 
 
 URL_VALIDATOR_MESSAGE = _('Not a valid URL.')
-URL_VALIDATOR = RegexValidator(regex='/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/',
+URL_VALIDATOR = RegexValidator(regex='/^((https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6}))?([\/\w \.-]*)*\/?$/',
                                message=URL_VALIDATOR_MESSAGE)
 
 
