@@ -229,11 +229,6 @@ def unique_slug_generator(new_slug=None):
     return slug
 
 
-URL_VALIDATOR_MESSAGE = _('Not a valid URL.')
-URL_VALIDATOR = RegexValidator(regex='/^((https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6}))?([\/\w \.-]*)*\/?$/',
-                               message=URL_VALIDATOR_MESSAGE)
-
-
 class TokenLogin(models.Model):
     user = models.ForeignKey(User,
                              on_delete=models.CASCADE)
@@ -241,7 +236,7 @@ class TokenLogin(models.Model):
                              default=unique_slug_generator,
                              unique=True,
                              null=False)
-    url = models.URLField(null=True, blank=True, validators=[URL_VALIDATOR])
+    url = models.URLField(null=True, blank=True)
     created_on = models.DateTimeField(_('created_on'),
                                       auto_now=True)
 

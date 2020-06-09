@@ -111,11 +111,11 @@ class TestTokenLogin(TestSetup):
         # login as admin
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
-        logger.debug("url = '%s'", reverse('login:login'))
-
         # create own token
+        url = request.build_absolute_uri(reverse('login:login'))
+        logger.debug("url = '%s'", url)
         response = client.post('/en/api/user/{}/tokenlogin/'.format(str(self.u1.username)),
-                               {'url': reverse('login:login')},
+                               {'url': url},
                                format='json')
         self.assertEqual(response.status_code, 201)
         token = JSONParser().parse(BytesIO(response.content))
