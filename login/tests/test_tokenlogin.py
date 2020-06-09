@@ -95,8 +95,32 @@ class TestTokenLogin(TestSetup):
         # instantiate client
         client = Client()
 
-        response = client.get('/en/auth/login', follow=True)
+        # login with token
+        response = client.get('/en/auth/login/{}'.format(str(token['token'])), follow=True)
+        logger.debug(response)
         self.assertEqual(response.status_code, 200)
+
+        # logout
+        client.logout()
+
+    def test_login_redirect(self):
+
+        # instantiate client
+        client = APIClient()
+
+        # login as admin
+        client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
+
+        # create own token
+        response = client.post('/en/api/user/{}/tokenlogin/'.format(str(self.u1.username)), {'url': '/'}, format='json')
+        self.assertEqual(response.status_code, 201)
+        token = JSONParser().parse(BytesIO(response.content))
+
+        # logout
+        client.logout()
+
+        # instantiate client
+        client = Client()
 
         # login with token
         response = client.get('/en/auth/login/{}'.format(str(token['token'])), follow=True)
