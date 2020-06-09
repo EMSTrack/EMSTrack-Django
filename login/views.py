@@ -768,8 +768,7 @@ class TokenLoginView(View):
         except Exception as e:
             logger.error("Token: {}\nException: '{}'".format(token, e))
 
-        finally:
-            return HttpResponseForbidden()
+        return HttpResponseForbidden()
 
 
 class PasswordView(APIView):
