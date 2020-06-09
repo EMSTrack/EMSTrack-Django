@@ -16,7 +16,7 @@ urlpatterns = [
         name='logout'),
 
     # token login
-    url(r'^login/(?P<token>.+)$',
+    url(r'^login/(?P<token>.+)/$',
         views.TokenLoginView.as_view(),
         name='tokenlogin'),
 
