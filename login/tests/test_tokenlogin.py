@@ -103,3 +103,5 @@ class TestTokenLogin(TestSetup):
         logger.debug(response.content)
         self.assertEqual(response.status_code, 200)
 
+        # logout
+        client.logout()
