@@ -95,7 +95,7 @@ class TestTokenLogin(TestSetup):
         # instantiate client
         client = Client()
 
-        response = client.get('/', follow=True)
+        response = client.get('/en/auth/login', follow=True)
         self.assertEqual(response.status_code, 200)
 
         # login with token
