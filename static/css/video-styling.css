@@ -90,3 +90,19 @@ heeeeeeeyyyy
    padding:30px 10px 70px 10px;
    background-color:black;
 }
+
+.fa-rotate-45 {
+  transform: rotate(45deg);
+}
+
+.fa-rotate-135 {
+  transform: rotate(135deg);
+}
+
+.fa-rotate-225 {
+  transform: rotate(225deg);
+}
+
+.fa-rotate-315 {
+  transform: rotate(315deg);
+}
