@@ -17,8 +17,8 @@ logger = logging.getLogger(__name__)
 class IndexView(TemplateView):
     template_name = 'guest/index.html'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['video_openmodal'] = True
-        context['video_call'] = None
-        return context
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['video_openmodal'] = True
+    #     context['video_call'] = None
+    #     return context

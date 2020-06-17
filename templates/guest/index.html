@@ -24,8 +24,8 @@
         const callMode = urlParams.get('callMode');
 
         // new call?
-        const handleCall = (callUsername !== null && callClientId !== null);
-        if (handleCall) {
+        const hasCallDetails = (callUsername !== null && callClientId !== null);
+        if (hasCallDetails) {
 
             const remoteClient = {
                 username: callUsername,

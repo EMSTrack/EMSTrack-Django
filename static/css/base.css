@@ -54,13 +54,97 @@
     bottom: 0px;
 }
 
+/*
 .localVideo {
-    width: 320px;
-    height: 240px;
-    transform: scaleX(-1);
+    width: 200px;
+    height: 120px;
+    float:right;
 }
 
 .remoteVideo {
     width: 320px;
     height: 240px;
 }
+*/
+
+/*
+heeeeeeeyyyy
+*/
+
+
+
+.video_box {
+   width:100%;
+
+
+   margin: 0 auto;
+   background-color: black;
+   display:flex;
+
+}
+.select_button{
+   border:none;
+   float:left;
+ background-color: #f2f2f2;
+ color: black;
+}
+
+.select_button:hover {
+   background-color:#d4d4d4;
+   color:black;
+}
+
+.select_button:active {
+   background-color:#16405F;
+   color:black;
+}
+
+.call_button {
+   width:50px;
+   height:50px;
+   margin-right:20px;
+}
+
+.call_img{
+    width:20px;
+   height:20px;
+
+}
+.phone_buttons{
+   float:right;
+
+}
+
+.left_bar{
+   width:30%;
+   padding:0px 4px;
+
+   display: flex;
+   justify-content: center;
+   align-items: center;
+
+}
+.localVideo {
+   width:100%;
+   float:left;
+}
+
+.remoteVideo{
+   float:left;
+   width:70%;
+
+}
+
+.dropdown_vid_text {
+color:white;
+
+}
+
+.main_box_buttons{
+   width:100%;
+   margin: 0 auto;
+   padding:30px 10px 70px 10px;
+   background-color:black;
+}
+
+
