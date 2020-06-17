@@ -125,6 +125,10 @@ function retrieveOnlineClients() {
 
 // new link
 
+function copyToClipboard(text) {
+    window.prompt("Copy to clipboard: Ctrl+C, Enter", text);
+}
+
 function getLink() {
 
     // get token
@@ -134,6 +138,7 @@ function getLink() {
     const token = postTokenLogin(user.username, encodeURI(uri));
     logger.log('info', 'token = %j', token);
 
+    copyToClipboard(token.token);
 }
 
 // new call
