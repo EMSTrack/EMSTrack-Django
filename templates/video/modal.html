@@ -6,24 +6,24 @@
         <video id="localVideo" class="localVideo" autoplay playsinline controls></video>
     </div>
     <video id="remoteVideo" class="remoteVideo" autoplay playsinline controls></video>
+</div>
 
-    <div class = "main_box_buttons">
-        <button type="button" class="btn btn-primary dropdown-toggle select_button" data-toggle="dropdown">
-            {% trans "Select user..." %}
+<div class = "main_box_buttons">
+    <button type="button" class="btn btn-primary dropdown-toggle select_button" data-toggle="dropdown">
+        {% trans "Select user..." %}
+    </button>
+    <div id="clients-dropdown" class="dropdown-menu dropdown_vid_text" >
+    </div>
+
+    <div class = "phone_buttons">
+        <button id="callButton" class="btn-success btn rounded-circle call_button">
+            <span class="fas fa-phone"></span>
+            <!-- img src = "/static/icons/call_start.png" class = "call_img" alt = "Start Call"-->
         </button>
-        <div id="clients-dropdown" class="dropdown-menu dropdown_vid_text" >
-        </div>
 
-        <div class = "phone_buttons">
-            <button id="callButton" class="btn-success btn rounded-circle call_button">
-                <span class="fas fa-phone"></span>
-                <!-- img src = "/static/icons/call_start.png" class = "call_img" alt = "Start Call"-->
-            </button>
-
-            <button id="hangupButton" class="btn-danger btn rounded-circle call_button  ">
-                <span class="fas fa-slash"></span>
-                <!--img src = "/static/icons/call_end.png" class = "call_img" alt = "End Call"-->
-            </button>
-        </div>
+        <button id="hangupButton" class="btn-danger btn rounded-circle call_button  ">
+            <span class="fas fa-slash"></span>
+            <!--img src = "/static/icons/call_end.png" class = "call_img" alt = "End Call"-->
+        </button>
     </div>
 </div>
