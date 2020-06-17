@@ -297,6 +297,22 @@ export class AppClient extends TopicObserver {
 
     // POST and PATCH methods
 
+    postTokenLogin(username, url = null) {
+
+        const data = {};
+        if (url !== null) {
+            data.url = url;
+        }
+
+        // retrieve token
+        return this.httpClient.post(`user/${username}/tokenlogin`, data)
+            .then( (response) => {
+                // return call
+                return response.data;
+            });
+
+    }
+
     postClient(data) {
 
         // retrieve bases

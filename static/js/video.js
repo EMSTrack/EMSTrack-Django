@@ -44,19 +44,25 @@ function initVideo(client) {
 }
 
 // Ready function
+let linkButton;
 let callButton;
 let hangupButton;
 let remoteClientText;
 $(function () {
 
+    linkButton = $('#linkButton');
     callButton = $('#callButton');
     hangupButton = $('#hangupButton');
     remoteClientText = $('#remoteClientText');
 
     // disable buttons
     remoteClientText.empty();
+    linkButton.prop('disabled', false);
     callButton.prop('disabled', true);
     hangupButton.prop('disabled', true);
+
+    // link button click
+    linkButton.click(() => { getLink(); });
 
     // call button click
     callButton.click(() => { newCall(); });
@@ -115,6 +121,19 @@ function retrieveOnlineClients() {
         .catch( (error) => {
             logger.log('error', 'Failed to retrieve clients from ApiClient: %j', error);
         })
+}
+
+// new link
+
+function getLink() {
+
+    // get token
+    const uri = `${window.location.protocol}//guest?callUsername=${localClient.username}+callClientId=${localClient.client_id}+callMode=new`;
+    logger.log('info', 'uri = %s', uri);
+
+    const token = postTokenLogin(user.username, encodeURI(uri));
+    logger.log('info', 'token = %j', token);
+
 }
 
 // new call
