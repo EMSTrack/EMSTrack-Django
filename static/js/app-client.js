@@ -305,7 +305,7 @@ export class AppClient extends TopicObserver {
         }
 
         // retrieve token
-        return this.httpClient.post(`user/${username}/tokenlogin`, data)
+        return this.httpClient.post(`user/${username}/tokenlogin/`, data)
             .then( (response) => {
                 // return call
                 return response.data;
