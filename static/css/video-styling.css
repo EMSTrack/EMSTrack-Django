@@ -91,18 +91,18 @@ heeeeeeeyyyy
    background-color:black;
 }
 
-.fa-rotate-45 {
+.fa-my-rotate-45 {
   transform: rotate(45deg);
 }
 
-.fa-rotate-135 {
+.fa-my-rotate-135 {
   transform: rotate(135deg);
 }
 
-.fa-rotate-225 {
+.fa-my-rotate-225 {
   transform: rotate(225deg);
 }
 
-.fa-rotate-315 {
+.fa-my-rotate-315 {
   transform: rotate(315deg);
 }
