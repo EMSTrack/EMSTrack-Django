@@ -139,7 +139,8 @@ function getLink() {
         .then( (token) => {
 
             logger.log('info', 'token = %j', token);
-            copyToClipboard(token.token);
+            const uri = `${window.location.protocol}//${window.location.hostname}/auth/login/${token.token}/`;
+            copyToClipboard(encodeURI(uri));
 
         })
         .catch( (error ) => {
