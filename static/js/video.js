@@ -135,10 +135,19 @@ function getLink() {
     const uri = `${window.location.protocol}//${window.location.hostname}/guest?callUsername=${localClient.username}+callClientId=${localClient.client_id}+callMode=new`;
     logger.log('info', 'uri = %s', uri);
 
-    const token = apiClient.postTokenLogin(username, encodeURI(uri));
-    logger.log('info', 'token = %j', token);
+    apiClient.postTokenLogin(username, encodeURI(uri))
+        .then( (token) => {
 
-    copyToClipboard(token.token);
+            logger.log('info', 'token = %j', token);
+            copyToClipboard(token.token);
+
+        })
+        .catch( (error ) => {
+
+            logger.log('error', 'Failed to retrieve token');
+            logger.log('error', error);
+
+        });
 }
 
 // new call
