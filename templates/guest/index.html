@@ -23,6 +23,8 @@
         const callClientId = urlParams.get('callClientId');
         const callMode = urlParams.get('callMode');
 
+        console.log('debug', 'callUsername = ' + callUsername + ', callClientId = ' + callClientId + ', callMode = ' + callMode );
+
         // new call?
         const hasCallDetails = (callUsername !== null && callClientId !== null);
         if (hasCallDetails) {

@@ -62,7 +62,7 @@ $(function () {
     hangupButton.prop('disabled', true);
 
     // link button click
-    linkButton.click(() => { getLink(); });
+    linkButton.click(() => { getLink(username); });
 
     // call button click
     callButton.click(() => { newCall(); });
@@ -129,7 +129,7 @@ function copyToClipboard(text) {
     window.prompt("Copy to clipboard: Ctrl+C, Enter", text);
 }
 
-function getLink() {
+function getLink(username) {
 
     // get token
     const uri = `${window.location.protocol}//${window.location.hostname}/guest?callUsername=${localClient.username}+callClientId=${localClient.client_id}+callMode=new`;
