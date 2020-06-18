@@ -132,7 +132,7 @@ function copyToClipboard(text) {
 function getLink(username) {
 
     // get token
-    const uri = `${window.location.protocol}//${window.location.hostname}/guest?callUsername=${localClient.username}+callClientId=${localClient.client_id}+callMode=new`;
+    const uri = `${window.location.protocol}//${window.location.hostname}/guest?callUsername=${localClient.username}&callClientId=${localClient.client_id}&callMode=new`;
     logger.log('info', 'uri = %s', uri);
 
     apiClient.postTokenLogin(username, encodeURI(uri))
