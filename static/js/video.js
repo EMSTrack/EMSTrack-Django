@@ -41,6 +41,29 @@ function initVideo(client) {
     logger.log('info', 'Signing up for client webrtc updates');
     apiClient.subscribeToWebRTC((message) => handleMessages(parseMessage(message)) );
 
+    // start call?
+    const hasCallDetails = (callUsername !== null && callClientId !== null);
+    if (hasCallDetails) {
+
+        const remoteClient = {
+            username: callUsername,
+            client_id: callClientId
+        };
+
+        if (callMode === 'new') {
+            newCall(remoteClient);
+        } else if (callMode === 'answer') {
+            acceptCall(remoteClient);
+        }
+
+        // bring up modal
+        $('#videoModalWindow').modal({
+            backdrop: 'static',
+            keyboard: false
+        });
+
+    }
+
 }
 
 // Ready function
@@ -88,29 +111,6 @@ $(function () {
         });
 
     });
-
-    // new call?
-    const hasCallDetails = (callUsername !== null && callClientId !== null);
-    if (hasCallDetails) {
-
-        const remoteClient = {
-            username: callUsername,
-            client_id: callClientId
-        };
-
-        if (callMode === 'new') {
-            newCall(remoteClient);
-        } else if (callMode === 'answer') {
-            acceptCall(remoteClient);
-        }
-
-        // bring up modal
-        $('#videoModalWindow').modal({
-            backdrop: 'static',
-            keyboard: false
-        });
-
-    }
 
 });
 
