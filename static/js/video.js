@@ -69,34 +69,29 @@ function initVideo(client) {
 // Ready function
 let linkButton;
 let callButton;
-let hangupButton;
 let remoteClientText;
 $(function () {
 
     linkButton = $('#linkButton');
     callButton = $('#callButton');
-    hangupButton = $('#hangupButton');
     remoteClientText = $('#remoteClientText');
 
     // disable buttons
     remoteClientText.empty();
     linkButton.prop('disabled', false);
     callButton.prop('disabled', true);
-    hangupButton.prop('disabled', true);
 
     // link button click
     linkButton.click(() => { getLink(username); });
 
     // call button click
-    callButton.click(() => { newCall(); });
-
-    // hangup button click
-    hangupButton
-        .click(function() {
-            if (state === State.ACTIVE_CALL) {
-                hangup();
-            }
-        });
+    callButton.click(() => {
+        if (state === State.ACTIVE_CALL) {
+            hangup();
+        } else {
+            newCall();
+        }
+    });
 
     // enable video modal button
     $('#videoMenuItem').click(function() {
@@ -129,10 +124,13 @@ function retrieveOnlineClients() {
                     dropdown.append(html);
                     $(`#${remote.username}_${remote.client_id}`).click(function() {
                         if (state === State.IDLE) {
+
                             remoteClient = {...remote};
                             remoteClientText.html(remoteClient.username + ' @ ' + remoteClient.client_id);
+
                             callButton.prop('disabled', false);
-                            hangupButton.prop('disabled', true);
+                            // hangupButton.prop('disabled', true);
+
                         } else {
                             logger.log('error', 'Cannot select client when not IDLE');
                         }
@@ -187,7 +185,7 @@ export function newCall(newRemoteClient = null) {
     if (state === State.IDLE && remoteClient !== null) {
         state = State.CALLING;
         callButton.prop('disabled', true);
-        hangupButton.prop('disabled', false);
+        // hangupButton.prop('disabled', false);
         sendMessage(remoteClient, {type: 'call'});
     }
 }
@@ -219,8 +217,10 @@ export function acceptCall(newRemoteClient = null) {
             // accept call
             state = State.WAITING_FOR_OFFER;
             logger.log('info', 'ACCEPTED: accepting call from %j', remoteClient);
+
             remoteClientText.html(remoteClient.username + ' @ ' + remoteClient.client_id);
-            hangupButton.prop('disabled', false);
+            // hangupButton.prop('disabled', false);
+
             sendMessage(remoteClient, { type: 'accepted', reroute: reroute });
 
             // close alert
@@ -394,6 +394,11 @@ function handleMessages(message) {
             pc.setRemoteDescription(new RTCSessionDescription(message));
             doAnswer();
 
+            callButton
+                .removeClass('btn-success')
+                .addClass('btn-danger')
+                .prop('disabled', false);
+
         } else {
 
             // ignore
@@ -411,6 +416,11 @@ function handleMessages(message) {
 
             state = State.ACTIVE_CALL;
             pc.setRemoteDescription(new RTCSessionDescription(message));
+
+            callButton
+                .removeClass('btn-success')
+                .addClass('btn-danger')
+                .prop('disabled', false);
 
         } else {
 
@@ -697,7 +707,10 @@ function modalReset() {
     remoteClient = null;
     remoteClientText.empty();
     callButton.prop('disabled', true);
-    hangupButton.prop('disabled', true);
+    callButton
+        .removeClass('btn-danger')
+        .addClass('btn-success');
+    // hangupButton.prop('disabled', true);
 }
 
 function modalAlert(body, title) {
