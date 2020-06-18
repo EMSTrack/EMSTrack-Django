@@ -153,7 +153,7 @@ function getLink(username) {
 
 // new call
 
-function newCall(newRemoteClient = null) {
+export function newCall(newRemoteClient = null) {
 
     // set remote client?
     if (newRemoteClient !== null) {
@@ -171,7 +171,7 @@ function newCall(newRemoteClient = null) {
 
 // accept call
 
-function acceptCall(newRemoteClient = null) {
+export function acceptCall(newRemoteClient = null) {
 
     // set remote client?
     let reroute = false;
