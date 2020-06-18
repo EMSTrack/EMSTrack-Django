@@ -224,9 +224,11 @@
 
 {% autoescape off %}
 <script>
+
     const username = '{{ user.get_username }}';
     const apiBaseUrl = '{% url 'index' %}api/';
     {% if request.user.is_authenticated %}
+
         const mqttBroker = {{ mqtt_broker }};
         const clientId = '{{ client_id }}';
         const mapProvider = {{ map_provider }};
@@ -236,7 +238,16 @@
         {% else %}
             const adminUrls = [];
         {% endif %}
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const callUsername = urlParams.get('callUsername');
+        const callClientId = urlParams.get('callClientId');
+        const callMode = urlParams.get('callMode');
+
+        console.log('debug', 'callUsername = ' + callUsername + ', callClientId = ' + callClientId + ', callMode = ' + callMode );
+
     {% endif %}
+
 </script>
 {% endautoescape %}
 
