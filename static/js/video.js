@@ -531,15 +531,7 @@ function startStream() {
 
 }
 
-/*
-const pcConfig = {
-    'iceServers': [{
-        'urls': 'stun:stun.l.google.com:19302'
-    }]
-};
-*/
-
-const pcConfig = {
+const pcConfig = turnServer['host'] !== '' ? {
     'iceServers': [
         {
             'url': 'stun:stun.l.google.com:19302'
@@ -553,10 +545,15 @@ const pcConfig = {
             'credential': `${turnServer['password']}`
         }
     ]
-}
+} : {
+    'iceServers': [{
+        'urls': 'stun:stun.l.google.com:19302'
+    }]
+};
 
 function maybeStart() {
-    logger.log('debug', '>>>>>>> maybeStart() ', isStarted, localStream, isChannelReady);
+    logger.log('debug', '>>>>>>> maybeStart(), turnServer = %j, isStarted = %s, localStream = %s, isChannelReady = %s',
+        turnServer, isStarted, localStream, isChannelReady);
     if (!isStarted && typeof localStream !== 'undefined' && isChannelReady) {
         logger.log('info', 'creating peer connection');
         createPeerConnection();
