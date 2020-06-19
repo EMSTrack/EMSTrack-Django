@@ -82,7 +82,7 @@ $(function () {
     callButton.prop('disabled', true);
 
     // link button click
-    linkButton.click(() => { getLink(username); });
+    linkButton.click(() => { getLink(guest.username); });
 
     // call button click
     callButton.click(() => {

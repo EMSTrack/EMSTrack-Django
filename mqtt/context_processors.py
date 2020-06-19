@@ -27,6 +27,9 @@ def jstags(request):
             'port': settings.TURN_PORT,
             'username': settings.TURN_USER,
             'password': settings.TURN_PASS,
+        },
+        'guest': {
+            'username': settings.GUEST['USERNAME']
         }
     }
 

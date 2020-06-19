@@ -239,6 +239,8 @@
             const adminUrls = [];
         {% endif %}
 
+        const guest = {{ guest }};
+
         const urlParams = new URLSearchParams(window.location.search);
         const callUsername = urlParams.get('callUsername');
         const callClientId = urlParams.get('callClientId');
