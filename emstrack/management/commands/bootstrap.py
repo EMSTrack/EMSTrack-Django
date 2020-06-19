@@ -67,7 +67,7 @@ class Command(BaseCommand):
             self.create_user(superuser, 'Superuser', **options)
 
         except IntegrityError as e:
-            self.stdout.write(self.style.WARNING("Superuser created successfully."))
+            self.stdout.write(self.style.WARNING("Superuser already exists."))
 
         try:
 
@@ -75,7 +75,7 @@ class Command(BaseCommand):
             self.create_user(guestuser, 'Guest user', **options)
 
         except IntegrityError as e:
-            self.stdout.write(self.style.WARNING("Guest user created successfully."))
+            self.stdout.write(self.style.WARNING("Guest user already exists."))
 
         if options['verbosity'] >= 1:
             self.stdout.write(
