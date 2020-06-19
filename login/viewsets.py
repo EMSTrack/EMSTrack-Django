@@ -35,6 +35,9 @@ class TokenLoginViewSet(mixins.CreateModelMixin,
         if user.username != username:
             # override user if guest
             user = get_object_or_404(User, username=username)
+            logger.debug('username = %s', username)
+            logger.debug('user = %s', user)
+            logger.debug('user.userprofile.is_guest = %s', user.userprofile.is_guest)
             if not user.userprofile.is_guest:
                 raise Http404
 
