@@ -62,6 +62,15 @@ class TestTokenLogin(TestSetup):
         response = client.post('/en/api/user/{}/tokenlogin/'.format(str(self.u2.username)), {}, format='json')
         self.assertEqual(response.status_code, 404)
 
+        # create guest
+        response = client.post('/en/api/user/{}/tokenlogin/'.format(str(settings.GUEST['USERNAMME'])), {}, format='json')
+        self.assertEqual(response.status_code, 201)
+        result = JSONParser().parse(BytesIO(response.content))
+
+        obj = TokenLogin.objects.get(user=self.u9)
+        answer = TokenLoginSerializer(obj).data
+        self.assertDictEqual(result, answer)
+
         # create own token with url
         url = 'http://localhost/en/test/'
         response = client.post('/en/api/user/{}/tokenlogin/'.format(str(self.u1.username)), {'url': url}, format='json')

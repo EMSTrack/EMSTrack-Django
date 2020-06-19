@@ -68,6 +68,13 @@ class TestSetupData:
         cls.u8.userprofile.mobile_number = '+15555055050'
         cls.u8.userprofile.save()
 
+        cls.u9 = User.objects.create_user(
+            username=settings.GUEST['USERNAME'],
+            email='guest@user.com',
+            password=settings.GUEST['PASSWORD'])
+        cls.u9.userprofile.is_guest = True
+        cls.u8.userprofile.save()
+
         # Add ambulances
         cls.a1 = Ambulance.objects.create(
             identifier='BC-179',
