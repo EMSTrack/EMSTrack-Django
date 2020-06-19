@@ -11,7 +11,7 @@ class Command(BaseCommand):
 
     help = 'Create admin user'
 
-    def create_user(self, user, type_of_user):
+    def create_user(self, user, type_of_user, **options):
 
         # Retrieve current user model
         model = get_user_model()
@@ -64,7 +64,7 @@ class Command(BaseCommand):
         try:
 
             # create superuser
-            self.create_user(superuser, 'Superuser')
+            self.create_user(superuser, 'Superuser', **options)
 
         except IntegrityError as e:
             self.stdout.write(self.style.WARNING("Superuser created successfully."))
@@ -72,7 +72,7 @@ class Command(BaseCommand):
         try:
 
             # create guest user
-            self.create_user(guestuser, 'Guest user')
+            self.create_user(guestuser, 'Guest user', **options)
 
         except IntegrityError as e:
             self.stdout.write(self.style.WARNING("Guest user created successfully."))
