@@ -189,6 +189,13 @@ EMAIL_HOST_USER = env.str('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env.str('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = env.bool('EMAIL_USE_TLS')
 
+# Guest user
+GUEST = {
+    'USERNAME': env.str('GUEST_USERNAME'),
+    'PASSWORD': env.str('GUEST_PASSWORD'),
+    'EMAIL': env.str('GUEST_EMAIL'),
+}
+
 # MQTT settings
 MQTT = {
     'USERNAME': env.str('MQTT_USERNAME'),

@@ -11,52 +11,71 @@ class Command(BaseCommand):
 
     help = 'Create admin user'
 
-    def handle(self, *args, **options):
-
-        if options['verbosity'] >= 1:
-            self.stdout.write('Bootstraping ambulance application')
-        
-        # Retrieve defaults from settings
-        mqtt = {
-            'USERNAME': '',
-            'PASSWORD': '',
-        }
-        mqtt.update(settings.MQTT)
+    def create_user(self, user, type_of_user):
 
         # Retrieve current user model
         model = get_user_model()
         username_field = model._meta.get_field(model.USERNAME_FIELD)
 
         user_data = {}
-        username = username_field.clean(mqtt['USERNAME'], None)
+        username = username_field.clean(user['USERNAME'], None)
         database = DEFAULT_DB_ALIAS
-        
+
         if not username:
             raise CommandError("Could not retrieve '{}' from settings.".format(model.USERNAME_FIELD))
 
         # Make sure mandatory fields are present
         for field_name in model.REQUIRED_FIELDS:
-            if mqtt[field_name.upper()]:
+            if user[field_name.upper()]:
                 field = model._meta.get_field(field_name)
-                user_data[field_name] = field.clean(mqtt[field_name.upper()], None)
+                user_data[field_name] = field.clean(user[field_name.upper()], None)
             else:
                 raise CommandError("Could not retrieve '{}' from settings.".format(field_name))
 
         if username:
 
-            try:
+            # create superuser
+            user_data[model.USERNAME_FIELD] = username
+            user_data['password'] = user['PASSWORD']
+            model._default_manager.db_manager(database).create_superuser(**user_data)
 
-                # create superuser
-                user_data[model.USERNAME_FIELD] = username
-                user_data['password'] = mqtt['PASSWORD']
-                model._default_manager.db_manager(database).create_superuser(**user_data)
+            if options['verbosity'] >= 1:
+                self.stdout.write(
+                    self.style.SUCCESS("{} created successfully.".format(type_of_user)))
 
-                if options['verbosity'] >= 1:
-                    self.stdout.write(
-                        self.style.SUCCESS("Superuser created successfully."))
+    def handle(self, *args, **options):
 
-            except IntegrityError as e:
-                raise CommandError("Superuser already exists!")
+        if options['verbosity'] >= 1:
+            self.stdout.write('Bootstraping ambulance application')
+        
+        # Retrieve defaults from settings
+        superuser = {
+            'USERNAME': '',
+            'PASSWORD': '',
+        }
+        superuser.update(settings.MQTT)
+
+        guestuser = {
+            'USERNAME': '',
+            'PASSWORD': '',
+        }
+        guestuser.update(settings.GUEST)
+
+        try:
+
+            # create superuser
+            self.create_user(superuser, 'Superuser')
+
+        except IntegrityError as e:
+            self.stdout.write(self.style.WARNING("Superuser created successfully."))
+
+        try:
+
+            # create guest user
+            self.create_user(guestuser, 'Guest user')
+
+        except IntegrityError as e:
+            self.stdout.write(self.style.WARNING("Guest user created successfully."))
 
         if options['verbosity'] >= 1:
             self.stdout.write(
