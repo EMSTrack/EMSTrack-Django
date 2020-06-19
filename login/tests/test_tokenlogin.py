@@ -63,7 +63,7 @@ class TestTokenLogin(TestSetup):
         self.assertEqual(response.status_code, 404)
 
         # create guest
-        response = client.post('/en/api/user/{}/tokenlogin/'.format(str(settings.GUEST['USERNAMME'])), {}, format='json')
+        response = client.post('/en/api/user/{}/tokenlogin/'.format(str(settings.GUEST['USERNAME'])), {}, format='json')
         self.assertEqual(response.status_code, 201)
         result = JSONParser().parse(BytesIO(response.content))
 
