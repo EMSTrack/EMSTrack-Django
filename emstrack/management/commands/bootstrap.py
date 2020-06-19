@@ -43,14 +43,20 @@ class Command(BaseCommand):
 
         if username:
 
-            # create superuser
-            user_data[model.USERNAME_FIELD] = username
-            user_data['password'] = mqtt['PASSWORD']
-            model._default_manager.db_manager(database).create_superuser(**user_data)
+            try:
 
-            if options['verbosity'] >= 1:
+                # create superuser
+                user_data[model.USERNAME_FIELD] = username
+                user_data['password'] = mqtt['PASSWORD']
+                model._default_manager.db_manager(database).create_superuser(**user_data)
+
+                if options['verbosity'] >= 1:
+                    self.stdout.write(
+                        self.style.SUCCESS("Superuser created successfully."))
+
+            except IntegrityError as e:
                 self.stdout.write(
-                    self.style.SUCCESS("Superuser created successfully."))
+                    self.style.ERROR("Superuser already exists!"))
 
         if options['verbosity'] >= 1:
             self.stdout.write(
