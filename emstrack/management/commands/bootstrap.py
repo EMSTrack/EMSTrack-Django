@@ -56,8 +56,7 @@ class Command(BaseCommand):
                         self.style.SUCCESS("Superuser created successfully."))
 
             except IntegrityError as e:
-                self.stdout.write(
-                    self.style.ERROR("Superuser already exists!"))
+                raise CommandError("Superuser already exists!")
 
         if options['verbosity'] >= 1:
             self.stdout.write(
