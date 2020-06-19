@@ -37,7 +37,10 @@ class Command(BaseCommand):
             # create superuser
             user_data[model.USERNAME_FIELD] = username
             user_data['password'] = user['PASSWORD']
-            model._default_manager.db_manager(database).create_superuser(**user_data)
+            if type_of_user == 'admin':
+                model._default_manager.db_manager(database).create_superuser(**user_data)
+            else:
+                model._default_manager.db_manager(database).create_user(**user_data)
 
             if options['verbosity'] >= 1:
                 self.stdout.write(
@@ -64,7 +67,7 @@ class Command(BaseCommand):
         try:
 
             # create superuser
-            self.create_user(superuser, 'Superuser', **options)
+            self.create_user(superuser, 'admin', **options)
 
         except IntegrityError as e:
             self.stdout.write(self.style.WARNING("Superuser already exists."))
@@ -72,7 +75,7 @@ class Command(BaseCommand):
         try:
 
             # create guest user
-            self.create_user(guestuser, 'Guest user', **options)
+            self.create_user(guestuser, 'guest', **options)
 
         except IntegrityError as e:
             self.stdout.write(self.style.WARNING("Guest user already exists."))

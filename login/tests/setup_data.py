@@ -73,7 +73,7 @@ class TestSetupData:
             email='guest@user.com',
             password=settings.GUEST['PASSWORD'])
         cls.u9.userprofile.is_guest = True
-        cls.u8.userprofile.save()
+        cls.u9.userprofile.save()
 
         # Add ambulances
         cls.a1 = Ambulance.objects.create(
