@@ -38,9 +38,13 @@ class Command(BaseCommand):
             user_data[model.USERNAME_FIELD] = username
             user_data['password'] = user['PASSWORD']
             if type_of_user == 'admin':
-                model._default_manager.db_manager(database).create_superuser(**user_data)
+                u = model._default_manager.db_manager(database).create_superuser(**user_data)
             else:
-                model._default_manager.db_manager(database).create_user(**user_data)
+                u = model._default_manager.db_manager(database).create_user(**user_data)
+
+            if type_of_user == 'guest':
+                u.userprofile.is_guest = True
+                u.userprofile.save()
 
             if options['verbosity'] >= 1:
                 self.stdout.write(
