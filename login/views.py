@@ -825,7 +825,7 @@ class SettingsView(APIView):
 
         # from equipment/models.py
         equipment_type = {m.name: m.value for m in EquipmentType}
-        equipment_type_defaults = {k: v for (k,v) in EquipmentTypeDefaults.items()}
+        equipment_type_defaults = {k: v for (k, v) in EquipmentTypeDefaults.items()}
 
         # assemble all settings
         all_settings = {'ambulance_status': ambulance_status,
@@ -842,6 +842,7 @@ class SettingsView(APIView):
                         'waypoint_status': waypoint_status,
                         'equipment_type': equipment_type,
                         'equipment_type_defaults': equipment_type_defaults,
+                        'guest_username': settings.GUEST['USERNAME'],
                         'defaults': defaults.copy()}
 
         # serialize defaults.location
