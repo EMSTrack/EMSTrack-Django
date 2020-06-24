@@ -526,6 +526,7 @@ function startStream() {
 
     // if there is nothing to do...
     if (typeof localStream !== 'undefined') {
+        enableTrack(localStream, true);
         return Promise.resolve();
     }
 
