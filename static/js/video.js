@@ -174,7 +174,39 @@ function getLink(username) {
 
 // new call
 
-export function newCall(newRemoteClient = null) {
+function ringCall(maxTries = 5) {
+
+    // already in a call?
+    if (state !== State.CALLING)
+        return;
+
+    // should keep trying?
+    if (maxTries < 0) {
+
+        // cancel call, remote did not pick up
+        isStarted = false;
+        state = State.IDLE;
+        modalReset();
+
+        // alert call failed
+        modalAlert(`${remoteClient.username}@${remoteClient.client_id} did not pick up the call`);
+
+        logger.log('info', 'CANCELLING CALL: remote did not pick up call');
+        return;
+    }
+
+    // add alert
+    modalAlert(`Calling ${remoteClient.username}@${remoteClient.client_id}...`);
+
+    // hangupButton.prop('disabled', false);
+    sendMessage(remoteClient, {type: 'call'});
+
+    // set timeout
+    setTimeout(() => { ringCall(maxTries - 1) }, 30000);
+
+}
+
+function newCall(newRemoteClient = null) {
 
     // set remote client?
     if (newRemoteClient !== null) {
@@ -186,17 +218,13 @@ export function newCall(newRemoteClient = null) {
         state = State.CALLING;
         callButton.prop('disabled', true);
 
-        // add alert
-        modalAlert(`Calling ${remoteClient.username}@${remoteClient.client_id})`);
-
-        // hangupButton.prop('disabled', false);
-        sendMessage(remoteClient, {type: 'call'});
+        ringCall();
     }
 }
 
 // accept call
 
-export function acceptCall(newRemoteClient = null) {
+function acceptCall(newRemoteClient = null) {
 
     // set remote client?
     let reroute = false;
