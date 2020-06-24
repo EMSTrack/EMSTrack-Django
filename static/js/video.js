@@ -698,11 +698,25 @@ function handleRemoteHangup() {
     isInitiator = false;
 }
 
+/* stream: MediaStream, type:trackType('audio'/'video') */
+function enableTrack(stream, enabled, type=null) {
+    stream.getTracks().forEach((track) => {
+        if (type === null || track.kind === type) {
+            track.enabled = enabled;
+        }
+    });
+}
+
 function stop() {
     isStarted = false;
     isInitiator = false;
     state = State.IDLE;
-    pc.removeTrack();
+
+    // disable tracks first
+    if (typeof localStream !== 'undefined') {
+        enableTrack(localStream, false);
+    }
+
     pc.close();
     pc = null;
     modalReset();
