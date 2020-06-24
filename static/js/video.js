@@ -185,6 +185,10 @@ export function newCall(newRemoteClient = null) {
     if (state === State.IDLE && remoteClient !== null) {
         state = State.CALLING;
         callButton.prop('disabled', true);
+
+        // add alert
+        modalAlert(`Calling ${remoteClient.username}@${remoteClient.client_id})`);
+
         // hangupButton.prop('disabled', false);
         sendMessage(remoteClient, {type: 'call'});
     }
@@ -698,6 +702,7 @@ function stop() {
     isStarted = false;
     isInitiator = false;
     state = State.IDLE;
+    pc.removeTrack();
     pc.close();
     pc = null;
     modalReset();
