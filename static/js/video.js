@@ -202,7 +202,7 @@ function ringCall(maxTries = 5) {
     sendMessage(remoteClient, {type: 'call'});
 
     // set timeout
-    setTimeout(() => { ringCall(maxTries - 1) }, 30000);
+    setTimeout(() => { ringCall(maxTries - 1) }, 5000);
 
 }
 
