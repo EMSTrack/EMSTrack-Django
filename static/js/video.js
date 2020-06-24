@@ -186,13 +186,13 @@ function ringCall(maxTries = 5) {
         // alert call failed
         modalAlert(`${remoteClient.username}@${remoteClient.client_id} did not pick up the call`);
 
+        // send cancel message
+        sendMessage(remoteClient, {type: 'cancel'});
+
         // cancel call, remote did not pick up
         isStarted = false;
         state = State.IDLE;
         modalReset();
-
-        // send cancel message
-        sendMessage(remoteClient, {type: 'cancel'});
 
         logger.log('info', 'CANCELLING CALL: remote did not pick up call');
         return;
