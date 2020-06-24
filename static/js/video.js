@@ -181,7 +181,7 @@ function ringCall(maxTries = 5) {
         return;
 
     // should keep trying?
-    if (maxTries < 0) {
+    if (maxTries <= 0) {
 
         // alert call failed
         modalAlert(`${remoteClient.username}@${remoteClient.client_id} did not pick up the call`);
@@ -271,7 +271,7 @@ function promptCall() {
     retrieveOnlineClients();
 
     // add alert
-    $('#videoAlert').append(`<div class="alert alert-warning alert-dismissible fade show" id="videoAlertAlert" role="alert">
+    $('#videoAlert').append(`<div class="alert alert-warning alert-dismissible fade show" id="videoAlertAlert_${remoteClient.username}_${remoteClient.client_id}" role="alert">
   <h4 class="alert-heading">New Video Call</h4>
   From ${remoteClient.username}@${remoteClient.client_id}
   <hr>
@@ -329,11 +329,18 @@ function handleMessages(message) {
 
         logger.log('info', 'GOT CALL');
 
-        if (state !== State.IDLE) {
+        if (state !== State.IDLE && state !== State.PROMPT) {
 
             // reply busy, does not change state
             logger.log('info', 'BUSY: rejecting call from %j', message.client);
-            sendMessage(message.client, { type: 'busy' });
+            sendMessage(message.client, {type: 'busy'});
+
+        } else if (state === State.PROMPT) {
+
+            // reply busy, does not change state
+            logger.log('info', 'PROMPT: still prompting for video call from %j', message.client);
+
+            // TODO: Should notify?
 
         } else {
 
@@ -345,6 +352,31 @@ function handleMessages(message) {
 
             // prompt user for new call
             promptCall();
+
+        }
+
+    } else if (message.type === 'cancel') {
+
+        logger.log('info', 'GOT CANCEL');
+
+        if (state === State.PROMPT) {
+
+            // alert
+            modalAlert('Call cancelled');
+
+            // cancel call
+            isStarted = false;
+            state = State.IDLE;
+            logger.log('info', 'CANCEL: cancelling call from %j', remoteClient);
+            modalReset();
+
+            // cancel prompt
+            $(`#videoAlertAlert_${remoteClient.username}_${remoteClient.client_id}`).alert('close');
+
+        } else {
+
+            // ignore
+            logger.log('info', 'IGNORING CANCEL: %j', message.client);
 
         }
 
