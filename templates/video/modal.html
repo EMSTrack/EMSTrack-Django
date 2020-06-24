@@ -1,25 +1,26 @@
 {% load static %}
 {% load i18n %}
 
-<div class = "video_box">
-    <div class = "left_bar">
+<div class="video_box">
+    <div class="left_bar">
         <video id="localVideo" class="localVideo" autoplay playsinline controls></video>
     </div>
     <video id="remoteVideo" class="remoteVideo" autoplay playsinline controls></video>
 </div>
 
-<div class = "main_box_buttons">
+<div class="main_box_buttons">
     <button type="button" class="btn btn-light dropdown-toggle select_button" data-toggle="dropdown">
         {% trans "Select user..." %}
     </button>
     <div id="clients-dropdown" class="dropdown-menu" >
     </div>
+</div>
 
+<div class="main_box_buttons">
     <div id="remoteClientText" class="text-light" >
     </div>
 
-
-    <div class = "phone_buttons">
+    <div class="phone_buttons">
         <button id="linkButton" class="btn-info btn rounded-circle call_button">
             <span class="fas fa-user"></span>
         </button>
