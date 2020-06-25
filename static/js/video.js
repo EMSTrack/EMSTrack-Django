@@ -186,6 +186,26 @@ function getLink(username) {
         });
 }
 
+// decline call
+
+function declineCall() {
+
+    logger.log('info', 'DECLINE: declining call from %j', remoteClient);
+
+    // cancel prompt
+    $(`#videoAlertAlert_${remoteClient.username}_${remoteClient.client_id}`).alert('close');
+
+    // send decline message
+    sendMessage(remoteClient, { type: 'decline' });
+
+    // decline call
+    isStarted = false;
+    state = State.IDLE;
+    modalReset();
+
+}
+
+
 // cancel call
 
 function cancelCall(sendMessage_ = true) {
@@ -318,12 +338,7 @@ function promptCall() {
 
     $('#videoAlertAlert').on('closed.bs.alert', function (e) {
         if (state === State.PROMPT) {
-            // decline call
-            isStarted = false;
-            state = State.IDLE;
-            logger.log('info', 'DECLINE: declining call from %j', remoteClient);
-            sendMessage(remoteClient, { type: 'decline' });
-            modalReset();
+            declineCall();
         } else {
             logger.log('info', 'Unexpected state %s', state);
         }
@@ -386,14 +401,15 @@ function handleMessages(message) {
 
         if (state === State.PROMPT || state === State.CALLING) {
 
-            // copy remote client info
-            const remoteClientCopy = {...remoteClient};
+            if (state === State.PROMPT) {
+
+                // cancel prompt
+                $(`#videoAlertAlert_${remoteClient.username}_${remoteClient.client_id}`).alert('close');
+
+            }
 
             // cancel call
             cancelCall(false);
-
-            // cancel prompt
-            $(`#videoAlertAlert_${remoteClientCopy.username}_${remoteClientCopy.client_id}`).alert('close');
 
         } else {
 
