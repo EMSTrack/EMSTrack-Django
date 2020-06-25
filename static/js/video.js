@@ -101,7 +101,9 @@ $(function () {
     callButton.click(() => {
         if (state === State.ACTIVE_CALL) {
             hangup();
-        } if (state === State.PROMPT || state === State.CALLING) {
+        } if (state === State.PROMPT) {
+            declineCall();
+        } if (state === State.CALLING) {
             cancelCall();
         } else {
             newCall();
