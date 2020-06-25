@@ -184,7 +184,7 @@ function cancelCall(sendMessage_ = true) {
         sendMessage(remoteClient, {type: 'cancel'});
 
     // alert
-    modalAlert(`Call from ${remoteClientCopy.username}@${remoteClientCopy.client_id} was cancelled`);
+    modalAlert(`Call from ${remoteClient.username}@${remoteClient.client_id} was cancelled`);
 
     // cancel call, remote did not pick up
     isStarted = false;
