@@ -384,7 +384,7 @@ function handleMessages(message) {
 
         logger.log('info', 'GOT CANCEL');
 
-        if (state === State.PROMPT) {
+        if (state === State.PROMPT || state === State.WAITING_FOR_ANSWER) {
 
             // copy remote client info
             const remoteClientCopy = {...remoteClient};
