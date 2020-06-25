@@ -88,6 +88,8 @@ $(function () {
     callButton.click(() => {
         if (state === State.ACTIVE_CALL) {
             hangup();
+        } if (state === State.PROMPT || state === State.CALLING) {
+            cancelCall();
         } else {
             newCall();
         }
@@ -129,7 +131,6 @@ function retrieveOnlineClients() {
                             remoteClientText.html(remoteClient.username + ' @ ' + remoteClient.client_id);
 
                             callButton.prop('disabled', false);
-                            // hangupButton.prop('disabled', true);
 
                         } else {
                             logger.log('error', 'Cannot select client when not IDLE');
@@ -172,6 +173,23 @@ function getLink(username) {
         });
 }
 
+// cancel call
+
+function cancelCall(sendMessage = true) {
+
+    logger.log('info', 'CANCEL: cancelling call from %j', remoteClient);
+
+    if (sendMessage)
+        // send cancel message
+        sendMessage(remoteClient, {type: 'cancel'});
+
+    // cancel call, remote did not pick up
+    isStarted = false;
+    state = State.IDLE;
+    modalReset();
+
+}
+
 // new call
 
 function ringCall(maxTries = 5) {
@@ -183,25 +201,21 @@ function ringCall(maxTries = 5) {
     // should keep trying?
     if (maxTries <= 0) {
 
+        logger.log('info', 'CANCELLING CALL: remote did not pick up call');
+
         // alert call failed
         modalAlert(`${remoteClient.username}@${remoteClient.client_id} did not pick up the call`);
 
-        // send cancel message
-        sendMessage(remoteClient, {type: 'cancel'});
+        // cancel call
+        cancelCall();
 
-        // cancel call, remote did not pick up
-        isStarted = false;
-        state = State.IDLE;
-        modalReset();
-
-        logger.log('info', 'CANCELLING CALL: remote did not pick up call');
         return;
     }
 
     // add alert
     modalAlert(`Calling ${remoteClient.username}@${remoteClient.client_id}...`);
 
-    // hangupButton.prop('disabled', false);
+    // send message
     sendMessage(remoteClient, {type: 'call'});
 
     // set timeout
@@ -219,7 +233,10 @@ function newCall(newRemoteClient = null) {
     // initiate new call
     if (state === State.IDLE && remoteClient !== null) {
         state = State.CALLING;
-        callButton.prop('disabled', true);
+        callButton
+            .removeClass('btn-success')
+            .addClass('btn-danger')
+            .prop('disabled', false);
 
         ringCall();
     }
@@ -254,7 +271,6 @@ function acceptCall(newRemoteClient = null) {
             logger.log('info', 'ACCEPTED: accepting call from %j', remoteClient);
 
             remoteClientText.html(remoteClient.username + ' @ ' + remoteClient.client_id);
-            // hangupButton.prop('disabled', false);
 
             sendMessage(remoteClient, { type: 'accepted', reroute: reroute });
 
@@ -340,7 +356,7 @@ function handleMessages(message) {
             // reply busy, does not change state
             logger.log('info', 'PROMPT: still prompting for video call from %j', message.client);
 
-            // TODO: Should notify?
+            // TODO: Should reissue notification?
 
         } else {
 
@@ -349,6 +365,12 @@ function handleMessages(message) {
             // set state as user prompt
             state = State.PROMPT;
             remoteClient = {...message.client};
+
+            // enable call button
+            callButton
+                .removeClass('btn-success')
+                .addClass('btn-danger')
+                .prop('disabled', false);
 
             // prompt user for new call
             promptCall();
@@ -365,10 +387,7 @@ function handleMessages(message) {
             const remoteClientCopy = {...remoteClient};
 
             // cancel call
-            isStarted = false;
-            state = State.IDLE;
-            logger.log('info', 'CANCEL: cancelling call from %j', remoteClient);
-            modalReset();
+            cancelCall(false);
 
             // cancel prompt
             $(`#videoAlertAlert_${remoteClientCopy.username}_${remoteClientCopy.client_id}`).alert('close');
@@ -464,11 +483,6 @@ function handleMessages(message) {
             pc.setRemoteDescription(new RTCSessionDescription(message));
             doAnswer();
 
-            callButton
-                .removeClass('btn-success')
-                .addClass('btn-danger')
-                .prop('disabled', false);
-
         } else {
 
             // ignore
@@ -486,11 +500,6 @@ function handleMessages(message) {
 
             state = State.ACTIVE_CALL;
             pc.setRemoteDescription(new RTCSessionDescription(message));
-
-            callButton
-                .removeClass('btn-success')
-                .addClass('btn-danger')
-                .prop('disabled', false);
 
         } else {
 
@@ -618,9 +627,6 @@ const pcConfig = turnServer['host'] !== '' ? {
             'url': 'stun:stun.l.google.com:19302'
         },
         {
-            // 'url': 'turn:3.133.116.164:3478?transport=tcp',
-            // 'username': 'adminsean',
-            // 'credential': 'cruzrojaucsd'
             'url':`turn:${turnServer['host']}:${turnServer['port']}?transport=tcp`,
             'username': `${turnServer['username']}`,
             'credential': `${turnServer['password']}`
@@ -796,7 +802,6 @@ function modalReset() {
     callButton
         .removeClass('btn-danger')
         .addClass('btn-success');
-    // hangupButton.prop('disabled', true);
 }
 
 function modalAlert(body, title) {
