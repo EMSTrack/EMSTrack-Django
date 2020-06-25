@@ -197,6 +197,9 @@ function declineCall() {
     // cancel prompt
     $(`#videoAlertAlert_${remoteClient.username}_${remoteClient.client_id}`).alert('close');
 
+    // alert
+    modalAlert(`Call from ${remoteClient.username}@${remoteClient.client_id} was declined`);
+
     // send decline message
     sendMessage(remoteClient, { type: 'decline' });
 
