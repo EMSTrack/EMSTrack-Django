@@ -183,6 +183,9 @@ function cancelCall(sendMessage = true) {
         // send cancel message
         sendMessage(remoteClient, {type: 'cancel'});
 
+    // alert
+    modalAlert(`Call from ${remoteClientCopy.username}@${remoteClientCopy.client_id} was cancelled`);
+
     // cancel call, remote did not pick up
     isStarted = false;
     state = State.IDLE;
@@ -391,9 +394,6 @@ function handleMessages(message) {
 
             // cancel prompt
             $(`#videoAlertAlert_${remoteClientCopy.username}_${remoteClientCopy.client_id}`).alert('close');
-
-            // alert
-            modalAlert(`Call from ${remoteClientCopy.username}@${remoteClientCopy.client_id} was cancelled`);
 
         } else {
 
