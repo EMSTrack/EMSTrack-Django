@@ -316,7 +316,7 @@ function acceptCall(newRemoteClient = null) {
             sendMessage(remoteClient, { type: 'accepted', reroute: reroute });
 
             // close alert
-            $('#videoAlertAlert').alert('close');
+            $(`#videoAlertAlert_${remoteClient.username}_${remoteClient.client_id}`).alert('close');
         });
 }
 
@@ -339,7 +339,9 @@ function promptCall() {
   </button>
 </div>`);
 
-    $('#newVideoCallAcceptButton').click(() => { acceptCall(); } );
+    $('#newVideoCallAcceptButton').click( () => {
+        acceptCall();
+    });
 
     $('#videoAlertAlert').on('closed.bs.alert', function (e) {
         if (state === State.PROMPT) {
