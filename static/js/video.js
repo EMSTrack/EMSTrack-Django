@@ -26,6 +26,19 @@ const localClient = { username: username, client_id: clientId };
 // const turnServer = 'https://computeengineondemand.appspot.com/turn?username=41784574&key=4080218913';
 const turnServerHost = null;
 
+// State machine and message handling
+
+const State = {
+    IDLE: 1,
+    CALLING: 2,
+    WAITING_FOR_ANSWER: 3,
+    WAITING_FOR_OFFER: 4,
+    ACTIVE_CALL: 5,
+    PROMPT: 6,
+};
+Object.freeze(State);
+let state = State.IDLE;
+
 // initialization function
 function initVideo(client) {
 
@@ -328,19 +341,6 @@ function promptCall() {
 
 }
 
-// State machine and message handling
-
-const State = {
-    IDLE: 1,
-    CALLING: 2,
-    WAITING_FOR_ANSWER: 3,
-    WAITING_FOR_OFFER: 4,
-    ACTIVE_CALL: 5,
-    PROMPT: 6,
-};
-Object.freeze(State);
-let state = State.IDLE;
-
 // handle messages
 function handleMessages(message) {
 
@@ -384,7 +384,7 @@ function handleMessages(message) {
 
         logger.log('info', 'GOT CANCEL');
 
-        if (state === State.PROMPT || state === State.WAITING_FOR_ANSWER) {
+        if (state === State.PROMPT || state === State.CALLING) {
 
             // copy remote client info
             const remoteClientCopy = {...remoteClient};
