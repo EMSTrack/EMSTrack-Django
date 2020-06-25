@@ -361,9 +361,6 @@ function handleMessages(message) {
 
         if (state === State.PROMPT) {
 
-            // alert
-            modalAlert('Call cancelled');
-
             // copy remote client info
             const remoteClientCopy = {...remoteClient};
 
@@ -375,6 +372,9 @@ function handleMessages(message) {
 
             // cancel prompt
             $(`#videoAlertAlert_${remoteClientCopy.username}_${remoteClientCopy.client_id}`).alert('close');
+
+            // alert
+            modalAlert(`Call from ${remoteClientCopy.username}@${remoteClientCopy.client_id} was cancelled`);
 
         } else {
 
