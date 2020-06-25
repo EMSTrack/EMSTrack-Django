@@ -175,11 +175,11 @@ function getLink(username) {
 
 // cancel call
 
-function cancelCall(sendMessage = true) {
+function cancelCall(sendMessage_ = true) {
 
     logger.log('info', 'CANCEL: cancelling call from %j', remoteClient);
 
-    if (sendMessage)
+    if (sendMessage_)
         // send cancel message
         sendMessage(remoteClient, {type: 'cancel'});
 
