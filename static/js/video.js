@@ -110,6 +110,22 @@ $(function () {
         }
     });
 
+    // hangup on close
+    $('#videoModalWindow').on('hide.bs.modal', function (e) {
+        if (state === State.ACTIVE_CALL) {
+            hangup();
+        } if (state === State.PROMPT) {
+            declineCall();
+        } if (state === State.CALLING) {
+            cancelCall();
+        }
+
+        // clean up alerts
+        $('#videoAlert')
+            .empty();
+
+    });
+
     // enable video modal button
     $('#videoMenuItem').click(function() {
 
@@ -209,7 +225,6 @@ function declineCall() {
     modalReset();
 
 }
-
 
 // cancel call
 
