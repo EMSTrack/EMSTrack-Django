@@ -827,6 +827,14 @@ class SettingsView(APIView):
         equipment_type = {m.name: m.value for m in EquipmentType}
         equipment_type_defaults = {k: v for (k, v) in EquipmentTypeDefaults.items()}
 
+        # from turn server
+        turn_server = {
+            'ip': settings.TURN_IP,
+            'port': settings.TURN_PORT,
+            'user': settings.TURN_USER,
+            'pass': settings.TURN_PASS
+        }
+
         # assemble all settings
         all_settings = {'ambulance_status': ambulance_status,
                         'ambulance_status_order': ambulance_status_order,
@@ -843,6 +851,8 @@ class SettingsView(APIView):
                         'equipment_type': equipment_type,
                         'equipment_type_defaults': equipment_type_defaults,
                         'guest_username': settings.GUEST['USERNAME'],
+                        'enable_video': settings.ENABLE_VIDEO,
+                        'turn_server': turn_server,
                         'defaults': defaults.copy()}
 
         # serialize defaults.location
