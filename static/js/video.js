@@ -294,6 +294,14 @@ function acceptCall(newRemoteClient = null) {
         reroute = true;
     }
 
+    // enable hangup button
+    if (state === State.IDLE && remoteClient !== null) {
+        callButton
+            .removeClass('btn-success')
+            .addClass('btn-danger')
+            .prop('disabled', false);
+    }
+
     // retrieve online clients
     retrieveOnlineClients();
 
