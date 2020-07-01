@@ -293,6 +293,8 @@ function newCall(newRemoteClient = null) {
             .removeClass('btn-success')
             .addClass('btn-danger')
             .prop('disabled', false);
+        linkButton
+            .prop('disabled', true);
 
         ringCall();
     }
@@ -315,6 +317,8 @@ function acceptCall(newRemoteClient = null) {
             .removeClass('btn-success')
             .addClass('btn-danger')
             .prop('disabled', false);
+        linkButton
+            .prop('disabled', true);
     }
 
     // retrieve online clients
@@ -419,6 +423,8 @@ function handleMessages(message) {
                 .removeClass('btn-success')
                 .addClass('btn-danger')
                 .prop('disabled', false);
+            linkButton
+                .prop('disabled', true);
 
             // prompt user for new call
             promptCall();
@@ -844,10 +850,12 @@ function stop() {
 function modalReset() {
     remoteClient = null;
     remoteClientText.empty();
-    callButton.prop('disabled', true);
     callButton
         .removeClass('btn-danger')
-        .addClass('btn-success');
+        .addClass('btn-success')
+        .prop('disabled', true);
+    linkButton
+        .prop('disabled', false);
 }
 
 function modalAlert(body, title) {
