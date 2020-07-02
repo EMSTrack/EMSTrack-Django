@@ -193,7 +193,6 @@ function copyToClipboard(text) {
   <hr>
   <button type="button" class="btn btn-primary" id="videoCopyToClipboardButton">Copy to Clipboard</button>
   <a class="btn btn-primary" id="videoInviteByEmailButton" href="mailto:?subject=${encodeURIComponent(emailSubjecct)}&body=${encodeURIComponent(emailBody)}">Email Invitation</a>
-  <button type="button" class="btn btn-primary" id="videoInviteBySMSButton">SMS Invitation</button>
   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
     <span aria-hidden="true">&times;</span>
   </button>
@@ -218,6 +217,9 @@ function copyToClipboard(text) {
 }
 
 function getLink(username) {
+
+    // remove old link
+    $("#videoLinkAlert").remove();
 
     // get token
     const uri = `${window.location.protocol}//${window.location.hostname}/guest?callUsername=${localClient.username}&callClientId=${localClient.client_id}&callMode=new`;
