@@ -172,7 +172,7 @@ function retrieveOnlineClients() {
             }
         })
         .catch( (error) => {
-            logger.log('error', 'Failed to retrieve clients from ApiClient: %j', error);
+            logger.log('error', 'Failed to retrieve clients from ApiClien value= %j', e);
         })
 }
 
@@ -183,14 +183,14 @@ function copyToClipboard(text) {
     // window.prompt("Copy to clipboard: Ctrl+C, Enter", text);
 
     const emailSubjecct = "EMSTrack Video Call Invitation";
-    const emailBody = `You have been invited to a video call by ${localClient.username}\nClick on the following link to start the call:\n${text}`;
+    const emailBody = `You have been invited to a video call by '${localClient.username}'\n\nClick on the following link to start the call:\n\n${text}`;
 
     // add alert
     $('#videoAlert').append(`<div class="alert alert-warning alert-dismissible fade show" id="videoLinkAlert" role="alert">
   <h4 class="alert-heading">Video call invitation</h4>
   Send the following link to a third party to initiate a video call
   <br/>
-  <span id="videoLinkLink">${text}</span>
+  <input id="videoLinkLink" value="${text}">
   <hr>
   <button type="button" class="btn btn-primary" id="videoCopyToClipboardButton">Copy to Clipboard</button>
   <a class="btn btn-primary" id="videoInviteByEmailButton" href="mailto:?subject=${encodeURIComponent(emailSubjecct)}&body=${encodeURIComponent(emailBody)}">Email Invitation</a>
@@ -204,7 +204,7 @@ function copyToClipboard(text) {
         $("#videoLinkLink").focus().select();
         try {
             const successful = document.execCommand('copy');
-            logger.debug('Copying to clipboard was ' + successful ? 'successful' : 'unsuccessful');
+            logger.debug('Copying to clipboard was %s', successful ? 'successful' : 'unsuccessful');
         } catch (err) {
             logger.error('Unable to copy link to clipboard');
         }
