@@ -179,7 +179,37 @@ function retrieveOnlineClients() {
 // new link
 
 function copyToClipboard(text) {
-    window.prompt("Copy to clipboard: Ctrl+C, Enter", text);
+
+    // window.prompt("Copy to clipboard: Ctrl+C, Enter", text);
+
+    const emailSubjecct = "EMSTrack Video Call Invitation";
+    const emailBody = `You have been invited to a video call by ${localClient.username}\nClick on the following link to start the call:\n${text}`;
+
+    // add alert
+    $('#videoAlert').append(`<div class="alert alert-warning alert-dismissible fade show" id="videoLinkAlert" role="alert">
+  <h4 class="alert-heading">Video call invitation</h4>
+  Send the following link to a third party to initiate a video call
+  <br/>
+  <span id="videoLinkLink">${text}</span>
+  <hr>
+  <button type="button" class="btn btn-primary" id="videoCopyToClipboardButton">Copy to Clipboard</button>
+  <a class="btn btn-primary" id="videoInviteByEmailButton" href="mailto:?subject=${encodeURIComponent(emailSubjecct)}&body=${encodeURIComponent(emailBody)}">Email Invitation</a>
+  <button type="button" class="btn btn-primary" id="videoInviteBySMSButton">SMS Invitation</button>
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>`);
+
+    $('#videoCopyToClipboardButton').click( () => {
+        $("#videoLinkLink").focus().select();
+        try {
+            const successful = document.execCommand('copy');
+            logger.debug('Copying to clipboard was ' + successful ? 'successful' : 'unsuccessful');
+        } catch (err) {
+            logger.error('Unable to copy link to clipboard');
+        }
+    });
+
 }
 
 function getLink(username) {
@@ -359,7 +389,7 @@ function promptCall() {
   <h4 class="alert-heading">New Video Call</h4>
   From ${remoteClient.username}@${remoteClient.client_id}
   <hr>
-  <button type="button" class="btn btn-primary" id="newVideoCallAcceptButton">Accept</button>
+  <button type="button" class="btn btn-success" id="newVideoCallAcceptButton">Accept</button>
   <!-- <button type="button" class="btn btn-secondary" data-dismiss="alert">Decline</button> -->
   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
     <span aria-hidden="true">&times;</span>
