@@ -716,11 +716,13 @@ const pcConfig = turnServer['host'] !== '' ? {
             'url': 'stun:stun.l.google.com:19302'
         },
         {
-            'url':`turn:${turnServer['host']}:${turnServer['port']}?transport=tcp`,
+            // 'url':`turn:${turnServer['host']}:${turnServer['port']}?transport=tcp`,
+            'url':`turn:${turnServer['host']}:${turnServer['port']}`,
             'username': `${turnServer['username']}`,
             'credential': `${turnServer['password']}`
         }
-    ]
+    ],
+    'iceTransportPolicy': 'relay'
 } : {
     'iceServers': [{
         'urls': 'stun:stun.l.google.com:19302'
@@ -808,7 +810,7 @@ function requestTurn(turnURL) {
     logger.log('info', 'Looking for TURN server.');
     for (const i in pcConfig.iceServers) {
         if (pcConfig.iceServers[i].url.substr(0, 5) === 'turn:') {
-            logger.log('info', "Setting up turn server '%j'", pcConfig.iceServers[i]);
+            logger.log('debug', "Setting up turn server '%j'", pcConfig.iceServers[i].url);
             turnExists = true;
             turnReady = true;
             break;
