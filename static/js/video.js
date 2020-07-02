@@ -190,7 +190,7 @@ function copyToClipboard(text) {
   <h4 class="alert-heading">Video call invitation</h4>
   Send the following link to a third party to initiate a video call
   <br/>
-  <input id="videoLinkLink" value="${text}">
+  <input id="videoLinkLink" value="${text}" disabled>
   <hr>
   <button type="button" class="btn btn-primary" id="videoCopyToClipboardButton">Copy to Clipboard</button>
   <a class="btn btn-primary" id="videoInviteByEmailButton" href="mailto:?subject=${encodeURIComponent(emailSubjecct)}&body=${encodeURIComponent(emailBody)}">Email Invitation</a>
