@@ -434,10 +434,10 @@ function handleMessages(message) {
 
         logger.log('info', 'GOT CALL');
 
-        if (state !== State.IDLE && state !== State.PROMPT) {
+        if (state !== State.IDLE && state !== State.PROMPT && state !== State.WAITING_FOR_OFFER) {
 
             // reply busy, does not change state
-            logger.log('info', 'BUSY: rejecting call from %j', message.client);
+            logger.log('info', 'BUSY: rejecting call from %j, state = %s', message.client, state);
             sendMessage(message.client, {type: 'busy'});
 
         } else if (state === State.PROMPT) {
@@ -722,7 +722,7 @@ const pcConfig = turnServer['host'] !== '' ? {
             'credential': `${turnServer['password']}`
         }
     ],
-    'iceTransportPolicy': 'relay'
+    // 'iceTransportPolicy': 'relay'
 } : {
     'iceServers': [{
         'urls': 'stun:stun.l.google.com:19302'
