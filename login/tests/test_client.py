@@ -766,6 +766,7 @@ class TestClient(TestSetup):
         self.assertEqual(response.status_code, 400)
         result = JSONParser().parse(BytesIO(response.content))
         logger.debug(result)
+        self.assertTrue(False)
 
         # logout
         client.logout()
