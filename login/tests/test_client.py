@@ -539,6 +539,37 @@ class TestClient(TestSetup):
         self.assertEqual(client2.ambulance, self.a2)
         self.assertEqual(client2.hospital, self.h1)
 
+    def testClientSerializerConcurent(self):
+
+        # test ClientSerializer
+
+        # client online
+        client1 = Client.objects.create(client_id='client_id_1', user=self.u1,
+                                        status=ClientStatus.O.name, ambulance=self.a1)
+
+        serializer = ClientSerializer(client1)
+        result = {
+            'client_id': client1.client_id,
+            'username': client1.user.username,
+            'status': client1.status,
+            'ambulance': client1.ambulance.id,
+            'hospital': None,
+            'updated_on': date2iso(client1.updated_on)
+        }
+        self.assertDictEqual(serializer.data, result)
+
+        # create client
+        serializer = ClientSerializer(data={
+            'client_id': 'client_id_3',
+            'status': ClientStatus.O.name,
+            'ambulance': self.a1.id,
+            'hospital': None
+        })
+        if not serializer.is_valid():
+            logger.debug('errors = {}'.format(serializer.errors))
+            self.assertTrue(False)
+        serializer.save(user=self.u2)
+
     def test_client_viewset(self):
 
         # instantiate client
