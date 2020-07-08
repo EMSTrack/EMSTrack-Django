@@ -766,7 +766,8 @@ class TestClient(TestSetup):
         self.assertEqual(response.status_code, 400)
         result = JSONParser().parse(BytesIO(response.content))
         logger.debug(result)
-        self.assertTrue(False)
+        self.assertTrue('ambulance' in result)
+        self.assertEqual(result['ambulance'][0], "This field must be unique.")
 
         # logout
         client.logout()
