@@ -618,13 +618,14 @@ function handleMessages(message) {
 
         }
 
-    } else if (message.type === 'bye') {
+    } else if (message.type === 'bye' || message.type === 'abort') {
 
         logger.log('info', 'GOT BYE');
 
         if (state === State.ACTIVE_CALL &&
-            message.client.username === remoteClient.username &&
-            message.client.client_id === remoteClient.client_id) {
+            (message.type === 'abort' ||
+                (message.client.username === remoteClient.username &&
+                    message.client.client_id === remoteClient.client_id))) {
 
             handleRemoteHangup();
 
@@ -748,6 +749,7 @@ function maybeStart() {
 }
 
 window.onbeforeunload = function() {
+    logger.log('debug', 'onBeforeUnload');
     sendMessage(remoteClient, {type: 'bye'});
 };
 
@@ -853,7 +855,7 @@ function handleRemoteStreamRemoved(event) {
 }
 
 function hangup() {
-    console.log('info', 'Hanging up.');
+    logger.log('info', 'Hanging up.');
     sendMessage(remoteClient, {type: 'bye'});
     stop();
 }
