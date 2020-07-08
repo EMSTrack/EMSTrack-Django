@@ -62,27 +62,11 @@ heeeeeeeyyyy
 
 }
 
-.left_bar{
-/*
-   width:30%;
-   padding:0px 4px;
-
-   display: flex;
-   justify-content: center;
-   align-items: center;
-*/
-}
-
 .localVideo {
-   width:30%;
-   /*
-   float:left;
-   vertical-align: top;
-   */
-
+   width:25%;
    position: absolute;
-   top: 0;
-   right: 0;
+   top: 10px;
+   right: 10px;
 }
 
 .remoteVideo{
