@@ -180,7 +180,7 @@
     {% include 'messages.html' %}
 </div>
 
-{% if request.user.is_authenticated %}
+{% if request.user.is_authenticated and is_video_enabled %}
 <!-- VIDEO MODAL -->
 <div class="modal fade" tabindex="-1" role="dialog" id="videoModalWindow" aria-labelledby="videoModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -255,7 +255,7 @@
 
 {% render_bundle 'main' 'js' 'BASE' %}
 
-{% if request.user.is_authenticated %}
+{% if request.user.is_authenticated and is_video_enabled %}
 {% render_bundle 'main' 'js' 'VIDEO' %}
 {% endif %}
 

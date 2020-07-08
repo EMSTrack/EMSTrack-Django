@@ -9,6 +9,8 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 from django.utils.safestring import mark_safe
 
+from django.conf import settings
+
 
 @register.filter(is_safe=True)
 def get_check(key):
@@ -32,6 +34,11 @@ def get_check_or_times(key):
         return mark_safe('<span class="fas fa-check"></span>')
     else:
         return mark_safe('<span class="fas fa-times"></span>')
+
+
+@register.filter
+def is_video_enabled():
+    return settings.ENABLE_VIDEO
 
 
 defaults = {
