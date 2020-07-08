@@ -7,12 +7,6 @@
 
 <div class="container">
 
-    <div class="row">
-        <div class="col">
-            <h1>{% trans "Video" %}</h1>
-        </div>
-    </div>
-
     {% include 'video/modal.html' %}
 
 </div>
@@ -21,8 +15,20 @@
 
 {% block scripts %}
 
-<script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+<script>
 
-{% render_bundle 'main' 'js' 'VIDEO' %}
+    // Ready function
+    $(function () {
+
+        console.log('Removing video modal window');
+
+        // remove video modal window
+        $("#videoModalWindow").remove();
+
+    });
+
+</script>
+
+{% endblock %}
 
 {% endblock %}

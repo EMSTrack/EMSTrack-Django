@@ -6,8 +6,8 @@ let apiClient;
 // add initialization hook
 add_init_function(initVideo);
 
-const localVideo = document.querySelector('#localVideo');
-const remoteVideo = document.querySelector('#remoteVideo');
+let localVideo;
+let remoteVideo;
 
 let isChannelReady = false;
 let isInitiator = false;
@@ -44,6 +44,10 @@ let state = State.IDLE;
 function initVideo(client) {
 
     logger.log('info', '> video.js');
+
+    // get local and remote video
+    localVideo = document.querySelector('#localVideo');
+    remoteVideo = document.querySelector('#remoteVideo');
 
     // set apiClient
     apiClient = client;
