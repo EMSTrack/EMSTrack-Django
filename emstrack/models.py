@@ -38,7 +38,7 @@ def get_check_or_times(key):
 
 @register.simple_tag
 def is_video_enabled():
-    return settings.ENABLE_VIDEO
+    return settings['ENABLE_VIDEO']
 
 
 defaults = {
