@@ -61,12 +61,14 @@ heeeeeeeyyyy
 }
 
 .left_bar{
+/*
    width:30%;
    padding:0px 4px;
 
    display: flex;
    justify-content: center;
    align-items: center;
+*/
 }
 
 .localVideo {
@@ -77,7 +79,8 @@ heeeeeeeyyyy
 
 .remoteVideo{
    float:left;
-   width:70%;
+   width:30%;
+   vertical-align: top;
 }
 
 .dropdown_vid_text {
