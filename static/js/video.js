@@ -20,6 +20,7 @@ let turnReady;
 
 let onlineClients;
 
+let proxyRemoteClient = null;
 let remoteClient = null;
 const localClient = { username: username, client_id: clientId };
 
@@ -64,7 +65,14 @@ function initVideo(client) {
         };
 
         if (callMode === 'new') {
-            newCall(remoteClient);
+            let proxyClient = null;
+            if (callProxyUsername !== null && callProxyClientId !== null) {
+                proxyClient = {
+                    username: callProxyUsername,
+                    client_id: callProxyClientId
+                };
+            }
+            newCall(remoteClient, proxyClient);
         } else if (callMode === 'answer') {
             acceptCall(remoteClient);
         }
@@ -285,7 +293,7 @@ function cancelCall(sendMessage_ = true) {
 
 // new call
 
-function ringCall(maxTries = 5) {
+function ringCall(maxTries, proxyClient = null) {
 
     // already in a call?
     if (state !== State.CALLING)
@@ -309,14 +317,20 @@ function ringCall(maxTries = 5) {
     modalAlert(`Calling ${remoteClient.username}@${remoteClient.client_id}...`);
 
     // send message
-    sendMessage(remoteClient, {type: 'call'});
+    const message = {
+        type: 'call'
+    };
+    if (proxyClient !== null) {
+        message.proxy = proxyClient;
+    }
+    sendMessage(remoteClient, message);
 
     // set timeout
-    setTimeout(() => { ringCall(maxTries - 1) }, 5000);
+    setTimeout(() => { ringCall(maxTries - 1, proxyClient) }, 5000);
 
 }
 
-function newCall(newRemoteClient = null) {
+function newCall(newRemoteClient = null, proxyClient = null) {
 
     // set remote client?
     if (newRemoteClient !== null) {
@@ -333,7 +347,7 @@ function newCall(newRemoteClient = null) {
         linkButton
             .prop('disabled', true);
 
-        ringCall();
+        ringCall(5, proxyClient);
     }
 }
 
@@ -455,6 +469,11 @@ function handleMessages(message) {
             state = State.PROMPT;
             remoteClient = {...message.client};
 
+            // is proxy?
+            if (message.hasOwnProperty('proxy')) {
+                proxyRemoteClient = {...message.proxy};
+            }
+
             // enable call button
             callButton
                 .removeClass('btn-success')
@@ -526,6 +545,7 @@ function handleMessages(message) {
 
         // reroute?
         if (state === State.CALLING && message.reroute) {
+            proxyRemoteClient = {...remoteClient};
             remoteClient = {...message.client};
         }
 
@@ -896,6 +916,7 @@ function stop() {
 
 function modalReset() {
     remoteClient = null;
+    proxyRemoteClient = null;
     remoteClientText.empty();
     callButton
         .removeClass('btn-danger')
