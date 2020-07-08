@@ -180,6 +180,7 @@
     {% include 'messages.html' %}
 </div>
 
+{% if request.user.is_authenticated %}
 <!-- VIDEO MODAL -->
 <div class="modal fade" tabindex="-1" role="dialog" id="videoModalWindow" aria-labelledby="videoModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -201,6 +202,7 @@
         </div>
     </div>
 </div>
+{% endif %}
 
 <!-- TODO: Set timezone in settings/defaults -->
 
@@ -253,7 +255,9 @@
 
 {% render_bundle 'main' 'js' 'BASE' %}
 
+{% if request.user.is_authenticated %}
 {% render_bundle 'main' 'js' 'VIDEO' %}
+{% endif %}
 
 {% block scripts %}
 {% endblock %}
