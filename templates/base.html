@@ -93,6 +93,7 @@
                     {% trans "Hospitals" %}
                 </a>
             </li>
+            {% if is_video_enabled %}
             <li class="nav-item">
                 <!-- <a class="nav-link" href="{% url 'video:index' %}"> -->
                 <a class="nav-link" href="#" id="videoMenuItem">
@@ -100,6 +101,7 @@
                     {% trans "Video" %}
                 </a>
             </li>
+            {% endif %}
         </ul>
         {% endif %}
         <ul class="navbar-nav ml-auto">
