@@ -690,6 +690,9 @@ function startStream() {
 
     // if there is nothing to do...
     if (typeof localStream !== 'undefined') {
+
+        logger.log('info', "localStream is already set");
+
         enableTrack(localStream, true);
         return Promise.resolve();
     }
