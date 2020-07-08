@@ -620,7 +620,10 @@ function handleMessages(message) {
 
     } else if (message.type === 'bye' || message.type === 'abort') {
 
-        logger.log('info', 'GOT BYE OR ABORT');
+        if (message.type === 'bye')
+            logger.log('info', 'GOT BYE');
+        else
+            logger.log('info', 'GOT ABORT');
 
         if (state === State.ACTIVE_CALL &&
             (message.type === 'abort' ||
