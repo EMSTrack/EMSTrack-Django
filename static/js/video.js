@@ -97,6 +97,15 @@ let callButton;
 let remoteClientText;
 $(function () {
 
+    if (videoMode === "fullscreen") {
+
+        logger.log('info', 'Removing video modal window');
+
+        // remove video modal window
+        $("#videoModalWindow").remove();
+
+    }
+
     linkButton = $('#linkButton');
     callButton = $('#callButton');
     remoteClientText = $('#remoteClientText');

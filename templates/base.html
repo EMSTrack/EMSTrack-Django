@@ -227,6 +227,8 @@
 {% autoescape off %}
 <script>
 
+    let videoMode = "modal";
+
     const username = '{{ user.get_username }}';
     const apiBaseUrl = '{% url 'index' %}api/';
     {% if request.user.is_authenticated %}
