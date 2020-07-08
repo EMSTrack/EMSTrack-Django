@@ -25,6 +25,8 @@ heeeeeeeyyyy
    margin: 0 auto;
    background-color: black;
    display:flex;
+
+   position: relative;
 }
 
 .select_button{
@@ -72,14 +74,20 @@ heeeeeeeyyyy
 }
 
 .localVideo {
-   width:100%;
+   width:30%;
+   /*
    float:left;
    vertical-align: top;
+   */
+
+   position: absolute;
+   top: 0;
+   right: 0;
 }
 
 .remoteVideo{
    float:left;
-   width:30%;
+   width:100%;
    vertical-align: top;
 }
 
