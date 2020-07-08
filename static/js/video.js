@@ -638,15 +638,14 @@ function handleMessages(message) {
 
         }
 
-    } else if (message.type === 'bye' || message.type === 'abort') {
+    } else if (message.type === 'bye') {
 
-        if (message.type === 'bye')
-            logger.log('info', 'GOT BYE');
-        else
-            logger.log('info', 'GOT ABORT');
+        logger.log('info', 'GOT BYE');
 
         if (state === State.ACTIVE_CALL &&
-            (message.type === 'abort' ||
+            ((proxyRemoteClient !== null &&
+                message.client.username === proxyRemoteClient.username &&
+                message.client.client_id === proxyRemoteClient.client_id) ||
                 (message.client.username === remoteClient.username &&
                     message.client.client_id === remoteClient.client_id))) {
 
