@@ -36,7 +36,7 @@ def get_check_or_times(key):
         return mark_safe('<span class="fas fa-times"></span>')
 
 
-@register.filter
+@register.simple_tag
 def is_video_enabled():
     return settings.ENABLE_VIDEO
 
