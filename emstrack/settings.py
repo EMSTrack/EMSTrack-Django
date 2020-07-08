@@ -243,7 +243,7 @@ SMS_PASS = env.str('SMS_PASS')
 SMS_FROM = env.str('SMS_FROM')
 
 # enable video
-ENABLE_VIDEO = env.str('ENABLE_VIDEO')
+ENABLE_VIDEO = env.bool('ENABLE_VIDEO')
 
 # turn server
 TURN_IP = env.str('TURN_IP')
