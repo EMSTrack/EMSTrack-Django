@@ -236,7 +236,7 @@ class TokenLogin(models.Model):
                              default=unique_slug_generator,
                              unique=True,
                              null=False)
-    url = models.URLField(null=True, blank=True)
+    url = models.URLField(max_length=512, null=True, blank=True)
     created_on = models.DateTimeField(_('created_on'),
                                       auto_now=True)
 
