@@ -64,6 +64,11 @@
    width:100%;
 }
 
+.videoControl {
+   padding-left: 5px;
+   padding-right: 5px;
+}
+
 .videoControlButton {
    color: #777777;
    border-style: none;
