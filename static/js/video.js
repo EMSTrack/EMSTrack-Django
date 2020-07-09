@@ -91,13 +91,6 @@ function initVideo(client) {
 let linkButton;
 let callButton;
 let remoteClientText;
-
-let remoteVideoPlayPauseButton;
-let remoteVideoPlayPauseIcon;
-let remoteVideoMuteButton;
-let remoteVideoMuteIcon;
-let remoteVideoFullscreenButton;
-
 $(function () {
 
     if (videoMode === "fullscreen") {
@@ -170,23 +163,16 @@ $(function () {
 
 
     // video controls
-    remoteVideoPlayPauseButton = $('#remoteVideoPlayPauseButton');
-
-    remoteVideoPlayPauseButton.click(function() {
+    $('#remoteVideoPlayPauseButton').click(function() {
         togglePlayPause(remoteVideo, $('#remoteVideoPlayPauseButton'), $('#remoteVideoPlayPauseIcon'));
     });
 
-    remoteVideoMuteButton = $('#remoteVideoMuteButton');
-    remoteVideoMuteIcon = $('#remoteVideoMuteIcon');
-
-    remoteVideoMuteButton.click( function() {
-        toggleMute(remoteVideo, remoteVideoMuteButton, remoteVideoMuteIcon);
+    $('#remoteVideoMuteButton').click( function() {
+        toggleMute(remoteVideo, $('#remoteVideoMuteButton'), $('#remoteVideoMuteIcon'));
     });
 
-    remoteVideoFullscreenButton = $('#remoteVideoFullscreenButton');
-
-    remoteVideoFullscreenButton.click( function() {
-        toggleFullscreen(remoteVideo, remoteVideoFullscreenButton);
+    $('#remoteVideoFullscreenButton').click( function() {
+        toggleFullscreen(remoteVideo, $('#remoteVideoFullscreenButton'));
     });
 
 });
