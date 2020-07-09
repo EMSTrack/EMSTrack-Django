@@ -64,15 +64,10 @@
    width:100%;
 }
 
-.videoControl {
-   display: flex;
-}
-
 .videoControlButton {
    color: #777777;
    border-style: none;
    background-color: transparent;
-   width: 50px;
 }
 
 .dropdown_vid_text {
