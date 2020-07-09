@@ -176,11 +176,11 @@ $(function () {
     });
 
     $('#localVideoPlayPauseButton').click(function() {
-        togglePlayPause(localVideo, $('#localVideoPlayPauseButton'), $('#localVideoPlayPauseIcon'));
+        toggleLocalVideo($('#localVideoPlayPauseButton'), $('#localVideoPlayPauseIcon'), $('#localVideoMuteButton'), $('#localVideoMuteIcon'));
     });
 
     $('#localVideoMuteButton').click( function() {
-        toggleMuteMicrophone(localStream, $('#localVideoMuteButton'), $('#localVideoMuteIcon'));
+        toggleLocalMicrophone($('#localVideoMuteButton'), $('#localVideoMuteIcon'));
     });
 
 });
@@ -751,7 +751,7 @@ function startStream() {
 
         logger.log('info', "localStream is already set");
 
-        enableTrack(localStream, true);
+        enableTracks(localStream, true);
         return Promise.resolve();
     }
 
@@ -925,7 +925,7 @@ function handleRemoteHangup() {
 }
 
 /* stream: MediaStream, type:trackType('audio'/'video') */
-function enableTrack(stream, enabled, type=null) {
+function enableTracks(stream, enabled, type=null) {
     stream.getTracks().forEach((track) => {
         if (type === null || track.kind === type) {
             track.enabled = enabled;
@@ -940,7 +940,7 @@ function stop() {
 
     // disable tracks first
     if (typeof localStream !== 'undefined') {
-        enableTrack(localStream, false);
+        enableTracks(localStream, false);
     }
 
     pc.close();
@@ -1012,19 +1012,48 @@ function toggleMute(video, videoMuteButton, videoMuteIcon) {
     }
 }
 
-function toggleMuteMicrophone(mediaStream, videoMuteButton, videoMuteIcon) {
-    const audioTracks = mediaStream.getAudioTracks();
+function toggleLocalVideo(videoPlayPauseButton, videoPlayPauseIcon, videoMuteButton, videoMuteIcon) {
+    if (typeof localStream === 'undefined')
+        // return if no mediaStream
+        return;
+    const enabled = !(localStream.getVideoTracks()[0].enabled);
+    enableTracks(localStream, enabled);
+    if (enabled) {
+        videoPlayPauseButton.prop('title', "pause");
+        videoPlayPauseIcon
+            .removeClass('fa-play')
+            .addClass('fa-pause');
+        videoMuteButton.prop('title', "mute");
+        videoMuteIcon
+            .removeClass('text-danger');
+    }
+    else {
+        videoPlayPauseButton.prop('title', "play");
+        videoPlayPauseIcon
+            .removeClass('fa-pause')
+            .addClass('fa-play');
+        videoMuteButton.prop('title', "unmute");
+        videoMuteIcon
+            .addClass('text-danger');
+    }
+}
+
+function toggleLocalMicrophone(videoMuteButton, videoMuteIcon) {
+    if (typeof localStream === 'undefined')
+        // return if no mediaStream
+        return;
+    const audioTracks = localStream.getAudioTracks();
     for (const track of audioTracks) {
         track.enabled = !(track.enabled);
     }
     if (audioTracks[0].enabled) {
-      videoMuteButton.prop('title', "mute");
-      videoMuteIcon
-          .removeClass('text-danger');
+        videoMuteButton.prop('title', "mute");
+        videoMuteIcon
+            .removeClass('text-danger');
     } else {
-      videoMuteButton.prop('title', "unmute");
-      videoMuteIcon
-          .addClass('text-danger');
+        videoMuteButton.prop('title', "unmute");
+        videoMuteIcon
+            .addClass('text-danger');
     }
 }
 
