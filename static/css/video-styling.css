@@ -90,6 +90,10 @@
    font-size: 2em;
 }
 
+.videoControlButton:focus {
+   outline: none;
+}
+
 .dropdown_vid_text {
    color:white;
 }
