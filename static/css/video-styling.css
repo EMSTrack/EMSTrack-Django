@@ -54,10 +54,14 @@
    transform: rotateY(180deg);
 }
 
-.remoteVideo{
+.remoteVideo {
    float:left;
    width:100%;
    vertical-align: top;
+}
+
+#remoteVideo {
+   width:100%;
 }
 
 .dropdown_vid_text {
