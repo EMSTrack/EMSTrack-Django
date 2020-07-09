@@ -1022,14 +1022,14 @@ function toggleLocalVideo(videoPlayPauseButton, videoPlayPauseIcon) {
         videoPlayPauseButton.prop('title', "pause");
         videoPlayPauseIcon
             .removeClass('text-danger')
-            .removeClass('fa-play')
+            .removeClass('fa-video')
             .addClass('fa-pause');
     }
     else {
         videoPlayPauseButton.prop('title', "play");
         videoPlayPauseIcon
             .removeClass('fa-pause')
-            .addClass('fa-play')
+            .addClass('fa-video')
             .addClass('text-danger');
     }
 }
