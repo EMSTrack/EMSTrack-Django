@@ -994,14 +994,14 @@ function togglePlayPause(video, videoPlayPauseButton, videoPlayPauseIcon) {
       videoPlayPauseButton.prop('title', "pause");
       videoPlayPauseIcon
           .removeClass('fa-play')
-          .addClass('fa-pause')
+          .addClass('fa-pause');
       video.play();
    }
    else {
       videoPlayPauseButton.prop('title', "play");
       videoPlayPauseIcon
           .removeClass('fa-pause')
-          .addClass('fa-play')
+          .addClass('fa-play');
       video.pause();
    }
 }
@@ -1011,11 +1011,11 @@ function toggleMute(video, videoMuteButton, videoMuteIcon) {
     if (video.muted) {
       videoMuteButton.prop('title', "unmute");
       videoMuteIcon
-          .addClass('text-danger')
+          .addClass('text-danger');
     } else {
       videoMuteButton.prop('title', "mute");
       videoMuteIcon
-          .removeClass('text-danger')
+          .removeClass('text-danger');
     }
 }
 
