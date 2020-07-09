@@ -176,7 +176,7 @@ $(function () {
     });
 
     $('#localVideoPlayPauseButton').click(function() {
-        toggleLocalVideo($('#localVideoPlayPauseButton'), $('#localVideoPlayPauseIcon'), $('#localVideoMuteButton'), $('#localVideoMuteIcon'));
+        toggleLocalVideo($('#localVideoPlayPauseButton'), $('#localVideoPlayPauseIcon'));
     });
 
     $('#localVideoMuteButton').click( function() {
@@ -925,9 +925,9 @@ function handleRemoteHangup() {
 }
 
 /* stream: MediaStream, type:trackType('audio'/'video') */
-function enableTracks(stream, enabled, type=null) {
+function enableTracks(stream, enabled, kind=null) {
     stream.getTracks().forEach((track) => {
-        if (type === null || track.kind === type) {
+        if (kind === null || track.kind === kind) {
             track.enabled = enabled;
         }
     });
@@ -1012,28 +1012,24 @@ function toggleMute(video, videoMuteButton, videoMuteIcon) {
     }
 }
 
-function toggleLocalVideo(videoPlayPauseButton, videoPlayPauseIcon, videoMuteButton, videoMuteIcon) {
+function toggleLocalVideo(videoPlayPauseButton, videoPlayPauseIcon) {
     if (typeof localStream === 'undefined')
         // return if no mediaStream
         return;
     const enabled = !(localStream.getVideoTracks()[0].enabled);
-    enableTracks(localStream, enabled);
+    enableTracks(localStream, enabled, "video");
     if (enabled) {
         videoPlayPauseButton.prop('title', "pause");
         videoPlayPauseIcon
+            .removeClass('text-danger')
             .removeClass('fa-play')
             .addClass('fa-pause');
-        videoMuteButton.prop('title', "mute");
-        videoMuteIcon
-            .removeClass('text-danger');
     }
     else {
         videoPlayPauseButton.prop('title', "play");
         videoPlayPauseIcon
             .removeClass('fa-pause')
-            .addClass('fa-play');
-        videoMuteButton.prop('title', "unmute");
-        videoMuteIcon
+            .addClass('fa-play')
             .addClass('text-danger');
     }
 }
@@ -1042,11 +1038,9 @@ function toggleLocalMicrophone(videoMuteButton, videoMuteIcon) {
     if (typeof localStream === 'undefined')
         // return if no mediaStream
         return;
-    const audioTracks = localStream.getAudioTracks();
-    for (const track of audioTracks) {
-        track.enabled = !(track.enabled);
-    }
-    if (audioTracks[0].enabled) {
+    const enabled = !(localStream.getAudioTracks()[0].enabled);
+    enableTracks(localStream, enabled, "audio");
+    if (enabled) {
         videoMuteButton.prop('title', "mute");
         videoMuteIcon
             .removeClass('text-danger');
