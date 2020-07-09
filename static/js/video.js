@@ -182,7 +182,7 @@ $(function () {
     $('#localVideoMuteButton').click( function() {
         toggleMute(localVideo, $('#localVideoMuteButton'), $('#localVideoMuteIcon'));
     });
-    
+
 });
 
 // online clients
