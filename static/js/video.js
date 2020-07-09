@@ -172,9 +172,21 @@ $(function () {
     });
 
     $('#remoteVideoFullscreenButton').click( function() {
-        toggleFullscreen(remoteVideo, $('#remoteVideoFullscreenButton'));
+        toggleFullscreen(remoteVideo, $('#remoteVideoFullscreenButton'), $('#remoteVideoFullScreenIcon'));
     });
 
+    $('#localVideoPlayPauseButton').click(function() {
+        togglePlayPause(localVideo, $('#localVideoPlayPauseButton'), $('#localVideoPlayPauseIcon'));
+    });
+
+    $('#localVideoMuteButton').click( function() {
+        toggleMute(localVideo, $('#localVideoMuteButton'), $('#localVideoMuteIcon'));
+    });
+
+    $('#localVideoFullscreenButton').click( function() {
+        toggleFullscreen(localVideo, $('#localVideoFullscreenButton'), $('#localVideoFullScreenIcon'));
+    });
+    
 });
 
 // online clients
@@ -1012,21 +1024,25 @@ function setFullscreenData(video, state) {
     video.setAttribute('data-fullscreen', !!state);
 }
 
-function toggleFullscreen(video, videoFullscreenButton) {
+function toggleFullscreen(video, videoFullscreenButton, videoFullscreenIcon) {
    if (isFullScreen()) {
-      videoFullscreenButton.prop('title', "fullscreen");
       if (document.exitFullscreen) document.exitFullscreen();
       else if (document.mozCancelFullScreen) document.mozCancelFullScreen();
       else if (document.webkitCancelFullScreen) document.webkitCancelFullScreen();
       else if (document.msExitFullscreen) document.msExitFullscreen();
       setFullscreenData(video, false);
+      videoFullscreenButton.prop('title', "fullscreen");
+      videoFullscreenIcon
+          .removeClass('text-danger');
    }
    else {
-      videoFullscreenButton.prop('title', "exit");
       if (video.requestFullscreen) video.requestFullscreen();
       else if (video.mozRequestFullScreen) video.mozRequestFullScreen();
       else if (video.webkitRequestFullScreen) video.webkitRequestFullScreen();
       else if (video.msRequestFullscreen) video.msRequestFullscreen();
       setFullscreenData(video, true);
+      videoFullscreenButton.prop('title', "exit");
+      videoFullscreenIcon
+          .addClass('text-danger');
    }
 }
