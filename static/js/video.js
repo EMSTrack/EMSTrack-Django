@@ -1013,17 +1013,18 @@ function toggleMute(video, videoMuteButton, videoMuteIcon) {
 }
 
 function toggleMuteMicrophone(mediaStream, videoMuteButton, videoMuteIcon) {
-    // TODO: Should we worry about stereo?
     const audioTracks = mediaStream.getAudioTracks();
-    audioTracks[0].enabled = !(audioTracks[0].enabled);
+    for (const track of audioTracks) {
+        track.enabled = !(track.enabled);
+    }
     if (audioTracks[0].enabled) {
-      videoMuteButton.prop('title', "unmute");
-      videoMuteIcon
-          .addClass('text-danger');
-    } else {
       videoMuteButton.prop('title', "mute");
       videoMuteIcon
           .removeClass('text-danger');
+    } else {
+      videoMuteButton.prop('title', "unmute");
+      videoMuteIcon
+          .addClass('text-danger');
     }
 }
 
