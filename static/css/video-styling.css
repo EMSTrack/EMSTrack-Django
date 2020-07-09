@@ -60,11 +60,11 @@
    display: none;
    background-color: #111111;
    padding-top: 5px;
-   opacity: 0.5;
+   opacity: 0;
 }
 
-#remoteVideo:hover + #remoteVideoControls {
-   display: block;
+#remoteVideo:hover {
+   opacity: .5;
 }
 
 #localVideo {
