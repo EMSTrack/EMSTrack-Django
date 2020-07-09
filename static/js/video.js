@@ -182,10 +182,6 @@ $(function () {
     $('#localVideoMuteButton').click( function() {
         toggleMute(localVideo, $('#localVideoMuteButton'), $('#localVideoMuteIcon'));
     });
-
-    $('#localVideoFullscreenButton').click( function() {
-        toggleFullscreen(localVideo, $('#localVideoFullscreenButton'), $('#localVideoFullScreenIcon'));
-    });
     
 });
 
