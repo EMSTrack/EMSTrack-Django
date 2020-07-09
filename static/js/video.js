@@ -186,7 +186,7 @@ $(function () {
 
 
     // make local video draggable
-    dragElement(document.getElementById("localVideoBox"));
+    dragElement(document.getElementById("localVideoBox"), document.getElementById("videoBox"));
 
 });
 
