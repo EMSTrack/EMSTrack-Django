@@ -486,7 +486,7 @@ function handleMessages(message) {
         if (state !== State.IDLE && state !== State.PROMPT && state !== State.WAITING_FOR_OFFER) {
 
             // reply busy, does not change state
-            logger.log('info', 'BUSY: rejecting call from %j, state = %s', message.client, state);
+            logger.log('info', 'BUSY: rejecting call from %j, state = %d', message.client, state);
             sendMessage(message.client, {type: 'busy'});
 
         } else if (state === State.PROMPT) {
@@ -541,7 +541,7 @@ function handleMessages(message) {
         } else {
 
             // ignore
-            logger.log('info', 'IGNORING CANCEL: %j', message.client);
+            logger.log('info', 'IGNORING CANCEL: %j, state = %d', message.client, state);
 
         }
 
@@ -570,7 +570,7 @@ function handleMessages(message) {
         } else {
 
             // ignore
-            logger.log('info', 'IGNORING BUSY OR DECLINE: %j', message.client);
+            logger.log('info', 'IGNORING BUSY OR DECLINE: %j, state = %d', message.client, state);
 
         }
 
@@ -607,7 +607,7 @@ function handleMessages(message) {
         } else {
 
             // ignore
-            logger.log('info', 'IGNORING ACCEPTED: %j', message.client);
+            logger.log('info', 'IGNORING ACCEPTED: %j, state = %d', message.client, state);
 
         }
 
@@ -630,7 +630,7 @@ function handleMessages(message) {
         } else {
 
             // ignore
-            logger.log('info', 'IGNORING OFFER: %j', message.client);
+            logger.log('info', 'IGNORING OFFER: %j, state = %d', message.client, state);
 
         }
 
@@ -648,7 +648,7 @@ function handleMessages(message) {
         } else {
 
             // ignore
-            logger.log('info', 'IGNORING ANSWER: %j', message.client);
+            logger.log('info', 'IGNORING ANSWER: %j, state = %d', message.client, state);
 
         }
 
@@ -669,7 +669,7 @@ function handleMessages(message) {
         } else {
 
             // ignore
-            logger.log('info', 'IGNORING CANDIDATE: %j', message.client);
+            logger.log('info', 'IGNORING CANDIDATE: %j, state = %d', message.client, state);
 
         }
 
@@ -692,7 +692,7 @@ function handleMessages(message) {
         } else {
 
             // ignore
-            logger.log('info', 'IGNORING BYE: %j', message.client);
+            logger.log('info', 'IGNORING BYE: %j, state = %d', message.client, state);
 
         }
 
