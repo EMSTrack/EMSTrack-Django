@@ -58,6 +58,7 @@
    left: 0px;
    width: 100%;
    display: none;
+   background-color: #111111;
 }
 
 #remoteVideo:hover + #remoteVideoControls {
