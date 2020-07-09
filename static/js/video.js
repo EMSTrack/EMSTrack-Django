@@ -417,11 +417,13 @@ function acceptCall(newRemoteClient = null) {
         show: true
     });
 
+    // change state to waiting for offer
+    state = State.WAITING_FOR_OFFER;
+
     // start streaming then accept call
     startStream()
         .then(function() {
             // accept call
-            state = State.WAITING_FOR_OFFER;
             logger.log('info', 'ACCEPTED: accepting call from %j', remoteClient);
 
             remoteClientText.html(remoteClient.username + ' @ ' + remoteClient.client_id);
@@ -430,6 +432,13 @@ function acceptCall(newRemoteClient = null) {
 
             // close alert
             $(`#videoAlertAlert_${remoteClient.username}_${remoteClient.client_id}`).alert('close');
+        })
+        .catch(function() {
+
+            // accept call
+            logger.log('debug', 'Could not start streaming');
+            stop();
+
         });
 }
 
