@@ -42,7 +42,6 @@
 }
 .phone_buttons{
    float:right;
-
 }
 
 .localVideo {
@@ -51,6 +50,12 @@
    top: 10px;
    right: 10px;
    border-radius: 10px;
+}
+
+#remoteVideoControls {
+   position: absolute;
+   bottom: 0px;
+   left: 0px;
 }
 
 #localVideo {
