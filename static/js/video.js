@@ -1,5 +1,6 @@
 import { logger } from './logger';
 import {showNotification} from "./components/notification";
+import {dragElement} from "./components/drag";
 
 let apiClient;
 
@@ -182,6 +183,10 @@ $(function () {
     $('#localVideoMuteButton').click( function() {
         toggleLocalMicrophone($('#localVideoMuteButton'), $('#localVideoMuteIcon'));
     });
+
+
+    // make local video draggable
+    dragElement(document.getElementById("localVideoBox"));
 
 });
 
