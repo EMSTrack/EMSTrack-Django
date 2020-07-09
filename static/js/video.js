@@ -171,10 +171,9 @@ $(function () {
 
     // video controls
     remoteVideoPlayPauseButton = $('#remoteVideoPlayPauseButton');
-    remoteVideoPlayPauseIcon = $('#remoteVideoPlayPauseIcon');
 
     remoteVideoPlayPauseButton.click(function() {
-        togglePlayPause(remoteVideo, remoteVideoPlayPauseButton, remoteVideoPlayPauseIcon);
+        togglePlayPause(remoteVideo, $('#remoteVideoPlayPauseButton'), $('#remoteVideoPlayPauseIcon'));
     });
 
     remoteVideoMuteButton = $('#remoteVideoMuteButton');
