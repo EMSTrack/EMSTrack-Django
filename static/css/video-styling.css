@@ -51,6 +51,7 @@
    right: 10px;
    border-style: groove;
    border-radius: 10px;
+   border-width: 1px;
 }
 
 .videoControls {
