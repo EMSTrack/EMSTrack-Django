@@ -49,9 +49,6 @@
    position: absolute;
    top: 10px;
    right: 10px;
-   border-style: groove;
-   border-radius: 10px;
-   border-width: 1px;
 }
 
 .videoControls {
@@ -74,6 +71,9 @@
 }
 
 #localVideo {
+   border-style: solid;
+   border-width: 1px;
+   border-color: #aaaaaa;
    transform: rotateY(180deg);
 }
 
