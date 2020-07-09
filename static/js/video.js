@@ -1019,7 +1019,7 @@ function toggleFullscreen(video, videoFullscreenButton) {
       else if (document.mozCancelFullScreen) document.mozCancelFullScreen();
       else if (document.webkitCancelFullScreen) document.webkitCancelFullScreen();
       else if (document.msExitFullscreen) document.msExitFullscreen();
-      setFullscreenData(false);
+      setFullscreenData(video, false);
    }
    else {
       videoFullscreenButton.prop('title', "exit");
@@ -1027,6 +1027,6 @@ function toggleFullscreen(video, videoFullscreenButton) {
       else if (video.mozRequestFullScreen) video.mozRequestFullScreen();
       else if (video.webkitRequestFullScreen) video.webkitRequestFullScreen();
       else if (video.msRequestFullscreen) video.msRequestFullscreen();
-      setFullscreenData(true);
+      setFullscreenData(video, true);
    }
 }
