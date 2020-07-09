@@ -25,7 +25,7 @@ export function dragElement(elmnt, parent = null) {
         pos3 = e.clientX;
         pos4 = e.clientY;
 
-        const boun=parent.offsetWidth-elmnt.offsetWidth;
+        const boun = parent !== null ? parent.offsetWidth-elmnt.offsetWidth : 0;
         if (parent === null || ((pos1>0)&&(pos1<boun)&&(pos2>0)&&(pos2<boun))) {
             // set the element's new position:
             elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
