@@ -180,7 +180,7 @@ $(function () {
     });
 
     $('#localVideoMuteButton').click( function() {
-        toggleMute(localVideo, $('#localVideoMuteButton'), $('#localVideoMuteIcon'));
+        toggleMuteMicrophone(localStream, $('#localVideoMuteButton'), $('#localVideoMuteIcon'));
     });
 
 });
@@ -1002,6 +1002,21 @@ function togglePlayPause(video, videoPlayPauseButton, videoPlayPauseIcon) {
 function toggleMute(video, videoMuteButton, videoMuteIcon) {
     video.muted = !video.muted;
     if (video.muted) {
+      videoMuteButton.prop('title', "unmute");
+      videoMuteIcon
+          .addClass('text-danger');
+    } else {
+      videoMuteButton.prop('title', "mute");
+      videoMuteIcon
+          .removeClass('text-danger');
+    }
+}
+
+function toggleMuteMicrophone(mediaStream, videoMuteButton, videoMuteIcon) {
+    // TODO: Should we worry about stereo?
+    const audioTracks = mediaStream.getAudioTracks();
+    audioTracks[0].enabled = !(audioTracks[0].enabled);
+    if (audioTracks[0].enabled) {
       videoMuteButton.prop('title', "unmute");
       videoMuteIcon
           .addClass('text-danger');
