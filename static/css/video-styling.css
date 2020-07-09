@@ -63,8 +63,8 @@
    opacity: 0;
 }
 
-#remoteVideo:hover {
-   opacity: .5;
+#remoteVideoControls:hover {
+   opacity: 0.5;
 }
 
 #localVideo {
