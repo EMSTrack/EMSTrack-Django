@@ -45,10 +45,6 @@ function initVideo(client) {
 
     logger.log('info', '> video.js');
 
-    // get local and remote video
-    localVideo = document.querySelector('#localVideo');
-    remoteVideo = document.querySelector('#remoteVideo');
-
     // set apiClient
     apiClient = client;
 
@@ -95,6 +91,13 @@ function initVideo(client) {
 let linkButton;
 let callButton;
 let remoteClientText;
+
+let remoteVideoPlayPauseButton;
+let remoteVideoPlayPauseIcon;
+let remoteVideoMuteButton;
+let remoteVideoMuteIcon;
+let remoteVideoFullscreenButton;
+
 $(function () {
 
     if (videoMode === "fullscreen") {
@@ -105,6 +108,10 @@ $(function () {
         $("#videoModalWindow").remove();
 
     }
+
+    // get local and remote video
+    localVideo = document.querySelector('#localVideo');
+    remoteVideo = document.querySelector('#remoteVideo');
 
     linkButton = $('#linkButton');
     callButton = $('#callButton');
@@ -159,6 +166,28 @@ $(function () {
             show: true
         });
 
+    });
+
+
+    // video controls
+    remoteVideoPlayPauseButton = $('#remoteVideoPlayPauseButton');
+    remoteVideoPlayPauseIcon = $('#remoteVideoPlayPauseIcon');
+
+    remoteVideoPlayPauseButton.click( () => {
+        togglePlayPause(remoteVideo, remoteVideoPlayPauseButton, remoteVideoPlayPauseIcon);
+    });
+
+    remoteVideoMuteButton = $('#remoteVideoMuteButton');
+    remoteVideoMuteIcon = $('#remoteVideoMuteIcon');
+
+    remoteVideoMuteButton.click( () => {
+        toggleMute(remoteVideo, remoteVideoMuteButton, remoteVideoMuteIcon);
+    });
+
+    remoteVideoFullscreenButton = $('#remoteVideoFullscreenButton');
+
+    remoteVideoFullscreenButton.click( () => {
+        toggleFullscreen(remoteVideo, remoteVideoFullscreenButton);
     });
 
 });
@@ -956,4 +985,63 @@ function modalAlert(body, title) {
 </div>`;
 
     $('#videoAlert').append(html);
+}
+
+// Video controls
+
+function togglePlayPause(video, videoPlayPauseButton, videoPlayPauseIcon) {
+   if (video.paused || video.ended) {
+      videoPlayPauseButton.prop('title', "pause");
+      videoPlayPauseIcon
+          .removeClass('fa-play')
+          .addClass('fa-pause')
+      video.play();
+   }
+   else {
+      videoPlayPauseButton.prop('title', "play");
+      videoPlayPauseIcon
+          .removeClass('fa-pause')
+          .addClass('fa-play')
+      video.pause();
+   }
+}
+
+function toggleMute(video, videoMuteButton, videoMuteIcon) {
+    video.muted = !video.muted;
+    if (video.muted) {
+      videoMuteButton.prop('title', "unmute");
+      videoMuteIcon
+          .addClass('text-danger')
+    } else {
+      videoMuteButton.prop('title', "mute");
+      videoMuteIcon
+          .removeClass('text-danger')
+    }
+}
+
+function isFullScreen() {
+   return !!(document.webkitIsFullScreen || document.mozFullScreen || document.msFullscreenElement || document.fullscreenElement);
+}
+
+function setFullscreenData(video, state) {
+    video.setAttribute('data-fullscreen', !!state);
+}
+
+function toggleFullscreen(video, videoFullscreenButton) {
+   if (isFullScreen()) {
+      videoFullscreenButton.prop('title', "fullscreen");
+      if (document.exitFullscreen) document.exitFullscreen();
+      else if (document.mozCancelFullScreen) document.mozCancelFullScreen();
+      else if (document.webkitCancelFullScreen) document.webkitCancelFullScreen();
+      else if (document.msExitFullscreen) document.msExitFullscreen();
+      setFullscreenData(false);
+   }
+   else {
+      videoFullscreenButton.prop('title', "exit");
+      if (video.requestFullscreen) video.requestFullscreen();
+      else if (video.mozRequestFullScreen) video.mozRequestFullScreen();
+      else if (video.webkitRequestFullScreen) video.webkitRequestFullScreen();
+      else if (video.msRequestFullscreen) video.msRequestFullscreen();
+      setFullscreenData(true);
+   }
 }
