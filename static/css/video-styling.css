@@ -57,6 +57,11 @@
    bottom: 5px;
    left: 0px;
    width: 100%;
+   display: none;
+}
+
+#remoteVideo:hover + #remoteVideoControls {
+   display: block;
 }
 
 #localVideo {
