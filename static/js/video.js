@@ -173,20 +173,20 @@ $(function () {
     remoteVideoPlayPauseButton = $('#remoteVideoPlayPauseButton');
     remoteVideoPlayPauseIcon = $('#remoteVideoPlayPauseIcon');
 
-    remoteVideoPlayPauseButton.click( () => {
+    remoteVideoPlayPauseButton.click(function() {
         togglePlayPause(remoteVideo, remoteVideoPlayPauseButton, remoteVideoPlayPauseIcon);
     });
 
     remoteVideoMuteButton = $('#remoteVideoMuteButton');
     remoteVideoMuteIcon = $('#remoteVideoMuteIcon');
 
-    remoteVideoMuteButton.click( () => {
+    remoteVideoMuteButton.click( function() {
         toggleMute(remoteVideo, remoteVideoMuteButton, remoteVideoMuteIcon);
     });
 
     remoteVideoFullscreenButton = $('#remoteVideoFullscreenButton');
 
-    remoteVideoFullscreenButton.click( () => {
+    remoteVideoFullscreenButton.click( function() {
         toggleFullscreen(remoteVideo, remoteVideoFullscreenButton);
     });
 
