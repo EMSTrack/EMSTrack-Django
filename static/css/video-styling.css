@@ -52,7 +52,7 @@
    border-radius: 10px;
 }
 
-#remoteVideoControls {
+.videoControls {
    position: absolute;
    bottom: 5px;
    left: 0px;
@@ -62,7 +62,7 @@
    opacity: 0;
 }
 
-#remoteVideoControls:hover {
+.videoControls:hover {
    opacity: 0.5;
 }
 
