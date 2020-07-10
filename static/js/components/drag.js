@@ -31,7 +31,8 @@ export function dragElement(elmnt, parent = null) {
         elmntTop = elmntTop.replace('px','');
         dY = posY - elmntTop;
 
-        logger.log('debug', 'diffX = %d, diffY = %d', dX, dY);
+        logger.log('debug', 'dX = %d, dY = %d, parentTop = %d, parentLeft = %d',
+            dX, dY, parentTop, parentLeft);
 
         document.onmouseup = closeDragElement;
         document.onmousemove = elementDrag;
@@ -51,7 +52,7 @@ export function dragElement(elmnt, parent = null) {
         const boundX = parent !== null ? parent.offsetWidth - elmnt.offsetWidth : 0;
         const boundY = parent !== null ? parent.offsetHeight - elmnt.offsetHeight : 0;
 
-        logger.log('debug', 'aX = %d, diffY = %d, bound = %d', aX, aY, boundX);
+        logger.log('debug', 'aX = %d, aY = %d, boundX = %d, boundY = %d', aX, aY, boundX, boundY);
 
         if (parent === null ||
             ((aX>parentLeft) && (aX<parentLeft+boundX) &&
