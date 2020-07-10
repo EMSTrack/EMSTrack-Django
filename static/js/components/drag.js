@@ -13,6 +13,34 @@ export function dragElement(elmnt, parent = null) {
         // e = e || window.event;
         e.preventDefault();
 
+        const bbox = elmnt.getBoundingClientRect();
+        const shiftX = e.clientX - bbox.left;
+        const shiftY = e.clientY - bbox.top;
+
+        moveAt(e.pageX, e.pageY);
+
+        function moveAt(pageX, pageY) {
+            elmnt.style.left = pageX - shiftX + 'px';
+            elmnt.style.top = pageY - shiftY + 'px';
+        }
+
+        function onMouseMove(event) {
+            moveAt(event.pageX, event.pageY);
+        }
+
+        // move the ball on mousemove
+        document.addEventListener('mousemove', onMouseMove);
+
+        // drop the ball, remove unneeded handlers
+        elmnt.onmouseup = function () {
+            document.removeEventListener('mousemove', onMouseMove);
+            elmnt.onmouseup = null;
+        };
+
+    }
+
+
+        /*
         // get the mouse cursor position at startup:
         const posX = e.clientX,
               posY = e.clientY;
@@ -66,5 +94,7 @@ export function dragElement(elmnt, parent = null) {
         document.onmouseup = null;
         document.onmousemove = null;
     }
+
+         */
 
 }
