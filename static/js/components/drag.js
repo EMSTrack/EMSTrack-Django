@@ -17,8 +17,8 @@ export function dragElement(elmnt, parent = null) {
         e.preventDefault();
 
         const bbox = elmnt.getBoundingClientRect();
-        const shiftX = e.clientX - bbox.left;
-        const shiftY = e.clientY - bbox.top;
+        const shiftX = e.pageX - bbox.left;
+        const shiftY = e.pageY - bbox.top;
 
         moveAt(e.pageX, e.pageY);
 
