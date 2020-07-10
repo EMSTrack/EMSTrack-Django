@@ -40,12 +40,6 @@ export function dragElement(elmnt, parent = null) {
         document.onmousemove = onMouseMove;
         document.onmouseup = onMouseUp;
 
-        // drop the ball, remove unneeded handlers
-        elmnt.onmouseup = function () {
-            document.removeEventListener('mousemove', onMouseMove);
-            elmnt.onmouseup = null;
-        };
-
     }
 
 
