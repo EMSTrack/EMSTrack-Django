@@ -16,9 +16,20 @@ export function dragElement(elmnt, parent = null) {
         // e = e || window.event;
         e.preventDefault();
 
+        if (parent !== null) {
+            const bbox = parent.getBoundingClientRect();
+            parentTop = bbox.top;
+            parentLeft = bbox.left;
+
+            logger.log('debug', 'parent = %j', bbox);
+            logger.log('debug', 'bbox.left = %s', bbox.left);
+            logger.log('debug', 'bbox.top = %s', bbox.top);
+
+        }
+
         const bbox = elmnt.getBoundingClientRect();
 
-        logger.log('debug', 'bbox = %j', bbox);
+        logger.log('debug', 'elmnt = %j', bbox);
         logger.log('debug', 'bbox.left = %s', bbox.left);
         logger.log('debug', 'bbox.top = %s', bbox.top);
 
