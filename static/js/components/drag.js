@@ -6,7 +6,7 @@ import {logger} from "../logger";
 export function dragElement(elmnt, parent = null) {
 
     let dX, dY;
-    let parentTop, parentLeft, boundX, boundY;
+    let parentTop = 0, parentLeft = 0, boundX = 0, boundY = 0;
     elmnt.onmousedown = dragMouseDown;
 
     function dragMouseDown(e) {
@@ -18,16 +18,21 @@ export function dragElement(elmnt, parent = null) {
               posY = e.clientY;
 
         // calculate dX and dY
-        parentTop = parent !== null ? parent.style.top.replace('px','') : '0px';
-        parentLeft = parent !== null ? parent.style.left.replace('px','') : '0px';
+        if (parent !== null) {
 
-        boundX = parent !== null ? parent.offsetWidth - elmnt.offsetWidth : 0;
-        boundY = parent !== null ? parent.offsetHeight - elmnt.offsetHeight : 0;
+            const offsets = parent.getBoundingClientRect();
+            parentTop = offsets.top;
+            parentLeft = offsets.left;
 
+            boundX = parent.offsetWidth - elmnt.offsetWidth;
+            boundY = parent.offsetHeight - elmnt.offsetHeight;
+
+        }
+        
         dX = posX - elmnt.style.left.replace('px','');
         dY = posY - elmnt.style.top.replace('px','');
 
-        logger.log('debug', 'dX = %d, dY = %d, parentTop = %d, parentLeft = %d, boundX = %d, boundY = %d, boundY = %d',
+        logger.log('debug', 'dX = %d, dY = %d, parentTop = %d, parentLeft = %d, boundX = %d, boundY = %d',
             dX, dY, parentTop, parentLeft, boundX, boundY);
 
         document.onmouseup = closeDragElement;
