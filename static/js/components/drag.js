@@ -5,7 +5,8 @@ import {logger} from "../logger";
 
 export function dragElement(elmnt, parent = null) {
 
-    let diffX, diffY;
+    let dX, dY;
+    let parentTop, parentLeft;
     // otherwise, move the DIV from anywhere inside the DIV:
     elmnt.onmousedown = dragMouseDown;
 
@@ -18,16 +19,19 @@ export function dragElement(elmnt, parent = null) {
               posY = e.clientY;
 
         // calculate diffs
-        let divTop = elmnt.style.top,
-            divLeft = elmnt.style.left;
+        let elmntTop = elmnt.style.top,
+            elmntLeft = elmnt.style.left;
 
-        divLeft = divLeft.replace('px','');
-        diffX = posX - divLeft;
+        parentTop = parent !== null ? parent.style.top : 0;
+        parentLeft = parent !== null ? parent.style.left : 0;
 
-        divTop = divTop.replace('px','');
-        diffY = posY - divTop;
+        elmntLeft = elmntLeft.replace('px','');
+        dX = posX - elmntLeft;
 
-        logger.log('debug', 'diffX = %d, diffY = %d', diffX, diffY);
+        elmntTop = elmntTop.replace('px','');
+        dY = posY - elmntTop;
+
+        logger.log('debug', 'diffX = %d, diffY = %d', dX, dY);
 
         document.onmouseup = closeDragElement;
         document.onmousemove = elementDrag;
@@ -41,14 +45,17 @@ export function dragElement(elmnt, parent = null) {
         const posX = e.clientX,
               posY = e.clientY,
 
-              aX = posX - diffX,
-              aY = posY - diffY;
+              aX = posX - dX,
+              aY = posY - dY;
 
-        const bound = parent !== null ? parent.offsetWidth-elmnt.offsetWidth : 0;
+        const boundX = parent !== null ? parent.offsetWidth - elmnt.offsetWidth : 0;
+        const boundY = parent !== null ? parent.offsetHeight - elmnt.offsetHeight : 0;
 
-        logger.log('debug', 'aX = %d, diffY = %d, bound = %d', aX, aY, bound);
+        logger.log('debug', 'aX = %d, diffY = %d, bound = %d', aX, aY, boundX);
 
-        if (parent === null || ((aX>0)&&(aX<bound)&&(aY>0)&&(aY<bound))) {
+        if (parent === null ||
+            ((aX>parentLeft) && (aX<parentLeft+boundX) &&
+                (aY>parentTop) && (aY<parentTop+boundY))) {
             // set the element's new position:
             elmnt.style.left = aX + "px";
             elmnt.style.top = aY + "px";
