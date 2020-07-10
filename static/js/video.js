@@ -503,10 +503,10 @@ function handleMessages(message) {
             logger.log('info', 'BUSY: rejecting call from %j, state = %d', message.client, state);
             sendMessage(message.client, {type: 'busy'});
 
-        } else if (state === State.PROMPT) {
+        } else if (state === State.PROMPT || state === State.WAITING_FOR_OFFER) {
 
             // reply busy, does not change state
-            logger.log('info', 'PROMPT: still prompting for video call from %j', message.client);
+            logger.log('info', 'PROMPT or WAITING_FOR_OFFER: got wait %j, state = %d', message.client, state);
 
             // TODO: Should reissue notification?
 
