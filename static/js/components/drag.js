@@ -17,10 +17,10 @@ export function dragElement(elmnt, parent = null) {
         e.preventDefault();
 
         const bbox = elmnt.getBoundingClientRect();
-        const shiftX = e.pageX - bbox.left;
-        const shiftY = e.pageY - bbox.top;
+        const shiftX = e.clientX - bbox.left;
+        const shiftY = e.clientY - bbox.top;
 
-        moveAt(e.pageX, e.pageY);
+        moveAt(e.clientX, e.clientY);
 
         function moveAt(pageX, pageY) {
             elmnt.style.left = pageX - shiftX + 'px';
@@ -28,7 +28,7 @@ export function dragElement(elmnt, parent = null) {
         }
 
         function onMouseMove(event) {
-            moveAt(event.pageX, event.pageY);
+            moveAt(event.clientX, event.clientY);
         }
 
         function onMouseUp() {
