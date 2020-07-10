@@ -1,7 +1,10 @@
+
+
 // Make an element draggable:
+import {logger} from "../logger";
+
 export function dragElement(elmnt, parent = null) {
 
-    let aX = 0, aY = 0;
     let diffX, diffY;
     // otherwise, move the DIV from anywhere inside the DIV:
     elmnt.onmousedown = dragMouseDown;
@@ -24,6 +27,8 @@ export function dragElement(elmnt, parent = null) {
         divTop = divTop.replace('px','');
         diffY = posY - divTop;
 
+        logger.log('debug', 'diffX = %d, diffY = %d', diffX, diffY);
+
         document.onmouseup = closeDragElement;
         document.onmousemove = elementDrag;
     }
@@ -34,12 +39,15 @@ export function dragElement(elmnt, parent = null) {
 
         // calculate the new cursor position:
         const posX = e.clientX,
-              posY = e.clientY;
+              posY = e.clientY,
 
-        aX = posX - diffX;
-        aY = posY - diffY;
+              aX = posX - diffX,
+              aY = posY - diffY;
 
         const bound = parent !== null ? parent.offsetWidth-elmnt.offsetWidth : 0;
+
+        logger.log('debug', 'aX = %d, diffY = %d, bound = %d', aX, aY, bound);
+
         if (parent === null || ((aX>0)&&(aX<bound)&&(aY>0)&&(aY<bound))) {
             // set the element's new position:
             elmnt.style.left = aX + "px";
