@@ -31,8 +31,14 @@ export function dragElement(elmnt, parent = null) {
             moveAt(event.pageX, event.pageY);
         }
 
+        function onMouseUp() {
+            document.onmouseup = null;
+            document.onmousemove = null;
+        }
+
         // move the ball on mousemove
-        document.addEventListener('mousemove', onMouseMove);
+        document.onmousemove = onMouseMove;
+        document.onmouseup = onMouseUp;
 
         // drop the ball, remove unneeded handlers
         elmnt.onmouseup = function () {
