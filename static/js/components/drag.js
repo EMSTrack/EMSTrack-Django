@@ -6,8 +6,7 @@ import {logger} from "../logger";
 export function dragElement(elmnt, parent = null) {
 
     let dX, dY;
-    let parentTop, parentLeft;
-    // otherwise, move the DIV from anywhere inside the DIV:
+    let parentTop, parentLeft, boundX, boundY;
     elmnt.onmousedown = dragMouseDown;
 
     function dragMouseDown(e) {
@@ -18,21 +17,18 @@ export function dragElement(elmnt, parent = null) {
         const posX = e.clientX,
               posY = e.clientY;
 
-        // calculate diffs
-        let elmntTop = elmnt.style.top,
-            elmntLeft = elmnt.style.left;
+        // calculate dX and dY
+        parentTop = parent !== null ? parent.style.top.replace('px','') : '0px';
+        parentLeft = parent !== null ? parent.style.left.replace('px','') : '0px';
 
-        parentTop = parent !== null ? parent.style.top : 0;
-        parentLeft = parent !== null ? parent.style.left : 0;
+        boundX = parent !== null ? parent.offsetWidth - elmnt.offsetWidth : 0;
+        boundY = parent !== null ? parent.offsetHeight - elmnt.offsetHeight : 0;
 
-        elmntLeft = elmntLeft.replace('px','');
-        dX = posX - elmntLeft;
+        dX = posX - elmnt.style.left.replace('px','');
+        dY = posY - elmnt.style.top.replace('px','');
 
-        elmntTop = elmntTop.replace('px','');
-        dY = posY - elmntTop;
-
-        logger.log('debug', 'dX = %d, dY = %d, parentTop = %d, parentLeft = %d',
-            dX, dY, parentTop, parentLeft);
+        logger.log('debug', 'dX = %d, dY = %d, parentTop = %d, parentLeft = %d, boundX = %d, boundY = %d, boundY = %d',
+            dX, dY, parentTop, parentLeft, boundX, boundY);
 
         document.onmouseup = closeDragElement;
         document.onmousemove = elementDrag;
@@ -49,10 +45,7 @@ export function dragElement(elmnt, parent = null) {
               aX = posX - dX,
               aY = posY - dY;
 
-        const boundX = parent !== null ? parent.offsetWidth - elmnt.offsetWidth : 0;
-        const boundY = parent !== null ? parent.offsetHeight - elmnt.offsetHeight : 0;
-
-        logger.log('debug', 'aX = %d, aY = %d, boundX = %d, boundY = %d', aX, aY, boundX, boundY);
+        logger.log('debug', 'aX = %d, aY = %d', aX, aY);
 
         if (parent === null ||
             ((aX>parentLeft) && (aX<parentLeft+boundX) &&
