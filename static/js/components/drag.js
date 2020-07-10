@@ -33,8 +33,8 @@ export function dragElement(elmnt, parent = null) {
         logger.log('debug', 'bbox.left = %s', bbox.left);
         logger.log('debug', 'bbox.top = %s', bbox.top);
 
-        const shiftX = e.clientX - bbox.left - parentLeft;
-        const shiftY = e.clientY - bbox.top - parentTop;
+        const shiftX = e.clientX - bbox.left + parentLeft;
+        const shiftY = e.clientY - bbox.top + parentTop;
 
         moveAt(e.clientX, e.clientY);
 
