@@ -29,8 +29,8 @@ export function dragElement(elmnt, parent = null) {
 
         }
 
-        dX = posX - elmnt.style.left.replace('px','');
-        dY = posY - elmnt.style.top.replace('px','');
+        dX = posX - parentLeft - elmnt.style.left.replace('px','');
+        dY = posY - parentTop - elmnt.style.top.replace('px','');
 
         logger.log('debug', 'dX = %d, dY = %d, parentTop = %d, parentLeft = %d, boundX = %d, boundY = %d',
             dX, dY, parentTop, parentLeft, boundX, boundY);
