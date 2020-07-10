@@ -28,7 +28,7 @@ export function dragElement(elmnt, parent = null) {
             boundY = parent.offsetHeight - elmnt.offsetHeight;
 
         }
-        
+
         dX = posX - elmnt.style.left.replace('px','');
         dY = posY - elmnt.style.top.replace('px','');
 
