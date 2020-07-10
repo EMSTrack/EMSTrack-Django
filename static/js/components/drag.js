@@ -39,9 +39,23 @@ export function dragElement(elmnt, parent = null) {
         }
 
         function onMouseMove(event) {
-            const aX = event.clientX, aY = event.clientY;
-            if (aX - shiftX > 0 && aX - shiftX < boundX && aY - shiftY > 0 && aY -shiftY < boundY)
-                moveAt(aX, aY);
+            let aX = event.clientX, aY = event.clientY;
+            if (parent !== null) {
+
+                // horizontal constraints
+                if ( aX - shiftX < 0 )
+                    aX = shiftX;
+                else if ( aX - shiftX > boundX )
+                    aX = shiftX + boundX;
+
+                // vertical constraints
+                if ( aY - shiftY < 0 )
+                    aY = shiftY;
+                else if ( aY -shiftY > boundY )
+                    aY = shiftY + boundY;
+
+            }
+            moveAt(aX, aY);
         }
 
         function onMouseUp() {
