@@ -7,9 +7,12 @@ export function dragElement(elmnt, parent = null) {
 
     let dX, dY;
     let parentTop = 0, parentLeft = 0, boundX = 0, boundY = 0;
-    elmnt.onmousedown = dragMouseDown;
 
-    function dragMouseDown(e) {
+    elmnt.ondragstart = function() {
+        return false;
+    };
+
+    elmnt.onmousedown = function dragMouseDown(e) {
         // e = e || window.event;
         e.preventDefault();
 
