@@ -21,6 +21,9 @@ export function dragElement(elmnt, parent = null) {
             parentTop = bbox.top;
             parentLeft = bbox.left;
 
+            boundX = parent.offsetWidth - elmnt.offsetWidth;
+            boundY = parent.offsetHeight - elmnt.offsetHeight;
+
             logger.log('debug', 'parent = %j', bbox);
             logger.log('debug', 'bbox.left = %s', bbox.left);
             logger.log('debug', 'bbox.top = %s', bbox.top);
@@ -44,7 +47,9 @@ export function dragElement(elmnt, parent = null) {
         }
 
         function onMouseMove(event) {
-            moveAt(event.clientX, event.clientY);
+            const aX = event.clientX, aY = event.clientY;
+            if (aX - shiftX > 0 && aX - shiftX < boundX && aY - shiftY > 0 && aY -shiftY < boundY)
+                moveAt(aX, aY);
         }
 
         function onMouseUp() {
