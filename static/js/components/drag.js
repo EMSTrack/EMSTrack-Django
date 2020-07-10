@@ -17,6 +17,7 @@ export function dragElement(elmnt, parent = null) {
         e.preventDefault();
 
         if (parent !== null) {
+
             const bbox = parent.getBoundingClientRect();
             parentTop = bbox.top;
             parentLeft = bbox.left;
@@ -24,18 +25,9 @@ export function dragElement(elmnt, parent = null) {
             boundX = parent.offsetWidth - elmnt.offsetWidth;
             boundY = parent.offsetHeight - elmnt.offsetHeight;
 
-            logger.log('debug', 'parent = %j', bbox);
-            logger.log('debug', 'bbox.left = %s', bbox.left);
-            logger.log('debug', 'bbox.top = %s', bbox.top);
-
         }
 
         const bbox = elmnt.getBoundingClientRect();
-
-        logger.log('debug', 'elmnt = %j', bbox);
-        logger.log('debug', 'bbox.left = %s', bbox.left);
-        logger.log('debug', 'bbox.top = %s', bbox.top);
-
         const shiftX = e.clientX - bbox.left + parentLeft;
         const shiftY = e.clientY - bbox.top + parentTop;
 
