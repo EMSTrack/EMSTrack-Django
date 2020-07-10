@@ -1,35 +1,49 @@
 // Make an element draggable:
 export function dragElement(elmnt, parent = null) {
 
-    let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+    let aX = 0, aY = 0;
+    let diffX, diffY;
     // otherwise, move the DIV from anywhere inside the DIV:
     elmnt.onmousedown = dragMouseDown;
 
     function dragMouseDown(e) {
         // e = e || window.event;
         e.preventDefault();
+
         // get the mouse cursor position at startup:
-        pos3 = e.clientX;
-        pos4 = e.clientY;
+        const posX = e.clientX,
+              posY = e.clientY;
+
+        // calculate diffs
+        let divTop = elmnt.style.top,
+            divLeft = elmnt.style.left;
+
+        divLeft = divLeft.replace('px','');
+        diffX = posX - divLeft;
+
+        divTop = divTop.replace('px','');
+        diffY = posY - divTop;
+
         document.onmouseup = closeDragElement;
-        // call a function whenever the cursor moves:
         document.onmousemove = elementDrag;
     }
 
     function elementDrag(e) {
         // e = e || window.event;
         e.preventDefault();
-        // calculate the new cursor position:
-        pos1 = pos3 - e.clientX;
-        pos2 = pos4 - e.clientY;
-        pos3 = e.clientX;
-        pos4 = e.clientY;
 
-        const boun = parent !== null ? parent.offsetWidth-elmnt.offsetWidth : 0;
-        if (parent === null || ((pos1>0)&&(pos1<boun)&&(pos2>0)&&(pos2<boun))) {
+        // calculate the new cursor position:
+        const posX = e.clientX,
+              posY = e.clientY;
+
+        aX = posX - diffX;
+        aY = posY - diffY;
+
+        const bound = parent !== null ? parent.offsetWidth-elmnt.offsetWidth : 0;
+        if (parent === null || ((aX>0)&&(aX<bound)&&(aY>0)&&(aY<bound))) {
             // set the element's new position:
-            elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-            elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+            elmnt.style.left = aX + "px";
+            elmnt.style.top = aY + "px";
         }
     }
 
