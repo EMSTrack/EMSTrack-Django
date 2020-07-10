@@ -17,6 +17,11 @@ export function dragElement(elmnt, parent = null) {
         e.preventDefault();
 
         const bbox = elmnt.getBoundingClientRect();
+
+        logger.log('debug', 'bbox = %j', bbox);
+        logger.log('debug', 'bbox.left = %s', bbox.left);
+        logger.log('debug', 'bbox.top = %s', bbox.top);
+
         const shiftX = e.clientX - bbox.left;
         const shiftY = e.clientY - bbox.top;
 
