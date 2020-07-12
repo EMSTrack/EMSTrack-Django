@@ -1,9 +1,12 @@
+import logging
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
 from djangoformsetjs.utils import formset_media_js
 
 from equipment.models import Equipment, EquipmentHolder, EquipmentItem, EquipmentSetItem, EquipmentSet, EquipmentType
+
+logger = logging.getLogger(__name__)
 
 
 class EquipmentItemForm(forms.ModelForm):
@@ -67,8 +70,9 @@ class EquipmentUpdateForm(forms.ModelForm):
         if instance is not None:
             type = instance.type
             if type == EquipmentType.B.name:
-                self.fields['default'].widgets = forms.CheckboxInput
+                self.fields['default'].widget = forms.CheckboxInput()
             elif type == EquipmentType.I.name:
-                self.fields['default'].widgets = forms.NumberInput
+                self.fields['default'].widget = forms.NumberInput()
             elif type == EquipmentType.S.name:
-                self.fields['default'].widgets = forms.TextInput
+                self.fields['default'].widget = forms.TextInput()
+        logger.debug(self.__dict__)
