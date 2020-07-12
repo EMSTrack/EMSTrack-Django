@@ -10,7 +10,7 @@ from extra_views import InlineFormSet, UpdateWithInlinesView, CreateWithInlinesV
 from emstrack.mixins import SuccessMessageWithInlinesMixin, UpdatedByWithInlinesMixin, BasePermissionMixin, \
     UpdatedByMixin, PaginationViewMixin, ExportModelMixin, ImportModelMixin, ProcessImportModelMixin
 from equipment.forms import EquipmentHolderUpdateForm, EquipmentItemForm, EquipmentSetItemForm, EquipmentSetCreateForm, \
-    EquipmentSetUpdateForm
+    EquipmentSetUpdateForm, EquipmentUpdateForm
 from equipment.resources import EquipmentSetResource, EquipmentResource
 from .models import EquipmentItem, Equipment, EquipmentHolder, EquipmentSet, EquipmentSetItem
 
@@ -66,6 +66,7 @@ class EquipmentAdminUpdateView(SuccessMessageMixin,
                                UpdateView):
     model = Equipment
     fields = ['name', 'type', 'default']
+    form = EquipmentUpdateForm
 
     def get_success_message(self, cleaned_data):
         return "Successfully updated equipment '{}'".format(self.object.name)

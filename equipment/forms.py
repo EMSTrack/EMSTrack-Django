@@ -55,10 +55,20 @@ class EquipmentHolderUpdateForm(EquipmentHolderCreateForm):
     pass
 
 
-class EquipmentForm(forms.ModelForm):
-
-    default = forms.CharField(widget=forms.Textarea)
+class EquipmentUpdateForm(forms.ModelForm):
 
     class Meta:
         model = Equipment
         fields = ['name', 'type', 'default']
+
+    def __init__(self, *args, **kwargs):
+        instance = kwargs['instance']
+        if instance is not None:
+            type = instance.type
+            if type == EquipmentType.B.name:
+                self.fields.widgets['default'] = forms.CheckboxInput
+            elif type == EquipmentType.I.name:
+                self.fields.widgets['default'] = forms.NumberInput
+            elif type == EquipmentType.S.name:
+                self.fields.widgets['default'] = forms.TextInput
+        super(PropertyForm, self).__init__(*args, **kwargs)
