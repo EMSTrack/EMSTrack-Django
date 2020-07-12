@@ -62,6 +62,7 @@ class EquipmentUpdateForm(forms.ModelForm):
         fields = ['name', 'type', 'default']
 
     def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         instance = kwargs['instance']
         if instance is not None:
             type = instance.type
@@ -71,4 +72,3 @@ class EquipmentUpdateForm(forms.ModelForm):
                 self.fields.widgets['default'] = forms.NumberInput
             elif type == EquipmentType.S.name:
                 self.fields.widgets['default'] = forms.TextInput
-        super().__init__(*args, **kwargs)
