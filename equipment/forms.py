@@ -53,3 +53,12 @@ class EquipmentHolderCreateForm(forms.ModelForm):
 
 class EquipmentHolderUpdateForm(EquipmentHolderCreateForm):
     pass
+
+
+class EquipmentForm(forms.ModelForm):
+
+    default = forms.CharField(widget=forms.TextArea)
+
+    class Meta:
+        model = Equipment
+        felds = ['name', 'type', 'default']
