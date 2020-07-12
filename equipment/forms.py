@@ -61,4 +61,4 @@ class EquipmentForm(forms.ModelForm):
 
     class Meta:
         model = Equipment
-        felds = ['name', 'type', 'default']
+        fields = ['name', 'type', 'default']
