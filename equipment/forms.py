@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 
 from djangoformsetjs.utils import formset_media_js
 
-from equipment.models import EquipmentHolder, EquipmentItem, EquipmentSetItem, EquipmentSet
+from equipment.models import Equipment, EquipmentHolder, EquipmentItem, EquipmentSetItem, EquipmentSet
 
 
 class EquipmentItemForm(forms.ModelForm):
