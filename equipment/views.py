@@ -59,7 +59,7 @@ class EquipmentAdminCreateView(SuccessMessageMixin,
         return "Successfully created equipment '{}'".format(self.object.name)
 
     def get_success_url(self):
-        return self.object.get_absolute_create_url()
+        return self.object.get_absolute_url('equipment:update')
 
 
 class EquipmentAdminUpdateView(SuccessMessageMixin,

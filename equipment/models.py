@@ -1,6 +1,7 @@
 from enum import Enum
 
 from django.contrib.gis.db import models
+from django.forms import forms
 from django.template.defaulttags import register
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
@@ -50,11 +51,16 @@ class Equipment(models.Model):
     def __str__(self):
         return "{} ({})".format(self.name, self.type)
 
-    def get_absolute_url(self):
-        return reverse('equipment:detail', kwargs={'pk': self.id})
+    def get_absolute_url(self, target='equipment:detail'):
+        return reverse(target, kwargs={'pk': self.id})
 
-    def get_absolute_create_url(self):
-        return reverse('equipment:update', kwargs={'pk': self.id})
+    def get_default_widget(self):
+        if self.type == EquipmentType.B.name:
+            return forms.CheckboxInput()
+        elif self.type == EquipmentType.I.name:
+            return forms.NumberInput()
+        else: # elif type == EquipmentType.S.name:
+            return forms.TextInput()
 
 
 class EquipmentSet(models.Model):

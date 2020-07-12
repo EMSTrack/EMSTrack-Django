@@ -42,7 +42,7 @@
                     {% for equipment in page_list %}
                     <tr>
                         <td>
-                            <a href="{% url 'equipment:detail' pk=equipment.id %}">{{ equipment.name }}</a>
+                            <a href="{% url 'equipment:udpate' pk=equipment.id %}">{{ equipment.name }}</a>
                         </td>
                         <td>
                             {{ equipment.type|get_equipment_type }}

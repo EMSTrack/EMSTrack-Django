@@ -68,11 +68,4 @@ class EquipmentUpdateForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         instance = kwargs['instance']
         if instance is not None:
-            type = instance.type
-            if type == EquipmentType.B.name:
-                self.fields['default'].widget = forms.CheckboxInput()
-            elif type == EquipmentType.I.name:
-                self.fields['default'].widget = forms.NumberInput()
-            elif type == EquipmentType.S.name:
-                self.fields['default'].widget = forms.TextInput()
-        logger.debug(self.__dict__)
+            self.fields['default'].widget = instance.get_default_widget()
