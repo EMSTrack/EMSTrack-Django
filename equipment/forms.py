@@ -41,7 +41,7 @@ class EquipmentSetCreateForm(forms.ModelForm):
 
     class Media(object):
         css = {
-            'all': ('css/equipmennt-set.css', )
+            'all': ('css/equipment-set.css', )
         }
 
 
