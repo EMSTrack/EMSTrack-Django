@@ -7,7 +7,6 @@
 {% endblock %}
 
 {% block content %}
-
 {% load formset_tags %}
 
 <div class="container">
@@ -47,7 +46,7 @@
                     <div id="formset" data-formset-prefix="{{ formset.prefix }}">
                         {{ formset.management_form }}
 
-                        <div data-formset-body>
+                        <div data-formset-body class="equipment-item">
                             <!-- New forms will be inserted in here -->
                             {% for form in formset %}
                                 <div data-formset-form>
@@ -64,11 +63,11 @@
                         any scripts -->
                         <script type="form-template" data-formset-empty-form>
                             {% escapescript %}
-                                <div data-formset-form>
+                                <div data-formset-form class="equipment-item">
                                     {{ formset.empty_form.as_ul }}
                                     <!--button type="button" data-formset-move-up-button>Move up</button>
                                     <button type="button" data-formset-move-down-button>Move down</button-->
-                                    <button type="button" data-formset-delete-button>{% trans "Delete form" }</button>
+                                    <button type="button" data-formset-delete-button>{% trans "Delete form" %}</button>
                                 </div>
                             {% endescapescript %}
                         </script>

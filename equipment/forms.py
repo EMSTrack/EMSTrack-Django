@@ -39,6 +39,11 @@ class EquipmentSetCreateForm(forms.ModelForm):
         model = EquipmentSet
         fields = ['name']
 
+    class Media(object):
+        css = {
+            'all': ('css/equipmennt-set.css')
+        }
+
 
 class EquipmentSetUpdateForm(EquipmentSetCreateForm):
     pass

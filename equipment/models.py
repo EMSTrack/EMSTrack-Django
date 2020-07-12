@@ -81,6 +81,9 @@ class EquipmentSetItem(UpdatedByModel):
                                   on_delete=models.CASCADE,
                                   verbose_name=_('equipment'))
 
+    class Meta:
+        unique_together = ('equipment_set', 'equipment',)
+
 
 class EquipmentHolder(models.Model):
 
