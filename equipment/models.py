@@ -36,7 +36,7 @@ class Equipment(models.Model):
     type = models.CharField(_('type'), max_length=1,
                             choices=make_choices(EquipmentType))
 
-    default = models.CharField(_('default'), max_length=254)
+    default = models.CharField(_('default'), blank=True, max_length=254)
 
     def save(self, *args, **kwargs):
 
@@ -52,6 +52,9 @@ class Equipment(models.Model):
 
     def get_absolute_url(self):
         return reverse('equipment:detail', kwargs={'pk': self.id})
+
+    def get_absolute_create_url(self):
+        return reverse('equipment:update', kwargs={'pk': self.id})
 
 
 class EquipmentSet(models.Model):
