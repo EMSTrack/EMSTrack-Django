@@ -67,8 +67,8 @@ class EquipmentUpdateForm(forms.ModelForm):
         if instance is not None:
             type = instance.type
             if type == EquipmentType.B.name:
-                self.fields.widgets['default'] = forms.CheckboxInput
+                self.fields['default'].widgets = forms.CheckboxInput
             elif type == EquipmentType.I.name:
-                self.fields.widgets['default'] = forms.NumberInput
+                self.fields['default'].widgets = forms.NumberInput
             elif type == EquipmentType.S.name:
-                self.fields.widgets['default'] = forms.TextInput
+                self.fields['default'].widgets = forms.TextInput
