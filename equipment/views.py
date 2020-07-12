@@ -65,7 +65,6 @@ class EquipmentAdminCreateView(SuccessMessageMixin,
 class EquipmentAdminUpdateView(SuccessMessageMixin,
                                UpdateView):
     model = Equipment
-    fields = ['name', 'type', 'default']
     form_class = EquipmentUpdateForm
 
     def get_success_message(self, cleaned_data):
