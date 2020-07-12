@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 
 from djangoformsetjs.utils import formset_media_js
 
-from equipment.models import Equipment, EquipmentHolder, EquipmentItem, EquipmentSetItem, EquipmentSet
+from equipment.models import Equipment, EquipmentHolder, EquipmentItem, EquipmentSetItem, EquipmentSet, EquipmentType
 
 
 class EquipmentItemForm(forms.ModelForm):
@@ -71,4 +71,4 @@ class EquipmentUpdateForm(forms.ModelForm):
                 self.fields.widgets['default'] = forms.NumberInput
             elif type == EquipmentType.S.name:
                 self.fields.widgets['default'] = forms.TextInput
-        super(PropertyForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
