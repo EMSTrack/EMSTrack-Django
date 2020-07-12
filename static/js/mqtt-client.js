@@ -2,6 +2,8 @@ import { Client } from 'paho-mqtt';
 
 import { Observer } from './observer';
 
+import { logger } from './logger';
+
 export class MqttEvent {
 
     constructor(event, object) {
@@ -124,27 +126,27 @@ export class MqttClient extends Observer {
 
     onConnected(reconnect, uri) {
         if (this.logLevel > 0)
-            console.log("Connected to mqtt broker");
+            logger.log('info', "Connected to mqtt broker");
         this.isConnected = true;
         this.broadcast(new MqttConnectEvent(reconnect, uri));
     }
 
     onConnectionLost(errorCode, errorMessage) {
         if (this.logLevel > 0)
-            console.log("Disconnected from mqtt broker");
+            logger.log('info', "Disconnected from mqtt broker");
         this.isConnected = false;
         this.broadcast(new MqttConnectionLostEvent(errorCode, errorMessage));
     }
 
     onMessageDelivered(message) {
         if (this.logLevel > 2)
-            console.log("Message '" + message.destinationName + ':' + message.payloadString + "' delivered");
+            logger.log('debug', "Message '%s:%s' delivered", message.destinationName, message.payloadString);
         this.broadcast(new MqttMessageSentEvent(message));
     }
 
     onMessageArrived(message) {
         if (this.logLevel > 1)
-            console.log("Message '" + message.destinationName + ':' + message.payloadString + "' arrived");
+            logger.log('debug', "Message '%s:%s' arrived", message.destinationName, message.payloadString);
         this.broadcast(new MqttMessageArrivedEvent(message));
     }
 

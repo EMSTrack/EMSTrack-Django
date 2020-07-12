@@ -25,6 +25,9 @@ then
         sleep $timer
     done
 
+    echo "> Cleaning stale clients"
+    python manage.py clientclean
+
     if [ "$COMMAND" = 'all' ]; then
 
         echo "> Starting mqttclient"

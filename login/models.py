@@ -1,14 +1,21 @@
 import logging
+import random
+import string
+
+from datetime import timedelta
+
 from enum import Enum
 
 from django.contrib.auth.models import Group
 from django.contrib.auth.models import User
 from django.contrib.gis.db import models
 from django.core.exceptions import PermissionDenied
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, RegexValidator
 from django.template.defaulttags import register
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
+from django.utils import timezone
+from django.utils.text import slugify
 
 from phonenumber_field.modelfields import PhoneNumberField
 
@@ -40,12 +47,18 @@ def is_dispatcher(user):
     return user.is_superuser or user.is_staff or user.userprofile.is_dispatcher
 
 
+@register.filter
+def is_guest(user):
+    return user.userprofile.is_guest
+    
+
 class UserProfile(ClearPermissionCacheMixin,
                   models.Model):
     user = models.OneToOneField(User,
                                 on_delete=models.CASCADE,
                                 verbose_name=_('user'))
     is_dispatcher = models.BooleanField(_('is_dispatcher'), default=False)
+    is_guest = models.BooleanField(_('is_guest'), default=False)
     mobile_number = PhoneNumberField(blank=True)
 
     def get_absolute_url(self):
@@ -189,6 +202,45 @@ class GroupHospitalPermission(ClearPermissionCacheMixin,
                                                          self.can_write)
 
 
+# random string
+def random_string_generator(size=20,
+                            chars=(string.ascii_letters +
+                                   string.digits +
+                                   string.punctuation)):
+    return ''.join(random.choice(chars) for _ in range(size))
+
+
+# TokenLogin
+
+def unique_slug_generator(new_slug=None):
+    # generate slug
+    if new_slug is not None:
+        slug = new_slug
+    else:
+        slug = slugify(random_string_generator(size=50,
+                                               chars=(string.ascii_letters +
+                                                      string.digits)))
+
+    # if exists, try again
+    if TokenLogin.objects.filter(token=slug).exists():
+        return unique_slug_generator(new_slug=random_string_generator(size=50,
+                                                                      chars=(string.ascii_letters +
+                                                                             string.digits)))
+    return slug
+
+
+class TokenLogin(models.Model):
+    user = models.ForeignKey(User,
+                             on_delete=models.CASCADE)
+    token = models.SlugField(max_length=50,
+                             default=unique_slug_generator,
+                             unique=True,
+                             null=False)
+    url = models.URLField(max_length=512, null=True, blank=True)
+    created_on = models.DateTimeField(_('created_on'),
+                                      auto_now=True)
+
+
 # TemporaryPassword
 
 class TemporaryPassword(models.Model):
@@ -200,6 +252,46 @@ class TemporaryPassword(models.Model):
 
     def __str__(self):
         return '"{}" (created on: {})'.format(self.password, self.created_on)
+
+    @staticmethod
+    def get_or_create_password(user):
+
+        try:
+
+            # Retrieve current password
+            pwd = TemporaryPassword.objects.get(user=user)
+            password = pwd.password
+            valid_until = pwd.created_on + timedelta(seconds=120)
+
+            # Invalidate password if it is expired
+            if timezone.now() > valid_until:
+                password = None
+
+        except TemporaryPassword.DoesNotExist:
+
+            pwd = None
+            password = None
+
+        if password is None:
+
+            # Generate password
+            password = random_string_generator()
+
+            if pwd is None:
+
+                # create password
+                pwd = TemporaryPassword(user=user,
+                                        password=password)
+
+            else:
+
+                # update password
+                pwd.password = password
+
+            # save password
+            pwd.save()
+
+        return pwd
 
 
 # Client status
