@@ -57,7 +57,7 @@ class EquipmentHolderUpdateForm(EquipmentHolderCreateForm):
 
 class EquipmentForm(forms.ModelForm):
 
-    default = forms.CharField(widget=forms.TextArea)
+    default = forms.CharField(widget=forms.Textarea)
 
     class Meta:
         model = Equipment
