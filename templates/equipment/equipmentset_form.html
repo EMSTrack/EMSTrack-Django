@@ -50,9 +50,10 @@
                             <!-- New forms will be inserted in here -->
                             {% for form in formset %}
                                 <ul data-formset-form>
-                                    {{ form.as_ul }}
-                                    <!--button type="button" data-formset-move-up-button>Move up</button>
-                                    <button type="button" data-formset-move-down-button>Move down</button-->
+                                    <li>{{ form.equipment }}</li>
+                                    {% if formset.can_delete %}
+                                        <div class="hidden">{{ form.DELETE }}</div>
+                                    {% endif %}
                                     <button type="button" data-formset-delete-button>{% trans "Delete form" %}</button>
                                 </ul>
                             {% endfor %}
@@ -64,9 +65,11 @@
                         <script type="form-template" data-formset-empty-form>
                             {% escapescript %}
                                 <ul data-formset-form>
-                                    {{ formset.empty_form.as_ul }}
-                                    <!--button type="button" data-formset-move-up-button>Move up</button>
-                                    <button type="button" data-formset-move-down-button>Move down</button-->
+                                    <li>{{ formset.empty_form.equipment }}</li>
+                                    {% if formset.can_delete %}
+                                        <div class="hidden">{{ formset.empty_form.DELETE }}</div>
+                                    {% endif %}
+                                    <!-- { { formset.empty_form.as_ul } } -->
                                     <button type="button" data-formset-delete-button>{% trans "Delete form" %}</button>
                                 </ul>
                             {% endescapescript %}
