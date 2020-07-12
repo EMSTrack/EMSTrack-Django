@@ -49,12 +49,12 @@
                         <div data-formset-body class="equipment-item">
                             <!-- New forms will be inserted in here -->
                             {% for form in formset %}
-                                <div data-formset-form>
+                                <ul data-formset-form>
                                     {{ form.as_ul }}
                                     <!--button type="button" data-formset-move-up-button>Move up</button>
                                     <button type="button" data-formset-move-down-button>Move down</button-->
                                     <button type="button" data-formset-delete-button>{% trans "Delete form" %}</button>
-                                </div>
+                                </ul>
                             {% endfor %}
                         </div>
 
@@ -63,12 +63,12 @@
                         any scripts -->
                         <script type="form-template" data-formset-empty-form>
                             {% escapescript %}
-                                <div data-formset-form class="equipment-item">
+                                <ul data-formset-form>
                                     {{ formset.empty_form.as_ul }}
                                     <!--button type="button" data-formset-move-up-button>Move up</button>
                                     <button type="button" data-formset-move-down-button>Move down</button-->
                                     <button type="button" data-formset-delete-button>{% trans "Delete form" %}</button>
-                                </div>
+                                </ul>
                             {% endescapescript %}
                         </script>
 
