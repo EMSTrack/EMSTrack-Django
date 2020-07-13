@@ -10,6 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.hashers import get_hasher, check_password
 
 from django.contrib.auth.models import User, Group
+from djangoformsetjs.utils import formset_media_js
 
 from ambulance.models import Ambulance
 from hospital.models import Hospital
@@ -183,6 +184,11 @@ class UserAmbulancePermissionAdminForm(forms.ModelForm):
     class Meta:
         model = UserAmbulancePermission
         fields = ['ambulance', 'can_read', 'can_write']
+
+    class Media(object):
+        js = formset_media_js + (
+            # Other form media here
+        )
 
 
 class UserHospitalPermissionAdminForm(forms.ModelForm):
