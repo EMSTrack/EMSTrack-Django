@@ -21,11 +21,17 @@ class EquipmentItemInline(InlineFormSet):
     factory_kwargs = {'extra': 1}
 
 
-class EquipmentSetInline(InlineFormSet):
+class EquipmentSetCreateInline(InlineFormSet):
     model = EquipmentSetItem
     form_class = EquipmentSetItemForm
-    factory_kwargs = {'extra': 1, 'can_delete': True}
+    factory_kwargs = {'extra': 1, 'can_delete': False}
     # formset_kwargs = {'form_kwargs': {'label_suffix': ''}}
+
+
+class EquipmentSetUpdateInline(InlineFormSet):
+    model = EquipmentSetItem
+    form_class = EquipmentSetItemForm
+    factory_kwargs = {'extra': 0, 'can_delete': True}
 
 
 class EquipmentHolderInline(InlineFormSet):
@@ -91,7 +97,7 @@ class EquipmentSetAdminCreateView(SuccessMessageWithInlinesMixin,
                                   UpdatedByWithInlinesMixin,
                                   CreateWithInlinesView):
     model = EquipmentSet
-    inlines = [EquipmentSetInline]
+    inlines = [EquipmentSetCreateInline]
     form_class = EquipmentSetCreateForm
 
     def get_success_message(self, cleaned_data):
@@ -105,7 +111,7 @@ class EquipmentSetAdminUpdateView(SuccessMessageWithInlinesMixin,
                                   UpdatedByWithInlinesMixin,
                                   UpdateWithInlinesView):
     model = EquipmentSet
-    inlines = [EquipmentSetInline]
+    inlines = [EquipmentSetUpdateInline]
     form_class = EquipmentSetUpdateForm
 
     def get_success_message(self, cleaned_data):
