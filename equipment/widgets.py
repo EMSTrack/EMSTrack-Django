@@ -21,3 +21,9 @@ class StringCheckboxInput(CheckboxInput):
         value = str(super().value_from_datadict(data, files, name))
         logger.debug('value = %s', value)
         return value
+
+    def format_value(self, value):
+        """Only return the 'value' attribute if value isn't empty."""
+        if self.check_test(value) or value is None or value == '':
+            return
+        return str(value)
