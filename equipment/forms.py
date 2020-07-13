@@ -28,9 +28,7 @@ class EquipmentSetItemForm(forms.ModelForm):
         fields = ['equipment']
         labels = {
            'equipment': '',
-           'delete': 'DEL'
         }
-        label_suffix = ''
 
     class Media(object):
         js = formset_media_js + (

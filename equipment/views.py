@@ -24,7 +24,7 @@ class EquipmentItemInline(InlineFormSet):
 class EquipmentSetInline(InlineFormSet):
     model = EquipmentSetItem
     form_class = EquipmentSetItemForm
-    factory_kwargs = {'extra': 1, 'can_delete': True}
+    factory_kwargs = {'extra': 1, 'can_delete': True, 'form_kwargs': {'label_suffix': ''}}
 
 
 class EquipmentHolderInline(InlineFormSet):
