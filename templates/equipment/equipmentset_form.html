@@ -47,21 +47,20 @@
                         {{ formset.management_form }}
 
                         <table class="table table-striped table-sm">
-                            <!-- New forms will be inserted in here -->
-                            {% for form in formset %}
-                                <!--
-                                <ul data-formset-form>
-                                    { { form.as_ul } }
-                                </ul>
-                                -->
-                                {% if forloop.first %}
-                                    <thead><tr>
-                                        {% for field in form.visible_fields %}
-                                            <th>{{ field.label|capfirst }}</th>
-                                        {% endfor %}
-                                    </tr></thead>
-                                {% endif %}
-                                <tbody data-formset-body>
+                            {% with formset|first as form %}
+                                <thead><tr>
+                                    {% for field in form.visible_fields %}
+                                        <th>{{ field.label|capfirst }}</th>
+                                    {% endfor %}
+                                </tr></thead>
+                            {% endwith %}
+                            <tbody data-formset-body>
+                                {% for form in formset %}
+                                    <!--
+                                    <ul data-formset-form>
+                                        { { form.as_ul } }
+                                    </ul>
+                                    -->
                                     <tr data-formset-form>
                                         {% for field in form.visible_fields %}
                                             <td>
@@ -76,8 +75,8 @@
                                             </td>
                                         {% endfor %}
                                     </tr>
-                                </tbody>
-                            {% endfor %}
+                                {% endfor %}
+                            </tbody>
                         </table>
 
                         <!-- The empty form template. By wrapping this in a <script> tag, the
