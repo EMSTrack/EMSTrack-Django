@@ -46,7 +46,7 @@
 
                     {{ formset.media }}
 
-                    <div id="formset" data-formset-prefix="{{ formset.prefix }}">
+                    <div id="formset-{{ formset.prefix }}" data-formset-prefix="{{ formset.prefix }}">
                         {{ formset.management_form }}
 
                         <table class="table table-striped table-sm">
@@ -110,10 +110,12 @@ W                            {% endescapescript %}
                         </script>
 
                         <!-- This button will add a new form when clicked -->
-                        <input type="button" value="{% trans 'Add another' %}" data-formset-add>
+                        <p>
+                            <input type="button" value="{% trans 'Add another' %}" data-formset-add>
+                        </p>
 
                         <script>jQuery(function($) {
-                            $("#formset").formset({
+                            $("#formset-{{ formset.prefix }}").formset({
                                 animateForms: false,
                                 reorderMode: 'dom',
                             });
