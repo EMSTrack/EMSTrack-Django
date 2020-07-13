@@ -70,10 +70,13 @@
                                                         {{ hidden }}
                                                     {% endfor %}
                                                 {% endif %}
-                                                {{ field.errors.as_ul }}
+                                                {{ field.errors.as_p }}
                                                 {{ field }}
                                             </td>
                                         {% endfor %}
+                                        <td>
+                                            {{ form.non_field_errors }}
+                                        </td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
@@ -98,6 +101,7 @@
                                                     {{ hidden }}
                                                 {% endfor %}
                                             {% endif %}
+                                            {{ field.errors.as_p }}
                                             {{ field }}
                                         </td>
                                     {% endfor %}
