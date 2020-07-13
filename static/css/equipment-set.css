@@ -1,3 +1,7 @@
 .equipment-item ul li {
     display: inline;
 }
+
+.equipment-item input[checkbox] {
+
+}

@@ -27,13 +27,20 @@ class EquipmentSetItemForm(forms.ModelForm):
         model = EquipmentSetItem
         fields = ['equipment']
         labels = {
-           'equipment': '',
+            'equipment': '',
+            'DELETE': 'DEL'
         }
 
     class Media(object):
         js = formset_media_js + (
             # Other form media here
         )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        instance = kwargs['instance']
+        if instance is not None:
+            self.fields['DELETE'].widget.attrs['class'] = 'delete'
 
 
 class EquipmentSetCreateForm(forms.ModelForm):
