@@ -116,6 +116,8 @@ class UpdatedByWithInlinesMixin:
 
     def forms_valid(self, form, inlines):
 
+        logger.debug('in forms_valid')
+
         # add updated_by to form and save
         form.instance.updated_by = self.request.user
         self.object = form.save()
@@ -125,6 +127,8 @@ class UpdatedByWithInlinesMixin:
 
             # save but do not commit
             instances = formset.save(commit=False)
+
+            logger.debug(instances)
 
             # save form
             for obj in instances:
