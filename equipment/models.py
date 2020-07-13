@@ -10,6 +10,8 @@ from emstrack.models import UpdatedByModel
 from emstrack.util import make_choices
 from environs import Env
 
+from equipment.widgets import StringCheckboxInput
+
 env = Env()
 
 
@@ -29,15 +31,6 @@ EquipmentTypeDefaults = {
     EquipmentType.I.name: "0",
     EquipmentType.S.name: ""
 }
-
-
-def check_boolean(value):
-
-    # Translate true and false strings to boolean values.
-    values = {'true': True, 'false': False}
-    if isinstance(value, str):
-        value = values.get(value.lower(), value)
-    return bool(value)
 
 
 class Equipment(models.Model):
@@ -65,7 +58,7 @@ class Equipment(models.Model):
 
     def get_default_widget(self):
         if self.type == EquipmentType.B.name:
-            return forms.CheckboxInput(check_text=check_boolean)
+            return StringCheckboxInput()
         elif self.type == EquipmentType.I.name:
             return forms.NumberInput()
         else: # elif type == EquipmentType.S.name:
