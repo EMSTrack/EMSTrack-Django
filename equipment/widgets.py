@@ -25,6 +25,6 @@ class StringCheckboxInput(CheckboxInput):
 
     def format_value(self, value):
         """Only return the 'value' attribute if value isn't empty."""
-        if self.check_test(value) or value is None or value == '':
+        if value.lower() in ('true', 'false') or value is None or value == '':
             return
         return str(value)
