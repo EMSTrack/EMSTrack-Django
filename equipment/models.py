@@ -6,7 +6,7 @@ from django.template.defaulttags import register
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
-from emstrack.models import UpdatedByModel
+from emstrack.models import UpdatedByModel, get_check
 from emstrack.util import make_choices
 from environs import Env
 
@@ -18,6 +18,14 @@ env = Env()
 @register.filter
 def get_equipment_type(type_):
     return EquipmentType[type_].value
+
+
+@register.filter(is_safe=True)
+def get_equipment_value(value, type_):
+    if type_ == EquipmentType.B.name:
+        return get_check(value)
+    else:
+        return value
 
 
 class EquipmentType(Enum):

@@ -128,7 +128,7 @@
                     {% for equipment in ambulance.equipmentholder.equipmentitem_set.all %}
                     <tr>
                         <td>{{ equipment.equipment.name }}</td>
-                        <td>{{ equipment.value }}</td>
+                        <td>{{ equipment.value|get_equipment_value }}</td>
                         <td>{{ equipment.comment }}</td>
                         <td>{{ equipment.updated_by }}</td>
                         <td>{{ equipment.updated_on }}</td>

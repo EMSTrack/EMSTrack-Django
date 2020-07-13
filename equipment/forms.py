@@ -63,10 +63,6 @@ class EquipmentHolderCreateForm(forms.ModelForm):
         }
 
 
-class EquipmentHolderUpdateForm(EquipmentHolderCreateForm):
-    pass
-
-
 class EquipmentUpdateForm(forms.ModelForm):
 
     class Meta:
