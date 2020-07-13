@@ -2,6 +2,8 @@
     display: inline;
 }
 
-.equipment-item input[checkbox] {
-
+.equipment-item .errolist {
+    color: red;
+    float: right;
 }
+
