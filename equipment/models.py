@@ -31,6 +31,15 @@ EquipmentTypeDefaults = {
 }
 
 
+def check_boolean(value):
+
+    # Translate true and false strings to boolean values.
+    values = {'true': True, 'false': False}
+    if isinstance(value, str):
+        value = values.get(value.lower(), value)
+    return bool(value)
+
+
 class Equipment(models.Model):
     name = models.CharField(_('name'), max_length=254, unique=True)
 
@@ -56,7 +65,7 @@ class Equipment(models.Model):
 
     def get_default_widget(self):
         if self.type == EquipmentType.B.name:
-            return forms.CheckboxInput()
+            return forms.CheckboxInput(check_text=check_boolean)
         elif self.type == EquipmentType.I.name:
             return forms.NumberInput()
         else: # elif type == EquipmentType.S.name:
