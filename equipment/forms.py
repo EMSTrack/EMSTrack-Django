@@ -76,3 +76,4 @@ class EquipmentUpdateForm(forms.ModelForm):
         instance = kwargs['instance']
         if instance is not None:
             self.fields['default'].widget = instance.get_default_widget()
+            self.fields['type'].disabled = True
