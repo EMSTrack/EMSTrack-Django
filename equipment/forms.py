@@ -38,9 +38,7 @@ class EquipmentSetItemForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        instance = kwargs['instance']
-        if instance is not None:
-            self.fields['DELETE'].widget.attrs['class'] = 'delete'
+        self.fields['DELETE'].widget.attrs['class'] = 'delete'
 
 
 class EquipmentSetCreateForm(forms.ModelForm):
