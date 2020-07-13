@@ -73,7 +73,7 @@ class EquipmentSet(models.Model):
         return self.name
 
 
-class EquipmentSetItem(UpdatedByModel):
+class EquipmentSetItem(models.Model):
     equipment_set = models.ForeignKey(EquipmentSet,
                                       on_delete=models.CASCADE,
                                       verbose_name=_('equipment_set'))

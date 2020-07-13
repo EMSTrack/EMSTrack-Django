@@ -39,18 +39,12 @@
                 <thead>
                 <tr>
                     <th>{% trans "Name" %}</th>
-                    <th>{% trans "Comment" %}</th>
-                    <th>{% trans "Updated on" %}</th>
-                    <th>{% trans "by" %}</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for equipment in equipmentset.equipmentsetitem_set.all %}
                 <tr>
                     <td>{{ equipment.equipment.name }}</td>
-                    <td>{{ equipment.comment }}</td>
-                    <td>{{ equipment.updated_on }}</td>
-                    <td>{{ equipment.updated_by }}</td>
                 </tr>
                 {% endfor %}
                 </tbody>
