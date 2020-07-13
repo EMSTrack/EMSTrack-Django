@@ -50,6 +50,8 @@ class EquipmentSetUpdateForm(EquipmentSetCreateForm):
 
 
 class EquipmentHolderCreateForm(forms.ModelForm):
+    equipmentsets = forms.ModelMultipleChoiceField(widget=forms.CheckboxSelectMultiple,
+                                                   queryset=EquipmentSet.objects.all())
 
     class Meta:
         model = EquipmentHolder
