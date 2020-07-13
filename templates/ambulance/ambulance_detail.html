@@ -68,6 +68,36 @@
         <div class="col">
 
             <h3>
+                {% trans "Activity" %}:
+            </h3>
+
+            <div class="row">
+                <div class="col-5" id="pagination"></div>
+                <div class="col-2">
+                    <label for="overlap">{% trans "overlap" %}</label>
+                    <input type="checkbox" id="overlap">
+                </div>
+                <div class="col-2 text-right">
+                    <span>{% trans "number of records" %}:</span>
+                </div>
+                <div class="col-3 text-right">
+                    <div id="page_sizes"></div>
+                </div>
+            </div>
+
+            <div id="pleaseWait" class="alert alert-primary" role="alert">
+                <p id="pleaseWaitMessage">{% trans "Retrieving data..." %}</p>
+            </div>
+
+            <div id="map" class="my-2" style="height: 600px"></div>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+
+            <h3>
                 {% trans "Equipment sets" %}:
             </h3>
 
@@ -144,36 +174,6 @@
                 </p>
 
             {% endif %}
-
-        </div>
-    </div>
-    
-    <div class="row">
-        <div class="col">
-
-            <h3>
-                {% trans "Activity" %}:
-            </h3>
-
-            <div class="row">
-                <div class="col-5" id="pagination"></div>
-                <div class="col-2">
-                    <label for="overlap">{% trans "overlap" %}</label>
-                    <input type="checkbox" id="overlap">
-                </div>
-                <div class="col-2 text-right">
-                    <span>{% trans "number of records" %}:</span>
-                </div>
-                <div class="col-3 text-right">
-                    <div id="page_sizes"></div>
-                </div>
-            </div>
-
-            <div id="pleaseWait" class="alert alert-primary" role="alert">
-                <p id="pleaseWaitMessage">{% trans "Retrieving data..." %}</p>
-            </div>
-
-            <div id="map" class="my-2" style="height: 600px"></div>
 
         </div>
     </div>
