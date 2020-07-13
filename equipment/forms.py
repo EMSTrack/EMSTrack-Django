@@ -20,6 +20,13 @@ class EquipmentItemForm(forms.ModelForm):
             # Other form media here
         )
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        instance = kwargs['instance']
+        if instance is not None:
+            self.fields['value'].widget = instance.item.get_default_widget()
+            self.fields['equipment'].disabled = True
+
 
 class EquipmentSetItemForm(forms.ModelForm):
 
@@ -38,11 +45,6 @@ class EquipmentSetCreateForm(forms.ModelForm):
     class Meta:
         model = EquipmentSet
         fields = ['name']
-
-    class Media(object):
-        css = {
-            'all': ('css/equipment-set.css', )
-        }
 
 
 class EquipmentSetUpdateForm(EquipmentSetCreateForm):
