@@ -16,6 +16,3 @@ class StringCheckboxInput(CheckboxInput):
 
     def value_from_datadict(self, data, files, name):
         return str(super().value_from_datadict(data, files, name))
-
-    def value_omitted_from_data(self, data, files, name):
-        return str(super().value_omitted_from_data(data, files, name))
