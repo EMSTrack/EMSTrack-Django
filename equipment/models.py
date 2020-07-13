@@ -22,6 +22,14 @@ def get_equipment_type(type_):
 
 
 @register.filter(is_safe=True)
+def get_equipment_default(equipment):
+    if equipment.type == EquipmentType.B.name:
+        return get_check_or_times(check_boolean(equipment.default))
+    else:
+        return equipment.default
+
+
+@register.filter(is_safe=True)
 def get_equipment_value(equipment_item):
     if equipment_item.equipment.type == EquipmentType.B.name:
         return get_check_or_times(check_boolean(equipment_item.value))
