@@ -38,6 +38,7 @@ class EquipmentSetItemForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        logger.debug(self.fields)
         self.fields['DELETE'].widget.attrs['class'] = 'delete'
 
 
