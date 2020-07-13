@@ -24,7 +24,7 @@ class EquipmentItemForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         instance = kwargs.get('instance')
         if instance is not None:
-            self.fields['value'].widget = instance.equipment.get_default_widget()
+            self.fields['value'].widget = instance.equipment.get_value_widget()
             self.fields['equipment'].disabled = True
 
 
@@ -79,3 +79,9 @@ class EquipmentUpdateForm(forms.ModelForm):
         if instance is not None:
             self.fields['default'].widget = instance.get_default_widget()
             self.fields['type'].disabled = True
+
+    def is_valid(self):
+        _is_valid = super().is_valid()
+        logger.info('is_valid')
+        logger.info('cleaned_data = %s', self.cleaned_data)
+        return _is_valid

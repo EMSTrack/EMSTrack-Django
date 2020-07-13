@@ -56,7 +56,7 @@ class Equipment(models.Model):
     def get_absolute_url(self, target='equipment:detail'):
         return reverse(target, kwargs={'pk': self.id})
 
-    def get_default_widget(self):
+    def get_value_widget(self):
         if self.type == EquipmentType.B.name:
             return StringCheckboxInput()
         elif self.type == EquipmentType.I.name:

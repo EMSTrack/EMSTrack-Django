@@ -12,7 +12,7 @@ def check_boolean(value):
 class StringCheckboxInput(CheckboxInput):
 
     def __init__(self, attrs=None):
-        super().__init__(attrs=attrs, check_test = check_boolean)
+        super().__init__(attrs=attrs, check_test=check_boolean)
 
     def value_from_datadict(self, data, files, name):
         return str(super().value_from_datadict(data, files, name))
