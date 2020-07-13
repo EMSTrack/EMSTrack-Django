@@ -199,6 +199,11 @@ class UserHospitalPermissionAdminForm(forms.ModelForm):
         model = UserHospitalPermission
         fields = ['hospital', 'can_read', 'can_write']
 
+    class Media(object):
+        js = formset_media_js + (
+            # Other form media here
+        )
+
 
 class GroupAmbulancePermissionAdminForm(forms.ModelForm):
     ambulance = AmbulancePermissionModelChoiceField(label=_('Ambulance'),

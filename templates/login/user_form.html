@@ -42,7 +42,7 @@
 
                 <h3>{% trans "Permissions" %}:</h3>
 
-                {% for form in inlines|slice:"1:" %}
+                {% for formset in inlines|slice:"1:" %}
 
                     {{ formset.media }}
 
