@@ -31,13 +31,9 @@
             <form method="POST" class="post-form">
                 {% csrf_token %}
 
-                <h3>{% trans "Details" %}:</h3>
-
                 <table>
                     {{ form }}
                 </table>
-
-                <h3>{% trans "Equipment" %}:</h3>
 
                 {% for formset in inlines %}
 
@@ -113,7 +109,9 @@
                         </script>
 
                         <!-- This button will add a new form when clicked -->
-                        <input type="button" value="{% trans "Add another" %}" data-formset-add>
+                        <p>
+                            <input type="button" class="btn btn-secondary" value="{% trans "Add another" %}" data-formset-add>
+                        </p>
 
                         <script>jQuery(function($) {
                             $("#formset").formset({
