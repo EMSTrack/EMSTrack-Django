@@ -10,7 +10,7 @@ from emstrack.models import UpdatedByModel, get_check
 from emstrack.util import make_choices
 from environs import Env
 
-from equipment.widgets import StringCheckboxInput
+from equipment.widgets import StringCheckboxInput, check_boolean
 
 env = Env()
 
@@ -23,7 +23,7 @@ def get_equipment_type(type_):
 @register.filter(is_safe=True)
 def get_equipment_value(equipment_item):
     if equipment_item.equipment.type == EquipmentType.B.name:
-        return get_check(equipment_item.value)
+        return get_check(check_boolean(equipment_item.value))
     else:
         return equipment_item.value
 
