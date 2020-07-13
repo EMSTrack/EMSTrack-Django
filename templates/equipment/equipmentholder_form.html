@@ -23,6 +23,8 @@
             <form method="POST" class="post-form">
                 {% csrf_token %}
 
+                {{ form }}
+
                 <h3>{% trans "Equipment" %}:</h3>
 
                 {% for formset in inlines %}

@@ -137,7 +137,7 @@ class EquipmentHolderUpdateView(LoginRequiredMixin,
                                 UpdateWithInlinesView):
     model = EquipmentHolder
     inlines = [EquipmentItemInline]
-    form_class = EquipmentHolderUpdateForm
+    # form_class = EquipmentHolderUpdateForm
 
     def get_success_message(self, cleaned_data):
         return "Successfully updated equipments"
