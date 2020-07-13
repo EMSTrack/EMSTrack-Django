@@ -105,6 +105,9 @@
                                             {{ field }}
                                         </td>
                                     {% endfor %}
+                                    <td>
+                                        {{ form.non_field_errors }}
+                                    </td>
                                 </tr>
                             {% endescapescript %}
                         </script>
