@@ -21,11 +21,11 @@ def get_equipment_type(type_):
 
 
 @register.filter(is_safe=True)
-def get_equipment_value(value, type_):
-    if type_ == EquipmentType.B.name:
-        return get_check(value)
+def get_equipment_value(equipment):
+    if equipment.type == EquipmentType.B.name:
+        return get_check(equipment.value)
     else:
-        return value
+        return equipment.value
 
 
 class EquipmentType(Enum):
