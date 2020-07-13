@@ -24,7 +24,7 @@ class EquipmentItemForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         instance = kwargs['instance']
         if instance is not None:
-            self.fields['value'].widget = instance.item.get_default_widget()
+            self.fields['value'].widget = instance.equipment.get_default_widget()
             self.fields['equipment'].disabled = True
 
 
