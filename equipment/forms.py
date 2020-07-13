@@ -82,6 +82,5 @@ class EquipmentUpdateForm(forms.ModelForm):
 
     def is_valid(self):
         _is_valid = super().is_valid()
-        logger.info('is_valid')
-        logger.info('cleaned_data = %s', self.cleaned_data)
+        logger.debug('cleaned_data = %s', self.cleaned_data)
         return _is_valid

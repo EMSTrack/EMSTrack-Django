@@ -1,4 +1,7 @@
+import logging
 from django.forms import CheckboxInput
+
+logger = logging.getLogger(__name__)
 
 
 def check_boolean(value):
@@ -15,4 +18,6 @@ class StringCheckboxInput(CheckboxInput):
         super().__init__(attrs=attrs, check_test=check_boolean)
 
     def value_from_datadict(self, data, files, name):
-        return str(super().value_from_datadict(data, files, name))
+        value = str(super().value_from_datadict(data, files, name))
+        logger.debug('value = %s', value)
+        return value

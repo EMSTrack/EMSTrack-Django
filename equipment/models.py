@@ -16,8 +16,8 @@ env = Env()
 
 
 @register.filter
-def get_equipment_type(type):
-    return EquipmentType[type].value
+def get_equipment_type(type_):
+    return EquipmentType[type_].value
 
 
 class EquipmentType(Enum):
