@@ -26,9 +26,6 @@ class EquipmentSetItemForm(forms.ModelForm):
     class Meta:
         model = EquipmentSetItem
         fields = ['equipment']
-        labels = {
-            'equipment': '',
-        }
 
     class Media(object):
         js = formset_media_js + (
