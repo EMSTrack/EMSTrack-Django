@@ -149,8 +149,8 @@
                 {% for permission in hospital_list %}
                 <tr>
                     <td> {{ permission.hospital.name }} </td>
-                    <td> {{ permission.can_read }} </td>
-                    <td> {{ permission.can_write }} </td>
+                    <td> {{ permission.can_read|get_check }} </td>
+                    <td> {{ permission.can_write|get_check }} </td>
                 </tr>
                 {% endfor %}
                 </tbody>
