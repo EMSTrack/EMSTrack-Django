@@ -46,15 +46,37 @@
                     <div id="formset" data-formset-prefix="{{ formset.prefix }}">
                         {{ formset.management_form }}
 
-                        <div data-formset-body class="equipment-item">
+                        <table data-formset-body class="equipment-item">
                             <!-- New forms will be inserted in here -->
                             {% for form in formset %}
+                                <!--
                                 <ul data-formset-form>
-                                    {{ form.as_ul }}
-                                    <!-- <button type="button" data-formset-delete-button>{% trans "Delete form" %}</button> -->
+                                    { { form.as_ul } }
                                 </ul>
+                                -->
+                                {% if forloop.first %}
+                                    <thead><tr>
+                                        {% for field in form.visible_fields %}
+                                            <th>{{ field.label|capfirst }}</th>
+                                        {% endfor %}
+                                    </tr></thead>
+                                {% endif %}
+                                <tr class="{% cycle row1 row2 %}">
+                                    {% for field in form.visible_fields %}
+                                        <td>
+                                            {# Include the hidden fields in the form #}
+                                            {% if forloop.first %}
+                                                {% for hidden in form.hidden_fields %}
+                                                    {{ hidden }}
+                                                {% endfor %}
+                                            {% endif %}
+                                            {{ field.errors.as_ul }}
+                                            {{ field }}
+                                        </td>
+                                    {% endfor %}
+                                </tr>
                             {% endfor %}
-                        </div>
+                        </table>
 
                         <!-- The empty form template. By wrapping this in a <script> tag, the
                         __prefix__ placeholder can easily be replaced in both attributes and
@@ -63,7 +85,6 @@
                             {% escapescript %}
                                 <ul data-formset-form>
                                     {{ formset.empty_form.as_ul }}
-                                    <!-- <button type="button" data-formset-delete-button>{% trans "Delete form" %}</button> -->
                                 </ul>
                             {% endescapescript %}
                         </script>

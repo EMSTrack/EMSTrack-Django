@@ -2,7 +2,7 @@
     display: inline;
 }
 
-.equipment-item ul li.errorlist {
+.errorlist {
     color: red;
     float: right;
 }
