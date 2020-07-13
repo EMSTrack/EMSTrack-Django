@@ -332,6 +332,11 @@ LOGGING = {
             'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG'),
             'propagate': True,
         },
+        'equipment': {
+            'handlers': ['emstrack'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG'),
+            'propagate': True,
+        },
         'mqtt': {
             'handlers': ['mqtt'],
             'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG'),
