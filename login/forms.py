@@ -213,6 +213,11 @@ class GroupAmbulancePermissionAdminForm(forms.ModelForm):
         model = GroupAmbulancePermission
         fields = ['ambulance', 'can_read', 'can_write']
 
+    class Media(object):
+        js = formset_media_js + (
+            # Other form media here
+        )
+
 
 class GroupHospitalPermissionAdminForm(forms.ModelForm):
     hospital = HospitalPermissionModelChoiceField(label=_('Hospital'),
@@ -221,6 +226,11 @@ class GroupHospitalPermissionAdminForm(forms.ModelForm):
     class Meta:
         model = GroupHospitalPermission
         fields = ['hospital', 'can_read', 'can_write']
+
+    class Media(object):
+        js = formset_media_js + (
+            # Other form media here
+        )
 
 
 class GroupProfileAdminForm(forms.ModelForm):

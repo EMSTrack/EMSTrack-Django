@@ -43,7 +43,6 @@
                 <h3>{% trans "Permissions" %}:</h3>
 
                 {% for formset in inlines|slice:"1:" %}
-
                     {{ formset.media }}
 
                     <div id="formset-{{ formset.prefix }}" data-formset-prefix="{{ formset.prefix }}">
@@ -122,7 +121,6 @@ W                            {% endescapescript %}
                         });</script>
 
                     </div>
-
                 {% endfor %}
 
                 <p>
