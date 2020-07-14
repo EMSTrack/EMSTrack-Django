@@ -10,7 +10,7 @@ from extra_views import InlineFormSet, UpdateWithInlinesView, CreateWithInlinesV
 from emstrack.mixins import SuccessMessageWithInlinesMixin, UpdatedByWithInlinesMixin, BasePermissionMixin, \
     UpdatedByMixin, PaginationViewMixin, ExportModelMixin, ImportModelMixin, ProcessImportModelMixin
 from equipment.forms import EquipmentHolderUpdateForm, EquipmentItemForm, EquipmentSetItemForm, EquipmentSetCreateForm, \
-    EquipmentSetUpdateForm
+    EquipmentSetUpdateForm, EquipmentUpdateForm
 from equipment.resources import EquipmentSetResource, EquipmentResource
 from .models import EquipmentItem, Equipment, EquipmentHolder, EquipmentSet, EquipmentSetItem
 
@@ -18,13 +18,20 @@ from .models import EquipmentItem, Equipment, EquipmentHolder, EquipmentSet, Equ
 class EquipmentItemInline(InlineFormSet):
     model = EquipmentItem
     form_class = EquipmentItemForm
-    factory_kwargs = {'extra': 1}
+    factory_kwargs = {'extra': 0, 'can_delete': False}
 
 
-class EquipmentSetInline(InlineFormSet):
+class EquipmentSetCreateInline(InlineFormSet):
     model = EquipmentSetItem
     form_class = EquipmentSetItemForm
-    factory_kwargs = {'extra': 1}
+    factory_kwargs = {'extra': 1, 'can_delete': False}
+    # formset_kwargs = {'form_kwargs': {'label_suffix': ''}}
+
+
+class EquipmentSetUpdateInline(InlineFormSet):
+    model = EquipmentSetItem
+    form_class = EquipmentSetItemForm
+    factory_kwargs = {'extra': 0, 'can_delete': True}
 
 
 class EquipmentHolderInline(InlineFormSet):
@@ -53,19 +60,19 @@ class EquipmentAdminDetailView(DetailView):
 class EquipmentAdminCreateView(SuccessMessageMixin,
                                CreateView):
     model = Equipment
-    fields = ['name', 'type', 'default']
+    fields = ['name', 'type']
 
     def get_success_message(self, cleaned_data):
         return "Successfully created equipment '{}'".format(self.object.name)
 
     def get_success_url(self):
-        return self.object.get_absolute_url()
+        return self.object.get_absolute_url('equipment:update')
 
 
 class EquipmentAdminUpdateView(SuccessMessageMixin,
                                UpdateView):
     model = Equipment
-    fields = ['name', 'type', 'default']
+    form_class = EquipmentUpdateForm
 
     def get_success_message(self, cleaned_data):
         return "Successfully updated equipment '{}'".format(self.object.name)
@@ -90,7 +97,7 @@ class EquipmentSetAdminCreateView(SuccessMessageWithInlinesMixin,
                                   UpdatedByWithInlinesMixin,
                                   CreateWithInlinesView):
     model = EquipmentSet
-    inlines = [EquipmentSetInline]
+    inlines = [EquipmentSetCreateInline]
     form_class = EquipmentSetCreateForm
 
     def get_success_message(self, cleaned_data):
@@ -104,7 +111,7 @@ class EquipmentSetAdminUpdateView(SuccessMessageWithInlinesMixin,
                                   UpdatedByWithInlinesMixin,
                                   UpdateWithInlinesView):
     model = EquipmentSet
-    inlines = [EquipmentSetInline]
+    inlines = [EquipmentSetUpdateInline]
     form_class = EquipmentSetUpdateForm
 
     def get_success_message(self, cleaned_data):
@@ -130,7 +137,7 @@ class EquipmentHolderUpdateView(LoginRequiredMixin,
                                 UpdateWithInlinesView):
     model = EquipmentHolder
     inlines = [EquipmentItemInline]
-    form_class = EquipmentHolderUpdateForm
+    fields = []
 
     def get_success_message(self, cleaned_data):
         return "Successfully updated equipments"

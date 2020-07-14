@@ -1,0 +1,9 @@
+.equipment-item ul li {
+    display: inline;
+}
+
+.errorlist {
+    color: red;
+    float: right;
+}
+

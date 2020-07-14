@@ -7,7 +7,7 @@
 <div class="container">
 
     <div class="row">
-        <div class="col-md-6">
+        <div class="col">
 
             <h1>{% trans "Equipment" %}</h1>
 
@@ -42,13 +42,13 @@
                     {% for equipment in page_list %}
                     <tr>
                         <td>
-                            <a href="{% url 'equipment:detail' pk=equipment.id %}">{{ equipment.name }}</a>
+                            <a href="{% url 'equipment:update' pk=equipment.id %}">{{ equipment.name }}</a>
                         </td>
                         <td>
                             {{ equipment.type|get_equipment_type }}
                         </td>
                         <td>
-                            {{ equipment.default }}
+                            {{ equipment|get_equipment_default }}
                         </td>
                     </tr>
                     {% endfor %}

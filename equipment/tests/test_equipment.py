@@ -11,6 +11,7 @@ from equipment.serializers import EquipmentItemSerializer, EquipmentSerializer
 from emstrack.tests.util import date2iso
 from login.tests.setup_data import TestSetup
 
+
 class TestEquipmentSerializerUpdates(TestSetup):
 
     def test_serial_try_change_int_type_to_string(self):
@@ -59,7 +60,6 @@ class TestEquipmentSerializerUpdates(TestSetup):
         result = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(result['value'], value)
         client.logout()
-
 
     def test_serial_change_bool_type_to_bool(self):
         client = Client()

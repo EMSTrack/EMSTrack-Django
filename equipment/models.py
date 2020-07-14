@@ -1,20 +1,40 @@
 from enum import Enum
 
 from django.contrib.gis.db import models
+from django import forms
 from django.template.defaulttags import register
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from emstrack.models import UpdatedByModel
+from emstrack.filters import get_check_or_times
 from emstrack.util import make_choices
 from environs import Env
+
+from equipment.widgets import StringCheckboxInput, check_boolean
 
 env = Env()
 
 
 @register.filter
-def get_equipment_type(type):
-    return EquipmentType[type].value
+def get_equipment_type(type_):
+    return EquipmentType[type_].value
+
+
+@register.filter(is_safe=True)
+def get_equipment_default(equipment):
+    if equipment.type == EquipmentType.B.name:
+        return get_check_or_times(check_boolean(equipment.default))
+    else:
+        return equipment.default
+
+
+@register.filter(is_safe=True)
+def get_equipment_value(equipment_item):
+    if equipment_item.equipment.type == EquipmentType.B.name:
+        return get_check_or_times(check_boolean(equipment_item.value))
+    else:
+        return equipment_item.value
 
 
 class EquipmentType(Enum):
@@ -36,7 +56,7 @@ class Equipment(models.Model):
     type = models.CharField(_('type'), max_length=1,
                             choices=make_choices(EquipmentType))
 
-    default = models.CharField(_('default'), max_length=254)
+    default = models.CharField(_('default'), blank=True, max_length=254)
 
     def save(self, *args, **kwargs):
 
@@ -50,8 +70,16 @@ class Equipment(models.Model):
     def __str__(self):
         return "{} ({})".format(self.name, self.type)
 
-    def get_absolute_url(self):
-        return reverse('equipment:detail', kwargs={'pk': self.id})
+    def get_absolute_url(self, target='equipment:detail'):
+        return reverse(target, kwargs={'pk': self.id})
+
+    def get_value_widget(self):
+        if self.type == EquipmentType.B.name:
+            return StringCheckboxInput()
+        elif self.type == EquipmentType.I.name:
+            return forms.NumberInput()
+        else: # elif type == EquipmentType.S.name:
+            return forms.TextInput()
 
 
 class EquipmentSet(models.Model):
@@ -64,13 +92,16 @@ class EquipmentSet(models.Model):
         return self.name
 
 
-class EquipmentSetItem(UpdatedByModel):
+class EquipmentSetItem(models.Model):
     equipment_set = models.ForeignKey(EquipmentSet,
                                       on_delete=models.CASCADE,
                                       verbose_name=_('equipment_set'))
     equipment = models.ForeignKey(Equipment,
                                   on_delete=models.CASCADE,
                                   verbose_name=_('equipment'))
+
+    class Meta:
+        unique_together = ('equipment_set', 'equipment',)
 
 
 class EquipmentHolder(models.Model):
