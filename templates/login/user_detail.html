@@ -13,7 +13,6 @@
         </ol>
     </nav>
 
-
     <div class="row">
         <div class="col">
 
@@ -119,8 +118,8 @@
                 {% for permission in ambulance_list %}
                 <tr>
                     <td> {{ permission.ambulance.identifier }} </td>
-                    <td> {{ permission.can_read }} </td>
-                    <td> {{ permission.can_write }} </td>
+                    <td> {{ permission.can_read|get_check }} </td>
+                    <td> {{ permission.can_write|get_check }} </td>
                 </tr>
                 {% endfor %}
                 </tbody>
@@ -150,8 +149,8 @@
                 {% for permission in hospital_list %}
                 <tr>
                     <td> {{ permission.hospital.name }} </td>
-                    <td> {{ permission.can_read }} </td>
-                    <td> {{ permission.can_write }} </td>
+                    <td> {{ permission.can_read|get_check }} </td>
+                    <td> {{ permission.can_write|get_check }} </td>
                 </tr>
                 {% endfor %}
                 </tbody>

@@ -1,0 +1,127 @@
+.vid-modal-content-box {
+   max-width:1100px;
+}
+
+.videoBox {
+   width:100%;
+
+   margin: 0 auto;
+   display:flex;
+
+   position: relative;
+}
+
+.select_button{
+   border:none;
+   float:left;
+   background-color: #f2f2f2;
+   color: black;
+}
+
+.select_button:hover {
+   background-color:#d4d4d4;
+   color:black;
+}
+
+.select_button:active {
+   background-color:#16405F;
+   color:black;
+}
+
+.call_button {
+   width:50px;
+   height:50px;
+   margin-right:20px;
+}
+
+.call_img{
+   width:20px;
+   height:20px;
+
+}
+.phone_buttons{
+   float:right;
+}
+
+.localVideo {
+   width:25%;
+   position: absolute;
+   top: 10px;
+   right: 10px;
+}
+
+.videoControls {
+   position: absolute;
+   bottom: 5px;
+   left: 0px;
+   width: 100%;
+   background-color: #111111;
+   padding-top: 5px;
+   padding-bottom: 5px;
+   opacity: 0.5;
+}
+
+.hoverVideoControls {
+   opacity: 0;
+}
+
+.hoverVideoControls:hover {
+   opacity: 0.5;
+}
+
+#localVideo {
+   border-style: solid;
+   border-width: 1px;
+   border-color: #aaaaaa;
+   background-color: black;
+   transform: rotateY(180deg);
+}
+
+.remoteVideo {
+   float:left;
+   width:100%;
+   vertical-align: top;
+   background-color: black;
+}
+
+#remoteVideo {
+   background-color: black;
+}
+
+.videoControlButton {
+   color: #777777;
+   border-style: none;
+   background-color: transparent;
+   font-size: 2em;
+}
+
+.videoControlButton:focus {
+   outline: none;
+}
+
+.dropdown_vid_text {
+   color:white;
+}
+
+.main_box_buttons{
+   width:100%;
+   margin: 0 auto;
+   padding:30px 10px 70px 10px;
+   background-color:black;
+}
+
+.fa-my-rotate-45 {
+  transform: rotate(45deg);
+}
+
+.fa-my-rotate-135 {
+  transform: rotate(135deg);
+}
+
+.fa-my-rotate-225 {
+  transform: rotate(225deg);
+}
+
+.fa-my-rotate-315 {
+  transform: rotate(315deg);
+}

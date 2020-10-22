@@ -2,6 +2,8 @@
 {% load i18n %}
 {% load render_bundle from webpack_loader %}
 
+{% is_video_enabled as is_video_enabled %}
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,6 +20,7 @@
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'css/btn-yellow.css' %}">
     <link rel="stylesheet" href="{% static 'css/btn-outline-yellow.css' %}">
+    <link rel="stylesheet" href="{% static 'css/video-styling.css' %}">
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
@@ -39,6 +42,8 @@
             integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
             crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.7.0/js/all.js"></script>
+
+    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
 
     <!-- title -->
     <title>{% block title %}EMSTrack - {% trans "Ambulance Tracker" %}{% endblock %}</title>
@@ -64,7 +69,7 @@
 
     <!-- Navbar Menu -->
     <div class="collapse navbar-collapse" id="myNavbar">
-        {% if request.user.is_authenticated %}
+        {% if request.user.is_authenticated and not request.user.userprofile.is_guest %}
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'ambulance:map' %}">
@@ -90,6 +95,15 @@
                     {% trans "Hospitals" %}
                 </a>
             </li>
+            {% if is_video_enabled %}
+            <li class="nav-item">
+                <!-- <a class="nav-link" href="{% url 'video:index' %}"> -->
+                <a class="nav-link" href="#" id="videoMenuItem">
+                    <span class="fas fa-video"></span>
+                    {% trans "Video" %}
+                </a>
+            </li>
+            {% endif %}
         </ul>
         {% endif %}
         <ul class="navbar-nav ml-auto">
@@ -119,19 +133,21 @@
                     </div>
                 </li>
                 {% endif %}
-            <li class="nav-item dropdown" id="navitemAccountDropdown">
-                <a class="nav-link dropdown-toggle"
-                   id="navbarAccountDropdown"
-                   role="button" data-toggle="dropdown" aria-haspopup="true"
-                   aria-expanded="false"
-                   href="#">
-                    <span class="fas fa-user"></span>
-                    {% trans "Account" %}
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarAccountDropdown">
-                    <a class="dropdown-item" href="{% url 'password_change' %}">{% trans "Change password" %}</a>
-                </div>
-            </li>
+                {% if  not request.user.userprofile.is_guest %}
+                <li class="nav-item dropdown" id="navitemAccountDropdown">
+                    <a class="nav-link dropdown-toggle"
+                    id="navbarAccountDropdown"
+                    role="button" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false"
+                    href="#">
+                        <span class="fas fa-user"></span>
+                        {% trans "Account" %}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarAccountDropdown">
+                        <a class="dropdown-item" href="{% url 'password_change' %}">{% trans "Change password" %}</a>
+                    </div>
+                </li>
+                {% endif %}
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'login:logout' %}">
                     <span class="fas fa-sign-out-alt"></span>
@@ -168,6 +184,28 @@
     {% include 'messages.html' %}
 </div>
 
+{% if request.user.is_authenticated and is_video_enabled %}
+<!-- VIDEO MODAL -->
+<div class="modal fade" tabindex="-1" role="dialog" id="videoModalWindow" aria-labelledby="videoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content vid-modal-content-box">
+            <div class="modal-header">
+                <h5 id="videoModalTitle" class="modal-title">EMSTrack {% trans "Video Call" %}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {% include 'video/modal.html' %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans "Close" %}</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
 <!-- TODO: Set timezone in settings/defaults -->
 
 <!-- Content block -->
@@ -188,22 +226,44 @@
 
 {% autoescape off %}
 <script>
+
+    let videoMode = "modal";
+
     const username = '{{ user.get_username }}';
     const apiBaseUrl = '{% url 'index' %}api/';
     {% if request.user.is_authenticated %}
+
         const mqttBroker = {{ mqtt_broker }};
         const clientId = '{{ client_id }}';
         const mapProvider = {{ map_provider }};
+        const turnServer = {{ turn_server }};
         {% if request.user.is_staff %}
             const adminUrls = {{ admin_urls }};
         {% else %}
             const adminUrls = [];
         {% endif %}
+
+        const guest = {{ guest }};
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const callUsername = urlParams.get('callUsername');
+        const callClientId = urlParams.get('callClientId');
+        const callMode = urlParams.get('callMode');
+        const callProxyUsername = urlParams.get('callProxyUsername');
+        const callProxyClientId = urlParams.get('callProxyClientId');
+
+        console.log('debug', 'callUsername = ' + callUsername + ', callClientId = ' + callClientId + ', callMode = ' + callMode );
+
     {% endif %}
+
 </script>
 {% endautoescape %}
 
 {% render_bundle 'main' 'js' 'BASE' %}
+
+{% if request.user.is_authenticated and is_video_enabled %}
+{% render_bundle 'main' 'js' 'VIDEO' %}
+{% endif %}
 
 {% block scripts %}
 {% endblock %}

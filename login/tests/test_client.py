@@ -539,6 +539,37 @@ class TestClient(TestSetup):
         self.assertEqual(client2.ambulance, self.a2)
         self.assertEqual(client2.hospital, self.h1)
 
+    def testClientSerializerConcurent(self):
+
+        # test ClientSerializer
+
+        # client online
+        client1 = Client.objects.create(client_id='client_id_1', user=self.u1,
+                                        status=ClientStatus.O.name, ambulance=self.a1)
+
+        serializer = ClientSerializer(client1)
+        result = {
+            'client_id': client1.client_id,
+            'username': client1.user.username,
+            'status': client1.status,
+            'ambulance': client1.ambulance.id,
+            'hospital': None,
+            'updated_on': date2iso(client1.updated_on)
+        }
+        self.assertDictEqual(serializer.data, result)
+
+        # create client
+        serializer = ClientSerializer(data={
+            'client_id': 'client_id_3',
+            'status': ClientStatus.O.name,
+            'ambulance': self.a1.id,
+            'hospital': None
+        })
+        serializer.is_valid()
+        logger.debug('errors = {}'.format(serializer.errors))
+        self.assertTrue('ambulance' in serializer.errors)
+        self.assertEqual(str(serializer.errors['ambulance'][0]), 'This field must be unique.')
+
     def test_client_viewset(self):
 
         # instantiate client
@@ -672,6 +703,71 @@ class TestClient(TestSetup):
         self.assertEqual(result['ambulance'], self.a1.id)
         self.assertEqual(result['hospital'], self.h2.id)
         self.assertEqual(result['username'], self.u1.username)
+
+        # logout
+        client.logout()
+
+    def test_client_viewset_concurrent(self):
+
+        # instantiate client
+        client = DjangoClient()
+
+        # login as admin
+        client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
+
+        # create client online
+        client1 = Client.objects.create(client_id='client_id_1', user=self.u2,
+                                        status=ClientStatus.O.name)
+
+        # retrieve
+        response = client.get('/en/api/client/{}/'.format(str(client1.client_id)),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = ClientSerializer(client1).data
+        self.assertDictEqual(result, answer)
+        self.assertEqual(result['username'], self.u2.username)
+
+        # set status and ambulance
+        status = ClientStatus.O.name
+        response = client.patch('/en/api/client/{}/'.format(str(client1.client_id)),
+                                content_type='application/json',
+                                data=json.dumps({
+                                    'status': status,
+                                    'ambulance': self.a1.id,
+                                    'hospital': self.h1.id
+                                }),
+                                follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = ClientSerializer(Client.objects.get(id=client1.id)).data
+        self.assertDictEqual(result, answer)
+
+        # retrieve new status
+        response = client.get('/en/api/client/{}/'.format(str(client1.client_id)),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        self.assertEqual(result['status'], status)
+        self.assertEqual(result['ambulance'], self.a1.id)
+        self.assertEqual(result['hospital'], self.h1.id)
+        self.assertEqual(result['username'], self.u1.username)
+
+        # create concurrent client
+        response = client.post('/en/api/client/',
+                               content_type='application/json',
+                               data=json.dumps({
+                                   'client_id': 'client_id_2',
+                                   'status': ClientStatus.O.name,
+                                   'ambulance': self.a1.id,
+                                   'hospital': None
+                               }),
+                               follow=True)
+        self.assertEqual(response.status_code, 400)
+        result = JSONParser().parse(BytesIO(response.content))
+        logger.debug(result)
+        self.assertTrue('ambulance' in result)
+        self.assertEqual(result['ambulance'][0], "This field must be unique.")
 
         # logout
         client.logout()

@@ -189,6 +189,13 @@ EMAIL_HOST_USER = env.str('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env.str('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = env.bool('EMAIL_USE_TLS')
 
+# Guest user
+GUEST = {
+    'USERNAME': env.str('GUEST_USERNAME'),
+    'PASSWORD': env.str('GUEST_PASSWORD'),
+    'EMAIL': env.str('GUEST_EMAIL'),
+}
+
 # MQTT settings
 MQTT = {
     'USERNAME': env.str('MQTT_USERNAME'),
@@ -235,6 +242,15 @@ SMS_KEY = env.str('SMS_KEY')
 SMS_PASS = env.str('SMS_PASS')
 SMS_FROM = env.str('SMS_FROM')
 
+# enable video
+ENABLE_VIDEO = env.bool('ENABLE_VIDEO')
+
+# turn server
+TURN_IP = env.str('TURN_IP')
+TURN_PORT = env.str('TURN_PORT')
+TURN_USER = env.str('TURN_USER')
+TURN_PASS = env.str('TURN_PASS')
+
 # Webpack Loader
 WEBPACK_LOADER = {
     'BASE': {
@@ -264,6 +280,10 @@ WEBPACK_LOADER = {
     'REPORT_VEHICLE_STATUS': {
         'BUNDLE_DIR_NAME': 'bundles/report-vehicle-activity/',
         'STATS_FILE': os.path.join(BASE_DIR, 'webpack/report-vehicle-activity-stats.json'),
+    },
+    'VIDEO': {
+        'BUNDLE_DIR_NAME': 'bundles/video/',
+        'STATS_FILE': os.path.join(BASE_DIR, 'webpack/video-stats.json'),
     },
 }
 
@@ -308,6 +328,11 @@ LOGGING = {
             'propagate': True,
         },
         'login': {
+            'handlers': ['emstrack'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG'),
+            'propagate': True,
+        },
+        'equipment': {
             'handlers': ['emstrack'],
             'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG'),
             'propagate': True,

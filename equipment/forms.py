@@ -1,9 +1,12 @@
+import logging
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
 from djangoformsetjs.utils import formset_media_js
 
-from equipment.models import EquipmentHolder, EquipmentItem, EquipmentSetItem, EquipmentSet
+from equipment.models import Equipment, EquipmentHolder, EquipmentItem, EquipmentSetItem, EquipmentSet, EquipmentType
+
+logger = logging.getLogger(__name__)
 
 
 class EquipmentItemForm(forms.ModelForm):
@@ -16,6 +19,13 @@ class EquipmentItemForm(forms.ModelForm):
         js = formset_media_js + (
             # Other form media here
         )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        instance = kwargs.get('instance')
+        if instance is not None:
+            self.fields['value'].widget = instance.equipment.get_value_widget()
+            self.fields['equipment'].disabled = True
 
 
 class EquipmentSetItemForm(forms.ModelForm):
@@ -42,6 +52,8 @@ class EquipmentSetUpdateForm(EquipmentSetCreateForm):
 
 
 class EquipmentHolderCreateForm(forms.ModelForm):
+    equipmentsets = forms.ModelMultipleChoiceField(widget=forms.CheckboxSelectMultiple,
+                                                   queryset=EquipmentSet.objects.all())
 
     class Meta:
         model = EquipmentHolder
@@ -53,3 +65,17 @@ class EquipmentHolderCreateForm(forms.ModelForm):
 
 class EquipmentHolderUpdateForm(EquipmentHolderCreateForm):
     pass
+
+
+class EquipmentUpdateForm(forms.ModelForm):
+
+    class Meta:
+        model = Equipment
+        fields = ['name', 'type', 'default']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        instance = kwargs.get('instance')
+        if instance is not None:
+            self.fields['default'].widget = instance.get_value_widget()
+            self.fields['type'].disabled = True

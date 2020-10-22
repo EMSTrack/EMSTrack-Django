@@ -15,6 +15,11 @@ urlpatterns = [
         views.LogoutView.as_view(),
         name='logout'),
 
+    # token login
+    url(r'^login/(?P<token>.+)/$',
+        views.TokenLoginView.as_view(),
+        name='tokenlogin'),
+
     # signup
     url(r'^signup/$',
         views.SignupView.as_view(),

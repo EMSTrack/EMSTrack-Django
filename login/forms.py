@@ -10,6 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.hashers import get_hasher, check_password
 
 from django.contrib.auth.models import User, Group
+from djangoformsetjs.utils import formset_media_js
 
 from ambulance.models import Ambulance
 from hospital.models import Hospital
@@ -184,6 +185,11 @@ class UserAmbulancePermissionAdminForm(forms.ModelForm):
         model = UserAmbulancePermission
         fields = ['ambulance', 'can_read', 'can_write']
 
+    class Media(object):
+        js = formset_media_js + (
+            # Other form media here
+        )
+
 
 class UserHospitalPermissionAdminForm(forms.ModelForm):
     hospital = HospitalPermissionModelChoiceField(label=_('Hospital'),
@@ -192,6 +198,11 @@ class UserHospitalPermissionAdminForm(forms.ModelForm):
     class Meta:
         model = UserHospitalPermission
         fields = ['hospital', 'can_read', 'can_write']
+
+    class Media(object):
+        js = formset_media_js + (
+            # Other form media here
+        )
 
 
 class GroupAmbulancePermissionAdminForm(forms.ModelForm):
@@ -202,6 +213,11 @@ class GroupAmbulancePermissionAdminForm(forms.ModelForm):
         model = GroupAmbulancePermission
         fields = ['ambulance', 'can_read', 'can_write']
 
+    class Media(object):
+        js = formset_media_js + (
+            # Other form media here
+        )
+
 
 class GroupHospitalPermissionAdminForm(forms.ModelForm):
     hospital = HospitalPermissionModelChoiceField(label=_('Hospital'),
@@ -210,6 +226,11 @@ class GroupHospitalPermissionAdminForm(forms.ModelForm):
     class Meta:
         model = GroupHospitalPermission
         fields = ['hospital', 'can_read', 'can_write']
+
+    class Media(object):
+        js = formset_media_js + (
+            # Other form media here
+        )
 
 
 class GroupProfileAdminForm(forms.ModelForm):
@@ -239,6 +260,7 @@ class UserProfileAdminForm(forms.ModelForm):
         model = UserProfile
         labels = {
             'is_dispatcher': _('Dispatcher'),
+            'is_guest': _('Guest'),
         }
         exclude = ['user']
 

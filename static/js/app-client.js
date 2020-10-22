@@ -55,6 +55,7 @@ export class AppClient extends TopicObserver {
     }
 
     publish(topic, payload, qos, retained) {
+        logger.log('debug', 'topic: %s, payload: %s, qos: %d, retained: %s', topic, payload, qos, retained);
         this.mqttClient.publish(topic, payload, qos, retained);
     }
 
@@ -138,6 +139,13 @@ export class AppClient extends TopicObserver {
                 return priority_classification;
 
             });
+    }
+
+    subscribeToWebRTC(callback) {
+        // subscribe
+        // TODO: check if already subscribed
+        this._subscribe(`user/${username}/client/${clientId}/webrtc/message`,
+            callback);
     }
 
     getAmbulances() {
@@ -257,6 +265,16 @@ export class AppClient extends TopicObserver {
             });
     }
 
+    getClients() {
+
+        // retrieve clients
+        return this.httpClient.get('client/')
+            .then( (response) => {
+                // return aborted call
+                return response.data;
+            });
+    }
+
     abortCall(call_id) {
 
         // abort call
@@ -278,6 +296,32 @@ export class AppClient extends TopicObserver {
     }
 
     // POST and PATCH methods
+
+    postTokenLogin(username, url = null) {
+
+        const data = {};
+        if (url !== null) {
+            data.url = url;
+        }
+
+        // retrieve token
+        return this.httpClient.post(`user/${username}/tokenlogin/`, data)
+            .then( (response) => {
+                // return call
+                return response.data;
+            });
+
+    }
+
+    postClient(data) {
+
+        // retrieve bases
+        return this.httpClient.post('client/', data)
+            .then( (response) => {
+                // return call
+                return response.data;
+            });
+    }
 
     postCall(data) {
 

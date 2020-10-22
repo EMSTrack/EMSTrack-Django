@@ -1,8 +1,10 @@
 import logging
 
+from django.contrib.auth.models import User
+
 from rest_framework import serializers
 
-from .models import UserAmbulancePermission, UserHospitalPermission, Client
+from .models import UserAmbulancePermission, UserHospitalPermission, Client, TokenLogin
 
 from .permissions import get_permissions
 
@@ -50,6 +52,33 @@ class UserProfileSerializer(serializers.Serializer):
 
     def get_hospitals(self, user):
         return HospitalPermissionSerializer(self._permissions.get_permissions('hospitals').values(), many=True).data
+
+
+# TokenLogin serializer
+class TokenLoginSerializer(serializers.ModelSerializer):
+
+    username = serializers.CharField(source='user.username', required=True)
+
+    class Meta:
+        model = TokenLogin
+        fields = ('username', 'token', 'url')
+        read_only_fields = ('token', )
+        write_only_fields = ('username', )
+
+    def create(self, validated_data):
+        """
+        This will create a token
+        """
+        logger.debug(validated_data)
+
+        # get user
+        user = User.objects.get(username=validated_data.get('user').get('username'))
+
+        # create token
+        instance = TokenLogin.objects.create(user=user,
+                                             url=validated_data.get('url', None))
+
+        return instance
 
 
 # Client serializers

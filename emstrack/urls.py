@@ -1,14 +1,14 @@
 from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls import url, include
 from django.contrib import admin
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth import views as auth_views
 
 from rest_framework import routers, permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
-from login.viewsets import ProfileViewSet, ClientViewSet
+from login.decorator import login_required
+from login.viewsets import ProfileViewSet, ClientViewSet, TokenLoginViewSet
 from login.views import PasswordView, SettingsView, VersionView
 
 from ambulance.viewsets import AmbulanceEquipmentItemViewSet, AmbulanceViewSet, \
@@ -92,6 +92,11 @@ router.register(r'client',
                 ClientViewSet,
                 basename='api-client')
 
+router.register(r'user/(?P<username>.+)/tokenlogin',
+                TokenLoginViewSet,
+                basename='api-tokenlogin')
+
+
 urlpatterns = i18n_patterns(*[
 
     # Router API urls
@@ -133,6 +138,12 @@ urlpatterns += i18n_patterns(*[
 
     # report
     url(r'^report/', include('report.urls')),
+
+    # video
+    url(r'^video/', include('video.urls')),
+
+    # guest
+    url(r'^guest/', include('guest.urls')),
 
     # admin
     url(r'^admin/', admin.site.urls),

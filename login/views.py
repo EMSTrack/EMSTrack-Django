@@ -7,6 +7,7 @@ from datetime import timedelta
 from django.conf import settings
 from django.urls import reverse_lazy
 from django.utils.http import is_safe_url
+from django.contrib.auth import authenticate, login
 from tablib import Dataset
 
 from braces.views import CsrfExemptMixin
@@ -21,6 +22,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http.response import HttpResponse, HttpResponseForbidden
 from django.shortcuts import redirect, render
 from django.utils import timezone
+from django.views import View
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import View, TemplateView
 from django.views.generic.detail import BaseDetailView
@@ -51,7 +53,7 @@ from .forms import MQTTAuthenticationForm, AuthenticationForm, SignupForm, \
 from .models import TemporaryPassword, \
     UserAmbulancePermission, UserHospitalPermission, \
     GroupProfile, GroupAmbulancePermission, \
-    GroupHospitalPermission, Client, ClientStatus, UserProfile
+    GroupHospitalPermission, Client, ClientStatus, UserProfile, TokenLogin
 from .permissions import get_permissions
 from .resources import UserResource, GroupResource, GroupAmbulancePermissionResource, GroupHospitalPermissionResource, \
     UserImportResource
@@ -524,7 +526,6 @@ class MQTTAclView(CsrfExemptMixin,
                 #  - settings
                 if (len(topic) == 1 and
                         topic[0] == 'settings'):
-
                     return HttpResponse('OK')
 
                 #  - user/{username}/error
@@ -536,6 +537,16 @@ class MQTTAclView(CsrfExemptMixin,
                     if (topic[2] == 'profile' or
                             topic[2] == 'error'):
                         return HttpResponse('OK')
+
+                #  - user/{username}/client/{client-id}/webrtc/message
+                elif (len(topic) == 6 and
+                        topic[0] == 'user' and
+                        topic[1] == user.username and
+                        topic[2] == 'client' and
+                        topic[3] == clientid and
+                        topic[4] == 'webrtc' and
+                        topic[5] == 'message'):
+                    return HttpResponse('OK')
 
                 #  - hospital/{hospital-id}/data
                 elif (len(topic) == 3 and
@@ -651,7 +662,11 @@ class MQTTAclView(CsrfExemptMixin,
                     #  - user/{username}/client/{client-id}/status
                     if (len(topic) == 5 and
                             (topic[4] == 'error' or topic[4] == 'status')):
+                        return HttpResponse('OK')
 
+                    #  - user/{username}/client/{client-id}/webrtc/message
+                    elif len(topic) == 6 and \
+                            topic[4] == 'webrtc' and topic[5] == 'message':
                         return HttpResponse('OK')
 
                     #  - user/{username}/client/{client-id}/ambulance/{ambulance-id}/data
@@ -723,17 +738,43 @@ class MQTTAclView(CsrfExemptMixin,
         return HttpResponseForbidden()
 
 
+class TokenLoginView(View):
+    """
+    Login with token.
+    """
+
+    def get(self, request, token):
+        """
+        Login user using token
+        """
+
+        try:
+
+            login_token = TokenLogin.objects.get(token=token)
+            logger.debug("login_token: '{}'".format(login_token))
+            if login_token.user is not None:
+                login(request, login_token.user)
+                if login_token.url is not None:
+                    logger.debug("redirecting: '{}'".format(login_token.url))
+                    return redirect(login_token.url)
+                else:
+                    logger.debug("redirecting: 'login:login'")
+                    return redirect('login:login')
+
+        except TokenLogin.DoesNotExist:
+            # TODO: should we inform the user that the token is invalid?
+            logger.warning("Attempt to login with invalid token: '{}'".format(token))
+
+        except Exception as e:
+            logger.error("Token: {}\nException: '{}'".format(token, e))
+
+        return HttpResponseForbidden()
+
+
 class PasswordView(APIView):
     """
     Retrieve password to use with MQTT.
     """
-
-    @staticmethod
-    def generate_password(size=20,
-                          chars=(string.ascii_letters +
-                                 string.digits +
-                                 string.punctuation)):
-        return ''.join(random.choice(chars) for _ in range(size))
 
     def get(self, request, user__username=None):
         """
@@ -751,43 +792,11 @@ class PasswordView(APIView):
         if user.username != user__username:
             raise PermissionDenied()
 
-        try:
-
-            # Retrieve current password
-            pwd = TemporaryPassword.objects.get(user=user.id)
-            password = pwd.password
-            valid_until = pwd.created_on + timedelta(seconds=120)
-
-            # Invalidate password if it is expired
-            if timezone.now() > valid_until:
-                password = None
-
-        except ObjectDoesNotExist:
-
-            pwd = None
-            password = None
-
-        if password is None:
-
-            # Generate password
-            password = self.generate_password()
-
-            if pwd is None:
-
-                # create password
-                pwd = TemporaryPassword(user=user,
-                                        password=password)
-
-            else:
-
-                # update password
-                pwd.password = password
-
-            # save password
-            pwd.save()
+        # get or create password
+        pwd = TemporaryPassword.get_or_create_password(user)
 
         # Return password hash
-        password_hash = make_password(password=password)
+        password_hash = make_password(password=pwd.password)
 
         return Response(password_hash)
 
@@ -816,7 +825,15 @@ class SettingsView(APIView):
 
         # from equipment/models.py
         equipment_type = {m.name: m.value for m in EquipmentType}
-        equipment_type_defaults = {k: v for (k,v) in EquipmentTypeDefaults.items()}
+        equipment_type_defaults = {k: v for (k, v) in EquipmentTypeDefaults.items()}
+
+        # from turn server
+        turn_server = {
+            'ip': settings.TURN_IP,
+            'port': settings.TURN_PORT,
+            'user': settings.TURN_USER,
+            'pass': settings.TURN_PASS
+        }
 
         # assemble all settings
         all_settings = {'ambulance_status': ambulance_status,
@@ -833,6 +850,9 @@ class SettingsView(APIView):
                         'waypoint_status': waypoint_status,
                         'equipment_type': equipment_type,
                         'equipment_type_defaults': equipment_type_defaults,
+                        'guest_username': settings.GUEST['USERNAME'],
+                        'enable_video': settings.ENABLE_VIDEO,
+                        'turn_server': turn_server,
                         'defaults': defaults.copy()}
 
         # serialize defaults.location
