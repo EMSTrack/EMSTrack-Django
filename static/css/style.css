@@ -1,6 +1,8 @@
 /* divs */
 body {
-    background-color: #eeeeee;
+    /*background-color: #eeeeee;
+    */
+    background-color: pink;
 }
 
 .content {
@@ -20,7 +22,7 @@ body {
 
 /* headings */
 h1, h2 {
-    margin-top:15px;
+    margin-top:35px;
     text-align: center;
     font-family: Sans-Serif;
 }
