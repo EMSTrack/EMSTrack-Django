@@ -20,6 +20,7 @@ body {
 
 /* headings */
 h1, h2 {
+    margin-top:15px;
     text-align: center;
     font-family: Sans-Serif;
 }
