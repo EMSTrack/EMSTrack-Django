@@ -12,9 +12,18 @@
             <h2 class = "float-left" >{% trans "Calls" %}</h2>
 
 
-            <button class="btn btn-info float-left" >
-                    <i id="remoteVideoPlayPauseIcon" class="fas fa-question"></i>
+            <button class="btn btn-info float-left ml-1" type = "button" data-toggle = "collapse" data-target="#collapseCallGuide" aria-expanded = "false"
+                aria-controls="collapseExample">
+                    <i class="fas fa-question"></i>
                 </button>
+
+            <div class = "collapse" id = "collapseExample">
+                <div class = "card card-body">
+                    <p>
+                    {% trans "Sample documentation preview for calls go here" %}
+                    </p>
+                </div>
+            </div>
 
         </div>
 
