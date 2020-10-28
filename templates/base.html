@@ -84,6 +84,12 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" href="{% url 'ambulance:call_test' %}">
+                    <span class="fas fa-phone"></span>
+                    {% trans "Calls Test" %}
+                </a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="{% url 'ambulance:list' %}">
                     <span class="fas fa-ambulance"></span>
                     {% trans "Ambulances" %}
