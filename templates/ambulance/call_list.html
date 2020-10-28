@@ -9,21 +9,29 @@
     <div class = "row">
         <div class = "mt-3 col-sm-4">
 
-            <h2 class = "float-left" >{% trans "Calls" %}</h2>
+            <div class = "row">
 
 
-            <button class="btn btn-info float-left ml-1" type = "button" data-toggle = "collapse" data-target="#collapseCallGuide" aria-expanded = "false"
-                aria-controls="collapseExample">
-                    <i class="fas fa-question"></i>
-                </button>
+                <button class="btn btn-danger float-left ml-1" type = "button" data-toggle = "collapse" data-target="#collapseCallGuide" aria-expanded = "false"
+                    aria-controls="collapseExample"> Calls
+                        <i class="fas fa-question"></i>
+                    </button>
 
-            <div class = "collapse" id = "collapseCallGuide">
-                <div class = "card card-body">
-                    <p>
-                    {% trans "Sample documentation preview for calls go here" %}
-                    </p>
-                </div>
             </div>
+
+            <div class = "row">
+
+                <div class = "collapse" id = "collapseCallGuide">
+                    <div class="mt-3 card card-body border border-info">
+                        <p>
+                        {% trans "Sample documentation preview for calls go here.
+                            Sample text, sample documentation preview for calls go here.
+                            sample documentation preview for calls go here. sample documentation preview for calls go here. " %}
+                        </p>
+                    </div>
+                </div>
+
+             </div>
 
         </div>
 
