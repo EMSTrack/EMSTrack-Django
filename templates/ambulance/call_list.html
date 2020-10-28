@@ -54,15 +54,14 @@
                                             data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                         {% trans "Pending" %}
 
-                                        <span class="fa-stack fa-sm">
+                                        <span>
                                             <i class="fas fa-caret down"> </i>
                                         </span>
                                     </button>
                                 </h2>
                             </div>
 
-                            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
-                                 data-parent="#accordionExample">
+                            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne">
                                 <div class="card-body">
                                     {% if pending_list %}
 
@@ -114,12 +113,11 @@
                                     <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
                                             data-target="#collapseTwo" aria-expanded="false"
                                             aria-controls="collapseTwo">
-                                        <h2>{% trans "Started" %}</h2>
+                                        {% trans "Started" %}
                                     </button>
                                 </h2>
                             </div>
-                            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
-                                 data-parent="#accordionExample">
+                            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo">
                                 <div class="card-body">
                                     {% if started_list %}
 
@@ -172,7 +170,7 @@
                                     <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
                                             data-target="#collapseThree" aria-expanded="false"
                                             aria-controls="collapseThree">
-                                        #3
+                                        {% trans "Ended" %}
                                     </button>
                                 </h2>
                             </div>
@@ -180,21 +178,7 @@
                                  data-parent="#accordionExample">
                                 <div class="card-body">
 
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-
-
-                </div>
-            </div>
-
-            <h2>{% trans "Ended" %}</h2>
-
-            {% if ended_list.has_other_pages %}
+                                       {% if ended_list.has_other_pages %}
             <div class="row">
                 <div class="col">
                     {% include "pagination/numbers.html" %}
@@ -262,6 +246,24 @@
                 </div>
             </div>
             {% endif %}
+
+
+
+
+                                    
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+                </div>
+            </div>
+
 
 
         </div>
