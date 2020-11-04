@@ -22,8 +22,7 @@ class HospitalCreateForm(forms.ModelForm):
                   'active',
                   'comment',
                   'location']
-
+        required = ['name']
 
 class HospitalUpdateForm(HospitalCreateForm):
     pass
-
