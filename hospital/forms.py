@@ -10,7 +10,7 @@ from .models import Hospital
 class HospitalCreateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         # first call parent's constructor
-        super(ThatForm, self).__init__(*args, **kwargs)
+        super(HospitalCreateForm, self).__init__(*args, **kwargs)
         # there's a `fields` property now
         self.fields['name'].required = True
 
