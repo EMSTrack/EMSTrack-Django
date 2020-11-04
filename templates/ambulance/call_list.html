@@ -12,23 +12,30 @@
             <div class="row">
 
 
-                <button class="btn btn-danger float-left ml-1" type="button" data-toggle="collapse"
+
+                <div class = "vertical-center">
+                    <button class="float-left btn btn-danger rounded-circle"  data-toggle="collapse"
                         data-target="#collapseCallGuide" aria-expanded="false"
-                        aria-controls="collapseExample"> Calls
-                    <i class="fas fa-question"></i>
-                </button>
+                        aria-controls="collapseExample" ><i class="fa fa-question"></i></button>
+                    </div>
+
+
+
 
             </div>
 
             <div class="row">
 
                 <div class="collapse" id="collapseCallGuide">
-                    <div class="mt-3 card card-body border border-info">
+                    <div class="mt-3 card card-body border border-danger">
 
-                        {% trans "Sample documentation preview for calls go here.
+                        <p>
+                        "Sample documentation preview for calls go here.
                         Sample text, sample documentation preview for calls go here.
                         sample documentation preview for calls go here. sample documentation preview for calls go
-                        here. " %}
+                        here. "
+
+                        </p>
 
                     </div>
                 </div>
@@ -50,12 +57,11 @@
                         <div class="card">
                             <div class="card-header" id="headingOne">
                                 <h2 class="mb-0">
-                                    <button class="btn btn-link" type="button" data-toggle="collapse"
+                                    <button class="btn btn-link text-decoration-none text-dark" type="button" data-toggle="collapse"
                                             data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                        {% trans "Pending" %}
-
+                                      <h4>  {% trans "Pending" %} </h4>
                                         <span>
-                                            <i class="fas fa-caret down"> </i>
+                                            <i class="fas fa-angle-down"> </i>
                                         </span>
                                     </button>
                                 </h2>
@@ -110,10 +116,10 @@
                         <div class="card">
                             <div class="card-header" id="headingTwo">
                                 <h2 class="mb-0">
-                                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                    <button class="btn btn-link collapsed text-decoration-none text-dark " type="button" data-toggle="collapse"
                                             data-target="#collapseTwo" aria-expanded="false"
                                             aria-controls="collapseTwo">
-                                        {% trans "Started" %}
+                                     <h4>  {% trans "Started" %} </h4>
                                     </button>
                                 </h2>
                             </div>
@@ -167,10 +173,10 @@
                         <div class="card">
                             <div class="card-header" id="headingThree">
                                 <h2 class="mb-0">
-                                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                    <button class="btn btn-link collapsed text-decoration-none text-dark" type="button" data-toggle="collapse"
                                             data-target="#collapseThree" aria-expanded="false"
                                             aria-controls="collapseThree">
-                                        {% trans "Ended" %}
+                                      <h4>  {% trans "Ended" %} </h4>
                                     </button>
                                 </h2>
                             </div>
@@ -250,7 +256,7 @@
 
 
 
-                                    
+
 
                                 </div>
                             </div>
