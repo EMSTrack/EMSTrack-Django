@@ -145,15 +145,25 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarAccountDropdown">
                         <a class="dropdown-item" href="{% url 'password_change' %}">{% trans "Change password" %}</a>
+
+                        <a class="dropdown-item" href="/en/auth/logout"> Logout" </a>
+
+
                     </div>
+
+
+
+
                 </li>
                 {% endif %}
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'login:logout' %}">
-                    <span class="fas fa-sign-out-alt"></span>
-                    &nbsp;{% trans "Logout" %} {{ request.user.first_name }}
-                </a>
-            </li>
+
+
+<!--            <li class="nav-item">-->
+<!--                <a class="nav-link" href="{% url 'login:logout' %}">-->
+<!--                    <span class="fas fa-sign-out-alt"></span>-->
+<!--                    &nbsp;{% trans "Logout" %} {{ request.user.first_name }}-->
+<!--                </a>-->
+<!--            </li>-->
             {% else %}
             <!--
             <li class="nav-item">
