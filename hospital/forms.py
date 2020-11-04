@@ -8,6 +8,12 @@ from .models import Hospital
 
 
 class HospitalCreateForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        # first call parent's constructor
+        super(ThatForm, self).__init__(*args, **kwargs)
+        # there's a `fields` property now
+        self.fields['name'].required = True
+
     location = PointField(
         label=_('Location'),
         widget=LeafletPointWidget(attrs={'map_width': 500,
@@ -22,8 +28,6 @@ class HospitalCreateForm(forms.ModelForm):
                   'active',
                   'comment',
                   'location']
-        required = ['name',
-                    'city', 'state', 'country']
 
 class HospitalUpdateForm(HospitalCreateForm):
     pass
