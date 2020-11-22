@@ -8,6 +8,10 @@
 .btn-blue {
  background-color: #A6B7DA;
 }
+
+.btn-blue:hover {
+ background-color: #8293B7;
+ }
 .badge-yellow {
     background-color: #F5E234;
 }
