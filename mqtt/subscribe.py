@@ -91,10 +91,13 @@ class SubscribeClient(BaseClient):
         self.subscribe('user/+/client/+/status', 2)
         self.subscribe('user/+/client/+/ambulance/+/call/+/status', 2)
         self.subscribe('user/+/client/+/ambulance/+/call/+/waypoint/+/data', 2)
+        # TODO subscribe to unsanitized topic
 
         logger.info(">> Listening to MQTT messages...")
 
         return True
+
+    # TODO create callback for sanitizing panic topic 
 
     def send_error_message(self, username, client, topic, payload, error, qos=2):
 

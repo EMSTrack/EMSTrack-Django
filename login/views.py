@@ -596,6 +596,7 @@ class MQTTAclView(CsrfExemptMixin,
 
                 #  - ambulance/{ambulance-id}/data
                 #  - ambulance/{ambulance-id}/call/{call-id}/status
+                # TODO add sanitized subscribe topic ambulance/{ambulance-id}/panic
                 elif (len(topic) >= 3 and
                       topic[0] == 'ambulance'):
 
@@ -608,6 +609,7 @@ class MQTTAclView(CsrfExemptMixin,
                         # perm = user.profile.ambulances.get(ambulance=ambulance_id)
                         can_read = get_permissions(user).check_can_read(ambulance=ambulance_id)
 
+                        # TODO add sanitized subscribe topic ambulance/{ambulance-id}/panic
                         if (can_read and
                                 ((len(topic) == 3 and topic[2] == 'data') or
                                  (len(topic) == 5 and topic[2] == 'call' and topic[4] == 'status'))):
@@ -672,6 +674,7 @@ class MQTTAclView(CsrfExemptMixin,
                     #  - user/{username}/client/{client-id}/ambulance/{ambulance-id}/data
                     #  - user/{username}/client/{client-id}/ambulance/{ambulance-id}/call/{call-id}/status
                     #  - user/{username}/client/{client-id}/ambulance/{ambulance-id}/call/{call-id}/waypoint/{waypoint_id}/data
+                    #  TODO add publish topic user/{username}/client/{client-id}/ambulance/{ambulance-id}/panic
                     elif (topic[4] == 'ambulance' and
                           ((len(topic) == 7 and topic[6] == 'data') or
                            (len(topic) == 9 and topic[6] == 'call' and topic[8] == 'status') or
