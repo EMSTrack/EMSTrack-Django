@@ -81,6 +81,11 @@ class SubscribeClient(BaseClient):
         # ambulance call waypoint handler
         self.client.message_callback_add('user/+/client/+/ambulance/+/call/+/waypoint/+/data',
                                          self.on_call_ambulance_waypoint)
+        
+        # TODO ambulance panic handler
+        self.client.message_callback_add('user/+/client/+/ambulance/+/panic',
+                                         self.on_panic)
+
 
         # subscribe
         self.subscribe('message', 2)
@@ -92,12 +97,11 @@ class SubscribeClient(BaseClient):
         self.subscribe('user/+/client/+/ambulance/+/call/+/status', 2)
         self.subscribe('user/+/client/+/ambulance/+/call/+/waypoint/+/data', 2)
         # TODO subscribe to unsanitized topic
+        self.subscribe('user/+/client/+/ambulance/+/panic', 2)
 
         logger.info(">> Listening to MQTT messages...")
 
         return True
-
-    # TODO create callback for sanitizing panic topic 
 
     def send_error_message(self, username, client, topic, payload, error, qos=2):
 
@@ -235,7 +239,24 @@ class SubscribeClient(BaseClient):
                                     "Invalid topic")
             raise ParseException('Invalid topic {}'.format(msg.topic))
 
-    # Update ambulance
+    # TODO create callback for sanitizing panic topic 
+    def on_panic(self, clnt, userdata, msg):
+        try:
+
+            logger.debug("on_panic: msg = '{}'".format(msg.topic, msg.payload))
+
+            # parse topic
+            user, client, data, ambulance_id = self.parse_topic(msg, 4)
+
+        except Exception as e:
+
+            logger.debug("on_ambulance: ParseException '{}'".format(e))
+            return
+        
+        # topic ambulance/{ambulance-id}/panic
+        topic = 'ambulance/{}/panic'.format(ambulance_id)
+        clnt.publish(topic, msg.payload)
+ 
 
     def on_ambulance(self, clnt, userdata, msg):
 

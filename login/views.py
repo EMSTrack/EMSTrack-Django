@@ -612,6 +612,7 @@ class MQTTAclView(CsrfExemptMixin,
                         # TODO add sanitized subscribe topic ambulance/{ambulance-id}/panic
                         if (can_read and
                                 ((len(topic) == 3 and topic[2] == 'data') or
+                                 (len(topic) == 3 and topic[2] == 'panic') or
                                  (len(topic) == 5 and topic[2] == 'call' and topic[4] == 'status'))):
                             return HttpResponse('OK')
 
@@ -677,6 +678,7 @@ class MQTTAclView(CsrfExemptMixin,
                     #  TODO add publish topic user/{username}/client/{client-id}/ambulance/{ambulance-id}/panic
                     elif (topic[4] == 'ambulance' and
                           ((len(topic) == 7 and topic[6] == 'data') or
+                           (len(topic) == 7 and topic[6] == 'panic') or
                            (len(topic) == 9 and topic[6] == 'call' and topic[8] == 'status') or
                            (len(topic) == 11 and
                             topic[6] == 'call' and topic[8] == 'waypoint' and topic[10] == 'data'))):
