@@ -1,7 +1,10 @@
 import json
 
 from django.conf import settings
+from django.test import Client as DjangoClient
 from mqtt.tests.client import TestMQTT, MQTTTestCase, MQTTTestSubscribeClient as SubscribeClient, MQTTTestClient
+
+from login.models import ClientStatus, Client
 
 '''
     High-level idea:
@@ -42,6 +45,30 @@ class TestPanicPublish(TestMQTT, MQTTTestCase):
                                      debug=True)
         self.is_connected(test_client)
 
+        # start django client
+        django_client = DjangoClient()
+
+        # login as admin
+        django_client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
+
+        # handshake ambulance and hospital
+        response = django_client.post('/en/api/client/',
+                                      content_type='application/json',
+                                      data=json.dumps({
+                                          'client_id': client_id,
+                                          'status': ClientStatus.O.name,
+                                          'ambulance': self.a1.id,
+                                          'hospital': self.h1.id
+                                      }),
+                                      follow=True)
+        self.assertEqual(response.status_code, 201)
+
+        # check record
+        clnt = Client.objects.get(client_id=client_id)
+        self.assertEqual(clnt.status, ClientStatus.O.name)
+        self.assertEqual(clnt.ambulance, self.a1)
+        self.assertEqual(clnt.hospital, self.h1)
+
         # subscribe to ambulance/+/panic
         test_client.expect('ambulance/{}/panic'.format(self.a1.id))
         self.is_subscribed(test_client)
@@ -56,3 +83,20 @@ class TestPanicPublish(TestMQTT, MQTTTestCase):
 
         # process messages
         self.loop(test_client, subscribe_client)
+
+        # Client handshake
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), ClientStatus.F.name)
+
+        # process messages
+        self.loop(test_client, subscribe_client)
+
+        # check record
+        clnt = Client.objects.get(client_id=client_id)
+        self.assertEqual(clnt.status, ClientStatus.F.name)
+        self.assertEqual(clnt.ambulance, None)
+        self.assertEqual(clnt.hospital, None)
+
+        # wait for disconnect
+        test_client.wait()
+        subscribe_client.wait()
+        django_client.logout()

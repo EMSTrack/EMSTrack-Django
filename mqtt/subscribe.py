@@ -250,7 +250,7 @@ class SubscribeClient(BaseClient):
 
         except Exception as e:
 
-            logger.debug("on_ambulance: ParseException '{}'".format(e))
+            logger.debug("on_panic: ParseException '{}'".format(e))
             return
         
         # topic ambulance/{ambulance-id}/panic
