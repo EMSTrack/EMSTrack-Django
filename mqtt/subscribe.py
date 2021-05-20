@@ -255,7 +255,7 @@ class SubscribeClient(BaseClient):
         
         # topic ambulance/{ambulance-id}/panic
         topic = 'ambulance/{}/panic'.format(ambulance_id)
-        clnt.publish(topic, msg.payload)
+        self.publish(topic, msg.payload, qos=2)
  
 
     def on_ambulance(self, clnt, userdata, msg):
