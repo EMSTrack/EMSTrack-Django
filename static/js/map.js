@@ -220,6 +220,10 @@ function init( client ) {
             logger.log('info', 'Signing up for ambulance updates');
             apiClient.observe('ambulance/+/data', (message) => { updateAmbulance(message.payload) } );
 
+            // signup for ambulance updates
+            logger.log('info', 'Signing up for ambulance panics');
+            apiClient.observe('ambulance/+/panic', (message) => { updateAmbulance(message.payload) } ); // add handler
+
             // signup for ambulance call status updates
             logger.log('info', 'Signing up for ambulance call status updates');
             apiClient.observe('ambulance/+/call/+/status', (message) => {

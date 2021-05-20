@@ -32,6 +32,7 @@ export class AppClient extends TopicObserver {
         this.calls = undefined;
 
         // observer methods
+        this.panicAmbulance = (message) => { this._panicAmbulance(message) };
         this.updateAmbulance = (message) => { this._updateAmbulance(message) };
         this.updateHospital = (message) => { this._updateHospital(message) };
         this.updateCall = (message) => { this._updateCall(message) };
@@ -170,6 +171,7 @@ export class AppClient extends TopicObserver {
                         this.updateAmbulance);
                     this._subscribe('ambulance/' + ambulance.id + '/call/+/status',
                         this.updateAmbulanceCallStatus);
+                    this._subscribe('ambulance/' + ambulance.id + '/panic', this.panicAmbulance);
                     
                 });
 
@@ -405,6 +407,10 @@ export class AppClient extends TopicObserver {
     _updateAmbulance(message) {
         const ambulance = message.payload;
         this.ambulances[ambulance.id] = ambulance;
+    }
+
+    _panicAmbulance(message) {
+        // add state to ambulance
     }
 
     _updateHospital(message) {
