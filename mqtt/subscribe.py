@@ -257,7 +257,7 @@ class SubscribeClient(BaseClient):
         # topic ambulance/{ambulance-id}/panic
         topic = 'ambulance/{}/panic'.format(ambulance_id)
 
-        data.update({'user': user, 'client': client})
+        data.update({'user': user.username, 'client': client.client_id})
 
         self.publish(topic, json.dumps(data), qos=2)
  
