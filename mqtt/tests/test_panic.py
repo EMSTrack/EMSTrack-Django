@@ -72,7 +72,7 @@ class TestPanicPublish(TestMQTT, MQTTTestCase):
         # payload 
         payload = {
             'location': 'xyz',
-            'status': 'yell', # yell, hear 
+            'status': 'alert', # alert, acknowledge 
             'id': 'ambulance 1',
         }    
         json_payload = json.dumps(payload)

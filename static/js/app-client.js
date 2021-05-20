@@ -410,7 +410,7 @@ export class AppClient extends TopicObserver {
     }
 
     _panicAmbulance(message) {
-        // add state to ambulance
+        logger.log('debug', "panic received on topic '%s' with message '%s'", message.topic, message.payload);
     }
 
     _updateHospital(message) {
