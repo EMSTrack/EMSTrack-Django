@@ -68,18 +68,26 @@ class TestPanicPublish(TestMQTT, MQTTTestCase):
         self.assertEqual(clnt.status, ClientStatus.O.name)
         self.assertEqual(clnt.ambulance, self.a1)
         self.assertEqual(clnt.hospital, self.h1)
+        
+        # payload 
+        payload = {
+            'location': 'xyz',
+            'status': 'yell', # yell, hear 
+            'id': 'ambulance 1',
+        }    
+        json_payload = json.dumps(payload)
+
+        # expected message
+        payload.update({'user': self.u1.username, 'client': client_id})
+        expected_payload = json.dumps(payload)
 
         # subscribe to ambulance/+/panic
-        test_client.expect('ambulance/{}/panic'.format(self.a1.id))
+        test_client.expect('ambulance/{}/panic'.format(self.a1.id), expected_payload)
         self.is_subscribed(test_client)
 
         # Publish panic message
         publish_topic = 'user/{}/client/{}/ambulance/{}/panic'.format(self.u1.username, client_id, self.a1.id)
-        publish_payload = json.dumps({
-            'location': 'xyz',
-            'id': 'ambulance 1',
-        })
-        test_client.publish(publish_topic, publish_payload, qos=0)
+        test_client.publish(publish_topic, json_payload, qos=0)
 
         # process messages
         self.loop(test_client, subscribe_client)

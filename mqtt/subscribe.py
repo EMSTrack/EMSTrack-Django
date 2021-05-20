@@ -1,4 +1,5 @@
 import logging
+import json
 from io import BytesIO
 
 from django.contrib.auth.models import User
@@ -192,7 +193,7 @@ class SubscribeClient(BaseClient):
 
             else:
 
-                # create new client
+              # create new client
                 client = Client(client_id=values[3], user=user)
 
         if json:
@@ -255,7 +256,10 @@ class SubscribeClient(BaseClient):
         
         # topic ambulance/{ambulance-id}/panic
         topic = 'ambulance/{}/panic'.format(ambulance_id)
-        self.publish(topic, msg.payload, qos=2)
+
+        data.update({'user': user, 'client': client})
+
+        self.publish(topic, json.dumps(data), qos=2)
  
 
     def on_ambulance(self, clnt, userdata, msg):
