@@ -220,10 +220,6 @@ function init( client ) {
             logger.log('info', 'Signing up for ambulance updates');
             apiClient.observe('ambulance/+/data', (message) => { updateAmbulance(message.payload) } );
 
-            // signup for ambulance updates
-            logger.log('info', 'Signing up for ambulance panics');
-            apiClient.observe('ambulance/+/panic', (message) => { panicAmbulance(message.payload) } );
-
             // signup for ambulance call status updates
             logger.log('info', 'Signing up for ambulance call status updates');
             apiClient.observe('ambulance/+/call/+/status', (message) => {
@@ -349,15 +345,6 @@ function setupLocations(locations, type) {
         addLocationToMap(entry[1]);
     });
 
-}
-
-function panicAmbulance(payload) {
-       // display video modal
-       $('#panicModalWindow').modal({
-        backdrop: 'static',
-        keyboard: false,
-        show: true
-    });
 }
 
 function updateAmbulance(ambulance) {

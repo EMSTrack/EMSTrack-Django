@@ -1,5 +1,8 @@
 add_init_function(init);
 
+// TODO track multiple panics 
+let panics = []
+
 function init(client) {
     // set apiClient
     apiClient = client;
@@ -9,5 +12,12 @@ function init(client) {
 }
 
 function handlePanic(ambulance) {
-    // TODO
+    console.log('test');
+
+    // display video modal
+    $('#panicModalWindow').modal({
+        backdrop: 'static',
+        keyboard: false,
+        show: true
+    });
 }
