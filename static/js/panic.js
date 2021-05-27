@@ -1,7 +1,7 @@
 add_init_function(init);
 
 // TODO track multiple panics 
-let panics = []
+let panics = [];
 
 function init(client) {
     // set apiClient
@@ -19,5 +19,6 @@ function handlePanic(ambulance) {
         backdrop: 'static',
         keyboard: false,
         show: true
-    });
+    });  
+
 }
