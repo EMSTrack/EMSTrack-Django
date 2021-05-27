@@ -285,6 +285,10 @@ WEBPACK_LOADER = {
         'BUNDLE_DIR_NAME': 'bundles/video/',
         'STATS_FILE': os.path.join(BASE_DIR, 'webpack/video-stats.json'),
     },
+    'PANIC': {
+        'BUNDLE_DIR_NAME': 'bundles/panic/',
+        'STATS_FILE': os.path.join(BASE_DIR, 'webpack/panic-stats.json'),
+    },
 }
 
 # Import-export settings
