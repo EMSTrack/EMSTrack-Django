@@ -16,7 +16,9 @@ function init(client) {
 }
 
 $(function () {
-    // TODO define click behavior of button  
+    $('#confirm-panic').click(() => {
+        // TODO publish panic received message
+    }); 
 
     $('#videoPanicWindow').on('hide.bs.modal', function (e) {
         isDisplayed = false; 
@@ -40,10 +42,10 @@ function promptPanic() {
     // TODO add map with ambulance highlighted
     $('#panicModalBody').append(
         `<div class="row">
-            <div class="col-7">
+            <div class="col-8">
                 <h2>Ambulance: ${message.ambulance}</h2>
                 <h2>Call Identifier: ${message.call}</h2>
-                <h2>Location Last Updated: ${message.time}</h2>
+                <h2>Location: ${message.time}</h2>
             </div>
             <div class="col">
                 <img class="sample-img" src="https://www.google.com/maps/d/u/0/thumbnail?mid=19H5OPnebQva3tPbEXOu1MgfSwKc" alt="MAP GOES HERE">
