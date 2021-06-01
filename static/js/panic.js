@@ -16,15 +16,15 @@ function init(client) {
 
     // display panic modal
     isDisplayed = true;
+}
+
+$(function () {
+    // TODO define click behavior of button 
     $('#panicModalWindow').modal({
         backdrop: 'static',
         keyboard: false,
         show: true
     });  
-}
-
-$(function () {
-    // TODO define click behavior of button 
 
     $('#videoPanicWindow').on('hide.bs.modal', function (e) {
         isDisplayed = false; 
