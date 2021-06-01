@@ -71,9 +71,12 @@ class TestPanicPublish(TestMQTT, MQTTTestCase):
         
         # payload 
         payload = {
-            'location': 'xyz',
-            'type': 'alert', # alert, acknowledge 
-            'id': 'ambulance 1',
+            'location': 'xyz', # coordinates
+            'time': '5PM',
+            'call': '5', # call identifier
+            'type': 'alert', # alert, acknowledge ,
+            'ambulance': '6' # ambulance id
+            # client id, and user id get appended by subscribe client
         }    
         json_payload = json.dumps(payload)
 

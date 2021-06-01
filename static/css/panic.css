@@ -1,0 +1,15 @@
+.panic-button {
+    background: rgb(221, 50, 50);
+    color: black;
+    padding: 5px 35px 5px 35px;
+    border-radius: 10px;
+}
+.panic-button:hover {
+    background-color: green;
+    color: black;
+    content: "Confirmed";
+}
+.panic-button:focus {
+    background-color: green;
+    color: black;
+}    

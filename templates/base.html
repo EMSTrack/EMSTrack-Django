@@ -21,6 +21,8 @@
     <link rel="stylesheet" href="{% static 'css/btn-yellow.css' %}">
     <link rel="stylesheet" href="{% static 'css/btn-outline-yellow.css' %}">
     <link rel="stylesheet" href="{% static 'css/video-styling.css' %}">
+    <link rel="stylesheet" href="{% static 'css/panic.css' %}">
+
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
@@ -216,20 +218,9 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col">
-                        <h2>Ambulance #:</h2>
-                        <h2>Call Identifier:</h2>
-                        <h2>Location Last Updated:</h2>
-                    </div>
-                    <div class="col">
-                        <img src="./panic.png" alt="MAP GOES HERE">
-                    </div>
-                </div>
-            </div>
+            <div class="modal-body" id="panicModalBody"></div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Confirm Panic Message</button>
+                <button type="button" class="panic-button" data-dismiss="modal">Confirm Panic Message</button>
             </div>
 
         </div>
