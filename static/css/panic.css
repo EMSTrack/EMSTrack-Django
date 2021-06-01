@@ -13,3 +13,8 @@
     background-color: green;
     color: black;
 }    
+
+.sample-img {
+    max-width: 100%;
+    height: auto;
+}

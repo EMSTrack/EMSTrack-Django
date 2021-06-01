@@ -40,13 +40,13 @@ function promptPanic() {
     // TODO add map with ambulance highlighted
     $('#panicModalBody').append(
         `<div class="row">
-            <div class="col">
+            <div class="col-7">
                 <h2>Ambulance: ${message.ambulance}</h2>
                 <h2>Call Identifier: ${message.call}</h2>
                 <h2>Location Last Updated: ${message.time}</h2>
             </div>
             <div class="col">
-                <img src="https://www.google.com/maps/d/u/0/thumbnail?mid=19H5OPnebQva3tPbEXOu1MgfSwKc" alt="MAP GOES HERE">
+                <img class="sample-img" src="https://www.google.com/maps/d/u/0/thumbnail?mid=19H5OPnebQva3tPbEXOu1MgfSwKc" alt="MAP GOES HERE">
             </div>
         </div>`
     );
