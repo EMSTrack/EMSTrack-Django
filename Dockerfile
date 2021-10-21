@@ -10,12 +10,11 @@ RUN set -x && \
     apt-get install -y apt-utils && \
     apt-get install -y dumb-init git gettext \
             gdal-bin libgdal-dev python3-gdal \
-            postgresql-client mosquitto-clients && \
-    apt-get install -y nodejs npm
+            postgresql-client mosquitto-clients
 
 # Install node
-# RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
-#    apt-get install -y nodejs npm
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
+    apt-get install -y nodejs
 
 # Build variables
 ARG BUILD_APP_HOME=/app
