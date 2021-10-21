@@ -1,7 +1,7 @@
 django==3.0.6
 django-braces
 environs
-psycopg2-binary
+psycopg2-binary==2.8.6
 djangorestframework==3.10.3
 markdown
 django-filter
