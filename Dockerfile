@@ -13,8 +13,8 @@ RUN set -x && \
             postgresql-client mosquitto-clients
 
 # Install node
-RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
-    apt-get install -y nodejs
+# RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
+    apt-get install -y nodejs npm
 
 # Build variables
 ARG BUILD_APP_HOME=/app
