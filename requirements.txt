@@ -1,11 +1,11 @@
-django
+django==3.0.6
 django-braces
 environs
-psycopg2-binary
-djangorestframework
+psycopg2-binary==2.8.6
+djangorestframework==3.10.3
 markdown
 django-filter
-drf-yasg
+drf-yasg==1.17.1
 django-extra-fields
 django-extra-views
 django-import-export

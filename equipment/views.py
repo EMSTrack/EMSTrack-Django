@@ -5,7 +5,7 @@ from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, TemplateView, FormView
 from django.utils.translation import ugettext_lazy as _
 
-from extra_views import InlineFormSet, UpdateWithInlinesView, CreateWithInlinesView
+from extra_views import InlineFormSetView, UpdateWithInlinesView, CreateWithInlinesView
 
 from emstrack.mixins import SuccessMessageWithInlinesMixin, UpdatedByWithInlinesMixin, BasePermissionMixin, \
     UpdatedByMixin, PaginationViewMixin, ExportModelMixin, ImportModelMixin, ProcessImportModelMixin
@@ -15,26 +15,26 @@ from equipment.resources import EquipmentSetResource, EquipmentResource
 from .models import EquipmentItem, Equipment, EquipmentHolder, EquipmentSet, EquipmentSetItem
 
 
-class EquipmentItemInline(InlineFormSet):
+class EquipmentItemInline(InlineFormSetView):
     model = EquipmentItem
     form_class = EquipmentItemForm
     factory_kwargs = {'extra': 0, 'can_delete': False}
 
 
-class EquipmentSetCreateInline(InlineFormSet):
+class EquipmentSetCreateInline(InlineFormSetView):
     model = EquipmentSetItem
     form_class = EquipmentSetItemForm
     factory_kwargs = {'extra': 1, 'can_delete': False}
     # formset_kwargs = {'form_kwargs': {'label_suffix': ''}}
 
 
-class EquipmentSetUpdateInline(InlineFormSet):
+class EquipmentSetUpdateInline(InlineFormSetView):
     model = EquipmentSetItem
     form_class = EquipmentSetItemForm
     factory_kwargs = {'extra': 0, 'can_delete': True}
 
 
-class EquipmentHolderInline(InlineFormSet):
+class EquipmentHolderInline(InlineFormSetView):
     model = EquipmentHolder
     form_class = EquipmentHolderUpdateForm
     factory_kwargs = {

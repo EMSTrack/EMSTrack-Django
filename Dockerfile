@@ -6,14 +6,14 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 # Install dependencies
 RUN set -x && \
-    apt-get update -y && \
+    apt-get --allow-releaseinfo-change update -y && \
     apt-get install -y apt-utils && \
     apt-get install -y dumb-init git gettext \
             gdal-bin libgdal-dev python3-gdal \
             postgresql-client mosquitto-clients
 
 # Install node
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
+RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
     apt-get install -y nodejs
 
 # Build variables
