@@ -10,7 +10,7 @@ RUN set -x && \
     apt-get install -y apt-utils && \
     apt-get install -y dumb-init git gettext \
             gdal-bin libgdal-dev python3-gdal \
-            postgresql-client mosquitto-clients \
+            postgresql-client mosquitto-clients && \
     apt-get install -y nodejs npm
 
 # Install node
