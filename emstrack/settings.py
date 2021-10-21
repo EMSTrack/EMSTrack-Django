@@ -256,42 +256,34 @@ WEBPACK_LOADER = {
     'BASE': {
         'BUNDLE_DIR_NAME': 'bundles/base/',
         'STATS_FILE': os.path.join(BASE_DIR, 'webpack/base-stats.json'),
-        'LOADER_CLASS': 'emstrack.webpack.CustomWebpackLoader',
     },
     'MAP': {
         'BUNDLE_DIR_NAME': 'bundles/map/',
         'STATS_FILE': os.path.join(BASE_DIR, 'webpack/map-stats.json'),
-        'LOADER_CLASS': 'emstrack.webpack.CustomWebpackLoader',
     },
     'AMBULANCE': {
         'BUNDLE_DIR_NAME': 'bundles/ambulance/',
         'STATS_FILE': os.path.join(BASE_DIR, 'webpack/ambulance-stats.json'),
-        'LOADER_CLASS': 'emstrack.webpack.CustomWebpackLoader',
     },
     'POINT_WIDGET': {
         'BUNDLE_DIR_NAME': 'bundles/point-widget/',
         'STATS_FILE': os.path.join(BASE_DIR, 'webpack/point-widget-stats.json'),
-        'LOADER_CLASS': 'emstrack.webpack.CustomWebpackLoader',
     },
     'CALL': {
         'BUNDLE_DIR_NAME': 'bundles/call/',
         'STATS_FILE': os.path.join(BASE_DIR, 'webpack/call-stats.json'),
-        'LOADER_CLASS': 'emstrack.webpack.CustomWebpackLoader',
     },
     'REPORT_VEHICLE_MILEAGE': {
         'BUNDLE_DIR_NAME': 'bundles/report-vehicle-mileage/',
         'STATS_FILE': os.path.join(BASE_DIR, 'webpack/report-vehicle-mileage-stats.json'),
-        'LOADER_CLASS': 'emstrack.webpack.CustomWebpackLoader',
     },
     'REPORT_VEHICLE_STATUS': {
         'BUNDLE_DIR_NAME': 'bundles/report-vehicle-activity/',
         'STATS_FILE': os.path.join(BASE_DIR, 'webpack/report-vehicle-activity-stats.json'),
-        'LOADER_CLASS': 'emstrack.webpack.CustomWebpackLoader',
     },
     'VIDEO': {
         'BUNDLE_DIR_NAME': 'bundles/video/',
         'STATS_FILE': os.path.join(BASE_DIR, 'webpack/video-stats.json'),
-        'LOADER_CLASS': 'emstrack.webpack.CustomWebpackLoader',
     },
 }
 
