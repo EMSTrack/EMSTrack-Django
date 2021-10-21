@@ -253,7 +253,9 @@ TURN_PASS = env.str('TURN_PASS')
 
 # Webpack Loader
 WEBPACK_LOADER = {
-    'LOADER_CLASS': 'emstrack.webpack.CustomWebpackLoader',
+    'DEFAULT': {
+        'LOADER_CLASS': 'emstrack.webpack.CustomWebpackLoader',
+    },
     'BASE': {
         'BUNDLE_DIR_NAME': 'bundles/base/',
         'STATS_FILE': os.path.join(BASE_DIR, 'webpack/base-stats.json'),
