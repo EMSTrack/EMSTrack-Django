@@ -253,53 +253,38 @@ TURN_PASS = env.str('TURN_PASS')
 
 # Webpack Loader
 WEBPACK_LOADER = {
+    'LOADER_CLASS': 'emstrack.webpack.CustomWebpackLoader',
     'BASE': {
         'BUNDLE_DIR_NAME': 'bundles/base/',
         'STATS_FILE': os.path.join(BASE_DIR, 'webpack/base-stats.json'),
-        'POLL_INTERVAL': 0.1,
-        'IGNORE': [r'.+\.hot-update.js', r'.+\.map'],
     },
     'MAP': {
         'BUNDLE_DIR_NAME': 'bundles/map/',
         'STATS_FILE': os.path.join(BASE_DIR, 'webpack/map-stats.json'),
-        'POLL_INTERVAL': 0.1,
-        'IGNORE': [r'.+\.hot-update.js', r'.+\.map'],
     },
     'AMBULANCE': {
         'BUNDLE_DIR_NAME': 'bundles/ambulance/',
         'STATS_FILE': os.path.join(BASE_DIR, 'webpack/ambulance-stats.json'),
-        'POLL_INTERVAL': 0.1,
-        'IGNORE': [r'.+\.hot-update.js', r'.+\.map'],
     },
     'POINT_WIDGET': {
         'BUNDLE_DIR_NAME': 'bundles/point-widget/',
         'STATS_FILE': os.path.join(BASE_DIR, 'webpack/point-widget-stats.json'),
-        'POLL_INTERVAL': 0.1,
-        'IGNORE': [r'.+\.hot-update.js', r'.+\.map'],
     },
     'CALL': {
         'BUNDLE_DIR_NAME': 'bundles/call/',
         'STATS_FILE': os.path.join(BASE_DIR, 'webpack/call-stats.json'),
-        'POLL_INTERVAL': 0.1,
-        'IGNORE': [r'.+\.hot-update.js', r'.+\.map'],
     },
     'REPORT_VEHICLE_MILEAGE': {
         'BUNDLE_DIR_NAME': 'bundles/report-vehicle-mileage/',
         'STATS_FILE': os.path.join(BASE_DIR, 'webpack/report-vehicle-mileage-stats.json'),
-        'POLL_INTERVAL': 0.1,
-        'IGNORE': [r'.+\.hot-update.js', r'.+\.map'],
     },
     'REPORT_VEHICLE_STATUS': {
         'BUNDLE_DIR_NAME': 'bundles/report-vehicle-activity/',
         'STATS_FILE': os.path.join(BASE_DIR, 'webpack/report-vehicle-activity-stats.json'),
-        'POLL_INTERVAL': 0.1,
-        'IGNORE': [r'.+\.hot-update.js', r'.+\.map'],
     },
     'VIDEO': {
         'BUNDLE_DIR_NAME': 'bundles/video/',
         'STATS_FILE': os.path.join(BASE_DIR, 'webpack/video-stats.json'),
-        'POLL_INTERVAL': 0.1,
-        'IGNORE': [r'.+\.hot-update.js', r'.+\.map'],
     },
 }
 
