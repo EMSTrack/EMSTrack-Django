@@ -375,7 +375,8 @@
 	}
 
 	function unSelectBtn(btnId) {
-		// set btn style to light
+        // set btn style to light
+        alert(btnId);
 		document.getElementById(btnId).className = "lhs-tab-button d-flex align-items-center justify-content-center";
 		// let the corresponding content box invisible
 		const tabContentId = tabContentMap.get(btnId);
