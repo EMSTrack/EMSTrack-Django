@@ -1,0 +1,96 @@
+button:focus {
+	outline: none;
+}
+
+
+/* .tab-selector {
+	height: 3.8rem;
+	display: flex;
+	justify-content: flex-start;
+	background-color: #e9ecef;
+}*/
+
+.tab-content {
+    height: 400px;
+    margin: 20px;
+	border: solid;
+	background-color: #555;
+}
+
+.sidebar {
+	width: 300px; 
+	height: 100vh; 
+	position: fixed; 
+	top: 0; 
+	left: -305px;
+	z-index: 999; 
+	background: white; 
+	color: #fff; 
+	transition: all .3s; 
+	box-shadow: 3px 3px 3px rgba(51, 51, 51, 0.5);
+}
+
+.sidebar.active { left: 0; }
+
+
+.lhs-tab-button {
+	background-color: #e9ecef;
+	border: 0px transparent;
+	padding: .375rem .75rem;
+	font-size: 1rem;
+	line-height: 3;
+	cursor: pointer;
+	transition: all .3s;
+	text-align: center;
+
+	/* hacky way of getting rid of gaps between buttons */
+	margin: 0;
+}
+
+
+.lhs-tab-button:hover {
+	background-color:rgba(64, 139, 249, 0.08);
+	color: #408bf9;
+}
+
+
+.btn-selected {
+	border-style: solid transparent transparent transparent;
+	border-width: 4px 0 0 0;
+	border-color: #408bf9;
+	color: #408bf9;
+	background-color: white;
+	padding: .375rem .75rem;
+	font-size: 1rem;
+	line-height: 5;
+	text-align: center;
+	margin: 0;
+}
+
+
+.dismiss {
+	margin-left: auto;
+}
+
+.dismiss:hover {
+	color: #408bf9;
+	background-color:rgba(64, 139, 249, 0.08);
+	border-radius: 30px 0 0 30px;
+}
+
+#ambulance-tab-button, #settings-tab-button, #calls-tab-button {
+	flex: 1;
+}
+
+.tab-btn-icon {
+	font-size: 25px;
+}
+
+
+.open-menu { 
+	position: fixed; 
+	top: calc(50% - 24px); 
+	left: 10px; 
+	z-index: 997; 
+	box-shadow: 3px 3px 3px rgba(51, 51, 51, 0.2);
+}

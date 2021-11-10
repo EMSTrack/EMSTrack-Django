@@ -5,7 +5,7 @@
 
 {% block content %}
 
-    <nav class="navbar navbar-light"
+    <!-- <nav class="navbar navbar-light"
          id="map-navbar">
 
         <button class="navbar-toggler mr-auto" type="button"
@@ -22,13 +22,31 @@
             <span class="navbar-toggler-icon"></span>
         </button>
 
-    </nav>
+    </nav> -->
 
     <div class="row mx-1">
 
         <!-- Filter -->
         <div class="col-md-3 border-top border-secondary collapse bg-light"
              id="filtersDiv">
+            
+            <div class="d-flex justify-content-start" style="height: 3.8rem; background-color: #e9ecef;">
+                <!-- ambulance/settings/calls button -->
+                    <button type="button" class="btn-selected d-flex align-items-center justify-content-center" id="ambulance-tab-button">
+                        <i class="fas fa-ambulance center tab-btn-icon" onclick="toggleSelectionByIcon(this.parentNode.id)"></i>
+                    </button>
+                    <button type="button" class="lhs-tab-button d-flex align-items-center justify-content-center" id="settings-tab-button">
+                        <i class="fas fa-cog center tab-btn-icon" onclick="toggleSelectionByIcon(this.parentNode.id)"></i>
+                    </button>
+                    <button type="button" class="lhs-tab-button d-flex align-items-center justify-content-center" id="calls-tab-button">
+                        <i class="fas fa-phone center tab-btn-icon" onclick="toggleSelectionByIcon(this.parentNode.id)"></i>
+                    </button>
+                
+                <!-- exit button -->
+                <button type="button" class="lhs-tab-button d-flex align-items-center justify-content-center dismiss" id="return-tab-button">
+                    <i class="fas fa-angle-left tab-btn-icon"></i>
+                </button>						
+            </div>
 
             <!-- Ambulance Online Filter -->
             <h5 class="mt-2"
