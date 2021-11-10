@@ -61,7 +61,9 @@
             <!-- <div class="collapse show"
                  id="ambulance-status">
             </div> -->
-            <div class="ambulance-tab-content" id="ambulance-status"></div>
+            <div class="ambulance-tab-content">
+                <div id="ambulance-status"></div>
+            </div>
 
             <!-- Settings Filters (including the following filters, by default hidden, since not selected yet) -->
             <!-- 1. Ambulance Online Filter -->
@@ -77,51 +79,54 @@
             <div class="collapse"
                  id="ambulance-online-status">
             </div> -->
-            <h5 class="mt-2"
-                aria-expanded="true">
-                <span class="fas fa-mobile-alt"></span>
-                {% trans "Service" %}
-            </h5>
-            <div class="settings-tab-content d-none" id="ambulance-online-status"></div>
+            <div class="settings-tab-content d-none">
+                <h5 class="mt-2"
+                    aria-expanded="true">
+                    <span class="fas fa-mobile-alt"></span>
+                    {% trans "Service" %}
+                </h5>
+                <div id="ambulance-online-status"></div>
             
-            <!-- 2. Capability Filter -->
-            <!-- <h5 class="mt-2"
+                <!-- 2. Capability Filter -->
+                <!-- <h5 class="mt-2"
                 style="cursor: pointer;"
                 data-toggle="collapse"
                 data-target="#ambulance-capability"
                 aria-expanded="true" aria-controls="ambulance-capability">
                 <span class="fas fa-bed"></span>
                 {% trans "Capability" %}
-            </h5>
-            <div class="collapse ml-1"
-                 id="ambulance-capability">
-            </div> -->
-            <h5 class="mt-2"
-                aria-expanded="true">
-                <span class="fas fa-bed"></span>
-                {% trans "Capability" %}
-            </h5>
-            <div class="settings-tab-content d-none" id="ambulance-capability"></div>
+                </h5>
+                <div class="collapse ml-1"
+                    id="ambulance-capability">
+                </div> -->
+           
+                <h5 class="mt-2"
+                    aria-expanded="true">
+                    <span class="fas fa-bed"></span>
+                    {% trans "Capability" %}
+                </h5>
+                <div id="ambulance-capability"></div>
 
-            <!-- 3. Location Filter -->
-            <!-- <h5 class="mt-2"
+
+                <!-- 3. Location Filter -->
+                <!-- <h5 class="mt-2"
                 style="cursor: pointer;"
                 data-toggle="collapse"
                 data-target="#location-type"
                 aria-expanded="true" aria-controls="location-type">
                 <span class="fas fa-map-marker"></span>
                 {% trans "Locations" %}
-            </h5>
-            <div class="collapse ml-1"
-                 id="location-type">
-            </div> -->
-            <h5 class="mt-2"
-                aria-expanded="true">
-                <span class="fas fa-map-marker"></span>
-                {% trans "Locations" %}
-            </h5>
-            <div class="settings-tab-content d-none" id="location-type"></div>
-
+                </h5>
+                <div class="collapse ml-1"
+                    id="location-type">
+                </div> -->
+                <h5 class="mt-2"
+                    aria-expanded="true">
+                    <span class="fas fa-map-marker"></span>
+                    {% trans "Locations" %}
+                </h5>
+                <div id="location-type"></div>
+            </div>
 
             <!-- Calls Filter -->               <!-- TODO: not yet implemented!! -->
             <div class="calls-tab-content d-none" id="TODO"></div>
