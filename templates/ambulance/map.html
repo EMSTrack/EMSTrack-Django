@@ -120,7 +120,7 @@
         </div>
 
         <!-- Dispatching -->
-        <div class="col-md-3 border-top border-secondary collapse bg-light"
+        <div class="col-md-3 border-top border-secondary bg-light"
              id="dispatchDiv">
 
             {% if user|is_dispatcher %}
@@ -354,6 +354,76 @@
         translation_table: {{ translation_table }},
         defaults: {{ defaults }},
     };
+
+    //------------------------------Below is just for left side bar
+    const tabBtnIds = ["ambulance-tab-button", "settings-tab-button", "calls-tab-button"];
+	const tabContentMap = new Map([	
+		[tabBtnIds[0], "ambulance-tab-content"], 
+		[tabBtnIds[1], "settings-tab-content"], 
+		[tabBtnIds[2], "calls-tab-content"]
+	]);
+	
+	// let lastChosen = "ambulance-tab-button";
+	let currChosen = "ambulance-tab-button";
+
+	function selectBtn(btnId) {
+		// set btn style to dark
+		document.getElementById(btnId).className = "btn-selected d-flex align-items-center justify-content-center";
+		// let the corresponding content box visible
+		const tabContentId = tabContentMap.get(btnId);
+		document.getElementById(tabContentId).className = "tab-content";
+	}
+
+	function unSelectBtn(btnId) {
+		// set btn style to light
+		document.getElementById(btnId).className = "lhs-tab-button d-flex align-items-center justify-content-center";
+		// let the corresponding content box invisible
+		const tabContentId = tabContentMap.get(btnId);
+		document.getElementById(tabContentId).className = "tab-content d-none";
+	}
+
+	function toggleSelectionByBtn(e) {
+		e.preventDefault();
+		if ((e.target.id.length !== 0) && (e.target.id !== currChosen)) {
+				unSelectBtn(currChosen);
+				currChosen = e.target.id;
+				selectBtn(currChosen);
+			}
+	}
+
+	function toggleSelectionByIcon(id) {
+		if ((id.length !== 0) && (id !== currChosen)) {
+				unSelectBtn(currChosen);
+				currChosen = id;
+				selectBtn(currChosen);
+			}
+	}
+
+
+	// Add event listener of changing selected styles to tab buttons
+	for (let btnId of tabBtnIds) {
+		const button = document.getElementById(btnId);
+		button.addEventListener("click", (e) => toggleSelectionByBtn(e));
+	}
+
+
+	//-------------------------------------------------------------
+	// Add event listener for expanding the left side bar
+	const sideBar = document.getElementById("left-side-bar");
+	const sideBarBtn = document.getElementById("left-side-bar-btn");
+	const sideBarInitClassName = sideBar.className;
+			
+	sideBarBtn.addEventListener("click", (e) => {
+		e.preventDefault();
+		sideBar.className += " active";				// Add class = "active"
+	})
+
+	// Add event listener for collapsing the left side bar
+	const dismissBtn = document.getElementById("return-tab-button");
+	dismissBtn.addEventListener("click", (e) => {
+		e.preventDefault();
+		sideBar.className = sideBarInitClassName;	// Remove class = "active"
+	})
     
 </script>
 {% endautoescape %}
