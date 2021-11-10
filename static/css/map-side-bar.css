@@ -10,12 +10,7 @@ button:focus {
 	background-color: #e9ecef;
 }*/
 
-.tab-content {
-    height: 400px;
-    margin: 20px;
-	border: solid;
-	background-color: #555;
-}
+/* .tab-content {} */
 
 .sidebar {
     width: 400px;
