@@ -63,7 +63,7 @@
             </div>
 
             <!-- Ambulance Filter -->
-            <h5 class="mt-2"
+            <!-- <h5 class="mt-2"
                 style="cursor: pointer;"
                 data-toggle="collapse"
                 data-target="#ambulance-status"
@@ -71,10 +71,13 @@
                 aria-controls="ambulance-status">
                 <span class="fas fa-ambulance"></span>
                 {% trans "Ambulances" %}
-            </h5>
-            <div class="collapse show"
+            </h5> -->
+            <!-- <div class="collapse show"
                  id="ambulance-status">
+            </div> -->
+            <div class="tab-content" id="ambulance-status">
             </div>
+            
 
             <!-- Capability Filter -->
             <h5 class="mt-2"
@@ -358,7 +361,7 @@
     //------------------------------Below is just for left side bar
     const tabBtnIds = ["ambulance-tab-button", "settings-tab-button", "calls-tab-button"];
 	const tabContentMap = new Map([	
-		[tabBtnIds[0], "ambulance-tab-content"], 
+		[tabBtnIds[0], "ambulance-status"], 
 		[tabBtnIds[1], "settings-tab-content"], 
 		[tabBtnIds[2], "calls-tab-content"]
 	]);
