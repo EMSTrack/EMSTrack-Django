@@ -388,13 +388,13 @@
 
 	function unSelectBtn(btnId) {
         // set btn style to light
-        alert(btnId);
+        //alert(btnId);
 		document.getElementById(btnId).className = "lhs-tab-button d-flex align-items-center justify-content-center";
 		// let the corresponding content box invisible
         const tabContentClass = tabContentMap.get(btnId);
         var tabContent = document.getElementsByClassName(tabContentClass);
         for (let content of tabContent) {
-            content.className = tabContentClass + "d-none";
+            content.className = tabContentClass + " d-none";
         }
 
 		// document.getElementById(tabContentId).className = "tab-content d-none";
@@ -410,9 +410,9 @@
 	}
 
 	function toggleSelectionByIcon(id) {
-        alert(id);
+        //alert(id);
 		if ((id.length !== 0) && (id !== currChosen)) {
-                alert(currChosen);
+                //alert(currChosen);
 				unSelectBtn(currChosen);
 				currChosen = id;
 				selectBtn(currChosen);
