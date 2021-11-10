@@ -392,7 +392,9 @@
 	}
 
 	function toggleSelectionByIcon(id) {
+        alert(id);
 		if ((id.length !== 0) && (id !== currChosen)) {
+                alert(currChosen);
 				unSelectBtn(currChosen);
 				currChosen = id;
 				selectBtn(currChosen);
