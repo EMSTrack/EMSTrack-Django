@@ -72,8 +72,9 @@ button:focus {
 	border-radius: 30px 0 0 30px;
 }
 
-#ambulance-tab-button, #settings-tab-button, #calls-tab-button {
-	flex: 1;
+#ambulance-tab-button, #settings-tab-button, 
+#new-call-tab-button, #calls-tab-button{
+    flex: 1;
 }
 
 .tab-btn-icon {
