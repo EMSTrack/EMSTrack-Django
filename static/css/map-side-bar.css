@@ -138,12 +138,11 @@ button:focus {
 
 #right-side-bar-btn {
 	right: 0;
-	width: 1.6rem;
-    vertical-align: -.125em;
 	border-radius: 30px 0 0 30px;
 }
 
 #right-side-bar-phone-icon, #right-side-bar-phone-icon-active {
+	vertical-align: -.125em;
 	margin-left: 15px;
 }
 
