@@ -27,7 +27,7 @@
     <div class="row mx-1">
 
         <!-- Filter -->
-        <nav class="sidebar bg-light" id="filtersDiv">
+        <nav class="left-side-bar bg-light" id="filtersDiv">
             <!-- <div class="col-md-3 bg-light" id="filtersDiv"> -->
             
             <div class="d-flex justify-content-start" style="height: 3.8rem; background-color: #e9ecef;">
@@ -134,15 +134,13 @@
             <!--</div>-->
         </nav>
 
-        <!-- <div class="content"> -->
-			
-            <!-- open sidebar menu -->
-            <div class="open-menu" href="#" role="button" id="left-side-bar-btn">
-                <i class="fas fa-filter left-side-bar-filter-icon"></i>
-                <i class="fas fa-angle-right fa-lg"></i>
-            </div>
         
-        <!-- </div> -->
+        <!-- open/close left side bar btn -->
+        <div class="open-menu" href="#" role="button" id="left-side-bar-btn">
+            <i class="fas fa-filter left-side-bar-filter-icon"></i>
+            <i class="fas fa-angle-right fa-lg"></i>
+        </div>
+        
 
         <!-- Map -->
         <div class="col border-top border-secondary px-0">
@@ -150,13 +148,87 @@
         </div>
 
         <!-- Dispatching -->
+        <nav class="right-side-bar bg-light" id="dispatchDiv">
+            
+            <div class="d-flex justify-content-end" style="height: 3.8rem; background-color: #e9ecef;">
+                <!-- exit button -->
+                <button type="button" class="lhs-tab-button d-flex align-items-center justify-content-center dismiss" id="return-tab-button">
+                    <i class="fas fa-angle-right tab-btn-icon"></i>
+                </button>	
+
+                <!-- new-call/calls button -->
+                <button type="button" class="btn-selected d-flex align-items-center justify-content-center" id="new-call-tab-button">
+                    <i class="fas fa-ambulance center tab-btn-icon" onclick="toggleSelectionByIcon(this.parentNode.id)"></i>
+                </button>
+                <button type="button" class="lhs-tab-button d-flex align-items-center justify-content-center" id="calls-tab-button">
+                    <i class="fas fa-phone center tab-btn-icon" onclick="toggleSelectionByIcon(this.parentNode.id)"></i>
+                </button>        					
+            </div>
+
+            <!-- New Call tab -->
+            <!-- <div class="ambulance-tab-content">
+                
+            </div> -->
+
+            <!-- Settings Filters (including the following filters, by default hidden, since not selected yet) -->
+            <!-- 1. Ambulance Online Filter -->
+            <!-- <div class="settings-tab-content d-none">
+                <h5 class="mt-2"
+                    aria-expanded="true">
+                    <span class="fas fa-mobile-alt"></span>
+                    {% trans "Service" %}
+                </h5>
+                <div id="ambulance-online-status"></div>
+            -->
+                <!-- 2. Capability Filter -->
+            <!--    <h5 class="mt-2"
+                    aria-expanded="true">
+                    <span class="fas fa-bed"></span>
+                    {% trans "Capability" %}
+                </h5>
+                <div id="ambulance-capability"></div>
+
+            
+            </div> -->
+
+            <!-- Calls Filter -->               <!-- TODO: not yet implemented!! -->
+            <!-- <div class="calls-tab-content d-none" id="TODO"></div> -->
+
+            <!--</div>-->
+        </nav>
+
+        
+        <!-- open/close right side bar btn -->
+        <div class="open-menu" href="#" role="button" id="right-side-bar-btn">
+            <i class="fas fa-angle-left fa-lg"></i>
+            <i class="fas fa-filter right-side-bar-filter-icon"></i>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <!--
         <div class="col-md-3 border-top border-secondary bg-light"
              id="dispatchDiv">
 
-            {% if user|is_dispatcher %}
+            {% if user|is_dispatcher %} -->
 
                 <!-- Calls Filter -->
-                <h5 class="mt-2"
+        <!--        <h5 class="mt-2"
                     style="cursor: pointer;"
                     data-toggle="collapse"
                     data-target="#newDispatchDiv"
@@ -167,10 +239,10 @@
                     </span>
                 </h5>
 
-                <div class="collapse" id="newDispatchDiv">
+                <div class="collapse" id="newDispatchDiv">  -->
 
                     <!-- Dispatch -->
-                    <form id="dispatch-form-collapse"
+                <!--    <form id="dispatch-form-collapse"
                           method="POST" action="">
                         {% csrf_token %}
 
@@ -256,7 +328,7 @@
                                name="street"
                                placeholder="{% trans 'Address' %}" required> <!-- autocomplete="street-address"-->
 
-                        <h5>
+                    <!--    <h5>
                             {% trans "Coordinates" %}
                             <div class="float-right small"
                                  title="{% trans 'Click to automatically search for address after changing the coordinates' %}">
@@ -308,10 +380,10 @@
 
                 </div>
 
-            {% endif %}
+            {% endif %} -->
 
             <!-- Calls Filter -->
-            <h5 class="mt-2"
+            <!-- <h5 class="mt-2"
                 style="cursor: pointer;"
                 data-toggle="collapse"
                 data-target="#call-status"
@@ -326,7 +398,7 @@
                  id="call-status">
             </div>
 
-        </div>
+        </div> -->
 
     </div>
 

@@ -12,7 +12,7 @@ button:focus {
 
 /* .tab-content {} */
 
-.sidebar {
+.left-side-bar {
     width: 400px;
     max-width: 25%; 
 	height: 100%; 
@@ -24,7 +24,7 @@ button:focus {
 	box-shadow: 3px 3px 3px rgba(51, 51, 51, 0.5);
 }
 
-.sidebar.active { left: 0; }
+.left-side-bar.active { left: 0; }
 
 
 .lhs-tab-button {
@@ -105,16 +105,34 @@ button:focus {
 }
 
 .left-side-bar-filter-icon {
-	color: grey;
+	color: #CED4DA;
 	margin-right: 15px;
 }
 
+/* 
 .left-side-bar-filter-icon:hover {
 	color: #408bf9;
 }
-
+*/
 
 
 .ambulance-tab-content, .settings-tab-content, .calls-tab-content {
     padding: 10px;
 }
+
+
+/*----------------------------------------------------------*/
+/* Right side Bar */
+.right-side-bar {
+    width: 400px;
+    max-width: 25%; 
+	height: 100%; 
+	position: fixed; 
+	right: -750px;
+	z-index: 1200; 
+	background: white;
+	transition: all .3s; 
+	box-shadow: 3px 3px 3px rgba(51, 51, 51, 0.5);
+}
+
+.right-side-bar.active { right: 0; }
