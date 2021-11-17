@@ -86,7 +86,8 @@ button:focus {
 	top: calc(50% - 24px); 
 	left: 10px; 
 	z-index: 997; 
-	box-shadow: 3px 3px 3px rgba(51, 51, 51, 0.2);
+	border-radius: 0 30px 30px 0;
+	box-shadow: 3px 0 5px rgb(51 51 51 / 20%);
 }
 
 
