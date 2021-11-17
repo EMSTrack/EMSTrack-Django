@@ -522,26 +522,27 @@
 
 	//-------------------------------------------------------------
 	// Add event listener for expanding the left side bar
-	const sideBar = document.getElementById("filtersDiv");
+	const leftSideBar = document.getElementById("filtersDiv");
     const leftSideBarBtn = document.getElementById("left-side-bar-btn");
+    const rightSideBar = document.getElementById("dispatchDiv");
     const rightSideBarBtn = document.getElementById("right-side-bar-btn");
-	const sideBarInitClassName = sideBar.className;
+	const sideBarInitClassName = leftSideBar.className;
 			
 	leftSideBarBtn.addEventListener("click", (e) => {
 		e.preventDefault();
-		sideBar.className += " active";				// Add class = "active"
+		leftSideBar.className += " active";				// Add class = "active"
     })
     
     rightSideBarBtn.addEventListener("click", (e) => {
 		e.preventDefault();
-		sideBar.className += " active";				// Add class = "active"
+		rightSideBar.className += " active";				// Add class = "active"
 	})
 
 	// Add event listener for collapsing the left side bar
 	const dismissBtn = document.getElementById("return-tab-button");
 	dismissBtn.addEventListener("click", (e) => {
 		e.preventDefault();
-		sideBar.className = sideBarInitClassName;	// Remove class = "active"
+		leftSideBar.className = sideBarInitClassName;	// Remove class = "active"
 	})
     
 </script>
