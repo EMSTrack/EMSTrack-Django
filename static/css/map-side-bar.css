@@ -96,8 +96,12 @@ button:focus {
 }
 
 .open-menu:hover {
-	color: #408bf9;
 	background-color:rgba(64, 139, 249, 0.08);
+}
+
+/* Select all child elements when hovering over .open-menu */
+.open-menu:hover * {
+	color: #408bf9;
 }
 
 .left-side-bar-filter-icon {
