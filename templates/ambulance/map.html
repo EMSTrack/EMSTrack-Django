@@ -35,15 +35,15 @@
                     <button type="button" class="btn-selected d-flex align-items-center justify-content-center" id="ambulance-tab-button">
                         <i class="fas fa-ambulance center tab-btn-icon" onclick="toggleSelectionByIcon(this.parentNode.id)"></i>
                     </button>
-                    <button type="button" class="lhs-tab-button d-flex align-items-center justify-content-center" id="settings-tab-button">
+                    <button type="button" class="tab-button d-flex align-items-center justify-content-center" id="settings-tab-button">
                         <i class="fas fa-cog center tab-btn-icon" onclick="toggleSelectionByIcon(this.parentNode.id)"></i>
                     </button>
-                    <button type="button" class="lhs-tab-button d-flex align-items-center justify-content-center" id="calls-tab-button">
+                    <button type="button" class="tab-button d-flex align-items-center justify-content-center" id="calls-tab-button">
                         <i class="fas fa-phone center tab-btn-icon" onclick="toggleSelectionByIcon(this.parentNode.id)"></i>
                     </button>
                 
                 <!-- exit button -->
-                <button type="button" class="lhs-tab-button d-flex align-items-center justify-content-center left-dismiss" id="left-return-tab-button">
+                <button type="button" class="tab-button d-flex align-items-center justify-content-center left-dismiss" id="left-return-tab-button">
                     <i class="fas fa-angle-left tab-btn-icon"></i>
                 </button>						
             </div>
@@ -152,7 +152,7 @@
             
             <div class="d-flex justify-content-end" style="height: 3.8rem; background-color: #e9ecef;">
                 <!-- exit button -->
-                <button type="button" class="lhs-tab-button d-flex align-items-center justify-content-center right-dismiss" id="right-return-tab-button">
+                <button type="button" class="tab-button d-flex align-items-center justify-content-center right-dismiss" id="right-return-tab-button">
                     <i class="fas fa-angle-right tab-btn-icon"></i>
                 </button>	
 
@@ -160,7 +160,7 @@
                 <button type="button" class="btn-selected d-flex align-items-center justify-content-center" id="new-call-tab-button">
                     <i class="fas fa-ambulance center tab-btn-icon" onclick="toggleSelectionByIcon(this.parentNode.id)"></i>
                 </button>
-                <button type="button" class="lhs-tab-button d-flex align-items-center justify-content-center" id="calls-tab-button">
+                <button type="button" class="tab-button d-flex align-items-center justify-content-center" id="calls-tab-button">
                     <i class="fas fa-phone center tab-btn-icon" onclick="toggleSelectionByIcon(this.parentNode.id)"></i>
                 </button>        					
             </div>
@@ -483,7 +483,7 @@
 	function unSelectBtn(btnId) {
         // set btn style to light
         //alert(btnId);
-		document.getElementById(btnId).className = "lhs-tab-button d-flex align-items-center justify-content-center";
+		document.getElementById(btnId).className = "tab-button d-flex align-items-center justify-content-center";
 		// let the corresponding content box invisible
         const tabContentClass = tabContentMap.get(btnId);
         var tabContent = document.getElementsByClassName(tabContentClass);
