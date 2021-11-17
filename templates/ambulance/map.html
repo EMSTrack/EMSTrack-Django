@@ -136,7 +136,7 @@
 
         
         <!-- open/close left side bar btn -->
-        <div class="open-menu" href="#" role="button" id="left-side-bar-btn">
+        <div class="open-menu" id="left-side-bar-btn">
             <i class="fas fa-filter left-side-bar-filter-icon"></i>
             <i class="fas fa-angle-right fa-lg"></i>
         </div>
@@ -199,7 +199,7 @@
 
         
         <!-- open/close right side bar btn -->
-        <div class="open-menu" href="#" role="button" id="right-side-bar-btn">
+        <div class="open-menu" id="right-side-bar-btn">
             <i class="fas fa-angle-left fa-lg"></i>
             <i class="fas fa-filter right-side-bar-filter-icon"></i>
         </div>
@@ -523,10 +523,16 @@
 	//-------------------------------------------------------------
 	// Add event listener for expanding the left side bar
 	const sideBar = document.getElementById("filtersDiv");
-	const sideBarBtn = document.getElementById("left-side-bar-btn");
+    const leftSideBarBtn = document.getElementById("left-side-bar-btn");
+    const rightSideBarBtn = document.getElementById("right-side-bar-btn");
 	const sideBarInitClassName = sideBar.className;
 			
-	sideBarBtn.addEventListener("click", (e) => {
+	leftSideBarBtn.addEventListener("click", (e) => {
+		e.preventDefault();
+		sideBar.className += " active";				// Add class = "active"
+    })
+    
+    rightSideBarBtn.addEventListener("click", (e) => {
 		e.preventDefault();
 		sideBar.className += " active";				// Add class = "active"
 	})
