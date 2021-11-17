@@ -43,7 +43,7 @@
                     </button>
                 
                 <!-- exit button -->
-                <button type="button" class="lhs-tab-button d-flex align-items-center justify-content-center dismiss" id="return-tab-button">
+                <button type="button" class="lhs-tab-button d-flex align-items-center justify-content-center left-dismiss" id="left-return-tab-button">
                     <i class="fas fa-angle-left tab-btn-icon"></i>
                 </button>						
             </div>
@@ -152,7 +152,7 @@
             
             <div class="d-flex justify-content-end" style="height: 3.8rem; background-color: #e9ecef;">
                 <!-- exit button -->
-                <button type="button" class="lhs-tab-button d-flex align-items-center justify-content-center dismiss" id="return-tab-button">
+                <button type="button" class="lhs-tab-button d-flex align-items-center justify-content-center right-dismiss" id="right-return-tab-button">
                     <i class="fas fa-angle-right tab-btn-icon"></i>
                 </button>	
 
@@ -527,7 +527,8 @@
     const leftSideBarBtn = document.getElementById("left-side-bar-btn");
     const rightSideBar = document.getElementById("dispatchDiv");
     const rightSideBarBtn = document.getElementById("right-side-bar-btn");
-	const sideBarInitClassName = leftSideBar.className;
+	const leftSideBarInitClass = leftSideBar.className;
+    const rightSideBarInitClass = rightSideBar.className;
 			
 	leftSideBarBtn.addEventListener("click", (e) => {
 		e.preventDefault();
@@ -540,10 +541,17 @@
 	})
 
 	// Add event listener for collapsing the left side bar
-	const dismissBtn = document.getElementById("return-tab-button");
-	dismissBtn.addEventListener("click", (e) => {
+	const leftDismissBtn = document.getElementById("left-return-tab-button");
+	leftDismissBtn.addEventListener("click", (e) => {
 		e.preventDefault();
-		leftSideBar.className = sideBarInitClassName;	// Remove class = "active"
+		leftSideBar.className = leftSideBarInitClass;	// Remove class = "active"
+	})
+
+    // Add event listener for collapsing the right side bar
+	const rightDismissBtn = document.getElementById("right-return-tab-button");
+	rightDismissBtn.addEventListener("click", (e) => {
+		e.preventDefault();
+		rightSideBar.className = rightSideBarInitClass;	// Remove class = "active"
 	})
     
 </script>
