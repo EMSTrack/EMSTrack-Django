@@ -18,7 +18,7 @@ class DashboardView(TemplateView):
         # print("self request")
         # print(self.request.use)
 
-        context['token'] = "wow"
+        context['token'] = request.user
         # context['test'] = request.user
 
         return context
