@@ -33,13 +33,13 @@
             <div class="d-flex justify-content-start" style="height: 3.8rem; background-color: #e9ecef;">
                 <!-- ambulance/settings/calls button -->
                     <button type="button" class="btn-selected d-flex align-items-center justify-content-center" id="ambulance-tab-button">
-                        <i class="fas fa-ambulance center tab-btn-icon" onclick="toggleSelectionByIcon(this.parentNode.id)"></i>
+                        <i class="fas fa-ambulance center tab-btn-icon" onclick="lhsToggleSelByIcon(this.parentNode.id)"></i>
                     </button>
                     <button type="button" class="tab-button d-flex align-items-center justify-content-center" id="settings-tab-button">
-                        <i class="fas fa-cog center tab-btn-icon" onclick="toggleSelectionByIcon(this.parentNode.id)"></i>
+                        <i class="fas fa-cog center tab-btn-icon" onclick="lhsToggleSelByIcon(this.parentNode.id)"></i>
                     </button>
                     <!-- <button type="button" class="tab-button d-flex align-items-center justify-content-center" id="calls-tab-button">
-                        <i class="fas fa-phone center tab-btn-icon" onclick="toggleSelectionByIcon(this.parentNode.id)"></i>
+                        <i class="fas fa-phone center tab-btn-icon" onclick="lhsToggleSelByIcon(this.parentNode.id)"></i>
                     </button> -->
                 
                 <!-- exit button -->
@@ -157,13 +157,13 @@
                 </button>	
 
                 <!-- new-call/calls button -->
-                <button type="button" class="btn-selected d-flex align-items-center justify-content-center" id="new-call-tab-button"
-                        onclick="toggleSelectionByIcon(this.parentNode.id)">
-                    <img src="{%  static 'icons/dispatch-icon.png' %}" id="right-side-bar-dispatch-icon"></img>
+                <button type="button" class="btn-selected d-flex align-items-center justify-content-center" id="dispatch-tab-button"
+                        onclick="rhsToggleSelByIcon(this.parentNode.id)">
+                    <img src="{%  static 'icons/dispatch-icon.png' %}" class="d-none" id="right-side-bar-dispatch-icon"></img>
                     <img src="{%  static 'icons/dispatch-icon-active.png' %}" id="right-side-bar-dispatch-icon-active"></img>
                 </button>
                 <button type="button" class="tab-button d-flex align-items-center justify-content-center" id="calls-tab-button">
-                    <i class="fas fa-phone center tab-btn-icon" onclick="toggleSelectionByIcon(this.parentNode.id)"></i>
+                    <i class="fas fa-phone center tab-btn-icon" onclick="rhsToggleSelByIcon(this.parentNode.id)"></i>
                 </button>        					
             </div>
 
@@ -461,17 +461,22 @@
     };
 
     //------------------------------Below is just for left side bar
-    const tabBtnIds = ["ambulance-tab-button", "settings-tab-button", "calls-tab-button"];
-	const tabContentMap = new Map([	
-		[tabBtnIds[0], "ambulance-tab-content"], 
-		[tabBtnIds[1], "settings-tab-content"], 
-		[tabBtnIds[2], "calls-tab-content"]
-	]);
-	
-	// let lastChosen = "ambulance-tab-button";
-	let currChosen = "ambulance-tab-button";
+    const lhsTabBtnIds = ["ambulance-tab-button", "settings-tab-button"];
+	const lhsTabContentMap = new Map([	
+		[lhsTabBtnIds[0], "ambulance-tab-content"], 
+		[lhsTabBtnIds[1], "settings-tab-content"], 
+    ]);
+    let lhsCurrTab = "ambulance-tab-button";
 
-	function selectBtn(btnId) {
+    const rhsTabBtnIds = ["dispatch-tab-button", "calls-tab-button"];
+	const rhsTabContentMap = new Map([	
+		[lhsTabBtnIds[0], "dispatch-tab-content"], 
+		[lhsTabBtnIds[1], "calls-tab-content"]
+	]);
+	let rhsCurrTab = "dispatch-tab-button";
+	
+
+	function selectBtn(btnId, tabContentMap) {
 		// set btn style to dark
 		document.getElementById(btnId).className = "btn-selected d-flex align-items-center justify-content-center";
 		// let the corresponding content visible by setting their class name
@@ -482,9 +487,8 @@
         }
 	}
 
-	function unSelectBtn(btnId) {
+	function unSelectBtn(btnId, tabContentMap) {
         // set btn style to light
-        //alert(btnId);
 		document.getElementById(btnId).className = "tab-button d-flex align-items-center justify-content-center";
 		// let the corresponding content box invisible
         const tabContentClass = tabContentMap.get(btnId);
@@ -492,34 +496,54 @@
         for (let content of tabContent) {
             content.className = tabContentClass + " d-none";
         }
-
-		// document.getElementById(tabContentId).className = "tab-content d-none";
 	}
 
-	function toggleSelectionByBtn(e) {
+    // Toggel lhs tab selection
+	function lhsToggleSelByBtn(e) {
 		e.preventDefault();
-		if ((e.target.id.length !== 0) && (e.target.id !== currChosen)) {
-				unSelectBtn(currChosen);
-				currChosen = e.target.id;
-				selectBtn(currChosen);
+		if ((e.target.id.length !== 0) && (e.target.id !== lhsCurrTab)) {
+				unSelectBtn(lhsCurrTab);
+				lhsCurrTab = e.target.id;
+				selectBtn(lhsCurrTab);
 			}
 	}
-
-	function toggleSelectionByIcon(id) {
+	function lhsToggleSelByIcon(id) {
         //alert(id);
-		if ((id.length !== 0) && (id !== currChosen)) {
-                //alert(currChosen);
-				unSelectBtn(currChosen);
-				currChosen = id;
-				selectBtn(currChosen);
+		if ((id.length !== 0) && (id !== lhsCurrTab)) {
+                //alert(lhsCurrTab);
+				unSelectBtn(lhsCurrTab);
+				lhsCurrTab = id;
+				selectBtn(lhsCurrTab);
+			}
+    }
+    // Toggel rhs tab selection
+    function rhsToggleSelByBtn(e) {
+		e.preventDefault();
+		if ((e.target.id.length !== 0) && (e.target.id !== rhsCurrTab)) {
+				unSelectBtn(rhsCurrTab);
+				rhsCurrTab = e.target.id;
+				selectBtn(rhsCurrTab);
+			}
+	}
+	function rhsToggleSelByIcon(id) {
+        //alert(id);
+		if ((id.length !== 0) && (id !== rhsCurrTab)) {
+                //alert(rhsCurrTab);
+				unSelectBtn(rhsCurrTab);
+				rhsCurrTab = id;
+				selectBtn(rhsCurrTab);
 			}
 	}
 
 
-	// Add event listener of changing selected styles to tab buttons
-	for (let btnId of tabBtnIds) {
+	// Add event listener of changing selected styles to lhs/rhs tab buttons
+	for (let btnId of lhsTabBtnIds) {
 		const button = document.getElementById(btnId);
-		button.addEventListener("click", (e) => toggleSelectionByBtn(e));
+		button.addEventListener("click", (e) => lhsToggleSelByBtn(e));
+    }
+    for (let btnId of rhsTabBtnIds) {
+		const button = document.getElementById(btnId);
+		button.addEventListener("click", (e) => rhsToggleSelByBtn(e));
 	}
 
 

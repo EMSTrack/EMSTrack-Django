@@ -73,7 +73,7 @@ button:focus {
 }
 
 #ambulance-tab-button, #settings-tab-button, 
-#new-call-tab-button, #calls-tab-button{
+#dispatch-tab-button, #calls-tab-button{
     flex: 1;
 }
 
@@ -171,16 +171,4 @@ button:focus {
 
 #right-side-bar-dispatch-icon, #right-side-bar-dispatch-icon-active {
 	vertical-align: -.125em;
-	margin-left: 15px;
-}
-
-/* Hide the active dispatch icon by default & Hide the grey one when hovering */
-#new-call-tab-button:hover #right-side-bar-dispatch-icon,
-#right-side-bar-dispatch-icon-active {
-	display: none;
-}
-
-/* When hovering show the active dispatch icon */
-#new-call-tab-button:hover #right-side-bar-dispatch-icon-active {
-	display: inline;
 }
