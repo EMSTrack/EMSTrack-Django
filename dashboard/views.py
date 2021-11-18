@@ -10,15 +10,7 @@ class DashboardView(TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        # for user in User.objects.all():
-        #     Token.objects.get_or_create(user=user)
-        # print("this is inside the view")
-        # print(request.user)
-        # print("self request")
-        # print(self.request.use)
-
-        context['token'] = Token.objects.get_or_create(user=self.request.user)
-        # context['test'] = request.user
+        token, _ = Token.objects.get_or_create(user=self.request.user)
+        context['token'] = token
 
         return context
