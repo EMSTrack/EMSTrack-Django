@@ -462,21 +462,19 @@
 
     //------------------------------Below is just for left side bar
     const lhsTabBtnIds = ["ambulance-tab-button", "settings-tab-button"];
-	const lhsTabContentMap = new Map([	
-		[lhsTabBtnIds[0], "ambulance-tab-content"], 
-		[lhsTabBtnIds[1], "settings-tab-content"], 
-    ]);
-    let lhsCurrTab = "ambulance-tab-button";
-
     const rhsTabBtnIds = ["dispatch-tab-button", "calls-tab-button"];
-	const rhsTabContentMap = new Map([	
-		[lhsTabBtnIds[0], "dispatch-tab-content"], 
-		[lhsTabBtnIds[1], "calls-tab-content"]
-	]);
-	let rhsCurrTab = "dispatch-tab-button";
-	
 
-	function selectBtn(btnId, tabContentMap) {
+    let lhsCurrTab = "ambulance-tab-button";
+	let rhsCurrTab = "dispatch-tab-button";
+
+	const tabContentMap = new Map([	
+        [lhsTabBtnIds[0], "ambulance-tab-content"], 
+		[lhsTabBtnIds[1], "settings-tab-content"], 
+		[rhsTabBtnIds[0], "dispatch-tab-content"], 
+		[rhsTabBtnIds[1], "calls-tab-content"]
+	]);
+	
+	function selectBtn(btnId) {
 		// set btn style to dark
 		document.getElementById(btnId).className = "btn-selected d-flex align-items-center justify-content-center";
 		// let the corresponding content visible by setting their class name
@@ -487,7 +485,7 @@
         }
 	}
 
-	function unSelectBtn(btnId, tabContentMap) {
+	function unSelectBtn(btnId) {
         // set btn style to light
 		document.getElementById(btnId).className = "tab-button d-flex align-items-center justify-content-center";
 		// let the corresponding content box invisible
