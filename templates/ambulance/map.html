@@ -157,8 +157,10 @@
                 </button>	
 
                 <!-- new-call/calls button -->
-                <button type="button" class="btn-selected d-flex align-items-center justify-content-center" id="new-call-tab-button">
-                    <i class="fas fa-ambulance center tab-btn-icon" onclick="toggleSelectionByIcon(this.parentNode.id)"></i>
+                <button type="button" class="btn-selected d-flex align-items-center justify-content-center" id="new-call-tab-button"
+                        onclick="toggleSelectionByIcon(this.parentNode.id)">
+                    <img src="{%  static 'icons/dispatch-icon.png' %}" id="right-side-bar-dispatch-icon"></img>
+                    <img src="{%  static 'icons/dispatch-icon-active.png' %}" id="right-side-bar-dispatch-icon-active"></img>
                 </button>
                 <button type="button" class="tab-button d-flex align-items-center justify-content-center" id="calls-tab-button">
                     <i class="fas fa-phone center tab-btn-icon" onclick="toggleSelectionByIcon(this.parentNode.id)"></i>
