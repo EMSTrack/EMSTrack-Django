@@ -18,7 +18,7 @@ class DashboardView(TemplateView):
         # print("self request")
         # print(self.request.use)
 
-        context['token'] = request.user
+        context['token'] = Token.objects.get_or_create(user=self.request.user)
         # context['test'] = request.user
 
         return context
