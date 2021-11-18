@@ -13,8 +13,10 @@ class DashboardView(TemplateView):
 
         # for user in User.objects.all():
         #     Token.objects.get_or_create(user=user)
-        
-        context['token'] = None
-        logger.error(request.user)
+        print("this is inside the view")
+        print(request.user)
+        print("self request")
+        print(self.request.use)
 
+        context['token'] = None
         return context
