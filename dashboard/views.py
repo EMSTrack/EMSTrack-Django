@@ -18,7 +18,7 @@ class DashboardView(TemplateView):
 
         return context
 
-    def get_token():
+    def get_token(self, **kwargs):
         """
         Sets the token for accessing the API of EMSTrack.
         """
@@ -28,7 +28,7 @@ class DashboardView(TemplateView):
             'password': os.environ["DASHBOARD_PASSWORD_" + SERVER],
         }
         url = os.environ["DASHBOARD_AUTHURL_" + SERVER]
-        # res = requests.post(url, data=param)
-        # res.raise_for_status()
-        # token = res.json()['token']
-        return url
+        res = requests.post(url, data=param)
+        res.raise_for_status()
+        token = res.json()['token']
+        return token
