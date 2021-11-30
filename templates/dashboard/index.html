@@ -3,10 +3,10 @@
 {% load i18n %}
 
 {% block content %}
-{{ url }}
+{{ token }}
 <!-- 16:9 aspect ratio -->
 <div class="embed-responsive embed-responsive-16by9">
-    <iframe class="embed-responsive-item" src={{url}}></iframe>
+    <iframe class="embed-responsive-item" src="https://localhost/dashboard/?token={% static token %}"></iframe>
 </div>
 
 {% endblock %}
@@ -17,8 +17,6 @@
 <script>
 
     const token = {{ token }}
-
-    const url = "https://localhost/dashboard/?token=" + token
 
 </script>
 {% endautoescape %}
