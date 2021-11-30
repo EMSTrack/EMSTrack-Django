@@ -18,11 +18,9 @@ class DashboardView(TemplateView):
             'password': os.environ["DASHBOARD_PASSWORD_" + SERVER],
         }
         url = os.environ["DASHBOARD_AUTHURL_" + SERVER]
-        # token = url
         res = requests.post(url, data=param)
         res.raise_for_status()
         token = res.json()['token']
         # token, _ = Token.objects.get_or_create(user=self.request.user)
         context['token'] = token
-        context['user'] = self.request.user
         return context
