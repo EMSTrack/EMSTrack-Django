@@ -12,17 +12,6 @@ class DashboardView(TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        token = self.get_token()
-        # token, _ = Token.objects.get_or_create(user=self.request.user)
-        context['token'] = token.key
-        # context['user'] = self.request.user
-
-        return context
-
-    def get_token(self):
-        """
-        Sets the token for accessing the API of EMSTrack.
-        """
         SERVER = "UCSD"
         param = {
             'username': os.environ["DASHBOARD_USERNAME_" + SERVER],
@@ -32,4 +21,9 @@ class DashboardView(TemplateView):
         res = requests.post(url, data=param)
         res.raise_for_status()
         token = res.json()['token']
-        return token
+        # token = self.get_token()
+        # token, _ = Token.objects.get_or_create(user=self.request.user)
+        context['token'] = token
+        # context['user'] = self.request.user
+
+        return context
