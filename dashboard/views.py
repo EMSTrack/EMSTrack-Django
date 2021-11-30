@@ -13,10 +13,10 @@ class DashboardView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         SERVER = "UCSD"
-        param = {
-            'username': os.environ["DASHBOARD_USERNAME_" + SERVER],
-            'password': os.environ["DASHBOARD_PASSWORD_" + SERVER],
-        }
+        # param = {
+        #     'username': os.environ["DASHBOARD_USERNAME_" + SERVER],
+        #     'password': os.environ["DASHBOARD_PASSWORD_" + SERVER],
+        # }
         url = os.environ["DASHBOARD_AUTHURL_" + SERVER]
         # res = requests.post(url, data=param)
         # res.raise_for_status()
