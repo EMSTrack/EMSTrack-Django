@@ -11,7 +11,7 @@ class DashboardView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         token, _ = Token.objects.get_or_create(user=self.request.user)
-        context['token'] = token
-        context['user'] = self.request
+        context['token'] = token.key
+        context['user'] = self.request.user
 
         return context
