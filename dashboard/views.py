@@ -2,6 +2,7 @@ import logging
 from django.views.generic.base import TemplateView
 from rest_framework.authtoken.models import Token
 import requests
+import os
 
 
 logger = logging.getLogger(__name__)
@@ -18,7 +19,7 @@ class DashboardView(TemplateView):
 
         return context
 
-    def get_token(self, **kwargs):
+    def get_token(self):
         """
         Sets the token for accessing the API of EMSTrack.
         """
