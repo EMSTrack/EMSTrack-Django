@@ -482,7 +482,8 @@
             document.getElementById("right-side-bar-dispatch-icon-active").className = "d-inline-block";
         }
 
-		// set btn style to dark
+        // set btn style to dark
+        alert(btnId)
 		document.getElementById(btnId).className = "btn-selected d-flex align-items-center justify-content-center";
 		// let the corresponding content visible by setting their class name
 		const tabContentClass = tabContentMap.get(btnId);
@@ -539,10 +540,10 @@
 	function rhsToggleSelByIcon(id) {
         //alert(id);
 		if ((id.length !== 0) && (id !== rhsCurrTab)) {
-                alert(rhsCurrTab);
+                //alert(rhsCurrTab);
 				unSelectBtn(rhsCurrTab);
                 rhsCurrTab = id;
-                alert(id);
+                alert(rhsCurrTab);
 				selectBtn(rhsCurrTab);
 			}
 	}
