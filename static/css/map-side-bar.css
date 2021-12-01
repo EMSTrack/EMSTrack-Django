@@ -44,7 +44,7 @@ button:focus {
 
 .tab-button:hover {
 	background-color:rgba(64, 139, 249, 0.08);
-	color: #408bf9;
+	color: #408bf9 !important;
 }
 
 
@@ -52,7 +52,7 @@ button:focus {
 	border-style: solid transparent transparent transparent;
 	border-width: 4px 0 0 0;
 	border-color: #408bf9;
-	color: #408bf9;
+	color: #408bf9 !important;
 	background-color: white;
 	padding: .375rem .75rem;
 	font-size: 1rem;
@@ -74,7 +74,8 @@ button:focus {
 
 #ambulance-tab-button, #settings-tab-button, 
 #dispatch-tab-button, #calls-tab-button{
-    flex: 1;
+	flex: 1;
+	color: #ced4da;
 }
 
 .tab-btn-icon {
