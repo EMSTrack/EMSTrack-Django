@@ -157,10 +157,11 @@
                 </button>	
 
                 <!-- new-call/calls button -->
-                <button type="button" class="btn-selected d-flex align-items-center justify-content-center" id="dispatch-tab-button"
-                        onclick="rhsToggleSelByIcon(this.parentNode.id)">
-                    <img src="{%  static 'icons/dispatch-icon.png' %}" class="d-none" id="right-side-bar-dispatch-icon"></img>
-                    <img src="{%  static 'icons/dispatch-icon-active.png' %}" id="right-side-bar-dispatch-icon-active"></img>
+                <button type="button" class="btn-selected d-flex align-items-center justify-content-center" id="dispatch-tab-button">
+                    <img src="{%  static 'icons/dispatch-icon.png' %}" class="d-none" id="right-side-bar-dispatch-icon"
+                        onclick="rhsToggleSelByIcon(this.parentNode.id)"></img>
+                    <img src="{%  static 'icons/dispatch-icon-active.png' %}" id="right-side-bar-dispatch-icon-active"
+                        onclick="rhsToggleSelByIcon(this.parentNode.id)"></img>
                 </button>
                 <button type="button" class="tab-button d-flex align-items-center justify-content-center" id="calls-tab-button">
                     <i class="fas fa-phone center tab-btn-icon" onclick="rhsToggleSelByIcon(this.parentNode.id)"></i>
