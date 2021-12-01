@@ -475,6 +475,13 @@
 	]);
 	
 	function selectBtn(btnId) {
+        // Special case here for the dispatch tab as it is alternating between two images = not a font icon
+        if (btnId === "dispatch-tab-button") {
+            document.getElementById("right-side-bar-dispatch-icon").className = "d-none"
+            document.getElementById("right-side-bar-dispatch-icon-active").className = "d-inline-block"
+            return
+        }
+
 		// set btn style to dark
 		document.getElementById(btnId).className = "btn-selected d-flex align-items-center justify-content-center";
 		// let the corresponding content visible by setting their class name
