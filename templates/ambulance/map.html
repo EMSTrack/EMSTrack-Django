@@ -537,7 +537,7 @@
 			}
 	}
 	function rhsToggleSelByIcon(id) {
-        alert(event);
+        // we don't want to call btn's eventlistener to do the same thing again
         event.stopPropagation();
         //alert(id);
 		if ((id.length !== 0) && (id !== rhsCurrTab)) {
