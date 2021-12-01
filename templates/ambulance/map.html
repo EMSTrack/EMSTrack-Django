@@ -483,7 +483,6 @@
         }
 
         // set btn style to dark
-        alert(btnId)
 		document.getElementById(btnId).className = "btn-selected d-flex align-items-center justify-content-center";
 		// let the corresponding content visible by setting their class name
 		const tabContentClass = tabContentMap.get(btnId);
@@ -538,12 +537,14 @@
 			}
 	}
 	function rhsToggleSelByIcon(id) {
+        alert(event);
+        event.stopPropagation();
         //alert(id);
 		if ((id.length !== 0) && (id !== rhsCurrTab)) {
                 //alert(rhsCurrTab);
 				unSelectBtn(rhsCurrTab);
                 rhsCurrTab = id;
-                alert(rhsCurrTab);
+                //alert(rhsCurrTab);
 				selectBtn(rhsCurrTab);
 			}
 	}
