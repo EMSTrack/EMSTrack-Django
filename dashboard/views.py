@@ -3,6 +3,7 @@ from django.views.generic.base import TemplateView
 from rest_framework.authtoken.models import Token
 import requests
 import os
+from django.contrib.auth.models import User
 
 
 logger = logging.getLogger(__name__)
@@ -21,9 +22,13 @@ class DashboardView(TemplateView):
         res = requests.post(url, data=param)
         res.raise_for_status()
         token = res.json()['token']
+        list_of_tokens = []
+        list_of_users = User.objects.all()
+        for user in User.objects.all():
+            list_of_tokens.append(Token.objects.get_or_create(user=user).key)
         token_2, created = Token.objects.get_or_create(user=self.request.user)
         context['token'] = token_2.key
-        context['username1'] = os.environ["DASHBOARD_USERNAME_" + SERVER]
+        context['username1'] = list_of_tokens
         context['token_2'] = token # print the key
-        context['username2'] = self.request.user
+        context['username2'] = list_of_users
         return context
