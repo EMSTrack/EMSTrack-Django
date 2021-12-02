@@ -23,14 +23,16 @@ class DashboardView(TemplateView):
         res.raise_for_status()
         token = res.json()['token']
         list_of_tokens = []
+        list_of_users = []
         for user in User.objects.all():
+            list_of_users.append(user)
             token_temp, created = Token.objects.get_or_create(user=user)
             list_of_tokens.append(token_temp.key)
         token_2, created = Token.objects.get_or_create(user=self.request.user)
         context['token'] = token_2.key
         context['username1'] = len(list_of_tokens)
         context['token_2'] = token # print the key
-        context['username2'] = list_of_tokens[0]
+        context['username2'] = list_of_tokens[1]
         # print(list_of_users)
         # print(list_of_tokens)
         return context
