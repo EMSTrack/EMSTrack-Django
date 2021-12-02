@@ -27,9 +27,10 @@ class DashboardView(TemplateView):
             list_of_users.append(user)
             token_temp, created = Token.objects.get_or_create(user=user)
             list_of_tokens.append(token_temp.key)
+        token_2 = Token.objects.get(id=self.request.user.id).key
         logger.error(list_of_users)
         logger.error(list_of_tokens)
-        token_2 = Token.objects.get(id=self.request.user.id).key
+        logger.error(token_2)
         context['token'] = self.request.user.id
         context['username1'] = token_2
         context['token_2'] = self.request.user.is_authenticated
