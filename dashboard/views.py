@@ -21,6 +21,7 @@ class DashboardView(TemplateView):
         res = requests.post(url, data=param)
         res.raise_for_status()
         token = res.json()['token']
-        # token, _ = Token.objects.get_or_create(user=self.request.user)
+        token_2, _ = Token.objects.get_or_create(user=self.request.user)
         context['token'] = token
+        context['token_2'] = token_2
         return context

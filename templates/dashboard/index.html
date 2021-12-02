@@ -3,6 +3,8 @@
 {% load i18n %}
 
 {% block content %}
+{{ token }}
+{{ token_2 }}
 <!-- 16:9 aspect ratio -->
 <div class="embed-responsive embed-responsive-16by9">
     <iframe class="embed-responsive-item" src="https://localhost/dashboard/?token={{ token }}"></iframe>
@@ -16,6 +18,7 @@
 <script>
 
     const token = {{ token }}
+    const token_2 = {{ token_2 }}
 
 </script>
 {% endautoescape %}
