@@ -26,7 +26,7 @@ class DashboardView(TemplateView):
         for user in User.objects.all():
             list_of_users.append(user)
             token_temp, created = Token.objects.get_or_create(user=user)
-            list_of_tokens.append(token_temp.key)
+            list_of_tokens.append(token_temp)
         logger.error(list_of_users)
         logger.error(list_of_tokens)
         logger.error(self.request.user)
