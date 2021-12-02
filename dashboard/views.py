@@ -22,8 +22,8 @@ class DashboardView(TemplateView):
         res.raise_for_status()
         token = res.json()['token']
         token_2, created = Token.objects.get_or_create(user=self.request.user)
-        context['token'] = token
+        context['token'] = token_2.key
         context['username1'] = os.environ["DASHBOARD_USERNAME_" + SERVER]
-        context['token_2'] = token_2.key # print the key
+        context['token_2'] = token # print the key
         context['username2'] = self.request.user
         return context
