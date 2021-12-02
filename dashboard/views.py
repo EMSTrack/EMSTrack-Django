@@ -5,7 +5,6 @@ import requests
 import os
 from django.contrib.auth.models import User
 
-
 logger = logging.getLogger(__name__)
 
 class DashboardView(TemplateView):
@@ -29,10 +28,10 @@ class DashboardView(TemplateView):
             token_temp, created = Token.objects.get_or_create(user=user)
             list_of_tokens.append(token_temp.key)
         token_2, created = Token.objects.get_or_create(user=self.request.user)
-        context['token'] = token_2.key
-        context['username1'] = len(list_of_tokens)
-        context['token_2'] = token # print the key
+        context['token'] = list_of_users[0]
+        context['username1'] = list_of_users[1]
+        context['token_2'] = list_of_tokens[0]
         context['username2'] = list_of_tokens[1]
-        # print(list_of_users)
-        # print(list_of_tokens)
+        logger.info(list_of_users)
+        logger.info(list_of_tokens)
         return context
