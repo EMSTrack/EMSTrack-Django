@@ -27,11 +27,12 @@ class DashboardView(TemplateView):
             list_of_users.append(user)
             token_temp, created = Token.objects.get_or_create(user=user)
             list_of_tokens.append(token_temp.key)
-        token_2, created = Token.objects.get_or_create(user=self.request.user)
-        context['token'] = list_of_users[0]
+        logger.error(list_of_users)
+        logger.error(list_of_tokens)
+        # token_2, created = Token.objects.get_or_create(user=self.request.user)
+        context['token'] = self.request.user
         context['username1'] = list_of_users[1]
         context['token_2'] = list_of_tokens[0]
-        context['username2'] = list_of_tokens[1]
-        logger.info(list_of_users)
-        logger.info(list_of_tokens)
+        context['username2'] = self.request.
+
         return context
