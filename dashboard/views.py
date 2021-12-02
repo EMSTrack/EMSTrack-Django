@@ -23,5 +23,7 @@ class DashboardView(TemplateView):
         token = res.json()['token']
         token_2, _ = Token.objects.get_or_create(user=self.request.user)
         context['token'] = token
+        context['username1'] = os.environ["DASHBOARD_USERNAME_" + SERVER]
         context['token_2'] = token_2
+        context['username2'] = self.request.user
         return context
