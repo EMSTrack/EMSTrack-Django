@@ -31,8 +31,8 @@ class DashboardView(TemplateView):
         logger.error(list_of_tokens)
         # token_2, created = Token.objects.get_or_create(user=self.request.user)
         context['token'] = self.request.user
-        context['username1'] = list_of_users[1]
-        context['token_2'] = list_of_tokens[0]
-        context['username2'] = self.request.
+        context['username1'] = self.request.user.get_session_auth_hash()
+        context['token_2'] = self.request.user.is_authenticated
+        context['username2'] = self.request.user.is_anonymous
 
         return context
