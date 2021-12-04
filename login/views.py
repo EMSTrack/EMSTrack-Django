@@ -30,7 +30,7 @@ from django.views.generic.edit import FormView, CreateView, BaseFormView
 from django.utils.translation import ugettext_lazy as _
 
 from drf_extra_fields.geo_fields import PointField
-from extra_views import InlineFormSetView, CreateWithInlinesView, UpdateWithInlinesView
+from extra_views import InlineFormSetFactory, CreateWithInlinesView, UpdateWithInlinesView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -132,7 +132,7 @@ class GroupAdminDetailView(DetailView):
         return context
 
 
-class GroupProfileAdminInline(InlineFormSetView):
+class GroupProfileAdminInline(InlineFormSetFactory):
     model = GroupProfile
     form_class = GroupProfileAdminForm
     factory_kwargs = {
@@ -143,7 +143,7 @@ class GroupProfileAdminInline(InlineFormSetView):
     }
 
 
-class GroupAmbulancePermissionAdminInline(InlineFormSetView):
+class GroupAmbulancePermissionAdminInline(InlineFormSetFactory):
     model = GroupAmbulancePermission
     form_class = GroupAmbulancePermissionAdminForm
     factory_kwargs = {
@@ -151,7 +151,7 @@ class GroupAmbulancePermissionAdminInline(InlineFormSetView):
     }
 
 
-class GroupHospitalPermissionAdminInline(InlineFormSetView):
+class GroupHospitalPermissionAdminInline(InlineFormSetFactory):
     model = GroupHospitalPermission
     form_class = GroupHospitalPermissionAdminForm
     factory_kwargs = {
@@ -190,7 +190,7 @@ class GroupAdminUpdateView(SuccessMessageWithInlinesMixin,
 
 # Users
 
-class UserProfileAdminInline(InlineFormSetView):
+class UserProfileAdminInline(InlineFormSetFactory):
     model = UserProfile
     form_class = UserProfileAdminForm
     factory_kwargs = {
@@ -229,7 +229,7 @@ class UserAdminDetailView(DetailView):
         return context
 
 
-class UserAmbulancePermissionAdminInline(InlineFormSetView):
+class UserAmbulancePermissionAdminInline(InlineFormSetFactory):
     model = UserAmbulancePermission
     form_class = UserAmbulancePermissionAdminForm
     factory_kwargs = {
@@ -237,7 +237,7 @@ class UserAmbulancePermissionAdminInline(InlineFormSetView):
     }
 
 
-class UserHospitalPermissionAdminInline(InlineFormSetView):
+class UserHospitalPermissionAdminInline(InlineFormSetFactory):
     model = UserHospitalPermission
     form_class = UserHospitalPermissionAdminForm
     factory_kwargs = {
