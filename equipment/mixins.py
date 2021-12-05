@@ -51,9 +51,11 @@ class EquipmentHolderCreateMixin:
 
                 # call super
                 return super().form_valid(form)
-        # else:
-        #     # Otherwise treat as if the first form was invalid
-        #     return super().form_invalid(form)
+        else:
+            logger.debug('FORM FAILED')
+            logger.debug(equipmentholder_form)
+            # Otherwise treat as if the first form was invalid
+            return super().form_invalid(form)
 
 
 class EquipmentHolderUpdateMixin:
