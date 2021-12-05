@@ -2,14 +2,14 @@ import logging
 
 from django.db import transaction
 
-from equipment.forms import EquipmentHolderUpdateForm
+from equipment.forms import EquipmentHolderUpdateForm, EquipmentHolderCreateForm
 from equipment.models import EquipmentItem
 
 logger = logging.getLogger(__name__)
 
 
 class EquipmentHolderCreateMixin:
-    equipmentholder_form = EquipmentHolderUpdateForm
+    equipmentholder_form = EquipmentHolderCreateForm
 
     def get_context_data(self, **kwargs):
         # Get the context
@@ -51,6 +51,9 @@ class EquipmentHolderCreateMixin:
 
                 # call super
                 return super().form_valid(form)
+        else:
+            # Otherwise treat as if the first form was invalid
+            return super().form_invalid(form)
 
 
 class EquipmentHolderUpdateMixin:
