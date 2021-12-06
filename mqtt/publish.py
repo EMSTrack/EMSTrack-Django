@@ -194,11 +194,16 @@ class SingletonPublishClient(PublishClient):
         # Makes sure it is a singleton
         self.__dict__ = self._shared_state
 
+        if self.__dict__ == {}:
+            # brand new? initialize something
+            self.singleton = True
+            logger.debug('>> Initializing publish client singleton')
+
         # Do not initialize if already initialized
         if not self.__dict__ == {} and not self.retry:
             # debug initialization
+            logger.debug(">> is '%s' connected? = '%s'", self.client_id, self.is_connected())
             logger.debug(self.__dict__)
-            logger.debug(f'is {self.client_id} connected? = {self.is_connected()}')
 
             # skip initialization
             logger.debug(">> Already connected to MQTT, skipping initialization.")
