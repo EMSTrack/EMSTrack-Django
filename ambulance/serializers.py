@@ -461,11 +461,13 @@ class CallSerializer(serializers.ModelSerializer):
             # creates call first, do not publish
             call = Call(**validated_data)
             call.save(publish=False)
+            logger.debug('creating call')
 
             # then patients, do not publish
             for patient in patient_set:
                 obj = Patient(call=call, **patient)
                 obj.save(publish=False)
+            logger.debug('adding patients')
 
             if call.status != CallStatus.P.name and len(ambulancecall_set) == 0:
                 raise serializers.ValidationError('Started call and ended call must have ambulancecall_set')
@@ -505,6 +507,7 @@ class CallSerializer(serializers.ModelSerializer):
                     # add waypoint
                     obj = Waypoint.objects.create(ambulance_call=ambulance_call, **waypoint,
                                                   location=location, updated_by=user)
+            logger.debug('adding ambulances')
 
             # add users to sms notifications
             for user in sms_notifications:
@@ -512,13 +515,16 @@ class CallSerializer(serializers.ModelSerializer):
                     call.sms_notifications.add(user)
                 else:
                     logger.warning("User %s does not have a mobile phone on file, skipping", user)
+            logger.debug('adding sms')
 
             # publish call to mqtt only after all includes have succeeded
             call.publish()
+            logger.debug(f'publishing call: {call.id}')
 
             # then publish ambulance calls
             for ambulancecall in call.ambulancecall_set.all():
                 ambulancecall.publish()
+                logger.debug(f'publishing ambulance call: {ambulancecall.ambulance_id}')
 
         return call
 
