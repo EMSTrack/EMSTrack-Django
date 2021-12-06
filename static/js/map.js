@@ -93,9 +93,9 @@ function callDate(call) {
 
     // Get relevant date
     let date = call.updated_on;
-    if (status === 'P')
+    if (call.status === 'P')
         date = call.pending_at;
-    else if (status === 'S')
+    else if (call.status === 'S')
         date = call.started_at;
 
     // Format date

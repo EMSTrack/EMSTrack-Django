@@ -1,6 +1,7 @@
 import os
 import atexit
 import logging
+import uuid
 
 from ambulance.serializers import AmbulanceSerializer
 from ambulance.serializers import CallSerializer
@@ -220,7 +221,7 @@ class SingletonPublishClient(PublishClient):
         broker.update(settings.MQTT)
 
         # override client_id
-        broker['CLIENT_ID'] = 'mqtt_publish_' + str(os.getpid())
+        broker['CLIENT_ID'] = f'mqtt_publish_{os.getpid()}_{uuid.uuid4()}'
 
         try:
 
