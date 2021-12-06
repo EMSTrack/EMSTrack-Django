@@ -196,6 +196,10 @@ class SingletonPublishClient(PublishClient):
 
         # Do not initialize if already initialized
         if not self.__dict__ == {} and not self.retry:
+            # debug initialization
+            logger.debug(self.__dict__)
+            logger.debug(f'is connected? = {self.is_connected()}')
+
             # skip initialization
             logger.debug(">> Already connected to MQTT, skipping initialization.")
             return
