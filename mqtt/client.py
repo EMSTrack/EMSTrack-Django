@@ -195,7 +195,7 @@ class BaseClient:
         # logger.debug('retain = {}'.format(retain))
         result = self.client.publish(topic, payload, qos, retain)
         if result.rc:
-            logger.debug('Could not publish to topic (rc = {})'.format(result.rc))
+            logger.debug('Could not publish to topic (rc = %d)', result.rc)
             raise MQTTException('Could not publish to topic (rc = {})'.format(result.rc), result.rc)
 
     def on_publish(self, client, userdata, mid):
@@ -213,7 +213,7 @@ class BaseClient:
         pass
 
     def on_disconnect(self, client, userdata, rc):
-        logger.debug("Disconnecting client '%s', reason '%d'", self.client_id, rc)
+        logger.debug(">> Disconnecting client '%s', reason '%d'", self.client_id, rc)
         self.connected = False
 
     # disconnect
