@@ -127,13 +127,16 @@ class BaseClient:
 
     def send_buffer(self):
 
+        logger.debug('> in send_buffer, waiting for lock...')
+
         # acquire lock
         self.buffer_lock.acquire()
 
         # are there any messages on the buffer?
         while len(self.buffer) > 0:
 
-            logger.debug('> send_buffer len = {}'.format(len(self.buffer)))
+            logger.debug('> send_buffer len = %d, number of attempts = %d',
+                         len(self.buffer), self.number_of_unsuccessful_attempts)
 
             # attempt to send buffered messages
             message = self.buffer.pop(0)
@@ -163,10 +166,13 @@ class BaseClient:
                 # break from loop
                 break
 
-        logger.debug('< send_buffer len = {}'.format(len(self.buffer)))
+        logger.debug('> send_buffer len = %d, number of attempts = %d',
+                     len(self.buffer), self.number_of_unsuccessful_attempts)
 
         # release lock
         self.buffer_lock.release()
+
+        logger.debug('< in send_buffer, releasing lock...')
 
         if self.number_of_unsuccessful_attempts > RETRY_MAX_ATTEMPTS:
             raise MQTTException('Could not publish to MQTT broker.' +
