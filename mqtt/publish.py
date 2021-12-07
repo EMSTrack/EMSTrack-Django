@@ -203,7 +203,6 @@ class SingletonPublishClient(PublishClient):
         elif not self.retry:
             # debug initialization
             logger.debug(">> is '%s' connected? = '%s'", self.client_id, self.is_connected())
-            logger.debug(self.__dict__)
 
             # skip initialization
             logger.debug(">> Already connected to MQTT, skipping initialization.")
