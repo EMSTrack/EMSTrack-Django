@@ -39,12 +39,14 @@ class BaseClient:
         self.style = kwargs.pop('style', color_style())
         self.verbosity = kwargs.pop('verbosity', 1)
         self.debug = kwargs.pop('debug', False)
+        self.reconnect_on_failure = kwargs.pop('reconnect_on_failure', True)
         # self.forgive_mid = False
 
         if self.broker['CLIENT_ID']:
             self.client = mqtt.Client(client_id=self.broker['CLIENT_ID'],
                                       clean_session=self.broker['CLEAN_SESSION'],
-                                      transport=self.transport)
+                                      transport=self.transport,
+                                      reconnect_on_failure=self.reconnect_on_failure)
         else:
             self.client = mqtt.Client()
         # WARNING: get client id from private paho's client id property
@@ -67,6 +69,7 @@ class BaseClient:
                                  retain=will.get('retain', True))
 
         self.client.on_connect = self.on_connect
+        self.client.on_connect_fail = self.on_connect_fail
 
         # self.subscribed = {}
         # self.published = {}
@@ -106,8 +109,16 @@ class BaseClient:
         self.connected = True
 
         # success!
-        logger.info(">> Connected to the MQTT brocker '{}:{}'".format(self.broker['HOST'],
-                                                                      self.broker['PORT']))
+        logger.info(">> %s connected to the MQTT brocker '%s:%s'",
+                    self.broker['CLIENT_ID'], self.broker['HOST'], self.broker['PORT'])
+
+        return True
+
+    def on_connect_fail(self, client, userdata):
+
+        # failed!
+        logger.info(">> %s failed to connect to the MQTT brocker '%s:%s'",
+                    self.broker['CLIENT_ID'], self.broker['HOST'], self.broker['PORT'])
 
         return True
 
@@ -219,7 +230,11 @@ class BaseClient:
         pass
 
     def on_disconnect(self, client, userdata, rc):
-        logger.debug(">> Disconnecting client '%s', reason '%d'", self.client_id, rc)
+
+        # disconnected!
+        logger.info(">> %s disconnect from the MQTT brocker '%s:%s'; reason = %d",
+                    self.broker['CLIENT_ID'], self.broker['HOST'], self.broker['PORT'], rc)
+
         self.connected = False
 
     # disconnect
