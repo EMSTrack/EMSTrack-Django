@@ -128,7 +128,7 @@ class BaseClient:
     def on_disconnect(self, client, userdata, rc):
 
         # disconnected!
-        logger.info(">> '%s' disconnect from the MQTT broker '%s:%s'; reason = %d",
+        logger.info("<< '%s' disconnected from the MQTT broker '%s:%s'; reason = %d",
                     self.client_id, self.broker['HOST'], self.broker['PORT'], rc)
 
         self.connected = False
@@ -150,6 +150,7 @@ class BaseClient:
 
         # add to buffer
         self.buffer.append({'topic': topic, 'payload': payload, 'qos': qos, 'retain': retain})
+        logger.debug(">> '%s' added to buffer; current buffer size = %d", self.client_id, len(self.buffer))
 
         # release lock
         self.buffer_lock.release()
@@ -217,6 +218,13 @@ class BaseClient:
 
     def publish(self, topic, payload=None, qos=0, retain=False):
 
+        if not self.connected:
+
+            # add to buffer
+            logger.debug(">> '%s' is not connected; will add message to buffer", self.client_id)
+            self.add_to_buffer(topic, payload, qos, retain)
+            return
+
         try:
 
             # try to publish
@@ -238,8 +246,8 @@ class BaseClient:
         # logger.debug('retain = {}'.format(retain))
         result = self.client.publish(topic, payload, qos, retain)
         if result.rc:
-            logger.debug('>> Could not publish to topic (rc = %d)', result.rc)
-            raise MQTTException('Could not publish to topic (rc = {})'.format(result.rc), result.rc)
+            logger.debug(">> '%s' could not publish to topic; reason = %d", self.client_id, result.rc)
+            raise MQTTException('Could not publish to topic; reason = {}'.format(result.rc), result.rc)
 
     def on_publish(self, client, userdata, mid):
         logger.debug(">> '%s' published '%s'", self.client_id, userdata)
