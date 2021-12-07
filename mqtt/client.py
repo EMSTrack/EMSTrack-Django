@@ -189,7 +189,7 @@ class BaseClient:
 
             except MQTTException:
 
-                logger.debug('>> could not send message; will try later')
+                logger.debug('>> could not send message; will put back into buffer and try later')
 
                 # put message back
                 self.buffer.insert(0, message)
