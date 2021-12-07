@@ -103,14 +103,14 @@ class BaseClient:
     def on_connect(self, client, userdata, flags, rc):
 
         if rc:
-            logger.debug('>> Could not connect to brocker (rc = {})'.format(rc))
-            raise MQTTException('Could not connect to brocker (rc = {})'.format(rc), rc)
+            logger.debug('>> Could not connect to broker (rc = {})'.format(rc))
+            raise MQTTException('Could not connect to broker (rc = {})'.format(rc), rc)
 
         self.connected = True
 
         # success!
-        logger.info(">> '%s' is now connected to the MQTT brocker '%s:%s'",
-                    self.broker['CLIENT_ID'], self.broker['HOST'], self.broker['PORT'])
+        logger.info(">> '%s' is now connected to the MQTT broker '%s:%s'",
+                    self.client_id, self.broker['HOST'], self.broker['PORT'])
 
         # anything in the buffer? send it now
         self.send_buffer()
@@ -120,16 +120,16 @@ class BaseClient:
     def on_connect_fail(self, client, userdata):
 
         # failed!
-        logger.info(">> '%s' failed to connect to the MQTT brocker '%s:%s'",
-                    self.broker['CLIENT_ID'], self.broker['HOST'], self.broker['PORT'])
+        logger.info(">> '%s' failed to connect to the MQTT broker '%s:%s'",
+                    self.client_id, self.broker['HOST'], self.broker['PORT'])
 
         return True
 
     def on_disconnect(self, client, userdata, rc):
 
         # disconnected!
-        logger.info(">> %s disconnect from the MQTT brocker '%s:%s'; reason = %d",
-                    self.broker['CLIENT_ID'], self.broker['HOST'], self.broker['PORT'], rc)
+        logger.info(">> '%s' disconnect from the MQTT broker '%s:%s'; reason = %d",
+                    self.client_id, self.broker['HOST'], self.broker['PORT'], rc)
 
         self.connected = False
 
@@ -157,10 +157,11 @@ class BaseClient:
     def send_buffer(self):
 
         if len(self.buffer) == 0:
-            logger.info(">> '%s' buffer is empty.")
+            logger.info(">> '%s' buffer is empty.", self.client_id)
+            return
 
         if not self.connected:
-            logger.info(">> '%s' is not connected; buffer not sent.")
+            logger.info(">> '%s' is not connected; buffer not sent.", self.client_id)
             return
 
         logger.debug('>> in send_buffer, waiting for lock...')
@@ -202,7 +203,7 @@ class BaseClient:
                 # break from loop
                 break
 
-        logger.debug('> send_buffer len = %d, number of attempts = %d',
+        logger.debug('>> send_buffer len = %d, number of attempts = %d',
                      len(self.buffer), self.number_of_unsuccessful_attempts)
 
         # release lock
