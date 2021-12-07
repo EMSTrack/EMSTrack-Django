@@ -133,6 +133,11 @@ class BaseClient:
 
         self.connected = False
 
+        # attempt to reconnect
+        if self.reconnect_on_failure:
+            # this should not be necessary but for some reason reconnecting is not working
+            self.client.reconnect()
+
     # disconnect
     def disconnect(self):
         self.client.disconnect()
@@ -250,7 +255,7 @@ class BaseClient:
             raise MQTTException('Could not publish to topic; reason = {}'.format(result.rc), result.rc)
 
     def on_publish(self, client, userdata, mid):
-        logger.debug(">> '%s' published '%s'", self.client_id, userdata)
+        logger.debug(">> '%s' published '%d: %s'", self.client_id, mid, userdata)
 
     def subscribe(self, topic, qos=0):
 
