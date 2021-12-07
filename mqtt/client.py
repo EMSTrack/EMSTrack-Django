@@ -242,7 +242,7 @@ class BaseClient:
             raise MQTTException('Could not publish to topic (rc = {})'.format(result.rc), result.rc)
 
     def on_publish(self, client, userdata, mid):
-        pass
+        logger.debug(">> '%s' published '%s'", self.client_id, userdata)
 
     def subscribe(self, topic, qos=0):
 

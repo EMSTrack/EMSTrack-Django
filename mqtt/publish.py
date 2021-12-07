@@ -250,8 +250,6 @@ class SingletonPublishClient(PublishClient):
             # register atexit handler to make sure it disconnects at exit
             atexit.register(self.disconnect)
 
-            logger.info(">> Succesfully connected to MQTT brocker '{}'".format(broker))
-
         except (MQTTException, OSError) as e:
 
             self.active = False
