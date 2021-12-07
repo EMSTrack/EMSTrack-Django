@@ -109,18 +109,36 @@ class BaseClient:
         self.connected = True
 
         # success!
-        logger.info(">> %s connected to the MQTT brocker '%s:%s'",
+        logger.info(">> '%s' is now connected to the MQTT brocker '%s:%s'",
                     self.broker['CLIENT_ID'], self.broker['HOST'], self.broker['PORT'])
+
+        # anything in the buffer? send it now
+        self.send_buffer()
 
         return True
 
     def on_connect_fail(self, client, userdata):
 
         # failed!
-        logger.info(">> %s failed to connect to the MQTT brocker '%s:%s'",
+        logger.info(">> '%s' failed to connect to the MQTT brocker '%s:%s'",
                     self.broker['CLIENT_ID'], self.broker['HOST'], self.broker['PORT'])
 
         return True
+
+    def on_disconnect(self, client, userdata, rc):
+
+        # disconnected!
+        logger.info(">> %s disconnect from the MQTT brocker '%s:%s'; reason = %d",
+                    self.broker['CLIENT_ID'], self.broker['HOST'], self.broker['PORT'], rc)
+
+        self.connected = False
+
+    # disconnect
+    def disconnect(self):
+        self.client.disconnect()
+
+    def is_connected(self):
+        return self.connected
 
     def on_message(self, client, userdata, msg):
         pass
@@ -138,7 +156,14 @@ class BaseClient:
 
     def send_buffer(self):
 
-        logger.debug('> in send_buffer, waiting for lock...')
+        if len(self.buffer) == 0:
+            logger.info(">> '%s' buffer is empty.")
+
+        if not self.connected:
+            logger.info(">> '%s' is not connected; buffer not sent.")
+            return
+
+        logger.debug('>> in send_buffer, waiting for lock...')
 
         # acquire lock
         self.buffer_lock.acquire()
@@ -146,7 +171,7 @@ class BaseClient:
         # are there any messages on the buffer?
         while len(self.buffer) > 0:
 
-            logger.debug('> send_buffer len = %d, number of attempts = %d',
+            logger.debug('>> send_buffer len = %d, number of attempts = %d',
                          len(self.buffer), self.number_of_unsuccessful_attempts)
 
             # attempt to send buffered messages
@@ -162,7 +187,7 @@ class BaseClient:
 
             except MQTTException:
 
-                logger.debug('could not send message')
+                logger.debug('>> could not send message; will try later')
 
                 # put message back
                 self.buffer.insert(0, message)
@@ -183,7 +208,7 @@ class BaseClient:
         # release lock
         self.buffer_lock.release()
 
-        logger.debug('< in send_buffer, releasing lock...')
+        logger.debug('<< in send_buffer, releasing lock...')
 
         if self.number_of_unsuccessful_attempts > RETRY_MAX_ATTEMPTS:
             raise MQTTException('Could not publish to MQTT broker.' +
@@ -212,7 +237,7 @@ class BaseClient:
         # logger.debug('retain = {}'.format(retain))
         result = self.client.publish(topic, payload, qos, retain)
         if result.rc:
-            logger.debug('Could not publish to topic (rc = %d)', result.rc)
+            logger.debug('>> Could not publish to topic (rc = %d)', result.rc)
             raise MQTTException('Could not publish to topic (rc = {})'.format(result.rc), result.rc)
 
     def on_publish(self, client, userdata, mid):
@@ -228,21 +253,6 @@ class BaseClient:
 
     def on_subscribe(self, client, userdata, mid, granted_qos):
         pass
-
-    def on_disconnect(self, client, userdata, rc):
-
-        # disconnected!
-        logger.info(">> %s disconnect from the MQTT brocker '%s:%s'; reason = %d",
-                    self.broker['CLIENT_ID'], self.broker['HOST'], self.broker['PORT'], rc)
-
-        self.connected = False
-
-    # disconnect
-    def disconnect(self):
-        self.client.disconnect()
-
-    def is_connected(self):
-        return self.connected
 
     # loop
     def loop(self, *args, **kwargs):
