@@ -96,13 +96,13 @@ class Command(BaseCommand):
         import os
 
         broker = {
-            'HOST': '127.0.0.1',
+            'HOST': settings.MQTT['BROKER_HOST'],
             'PORT': 1883,
             'KEEPALIVE': 60,
             'CLEAN_SESSION': True
         }
         broker.update(settings.MQTT)
-        broker['CLIENT_ID'] = 'mqttclean_' + str(os.getpid())
+        broker['CLIENT_ID'] = 'mqttinspect_' + str(os.getpid())
 
         base_topic = options['base_topic']
         timeout = options['timeout']
