@@ -38,6 +38,7 @@ class Client(PublishClient):
         if self.timeout is None:
             if self.verbosity > 0:
                 self.stdout.write(self.style.SUCCESS(">> Will listen forever."))
+            self.client._thread.join()
             return
 
         # are we done yet?
