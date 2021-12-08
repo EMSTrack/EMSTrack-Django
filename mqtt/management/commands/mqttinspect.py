@@ -34,6 +34,12 @@ class Client(PublishClient):
         # start loop
         self.loop_start()
 
+        # timeout?
+        if self.timeout is None:
+            if self.verbosity > 0:
+                self.stdout.write(self.style.SUCCESS(">> Will listen forever."))
+            return
+
         # are we done yet?
         while not self.done():
 
@@ -89,7 +95,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('--base-topic', nargs='?', default='')
-        parser.add_argument('--timeout', nargs='?', type=int, default=10)
+        parser.add_argument('--timeout', nargs='?', type=int, default=None)
 
     def handle(self, *args, **options):
 
@@ -118,7 +124,9 @@ class Command(BaseCommand):
             client.loop()
 
         except KeyboardInterrupt:
-            pass
+            if timeout is None:
+                client.loop_stop()
+                client.disconnect()
 
         finally:
             client.wait()
