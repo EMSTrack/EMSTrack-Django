@@ -34,13 +34,6 @@ class Client(PublishClient):
         # start loop
         self.loop_start()
 
-        # timeout?
-        if self.timeout is None:
-            if self.verbosity > 0:
-                self.stdout.write(self.style.SUCCESS(">> Will listen forever."))
-            self.client._thread.join()
-            return
-
         # are we done yet?
         while not self.done():
 
@@ -122,7 +115,13 @@ class Command(BaseCommand):
                         verbosity=options['verbosity'])
 
         try:
-            client.loop()
+            # timeout?
+            if timeout is None:
+                if options['verbosity'] > 0:
+                    self.stdout.write(self.style.SUCCESS(">> Will listen forever."))
+                client.loop_forever()
+            else:
+                client.loop()
 
         except KeyboardInterrupt:
             if timeout is None:
