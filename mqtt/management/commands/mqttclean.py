@@ -5,7 +5,7 @@ from django.core.management.base import BaseCommand
 from django.conf import settings
 from django.utils import timezone
 
-from mqtt.publish import PublishClient
+from mqtt.publish_client import PublishClient
 
 
 class Client(PublishClient):

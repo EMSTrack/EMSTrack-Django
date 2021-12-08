@@ -1,4 +1,7 @@
+import os
+import atexit
 import logging
+import uuid
 
 from ambulance.serializers import AmbulanceSerializer
 from ambulance.serializers import CallSerializer
@@ -7,13 +10,9 @@ from equipment.serializers import EquipmentItemSerializer, EquipmentSerializer
 from hospital.serializers import HospitalSerializer
 from login.serializers import UserProfileSerializer
 from login.views import SettingsView
+from .client import BaseClient, MQTTException
 
 from environs import Env
-
-import paho.mqtt.publish as publish
-
-from rest_framework import serializers
-from rest_framework.renderers import JSONRenderer
 
 env = Env()
 logger = logging.getLogger(__name__)
@@ -71,54 +70,26 @@ class MessagePublishClient:
         pass
 
 
-class PublishSingle:
+class PublishClient(BaseClient):
 
-    def __init__(self, **kwargs):
-        self.kwargs = kwargs
+    def __init__(self, broker, **kwargs):
 
-    def publish_topic(self, topic, payload, qos=0, retain=False):
+        # call super
+        super().__init__(broker, **kwargs)
 
-        # serializer?
-        if isinstance(payload, serializers.BaseSerializer):
-            payload = JSONRenderer().render(payload.data)
-        else:
-            payload = JSONRenderer().render(payload)
+        # set as active
+        self.active = True
 
-        # Publish to topic
-        publish.single(topic, payload, qos, retain, **self.kwargs)
+        # set retry
+        self.retry = False
 
-    def remove_topic(self, topic, qos=0):
-
-        # Publish null to retained topic
-        publish.single(topic, None, qos=qos, retain=True, **self.kwargs)
-
-
-class SingletonPublishClient(PublishSingle):
-
-    def __init__(self, **kwargs):
-        self.active = kwargs.pop('active', True)
-
-        mqtt_publish = env.bool("DJANGO_ENABLE_MQTT_PUBLISH", default=True)
-        if not mqtt_publish:
-
-            self.active = False
-            logger.info(">> No connection to MQTT, will not publish messages")
-            return
-
-        # initialization
-        from django.conf import settings
-
-        broker = {
-            'hostname': settings.MQTT['BROKER_HOST'] if not settings.TESTING else settings.MQTT['BROKER_TEST_HOST'],
-            'port': 1883,
-            'auth': {
-                'username': settings.MQTT['USERNAME'],
-                'password': settings.MQTT['PASSWORD']
-            }
-        }
-        broker.update(kwargs)
-
-        super().__init__(**broker)
+    def on_disconnect(self, client, userdata, rc):
+        # Exception is generated only if never connected
+        if not self.connected and rc:
+            raise MQTTException('Disconnected',
+                                rc)
+        # call super
+        super().on_disconnect(client, userdata, rc)
 
     def publish_topic(self, topic, payload, qos=0, retain=False):
         if self.active:
@@ -211,3 +182,92 @@ class SingletonPublishClient(PublishSingle):
     def remove_call_status(self, ambulancecall):
         self.remove_topic('ambulance/{}/call/{}/status'.format(ambulancecall.ambulance_id,
                                                                ambulancecall.call_id))
+
+
+# Uses Alex Martelli's Borg for making PublishClient act like a singleton
+
+class SingletonPublishClient(PublishClient):
+    _shared_state = {}
+
+    def __init__(self, **kwargs):
+
+        # Makes sure it is a singleton
+        self.__dict__ = self._shared_state
+
+        if self.__dict__ == {}:
+            # brand new? initialize something
+            self.singleton = True
+            logger.debug('>> Initializing publish client singleton')
+
+        # Do not initialize if already initialized
+        elif not self.retry:
+            # skip initialization
+            logger.debug(">> '%s' is already connected to MQTT, skipping initialization.", self.client_id)
+            logger.debug(">> is '%s' connected? = '%s'", self.client_id, self.is_connected())
+            return
+
+        logger.debug('>> Connecting to MQTT')
+        mqtt_publish = env.bool("DJANGO_ENABLE_MQTT_PUBLISH", default=True)
+        if not mqtt_publish:
+
+            self.active = False
+            self.retry = True
+
+            logger.info(">> No connection to MQTT. Will retry later...")
+            return
+
+        # initialization
+        from django.conf import settings
+
+        broker = {
+            'HOST': settings.MQTT['BROKER_HOST'] if not settings.TESTING else settings.MQTT['BROKER_TEST_HOST'],
+            'PORT': 1883,
+            'KEEPALIVE': 60,
+            'CLEAN_SESSION': True
+        }
+        broker.update(settings.MQTT)
+
+        # override client_id
+        broker['CLIENT_ID'] = f'mqtt_publish_{os.getpid()}_{uuid.uuid4()}'
+
+        try:
+
+            # try to connect
+            logger.info('>> Connecting to MQTT brocker...')
+
+            # initialize PublishClient
+            super().__init__(broker, **kwargs)
+
+            # wait for connection
+            while not self.connected:
+                self.loop()
+
+            # start loop
+            self.loop_start()
+
+            # register atexit handler to make sure it disconnects at exit
+            atexit.register(self.disconnect)
+
+        except (MQTTException, OSError) as e:
+
+            self.active = False
+            self.retry = True
+
+            logger.info(">> Failed to connect to MQTT brocker '{}'. Will retry later...".format(broker))
+            logger.info('>> Generated exception: {}'.format(e))
+
+    def disconnect(self):
+
+        # try to connect
+        logger.info('<< Disconnecting from MQTT brocker')
+
+        # disconnect
+        self.loop_stop()
+        super().disconnect()
+
+        self.active = False
+        self.retry = True
+
+# mqtt_cache_clear
+
+

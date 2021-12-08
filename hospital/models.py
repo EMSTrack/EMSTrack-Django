@@ -41,7 +41,7 @@ class Hospital(Location):
         if env.bool("DJANGO_ENABLE_MQTT_PUBLISH", default=True):
 
             # publish to mqtt
-            from mqtt.publish import SingletonPublishClient
+            from mqtt.publish_client import SingletonPublishClient
             SingletonPublishClient().publish_hospital(self)
 
         # just created?

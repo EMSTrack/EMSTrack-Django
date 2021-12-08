@@ -4,7 +4,7 @@ import time
 from django.conf import settings
 
 from login.permissions import cache_clear, get_permissions, cache_info
-from mqtt.publish import SingletonPublishClient
+from mqtt.publish_client import SingletonPublishClient
 from mqtt.subscribe import SubscribeClient
 from .client import MQTTTestCase, MQTTTestClient, TestMQTT
 from .client import MQTTTestSubscribeClient as SubscribeClient
