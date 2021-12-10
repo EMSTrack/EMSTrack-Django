@@ -168,36 +168,151 @@
                 </button>        					
             </div>
 
-            <!-- New Call tab -->
-            <!-- <div class="ambulance-tab-content">
-                
-            </div> -->
+            <!-- Dispatch tab -->
+            <div class="dispatch-tab-content" id="newDispatchDiv">
+                <!-- Dispatch -->
+                <form id="dispatch-form-collapse"
+                      method="POST" action="">
+                    {% csrf_token %}
 
-            <!-- Settings Filters (including the following filters, by default hidden, since not selected yet) -->
-            <!-- 1. Ambulance Online Filter -->
-            <!-- <div class="settings-tab-content d-none">
-                <h5 class="mt-2"
-                    aria-expanded="true">
-                    <span class="fas fa-mobile-alt"></span>
-                    {% trans "Service" %}
-                </h5>
-                <div id="ambulance-online-status"></div>
-            -->
-                <!-- 2. Capability Filter -->
-            <!--    <h5 class="mt-2"
-                    aria-expanded="true">
-                    <span class="fas fa-bed"></span>
-                    {% trans "Capability" %}
-                </h5>
-                <div id="ambulance-capability"></div>
+                    <button type="submit"
+                            id="dispatchSubmitButton"
+                            class="btn btn-danger btn-block">
+                        {% trans "Dispatch" %}
+                    </button>
 
-            
-            </div> -->
+                    <h5 class="mb-0">
+                        {% trans "Priority" %}
+                    </h5>
+                    {% if priority_code_list %}
+                    <div class="text-right">
+                        <label class="d-inline-block text-right" id="priority-classification" name="priority-classification">
+                            <span class="text-muted small">{% trans "Priority Classification" %}</span>
+                        </label>
+                    </div>
+                    {% endif  %}
+                    <div class="text-right">
+                        <div id="priority-buttons"
+                             class="btn-group btn-group-toggle border rounded"
+                             data-toggle="buttons">
+                        </div>
+                    </div>
+                    {% if priority_code_list %}
+                    <div class="text-right">
+                        <label class="d-inline-block text-right" id="priority-code" name="priority-code">
+                            <span class="text-muted small">{% trans "Priority Code" %}</span>
+                        </label>
+                    </div>
+                    <input class="form-control form-control-sm"
+                           id="priority-code-input"
+                           list="priority-code-list"
+                           name="priority-code-input"
+                           placeholder="{% trans 'Priority Code' %}">
+                    <datalist id="priority-code-list">
+                        {% for code in priority_code_list %}
+                        <option id="priority-code-{{ code.id }}" value="{{ code.prefix.id }}-{{ code.priority }}-{{ code.suffix }}">{{ code.label }}</option>
+                        {% endfor %}
+                    </datalist>
+                    {% endif  %}
 
-            <!-- Calls Filter -->               <!-- TODO: not yet implemented!! -->
-            <!-- <div class="calls-tab-content d-none" id="TODO"></div> -->
+                    {% if radio_code_list %}
+                    <h5 class="mb-0">
+                        {% trans "Radio Code" %}
+                    </h5>
+                    <div class="text-right">
+                        <label class="d-inline-block text-right" id="radio-code" name="radio-code">
+                            <span class="text-muted small">{% trans "Radio Code" %}</span>
+                        </label>
+                    </div>
+                    <input class="form-control form-control-sm"
+                           id="radio-code-input" list="radio-code-list"
+                           name="radio-code-input"
+                           placeholder="{% trans 'Radio Code' %}">
+                    <datalist id="radio-code-list">
+                        {% for code in radio_code_list %}
+                        <option id="radio-code-{{ code.id }}" value="{{ code.code }}">{{ code.label }}</option>
+                        {% endfor %}
+                    </datalist>
+                    {% endif  %}
 
-            <!--</div>-->
+                    <h5>
+                        {% trans "Description" %}
+                    </h5>
+                    <textarea class="form-control form-control-sm"
+                              name="description"
+                              rows="2" id="comment"
+                              placeholder="{% trans 'Describe the incident' %}"
+                              required></textarea>
+
+                    <h5>
+                        {% trans "Street address" %}
+                        <div class="float-right small"
+                             title="Click to automatically search for coordinates after changing the address">
+                            {% trans "update coordinates" %}
+                            <input id="update-coordinates" type="checkbox">
+                        </div>
+                    </h5>
+                    <input class="form-control form-control-sm"
+                           id="street" type="text"
+                           name="street"
+                           placeholder="{% trans 'Address' %}" required> <!-- autocomplete="street-address"-->
+
+                    <h5>
+                        {% trans "Coordinates" %}
+                        <div class="float-right small"
+                             title="{% trans 'Click to automatically search for address after changing the coordinates' %}">
+                            {% trans "update address" %}
+                            <input id="update-address" type="checkbox" checked>
+                        </div>
+                    </h5>
+                    <div class="card"
+                         title="Click on map to update coordinates">
+                        <div class="card-body py-1 px-3 small">
+                            <strong>{% trans "Lat" %}:</strong>
+                            <div id="curr-lat" style="display: inline-block;"></div>
+                            , &nbsp;
+                            <strong>{% trans "Lon" %}:</strong>
+                            <div id="curr-lng" style="display: inline-block;"></div>
+                        </div>
+                    </div>
+
+                    <h5>
+                        {% trans "Ambulances" %}
+                    </h5>
+                    <div class="card px-0 py-0">
+                        <div class="card-body py-1 px-2"
+                             id="ambulance-selection">
+                            <input id="ambulance-selection-message"
+                                   class="border-0 w-100 small"
+                                   placeholder="{% trans 'Click on or drag ambulances here' %}"/>
+                        </div>
+                    </div>
+
+                    <h5>
+                        {% trans "Patients" %}
+                    </h5>
+                    <div id="patients">
+                    </div>
+
+                    <h5>
+                        {% trans "SMS Notifications" %}
+                    </h5>
+                    <div id="sms-notifications">
+                    </div>
+                    <datalist id="sms-notifications-list">
+                        {% for user in sms_notifications_list %}
+                            <option data-id="{{ user.id }}" value="{{ user.username }}">{{ user.username }}</option>
+                        {% endfor %}
+                    </datalist>
+
+                </form>
+
+            </div>
+
+            <!-- Calls tab -->
+            <div class="calls-tab-content d-none">
+                <div id="call-status"></div>
+            </div>
         </nav>
 
         
@@ -210,29 +325,14 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        <!--
-        <div class="col-md-3 border-top border-secondary bg-light"
+        
+        <!-- <div class="col-md-3 border-top border-secondary bg-light"
              id="dispatchDiv">
 
             {% if user|is_dispatcher %} -->
 
                 <!-- Calls Filter -->
-        <!--        <h5 class="mt-2"
+                <!-- <h5 class="mt-2"
                     style="cursor: pointer;"
                     data-toggle="collapse"
                     data-target="#newDispatchDiv"
@@ -243,10 +343,10 @@
                     </span>
                 </h5>
 
-                <div class="collapse" id="newDispatchDiv">  -->
-
+                <div class="collapse" id="newDispatchDiv"> -->
+            <!--    <div class="dispatch-tab-content" id="newDispatchDiv"> -->
                     <!-- Dispatch -->
-                <!--    <form id="dispatch-form-collapse"
+            <!--        <form id="dispatch-form-collapse"
                           method="POST" action="">
                         {% csrf_token %}
 
@@ -331,8 +431,8 @@
                                id="street" type="text"
                                name="street"
                                placeholder="{% trans 'Address' %}" required> <!-- autocomplete="street-address"-->
-
-                    <!--    <h5>
+                    <!--
+                        <h5>
                             {% trans "Coordinates" %}
                             <div class="float-right small"
                                  title="{% trans 'Click to automatically search for address after changing the coordinates' %}">
@@ -387,7 +487,7 @@
             {% endif %} -->
 
             <!-- Calls Filter -->
-            <!-- <h5 class="mt-2"
+        <!--    <h5 class="mt-2"
                 style="cursor: pointer;"
                 data-toggle="collapse"
                 data-target="#call-status"
@@ -473,8 +573,8 @@
 		[lhsTabBtnIds[1], "settings-tab-content"], 
 		[rhsTabBtnIds[0], "dispatch-tab-content"], 
 		[rhsTabBtnIds[1], "calls-tab-content"]
-	]);
-	
+    ]);
+
 	function selectBtn(btnId) {
         // Special case here for the dispatch tab as it is alternating between two images = not a font icon
         if (btnId === "dispatch-tab-button") {
@@ -519,9 +619,7 @@
 			}
 	}
 	function lhsToggleSelByIcon(id) {
-        //alert(id);
 		if ((id.length !== 0) && (id !== lhsCurrTab)) {
-                //alert(lhsCurrTab);
 				unSelectBtn(lhsCurrTab);
 				lhsCurrTab = id;
 				selectBtn(lhsCurrTab);
@@ -539,12 +637,9 @@
 	function rhsToggleSelByIcon(id) {
         // we don't want to call btn's eventlistener to do the same thing again
         event.stopPropagation();
-        //alert(id);
 		if ((id.length !== 0) && (id !== rhsCurrTab)) {
-                //alert(rhsCurrTab);
 				unSelectBtn(rhsCurrTab);
                 rhsCurrTab = id;
-                //alert(rhsCurrTab);
 				selectBtn(rhsCurrTab);
 			}
 	}
@@ -597,6 +692,6 @@
 </script>
 {% endautoescape %}
 
-{% render_bundle 'main' 'js' 'MAP' %}
+{% render_bundle 'main' 'js' 'MAP' %}  
 
 {% endblock %}
