@@ -117,7 +117,7 @@ button:focus {
 }
 
 
-.ambulance-tab-content, .settings-tab-content, .calls-tab-content {
+.ambulance-tab-content, .settings-tab-content, .calls-tab-content, .dispatch-tab-content {
     padding: 10px;
 }
 
