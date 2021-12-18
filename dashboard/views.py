@@ -34,10 +34,8 @@ class DashboardView(TemplateView):
         # logger.error(list_of_users[1])
         # user = User.objects.get(username="admin")
         # logger.error(user)
-        user = authenticate(username='admin', password='cruzrojaadmin')
-        logger.error(user)
-        user = user[0]
-        token, created = Token.objects.get_or_create(user=user)
+        # user = authenticate(username='admin', password='cruzrojaadmin')
+        token, created = Token.objects.get_or_create(user=self.request.user)
         context['token'] = token.key
         # context['token'] = self.request.META[]
         # context['username1'] = token_2.key
