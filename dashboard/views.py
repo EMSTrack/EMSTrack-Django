@@ -26,6 +26,6 @@ class DashboardView(TemplateView):
             token = res.json()['token']
         elif mode == "production": # if running on your own computer, has empty data
             token, created = Token.objects.get_or_create(user=self.request.user)
-        context['token'] = token.key
+        context['token'] = token
 
         return context
