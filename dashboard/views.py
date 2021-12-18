@@ -4,6 +4,7 @@ from rest_framework.authtoken.models import Token
 import requests
 import os
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
 
 logger = logging.getLogger(__name__)
 
@@ -33,8 +34,10 @@ class DashboardView(TemplateView):
         # logger.error(list_of_users[1])
         # user = User.objects.get(username="admin")
         # logger.error(user)
-        token, created = Token.objects.get_or_create(user=self.request.user)
+        user = authenticate(username='admin', password='cruzrojaadmin')
+        token, created = Token.objects.get_or_create(user=user)
         context['token'] = token.key
+        # context['token'] = self.request.META[]
         # context['username1'] = token_2.key
         # context['token_2'] = self.request.user.is_authenticated
         # context['username2'] = self.request.user.is_anonymous
