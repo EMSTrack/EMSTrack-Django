@@ -36,6 +36,7 @@ class DashboardView(TemplateView):
         # logger.error(user)
         user = authenticate(username='admin', password='cruzrojaadmin')
         logger.error(user)
+        user = user[0]
         token, created = Token.objects.get_or_create(user=user)
         context['token'] = token.key
         # context['token'] = self.request.META[]
