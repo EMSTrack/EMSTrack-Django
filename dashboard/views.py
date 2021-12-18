@@ -13,7 +13,10 @@ class DashboardView(TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        mode = "dev"
+        # if mode is dev, we directly call ucsd server, which has data
+        # if mode is prod, we call ourselves, which will have nothing if 
+        # running on local machine, but will have data when on ucsd server
+        mode = "production" # run in dev if on local machine, change to prod when deploy
         if mode == "dev":
             SERVER = "UCSD"
             param = {
