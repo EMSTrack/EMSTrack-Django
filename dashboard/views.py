@@ -13,7 +13,7 @@ class DashboardView(TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        mode = "production"
+        mode = "dev"
         if mode == "dev":
             SERVER = "UCSD"
             param = {
