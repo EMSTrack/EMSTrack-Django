@@ -407,10 +407,12 @@ class CallRadioCodeSerializer(serializers.ModelSerializer):
 
 class CallNoteSerializer(serializers.ModelSerializer):
 
+    updated_by_username = serializers.CharField(source='updated_by.username', required=False)
+
     class Meta:
         model = CallNote
-        fields = ['comment', 'updated_by', 'updated_on']
-        read_only_fields = ['updated_by', 'updated_on']
+        fields = ['comment', 'updated_by', 'updated_by_username', 'updated_on']
+        read_only_fields = ['updated_by', 'updated_by_username', 'updated_on']
 
     def create(self, validated_data):
 
