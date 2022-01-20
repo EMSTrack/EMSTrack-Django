@@ -32,3 +32,4 @@ class DashboardView(TemplateView):
         context['token'] = token
 
         return context
+        
