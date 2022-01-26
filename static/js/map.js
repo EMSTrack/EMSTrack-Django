@@ -2626,7 +2626,7 @@ function newPatientForm(index, symbol) {
 }
 
 /* Map Side Bars Frontend */
-/* const lhsTabBtnIds = ["ambulance-tab-button", "settings-tab-button"];
+const lhsTabBtnIds = ["ambulance-tab-button", "settings-tab-button"];
 const rhsTabBtnIds = ["dispatch-tab-button", "calls-tab-button"];
 
 let lhsCurrTab = "ambulance-tab-button";
@@ -2744,11 +2744,11 @@ leftDismissBtn.addEventListener("click", (e) => {
 })
 
 // Add event listener for collapsing the right side bar
-const rightDismissBtn = document.getElementById("right-return-tab-button");
-rightDismissBtn.addEventListener("click", (e) => {
-    e.preventDefault();
-    rightSideBar.className = rightSideBarInitClass;	// Remove class = "active"
-}) */
+$('right-return-tab-button')
+    .on('click', (e) => {
+        e.preventDefault();
+        $('dispatchDiv').className = rightSideBarInitClass;	// Remove class = "active"
+    });
 
 /* Map Side Bar Frontend Logis Ends HERE */
 
