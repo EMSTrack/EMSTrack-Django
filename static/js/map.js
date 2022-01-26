@@ -2626,134 +2626,140 @@ function newPatientForm(index, symbol) {
 }
 
 /* Map Side Bars Frontend */
-const lhsTabBtnIds = ['ambulance-tab-button', 'settings-tab-button'];
-const rhsTabBtnIds = ['dispatch-tab-button', 'calls-tab-button'];
+const lhsTabBtnIds = ["ambulance-tab-button", "settings-tab-button"];
+const rhsTabBtnIds = ["dispatch-tab-button", "calls-tab-button"];
 
-let lhsCurrTab = 'ambulance-tab-button';
-let rhsCurrTab = 'dispatch-tab-button';
+let lhsCurrTab = "ambulance-tab-button";
+let rhsCurrTab = "dispatch-tab-button";
 
 const tabContentMap = new Map([	
-    [lhsTabBtnIds[0], '.ambulance-tab-content'], 
-    [lhsTabBtnIds[1], '.settings-tab-content'], 
-    [rhsTabBtnIds[0], '.dispatch-tab-content'], 
-    [rhsTabBtnIds[1], '.calls-tab-content']
+    [lhsTabBtnIds[0], "ambulance-tab-content"], 
+	[lhsTabBtnIds[1], "settings-tab-content"], 
+	[rhsTabBtnIds[0], "dispatch-tab-content"], 
+	[rhsTabBtnIds[1], "calls-tab-content"]
 ]);
 
 function selectBtn(btnId) {
     // Special case here for the dispatch tab as it is alternating between two images = not a font icon
-    if (btnId === 'dispatch-tab-button') {
-        $('#right-side-bar-dispatch-icon')[0].className = 'd-none';
-        $('#right-side-bar-dispatch-icon-active')[0].className = 'd-inline-block';
+    if (btnId === "dispatch-tab-button") {
+        document.getElementById("right-side-bar-dispatch-icon").className = "d-none";
+        document.getElementById("right-side-bar-dispatch-icon-active").className = "d-inline-block";
     }
 
     // set btn style to dark
-    $('#' + btnId)[0].className = 'btn-selected d-flex align-items-center justify-content-center';
-    // let the corresponding content visible by setting their class name
-    const tabContentClass = tabContentMap.get(btnId);
-    var tabContent = $(tabContentClass);
+	document.getElementById(btnId).className = "btn-selected d-flex align-items-center justify-content-center";
+	// let the corresponding content visible by setting their class name
+	const tabContentClass = tabContentMap.get(btnId);
+    var tabContent = document.getElementsByClassName(tabContentClass);
     for (let content of tabContent) {
-        content.setAttribute('class', tabContentClass);
+        content.className = tabContentClass;
     }
 }
 
 function unSelectBtn(btnId) {
     // Special case here for the dispatch tab as it is alternating between two images = not a font icon
-    if (btnId === 'dispatch-tab-button') {
-        $('#right-side-bar-dispatch-icon-active')[0].className = 'd-none';
-        $('#right-side-bar-dispatch-icon')[0].className = 'd-inline-block';
+    if (btnId === "dispatch-tab-button") {
+        document.getElementById("right-side-bar-dispatch-icon-active").className = "d-none";
+        document.getElementById("right-side-bar-dispatch-icon").className = "d-inline-block";
     }
 
     // set btn style to light
-    $('#' + btnId)[0].className = 'tab-button d-flex align-items-center justify-content-center';
-    // let the corresponding content box invisible
+	document.getElementById(btnId).className = "tab-button d-flex align-items-center justify-content-center";
+	// let the corresponding content box invisible
     const tabContentClass = tabContentMap.get(btnId);
-    var tabContent = $(tabContentClass);
+    var tabContent = document.getElementsByClassName(tabContentClass);
     for (let content of tabContent) {
-        content.setAttribute('class', tabContentClass + ' d-none');
+        content.className = tabContentClass + " d-none";
     }
 }
 
 // Toggel lhs tab selection
 function lhsToggleSelByBtn(e) {
-    e.preventDefault();
-    if ((e.target.id.length !== 0) && (e.target.id !== lhsCurrTab)) {
-            unSelectBtn(lhsCurrTab);
-            lhsCurrTab = e.target.id;
-            selectBtn(lhsCurrTab);
-        }
+	e.preventDefault();
+	if ((e.target.id.length !== 0) && (e.target.id !== lhsCurrTab)) {
+			unSelectBtn(lhsCurrTab);
+			lhsCurrTab = e.target.id;
+			selectBtn(lhsCurrTab);
+		}
 }
 function lhsToggleSelByIcon(id) {
-    if ((id.length !== 0) && (id !== lhsCurrTab)) {
-            unSelectBtn(lhsCurrTab);
-            alert('Unselect btn ' + lhsCurrTab);
-            lhsCurrTab = id;
-            selectBtn(lhsCurrTab);
-            alert('Select btn ' + lhsCurrTab);
-        }
+	if ((id.length !== 0) && (id !== lhsCurrTab)) {
+			unSelectBtn(lhsCurrTab);
+			lhsCurrTab = id;
+			selectBtn(lhsCurrTab);
+		}
 }
+
 $('#ambulance-tab-icon')
     .on('click', () => {
-        lhsToggleSelByIcon('ambulance-tab-button')
+        alert("yoooo");
+        lhsToggleSelByIcon('ambulance-tab-button');
     });
-
 
 // Toggel rhs tab selection
 function rhsToggleSelByBtn(e) {
-    e.preventDefault();
-    if ((e.target.id.length !== 0) && (e.target.id !== rhsCurrTab)) {
-            unSelectBtn(rhsCurrTab);
-            rhsCurrTab = e.target.id;
-            selectBtn(rhsCurrTab);
-        }
+	e.preventDefault();
+	if ((e.target.id.length !== 0) && (e.target.id !== rhsCurrTab)) {
+			unSelectBtn(rhsCurrTab);
+			rhsCurrTab = e.target.id;
+			selectBtn(rhsCurrTab);
+	}
 }
+    
 function rhsToggleSelByIcon(id) {
     // we don't want to call btn's eventlistener to do the same thing again
     event.stopPropagation();
-    if ((id.length !== 0) && (id !== rhsCurrTab)) {
-            unSelectBtn(rhsCurrTab);
-            rhsCurrTab = id;
-            selectBtn(rhsCurrTab);
-        }
+	if ((id.length !== 0) && (id !== rhsCurrTab)) {
+		unSelectBtn(rhsCurrTab);
+        rhsCurrTab = id;
+		selectBtn(rhsCurrTab);
+	    }
 }
+
 
 // Add event listener of changing selected styles to lhs/rhs tab buttons
 for (let btnId of lhsTabBtnIds) {
-    $('#' + btnId).on('click', (e) => lhsToggleSelByBtn(e));
+	const button = document.getElementById(btnId);
+    button.addEventListener("click", (e) => lhsToggleSelByBtn(e)); 
 }
 for (let btnId of rhsTabBtnIds) {
-    $('#' + btnId).on('click', (e) => rhsToggleSelByBtn(e));
+	const button = document.getElementById(btnId);
+	button.addEventListener("click", (e) => rhsToggleSelByBtn(e));
 }
 
-const leftSideBar = $('#filtersDiv')[0];
-const rightSideBar = $('#dispatchDiv')[0];
+
+//-------------------------------------------------------------
+// Add event listener for expanding the left side bar
+const leftSideBar = document.getElementById("filtersDiv");
+const leftSideBarBtn = document.getElementById("left-side-bar-btn");
+const rightSideBar = document.getElementById("dispatchDiv");
+const rightSideBarBtn = document.getElementById("right-side-bar-btn");
 const leftSideBarInitClass = leftSideBar.className;
 const rightSideBarInitClass = rightSideBar.className;
-        
-$('#left-side-bar-btn')
-    .on('click', (e) => {
-        e.preventDefault();
-        leftSideBar.className += ' active';				// Add class = 'active'
-    });
-
-$('#right-side-bar-btn')
-    .on('click', (e) => {
-        e.preventDefault();
-        rightSideBar.className += ' active';				// Add class = "active"
-    });
+			
+leftSideBarBtn.addEventListener("click", (e) => {
+	e.preventDefault();
+	leftSideBar.className += " active";				// Add class = "active"
+})
+    
+rightSideBarBtn.addEventListener("click", (e) => {
+	e.preventDefault();
+	rightSideBar.className += " active";				// Add class = "active"
+})
 
 // Add event listener for collapsing the left side bar
-$('#left-return-tab-button')
-    .on('click', (e) => {
-        e.preventDefault();
-        leftSideBar.className = leftSideBarInitClass;	// Remove class = "active"
-    });  
+const leftDismissBtn = document.getElementById("left-return-tab-button");
+leftDismissBtn.addEventListener("click", (e) => {
+	e.preventDefault();
+	leftSideBar.className = leftSideBarInitClass;	// Remove class = "active"
+})
 
 // Add event listener for collapsing the right side bar
-$('#right-return-tab-button')
-    .on('click', (e) => {
-        e.preventDefault();
-        rightSideBar.className = rightSideBarInitClass;	// Remove class = "active"
-    });
+const rightDismissBtn = document.getElementById("right-return-tab-button");
+rightDismissBtn.addEventListener("click", (e) => {
+	e.preventDefault();
+	rightSideBar.className = rightSideBarInitClass;	// Remove class = "active"
+})
 
 /* Map Side Bar Frontend Logis Ends HERE */
 
