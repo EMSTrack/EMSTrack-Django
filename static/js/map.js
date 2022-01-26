@@ -2683,12 +2683,18 @@ function lhsToggleSelByBtn(e) {
         }
 }
 function lhsToggleSelByIcon(id) {
+    event.stopPropagation();
     if ((id.length !== 0) && (id !== lhsCurrTab)) {
             unSelectBtn(lhsCurrTab);
             lhsCurrTab = id;
             selectBtn(lhsCurrTab);
         }
 }
+$('ambulance-tab-icon').on('click', () => {
+    lhsToggleSelByIcon('ambulance-tab-button');
+});
+
+
 // Toggel rhs tab selection
 function rhsToggleSelByBtn(e) {
     e.preventDefault();
