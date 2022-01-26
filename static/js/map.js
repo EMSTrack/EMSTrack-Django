@@ -2654,7 +2654,7 @@ function selectBtn(btnId) {
 	const tabContentClass = tabContentMap.get(btnId);
     var tabContent = document.getElementsByClassName(tabContentClass);
     for (let content of tabContent) {
-        content.className = tabContentClass;
+        content.setAttribute('class', tabContentClass);
     }
 }
 
@@ -2671,7 +2671,7 @@ function unSelectBtn(btnId) {
     const tabContentClass = tabContentMap.get(btnId);
     var tabContent = document.getElementsByClassName(tabContentClass);
     for (let content of tabContent) {
-        content.className = tabContentClass + " d-none";
+        content.setAttribute('class', tabContentClass + " d-none");
     }
 }
 
@@ -2693,8 +2693,8 @@ function lhsToggleSelByIcon(id) {
 }
 for (let iconId of lhsTabIconIds) {
     $(document).on('click', '#' + iconId, function() {
-        alert("select " + iconId);
-        alert("curr lhs = " + lhsCurrTab);
+        //alert("select " + iconId);
+        //alert("curr lhs = " + lhsCurrTab);
         lhsToggleSelByIcon(iconId.replace('icon', 'button'));
     });
 }
