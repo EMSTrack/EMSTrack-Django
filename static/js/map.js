@@ -2685,11 +2685,14 @@ function lhsToggleSelByBtn(e) {
 function lhsToggleSelByIcon(id) {
     if ((id.length !== 0) && (id !== lhsCurrTab)) {
             unSelectBtn(lhsCurrTab);
+            console.log('Unselect btn ' + lhsCurrTab);
             lhsCurrTab = id;
             selectBtn(lhsCurrTab);
+            console.log('Select btn ' + lhsCurrTab);
         }
 }
 $('ambulance-tab-icon').on('click', () => {
+    console.log('Click on ambulance tab icon!');
     lhsToggleSelByIcon('ambulance-tab-button');
 });
 
