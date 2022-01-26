@@ -2642,8 +2642,8 @@ const tabContentMap = new Map([
 function selectBtn(btnId) {
     // Special case here for the dispatch tab as it is alternating between two images = not a font icon
     if (btnId === "dispatch-tab-button") {
-        document.getElementById("right-side-bar-dispatch-icon").className = "d-none";
-        document.getElementById("right-side-bar-dispatch-icon-active").className = "d-inline-block";
+        $("#right-side-bar-dispatch-icon").className = "d-none";
+        $("#right-side-bar-dispatch-icon-active").className = "d-inline-block";
     }
 
     // set btn style to dark
@@ -2756,7 +2756,7 @@ $('#right-return-tab-button')
     .on('click', (e) => {
         alert("Hellow!");
         e.preventDefault();
-        $('#dispatchDiv').className = rightSideBarInitClass;	// Remove class = "active"
+        $('#dispatchDiv').setAttribute('class', rightSideBarInitClass);	// Remove class = "active"
     });
 
 /* Map Side Bar Frontend Logis Ends HERE */
