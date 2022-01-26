@@ -2679,24 +2679,24 @@ function unSelectBtn(btnId) {
 function lhsToggleSelByBtn(e) {
 	e.preventDefault();
 	if ((e.target.id.length !== 0) && (e.target.id !== lhsCurrTab)) {
-			unSelectBtn(lhsCurrTab);
-			lhsCurrTab = e.target.id;
-			selectBtn(lhsCurrTab);
-		}
+		unSelectBtn(lhsCurrTab);
+		lhsCurrTab = e.target.id;
+		selectBtn(lhsCurrTab);
+	}
 }
 function lhsToggleSelByIcon(id) {
     event.stopPropagation();
 	if ((id.length !== 0) && (id !== lhsCurrTab)) {
-			unSelectBtn(lhsCurrTab);
-			lhsCurrTab = id;
-			selectBtn(lhsCurrTab);
-		}
+        alert("going to select and deselect " + id);
+    	unSelectBtn(lhsCurrTab);
+		lhsCurrTab = id;
+        selectBtn(lhsCurrTab);
+    }
 }
 for (let iconId of lhsTabIconIds) {
     $(document).on('click', '#' + iconId, function() {
         //alert("select " + iconId);
         //alert("curr lhs = " + lhsCurrTab);
-        alert("going to select " + iconId.replace('icon', 'button'));
         lhsToggleSelByIcon(iconId.replace('icon', 'button'));
     });
 }
