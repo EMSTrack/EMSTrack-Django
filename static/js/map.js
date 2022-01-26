@@ -2690,6 +2690,12 @@ function lhsToggleSelByIcon(id) {
 		}
 }
 
+$('#ambulance-tab-icon')
+    .on('click', () => {
+        alert("yoooo");
+        lhsToggleSelByIcon('ambulance-tab-button');
+    });
+
 // Toggel rhs tab selection
 function rhsToggleSelByBtn(e) {
 	e.preventDefault();
@@ -2936,12 +2942,5 @@ $(function() {
 
         });
     }
-
-    $('#ambulance-tab-icon')
-    .on('click', () => {
-        alert("yoooo");
-        lhsToggleSelByIcon('ambulance-tab-button');
-    });
-
 
 });
