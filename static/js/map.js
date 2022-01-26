@@ -2691,7 +2691,7 @@ function lhsToggleSelByIcon(id) {
             alert('Select btn ' + lhsCurrTab);
         }
 }
-$('#ambulance-tab-icon').on('click', () => {
+$('#ambulance-tab-icon').on('click', function() {
     alert('Click on ambulance tab icon!');
     lhsToggleSelByIcon('ambulance-tab-button');
 });
