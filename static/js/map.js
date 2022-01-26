@@ -2679,8 +2679,6 @@ function unSelectBtn(btnId) {
 function lhsToggleSelByBtn(e) {
 	e.preventDefault();
 	if ((e.target.id.length !== 0) && (e.target.id !== lhsCurrTab)) {
-        alert("the lhsCurrTab from Btn is " + lhsCurrTab);
-        alert("Btn going to select and deselect " + e.target.id);
 		unSelectBtn(lhsCurrTab);
 		lhsCurrTab = e.target.id;
 		selectBtn(lhsCurrTab);
@@ -2689,8 +2687,6 @@ function lhsToggleSelByBtn(e) {
 function lhsToggleSelByIcon(id, e) {
     e.stopPropagation();    // we don't want to call lhsToggleSelByBtn again
 	if ((id.length !== 0) && (id !== lhsCurrTab)) {
-        alert("the lhsCurrTab from Icon is " + lhsCurrTab);
-        alert("Icon going to select and deselect " + id);
     	unSelectBtn(lhsCurrTab);
 		lhsCurrTab = id;
         selectBtn(lhsCurrTab);
@@ -2698,8 +2694,6 @@ function lhsToggleSelByIcon(id, e) {
 }
 for (let iconId of lhsTabIconIds) {
     $(document).on('click', '#' + iconId, (e) => {
-        //alert("select " + iconId);
-        //alert("curr lhs = " + lhsCurrTab);
         lhsToggleSelByIcon(iconId.replace('icon', 'button'), e);
     });
 }
@@ -2713,25 +2707,25 @@ function rhsToggleSelByBtn(e) {
 			selectBtn(rhsCurrTab);
 	}
 }
-function rhsToggleSelByIcon(id) {
-    // we don't want to call btn's eventlistener to do the same thing again
-    event.stopPropagation();
+function rhsToggleSelByIcon(id, e) {
+    // we don't want to call btn's eventlistener to do the same thing again (rhsToggleSelByBtn) 
+    e.stopPropagation();
 	if ((id.length !== 0) && (id !== rhsCurrTab)) {
 		unSelectBtn(rhsCurrTab);
         rhsCurrTab = id;
 		selectBtn(rhsCurrTab);
-	    }
+	}
 }
 for (let iconId of rhsTabIconIds) {
     // Special case here: due to two images used for dispatch tab icon; replace images with an icon would be better
     if (iconId === 'dispatch-tab-icon-active') {
-        $(document).on('click', '#' + iconId, function() {
-            rhsToggleSelByIcon('dispatch-tab-button');
+        $(document).on('click', '#' + iconId, (e) => {
+            rhsToggleSelByIcon('dispatch-tab-button', e);
         });
         continue;
     }
-    $(document).on('click', '#' + iconId, function() {
-        rhsToggleSelByIcon(iconId.replace('icon', 'button'));
+    $(document).on('click', '#' + iconId, (e) => {
+        rhsToggleSelByIcon(iconId.replace('icon', 'button'), e);
     });
 }
 
