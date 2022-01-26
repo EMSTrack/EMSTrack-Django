@@ -2642,12 +2642,12 @@ const tabContentMap = new Map([
 function selectBtn(btnId) {
     // Special case here for the dispatch tab as it is alternating between two images = not a font icon
     if (btnId === 'dispatch-tab-button') {
-        $('#right-side-bar-dispatch-icon').className = 'd-none';
-        $('#right-side-bar-dispatch-icon-active').className = 'd-inline-block';
+        $('#right-side-bar-dispatch-icon')[0].className = 'd-none';
+        $('#right-side-bar-dispatch-icon-active')[0].className = 'd-inline-block';
     }
 
     // set btn style to dark
-    $('#' + btnId).className = 'btn-selected d-flex align-items-center justify-content-center';
+    $('#' + btnId)[0].className = 'btn-selected d-flex align-items-center justify-content-center';
     // let the corresponding content visible by setting their class name
     const tabContentClass = tabContentMap.get(btnId);
     var tabContent = $(tabContentClass);
@@ -2659,12 +2659,12 @@ function selectBtn(btnId) {
 function unSelectBtn(btnId) {
     // Special case here for the dispatch tab as it is alternating between two images = not a font icon
     if (btnId === 'dispatch-tab-button') {
-        $('#right-side-bar-dispatch-icon-active').className = 'd-none';
-        $('#right-side-bar-dispatch-icon').className = 'd-inline-block';
+        $('#right-side-bar-dispatch-icon-active')[0].className = 'd-none';
+        $('#right-side-bar-dispatch-icon')[0].className = 'd-inline-block';
     }
 
     // set btn style to light
-    $('#' + btnId).className = 'tab-button d-flex align-items-center justify-content-center';
+    $('#' + btnId)[0].className = 'tab-button d-flex align-items-center justify-content-center';
     // let the corresponding content box invisible
     const tabContentClass = tabContentMap.get(btnId);
     var tabContent = $(tabContentClass);
@@ -2692,7 +2692,9 @@ function lhsToggleSelByIcon(id) {
         }
 }
 $('#ambulance-tab-icon')
-    .on('click', () => lhsToggleSelByIcon('ambulance-tab-button'));
+    .on('click', () => {
+        lhsToggleSelByIcon('ambulance-tab-button')
+    });
 
 
 // Toggel rhs tab selection
