@@ -2679,6 +2679,8 @@ function unSelectBtn(btnId) {
 function lhsToggleSelByBtn(e) {
 	e.preventDefault();
 	if ((e.target.id.length !== 0) && (e.target.id !== lhsCurrTab)) {
+        alert("the lhsCurrTab from Btn is " + lhsCurrTab);
+        alert("Btn going to select and deselect " + id);
 		unSelectBtn(lhsCurrTab);
 		lhsCurrTab = e.target.id;
 		selectBtn(lhsCurrTab);
@@ -2687,8 +2689,8 @@ function lhsToggleSelByBtn(e) {
 function lhsToggleSelByIcon(id) {
     event.stopPropagation();
 	if ((id.length !== 0) && (id !== lhsCurrTab)) {
-        alert("the lhsCurrTab is" + lhsCurrTab);
-        alert("going to select and deselect " + id);
+        alert("the lhsCurrTab from Icon is " + lhsCurrTab);
+        alert("Icon going to select and deselect " + id);
     	unSelectBtn(lhsCurrTab);
 		lhsCurrTab = id;
         selectBtn(lhsCurrTab);
