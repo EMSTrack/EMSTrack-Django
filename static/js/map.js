@@ -2754,6 +2754,7 @@ leftDismissBtn.addEventListener("click", (e) => {
 // Add event listener for collapsing the right side bar
 $('#right-return-tab-button')
     .on('click', (e) => {
+        alert("Hellow!");
         e.preventDefault();
         $('#dispatchDiv').className = rightSideBarInitClass;	// Remove class = "active"
     });
