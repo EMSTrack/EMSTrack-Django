@@ -2691,7 +2691,7 @@ function lhsToggleSelByIcon(id) {
             alert('Select btn ' + lhsCurrTab);
         }
 }
-$('ambulance-tab-icon').on('click', () => {
+$('#ambulance-tab-icon').on('click', () => {
     alert('Click on ambulance tab icon!');
     lhsToggleSelByIcon('ambulance-tab-button');
 });
@@ -2752,7 +2752,7 @@ leftDismissBtn.addEventListener("click", (e) => {
 })
 
 // Add event listener for collapsing the right side bar
-$('right-return-tab-button')
+$('#right-return-tab-button')
     .on('click', (e) => {
         e.preventDefault();
         $('dispatchDiv').className = rightSideBarInitClass;	// Remove class = "active"
