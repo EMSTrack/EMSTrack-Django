@@ -2627,7 +2627,9 @@ function newPatientForm(index, symbol) {
 
 /* Map Side Bars Frontend */
 const lhsTabBtnIds = ["ambulance-tab-button", "settings-tab-button"];
+const lhsTabIconIds = ["ambulance-tab-icon", "settings-tab-icon"];
 const rhsTabBtnIds = ["dispatch-tab-button", "calls-tab-button"];
+const rhsTabIconIds = ["dispatch-tab-icon", "dispatch-tab-icon-active", "calls-tab-icon"];
 
 let lhsCurrTab = "ambulance-tab-button";
 let rhsCurrTab = "dispatch-tab-button";
@@ -2642,8 +2644,8 @@ const tabContentMap = new Map([
 function selectBtn(btnId) {
     // Special case here for the dispatch tab as it is alternating between two images = not a font icon
     if (btnId === "dispatch-tab-button") {
-        document.getElementById("right-side-bar-dispatch-icon").className = "d-none";
-        document.getElementById("right-side-bar-dispatch-icon-active").className = "d-inline-block";
+        document.getElementById("dispatch-tab-icon").className = "d-none";
+        document.getElementById("dispatch-tab-icon-active").className = "d-inline-block";
     }
 
     // set btn style to dark
@@ -2659,8 +2661,8 @@ function selectBtn(btnId) {
 function unSelectBtn(btnId) {
     // Special case here for the dispatch tab as it is alternating between two images = not a font icon
     if (btnId === "dispatch-tab-button") {
-        document.getElementById("right-side-bar-dispatch-icon-active").className = "d-none";
-        document.getElementById("right-side-bar-dispatch-icon").className = "d-inline-block";
+        document.getElementById("dispatch-tab-icon-active").className = "d-none";
+        document.getElementById("dispatch-tab-icon").className = "d-inline-block";
     }
 
     // set btn style to light
@@ -2689,12 +2691,11 @@ function lhsToggleSelByIcon(id) {
 			selectBtn(lhsCurrTab);
 		}
 }
-
-$(document).on('click', '#ambulance-tab-icon', function() {
-    alert("yoooo");
-    lhsToggleSelByIcon('ambulance-tab-button');
-});
-
+for (let iconId of lhsTabIconIds) {
+    $(document).on('click', '#' + iconId, function() {
+        lhsToggleSelByIcon('ambulance-tab-button');
+    });
+}
 
 // Toggel rhs tab selection
 function rhsToggleSelByBtn(e) {
@@ -2705,7 +2706,6 @@ function rhsToggleSelByBtn(e) {
 			selectBtn(rhsCurrTab);
 	}
 }
-    
 function rhsToggleSelByIcon(id) {
     // we don't want to call btn's eventlistener to do the same thing again
     event.stopPropagation();
@@ -2715,7 +2715,11 @@ function rhsToggleSelByIcon(id) {
 		selectBtn(rhsCurrTab);
 	    }
 }
-
+for (let iconId of rhsTabIconIds) {
+    $(document).on('click', '#' + iconId, function() {
+        rhsToggleSelByIcon('ambulance-tab-button');
+    });
+}
 
 // Add event listener of changing selected styles to lhs/rhs tab buttons
 for (let btnId of lhsTabBtnIds) {
@@ -2727,8 +2731,6 @@ for (let btnId of rhsTabBtnIds) {
 	button.addEventListener("click", (e) => rhsToggleSelByBtn(e));
 }
 
-
-//-------------------------------------------------------------
 // Add event listener for expanding the left side bar
 const leftSideBar = document.getElementById("filtersDiv");
 const leftSideBarBtn = document.getElementById("left-side-bar-btn");
