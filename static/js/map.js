@@ -2696,6 +2696,7 @@ for (let iconId of lhsTabIconIds) {
     $(document).on('click', '#' + iconId, function() {
         //alert("select " + iconId);
         //alert("curr lhs = " + lhsCurrTab);
+        alert("going to select " + iconId.replace('icon', 'button'));
         lhsToggleSelByIcon(iconId.replace('icon', 'button'));
     });
 }
