@@ -2685,6 +2685,7 @@ function lhsToggleSelByBtn(e) {
 		}
 }
 function lhsToggleSelByIcon(id) {
+    event.stopPropagation();
 	if ((id.length !== 0) && (id !== lhsCurrTab)) {
 			unSelectBtn(lhsCurrTab);
 			lhsCurrTab = id;
@@ -2693,7 +2694,7 @@ function lhsToggleSelByIcon(id) {
 }
 for (let iconId of lhsTabIconIds) {
     $(document).on('click', '#' + iconId, function() {
-        lhsToggleSelByIcon('ambulance-tab-button');
+        lhsToggleSelByIcon(iconId.replace('icon', 'button'));
     });
 }
 
@@ -2716,8 +2717,15 @@ function rhsToggleSelByIcon(id) {
 	    }
 }
 for (let iconId of rhsTabIconIds) {
+    // Special case here: due to two images used for dispatch tab icon; replace images with an icon would be better
+    if (iconId === 'dispatch-tab-icon-active') {
+        $(document).on('click', '#' + iconId, function() {
+            rhsToggleSelByIcon('dispatch-tab-button');
+        });
+        continue;
+    }
     $(document).on('click', '#' + iconId, function() {
-        rhsToggleSelByIcon('ambulance-tab-button');
+        rhsToggleSelByIcon(iconId.replace('icon', 'button'));
     });
 }
 
