@@ -2687,6 +2687,7 @@ function lhsToggleSelByBtn(e) {
 function lhsToggleSelByIcon(id) {
     event.stopPropagation();
 	if ((id.length !== 0) && (id !== lhsCurrTab)) {
+        alert("the lhsCurrTab is" + lhsCurrTab);
         alert("going to select and deselect " + id);
     	unSelectBtn(lhsCurrTab);
 		lhsCurrTab = id;
