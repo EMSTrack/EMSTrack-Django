@@ -2755,7 +2755,7 @@ leftDismissBtn.addEventListener("click", (e) => {
 $('#right-return-tab-button')
     .on('click', (e) => {
         e.preventDefault();
-        $('dispatchDiv').className = rightSideBarInitClass;	// Remove class = "active"
+        $('#dispatchDiv').className = rightSideBarInitClass;	// Remove class = "active"
     });
 
 /* Map Side Bar Frontend Logis Ends HERE */
