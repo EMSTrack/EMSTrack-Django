@@ -2756,7 +2756,7 @@ $('#right-return-tab-button')
     .on('click', (e) => {
         alert("Hellow!");
         e.preventDefault();
-        $('#dispatchDiv').setAttribute('class', rightSideBarInitClass);	// Remove class = "active"
+        $('#dispatchDiv')[0].setAttribute('class', rightSideBarInitClass);	// Remove class = "active"
     });
 
 /* Map Side Bar Frontend Logis Ends HERE */
