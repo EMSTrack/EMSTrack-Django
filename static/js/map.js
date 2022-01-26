@@ -2690,11 +2690,11 @@ function lhsToggleSelByIcon(id) {
 		}
 }
 
-$('#ambulance-tab-icon')
-    .on('click', () => {
-        alert("yoooo");
-        lhsToggleSelByIcon('ambulance-tab-button');
-    });
+$(document).on('click', '#ambulance-tab-icon', function() {
+    alert("yoooo");
+    lhsToggleSelByIcon('ambulance-tab-button');
+});
+
 
 // Toggel rhs tab selection
 function rhsToggleSelByBtn(e) {
