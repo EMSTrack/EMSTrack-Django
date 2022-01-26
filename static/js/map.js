@@ -2771,7 +2771,7 @@ const rightDismissBtn = document.getElementById("right-return-tab-button");
 rightDismissBtn.addEventListener("click", (e) => {
 	e.preventDefault();
 	rightSideBar.className = rightSideBarInitClass;	// Remove class = "active"
-}) */
+})
 
 /* Map Side Bar Frontend Logis Ends HERE */
 
