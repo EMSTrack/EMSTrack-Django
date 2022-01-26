@@ -2680,7 +2680,7 @@ function lhsToggleSelByBtn(e) {
 	e.preventDefault();
 	if ((e.target.id.length !== 0) && (e.target.id !== lhsCurrTab)) {
         alert("the lhsCurrTab from Btn is " + lhsCurrTab);
-        alert("Btn going to select and deselect " + id);
+        alert("Btn going to select and deselect " + e.target.id);
 		unSelectBtn(lhsCurrTab);
 		lhsCurrTab = e.target.id;
 		selectBtn(lhsCurrTab);
