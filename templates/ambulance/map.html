@@ -37,7 +37,9 @@
                         <i class="fas fa-ambulance center tab-btn-icon" id="ambulance-tab-icon"></i>
                     </button>
                     <button type="button" class="tab-button d-flex align-items-center justify-content-center" id="settings-tab-button">
-                        <i class="fas fa-cog center tab-btn-icon" id="settings-tab-icon" onclick="lhsToggleSelByIcon(this.parentNode.id)"></i>
+                        <!-- <i class="fas fa-cog center tab-btn-icon" onclick="lhsToggleSelByIcon(this.parentNode.id)"></i> -->
+                        <i class="fas fa-cog center tab-btn-icon"></i>
+
                     </button>
                     <!-- <button type="button" class="tab-button d-flex align-items-center justify-content-center" id="calls-tab-button">
                         <i class="fas fa-phone center tab-btn-icon" onclick="lhsToggleSelByIcon(this.parentNode.id)"></i>
@@ -159,13 +161,19 @@
 
                 <!-- new-call/calls button -->
                 <button type="button" class="btn-selected d-flex align-items-center justify-content-center" id="dispatch-tab-button">
-                    <img src="{%  static 'icons/dispatch-icon.png' %}" class="d-none" id="right-side-bar-dispatch-icon"
-                        onclick="rhsToggleSelByIcon(this.parentNode.id)"></img>
-                    <img src="{%  static 'icons/dispatch-icon-active.png' %}" id="right-side-bar-dispatch-icon-active"
-                        onclick="rhsToggleSelByIcon(this.parentNode.id)"></img>
+                    <!-- <img src="{%  static 'icons/dispatch-icon.png' %}" class="d-none" id="right-side-bar-dispatch-icon"
+                        onclick="rhsToggleSelByIcon(this.parentNode.id)"></img> -->
+                    <img src="{%  static 'icons/dispatch-icon.png' %}" class="d-none" id="right-side-bar-dispatch-icon"></img>
+                    
+                    <!-- <img src="{%  static 'icons/dispatch-icon-active.png' %}" id="right-side-bar-dispatch-icon-active"
+                        onclick="rhsToggleSelByIcon(this.parentNode.id)"></img> -->
+
+                    <img src="{%  static 'icons/dispatch-icon-active.png' %}" id="right-side-bar-dispatch-icon-active"></img>
+
                 </button>
                 <button type="button" class="tab-button d-flex align-items-center justify-content-center" id="calls-tab-button">
-                    <i class="fas fa-phone center tab-btn-icon" onclick="rhsToggleSelByIcon(this.parentNode.id)"></i>
+                    <!-- <i class="fas fa-phone center tab-btn-icon" onclick="rhsToggleSelByIcon(this.parentNode.id)"></i> -->
+                    <i class="fas fa-phone center tab-btn-icon"></i>
                 </button>        					
             </div>
 
