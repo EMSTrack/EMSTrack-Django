@@ -2686,8 +2686,8 @@ function lhsToggleSelByBtn(e) {
 		selectBtn(lhsCurrTab);
 	}
 }
-function lhsToggleSelByIcon(id) {
-    event.stopPropagation();
+function lhsToggleSelByIcon(id, e) {
+    e.stopPropagation();    // we don't want to call lhsToggleSelByBtn again
 	if ((id.length !== 0) && (id !== lhsCurrTab)) {
         alert("the lhsCurrTab from Icon is " + lhsCurrTab);
         alert("Icon going to select and deselect " + id);
@@ -2697,10 +2697,10 @@ function lhsToggleSelByIcon(id) {
     }
 }
 for (let iconId of lhsTabIconIds) {
-    $(document).on('click', '#' + iconId, function() {
+    $(document).on('click', '#' + iconId, (e) => {
         //alert("select " + iconId);
         //alert("curr lhs = " + lhsCurrTab);
-        lhsToggleSelByIcon(iconId.replace('icon', 'button'));
+        lhsToggleSelByIcon(iconId.replace('icon', 'button'), e);
     });
 }
 
