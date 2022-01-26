@@ -2652,7 +2652,7 @@ function selectBtn(btnId) {
     const tabContentClass = tabContentMap.get(btnId);
     var tabContent = document.getElementsByClassName(tabContentClass);
     for (let content of tabContent) {
-        content.className = tabContentClass;
+        content.setAttribute('class', tabContentClass);
     }
 }
 
@@ -2669,7 +2669,7 @@ function unSelectBtn(btnId) {
     const tabContentClass = tabContentMap.get(btnId);
     var tabContent = document.getElementsByClassName(tabContentClass);
     for (let content of tabContent) {
-        content.className = tabContentClass + " d-none";
+        content.setAttribute('class', tabContentClass + " d-none");
     }
 }
 
@@ -2685,14 +2685,14 @@ function lhsToggleSelByBtn(e) {
 function lhsToggleSelByIcon(id) {
     if ((id.length !== 0) && (id !== lhsCurrTab)) {
             unSelectBtn(lhsCurrTab);
-            console.log('Unselect btn ' + lhsCurrTab);
+            alert('Unselect btn ' + lhsCurrTab);
             lhsCurrTab = id;
             selectBtn(lhsCurrTab);
-            console.log('Select btn ' + lhsCurrTab);
+            alert('Select btn ' + lhsCurrTab);
         }
 }
 $('ambulance-tab-icon').on('click', () => {
-    console.log('Click on ambulance tab icon!');
+    alert('Click on ambulance tab icon!');
     lhsToggleSelByIcon('ambulance-tab-button');
 });
 
