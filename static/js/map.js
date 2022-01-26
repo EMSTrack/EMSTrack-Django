@@ -2683,7 +2683,6 @@ function lhsToggleSelByBtn(e) {
         }
 }
 function lhsToggleSelByIcon(id) {
-    event.stopPropagation();
     if ((id.length !== 0) && (id !== lhsCurrTab)) {
             unSelectBtn(lhsCurrTab);
             lhsCurrTab = id;
