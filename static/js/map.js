@@ -2642,6 +2642,8 @@ const tabContentMap = new Map([
 ]);
 
 function selectBtn(btnId) {
+//    if (!(lhsTabBtnIds.includes(btnId) || rhsTabBtnIds.includes(btnId))) return; 
+
     // Special case here for the dispatch tab as it is alternating between two images = not a font icon
     if (btnId === "dispatch-tab-button") {
         document.getElementById("dispatch-tab-icon").className = "d-none";
@@ -2649,7 +2651,7 @@ function selectBtn(btnId) {
     }
 
     // set btn style to dark
-	if (lhsTabBtnIds.includes(btnId) || rhsTabBtnIds.includes(btnId)) document.getElementById(btnId).setAttribute('class', "btn-selected d-flex align-items-center justify-content-center");
+	document.getElementById(btnId).setAttribute('class', "btn-selected d-flex align-items-center justify-content-center");
 	// let the corresponding content visible by setting their class name
 	const tabContentClass = tabContentMap.get(btnId);
     var tabContent = document.getElementsByClassName(tabContentClass);
@@ -2659,6 +2661,8 @@ function selectBtn(btnId) {
 }
 
 function unSelectBtn(btnId) {
+//    if (!(lhsTabBtnIds.includes(btnId) || rhsTabBtnIds.includes(btnId))) return; 
+    
     // Special case here for the dispatch tab as it is alternating between two images = not a font icon
     if (btnId === "dispatch-tab-button") {
         document.getElementById("dispatch-tab-icon-active").className = "d-none";
@@ -2666,7 +2670,7 @@ function unSelectBtn(btnId) {
     }
 
     // set btn style to light
-	if (lhsTabBtnIds.includes(btnId) || rhsTabBtnIds.includes(btnId)) document.getElementById(btnId).setAttribute('class', "tab-button d-flex align-items-center justify-content-center");
+	document.getElementById(btnId).setAttribute('class', "tab-button d-flex align-items-center justify-content-center");
 	// let the corresponding content box invisible
     const tabContentClass = tabContentMap.get(btnId);
     var tabContent = document.getElementsByClassName(tabContentClass);
@@ -2677,8 +2681,8 @@ function unSelectBtn(btnId) {
 
 // Toggle lhs tab selection
 function lhsToggleSelByBtn(e) {
-	e.preventDefault();
-	if ((e.target.id.length !== 0) && (e.target.id !== lhsCurrTab)) {
+    e.preventDefault();
+	if ((e.target.id.length !== 0) && (lhsTabBtnIds.includes(e.target.id)) && (e.target.id !== lhsCurrTab)) {
 		unSelectBtn(lhsCurrTab);
 		lhsCurrTab = e.target.id;
 		selectBtn(lhsCurrTab);
@@ -2686,6 +2690,7 @@ function lhsToggleSelByBtn(e) {
 }
 function lhsToggleSelByIcon(id, e) {
     e.stopPropagation();    // we don't want to call lhsToggleSelByBtn again
+    if (!lhsTabBtnIds.includes(id)) return;
 	if ((id.length !== 0) && (id !== lhsCurrTab)) {
     	unSelectBtn(lhsCurrTab);
 		lhsCurrTab = id;
@@ -2701,7 +2706,7 @@ for (let iconId of lhsTabIconIds) {
 // Toggle rhs tab selection
 function rhsToggleSelByBtn(e) {
 	e.preventDefault();
-	if ((e.target.id.length !== 0) && (e.target.id !== rhsCurrTab)) {
+	if ((e.target.id.length !== 0) && (rhsTabBtnIds.includes(e.target.id)) && (e.target.id !== rhsCurrTab)) {
 			unSelectBtn(rhsCurrTab);
 			rhsCurrTab = e.target.id;
 			selectBtn(rhsCurrTab);
@@ -2710,6 +2715,7 @@ function rhsToggleSelByBtn(e) {
 function rhsToggleSelByIcon(id, e) {
     // we don't want to call btn's eventlistener to do the same thing again (rhsToggleSelByBtn) 
     e.stopPropagation();
+    if (!rhsTabBtnIds.includes(id)) return;
 	if ((id.length !== 0) && (id !== rhsCurrTab)) {
 		unSelectBtn(rhsCurrTab);
         rhsCurrTab = id;
