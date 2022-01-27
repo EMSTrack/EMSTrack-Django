@@ -2698,6 +2698,16 @@ function lhsToggleSelByIcon(id, e) {
     });
 } */
 
+for (let btnId of lhsTabBtnIds) {
+    document.addEventListener('DOMContentLoaded', () => {
+        $('#' + btnId).on('click', '[data-fa-i2svg]', (e) => {
+            lhsToggleSelByIcon(iconId.replace('icon', 'button'), e);
+        });
+    });
+}
+
+
+
 // Toggle rhs tab selection
 function rhsToggleSelByBtn(e) {
 	e.preventDefault();
@@ -2952,17 +2962,4 @@ $(function() {
 
         });
     }
-
-    // Add event listener for lhs tab icons (when clicked -> select corresponding button + content)
-    for (let iconId of lhsTabIconIds) {
-        $(document).on('click', '#' + iconId, (e) => {
-            lhsToggleSelByIcon(iconId.replace('icon', 'button'), e);
-        });
-
-        /* not working for dynamic elements */
-        /* $('#' + iconId).on('click', (e) => {
-            lhsToggleSelByIcon(iconId.replace('icon', 'button'), e);
-        }); */
-    }
-
 });
