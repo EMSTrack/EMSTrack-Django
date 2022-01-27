@@ -2642,8 +2642,6 @@ const tabContentMap = new Map([
 ]);
 
 function selectBtn(btnId) {
-//    if (!(lhsTabBtnIds.includes(btnId) || rhsTabBtnIds.includes(btnId))) return; 
-
     // Special case here for the dispatch tab as it is alternating between two images = not a font icon
     if (btnId === "dispatch-tab-button") {
         document.getElementById("dispatch-tab-icon").className = "d-none";
@@ -2661,8 +2659,6 @@ function selectBtn(btnId) {
 }
 
 function unSelectBtn(btnId) {
-//    if (!(lhsTabBtnIds.includes(btnId) || rhsTabBtnIds.includes(btnId))) return; 
-    
     // Special case here for the dispatch tab as it is alternating between two images = not a font icon
     if (btnId === "dispatch-tab-button") {
         document.getElementById("dispatch-tab-icon-active").className = "d-none";
