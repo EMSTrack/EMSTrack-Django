@@ -2700,7 +2700,7 @@ function lhsToggleSelByIcon(id, e) {
 
 for (let btnId of lhsTabBtnIds) {
     document.addEventListener('DOMContentLoaded', () => {
-        $('#' + btnId).on('click', '[data-fa-i2svg]', (e) => {
+        $('#' + btnId).on('click', '#' + btnId.replace('button', 'icon'), (e) => {
             lhsToggleSelByIcon(iconId.replace('icon', 'button'), e);
         });
     });
