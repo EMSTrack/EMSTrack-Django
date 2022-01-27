@@ -2692,21 +2692,11 @@ function lhsToggleSelByIcon(id, e) {
         selectBtn(lhsCurrTab);
     }
 }
-/* for (let iconId of lhsTabIconIds) {
+for (let iconId of lhsTabIconIds) {
     $(document).on('click', '#' + iconId, (e) => {
         lhsToggleSelByIcon(iconId.replace('icon', 'button'), e);
     });
-} */
-
-for (let btnId of lhsTabBtnIds) {
-    document.addEventListener('DOMContentLoaded', () => {
-        $('#' + btnId).on('click', '#' + btnId.replace('button', 'icon'), (e) => {
-            lhsToggleSelByIcon(iconId.replace('icon', 'button'), e);
-        });
-    });
 }
-
-
 
 // Toggle rhs tab selection
 function rhsToggleSelByBtn(e) {
@@ -2726,7 +2716,7 @@ function rhsToggleSelByIcon(id, e) {
 		selectBtn(rhsCurrTab);
 	}
 }
-/* for (let iconId of rhsTabIconIds) {
+for (let iconId of rhsTabIconIds) {
     // Special case here: due to two images used for dispatch tab icon; replace images with an icon would be better
     if (iconId === 'dispatch-tab-icon-active') {
         $(document).on('click', '#' + iconId, (e) => {
@@ -2737,7 +2727,7 @@ function rhsToggleSelByIcon(id, e) {
     $(document).on('click', '#' + iconId, (e) => {
         rhsToggleSelByIcon(iconId.replace('icon', 'button'), e);
     });
-} */
+}
 
 // Add event listener of changing selected styles to lhs/rhs tab buttons
 for (let btnId of lhsTabBtnIds) {
@@ -2962,4 +2952,5 @@ $(function() {
 
         });
     }
+
 });
