@@ -2649,7 +2649,7 @@ function selectBtn(btnId) {
     }
 
     // set btn style to dark
-	document.getElementById(btnId).setAttribute('class', "btn-selected d-flex align-items-center justify-content-center");
+	if (lhsTabBtnIds.includes(btnId) || rhsTabBtnIds.includes(btnId)) document.getElementById(btnId).setAttribute('class', "btn-selected d-flex align-items-center justify-content-center");
 	// let the corresponding content visible by setting their class name
 	const tabContentClass = tabContentMap.get(btnId);
     var tabContent = document.getElementsByClassName(tabContentClass);
@@ -2666,7 +2666,7 @@ function unSelectBtn(btnId) {
     }
 
     // set btn style to light
-	document.getElementById(btnId).setAttribute('class', "tab-button d-flex align-items-center justify-content-center");
+	if (lhsTabBtnIds.includes(btnId) || rhsTabBtnIds.includes(btnId)) document.getElementById(btnId).setAttribute('class', "tab-button d-flex align-items-center justify-content-center");
 	// let the corresponding content box invisible
     const tabContentClass = tabContentMap.get(btnId);
     var tabContent = document.getElementsByClassName(tabContentClass);
