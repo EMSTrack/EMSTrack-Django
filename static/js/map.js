@@ -2955,9 +2955,14 @@ $(function() {
 
     // Add event listener for lhs tab icons (when clicked -> select corresponding button + content)
     for (let iconId of lhsTabIconIds) {
-        $('#' + iconId).on('click', (e) => {
+        $(document).on('click', '#' + iconId, (e) => {
             lhsToggleSelByIcon(iconId.replace('icon', 'button'), e);
         });
+
+        /* not working for dynamic elements */
+        /* $('#' + iconId).on('click', (e) => {
+            lhsToggleSelByIcon(iconId.replace('icon', 'button'), e);
+        }); */
     }
 
 });
