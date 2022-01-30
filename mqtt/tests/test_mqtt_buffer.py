@@ -6,7 +6,7 @@ from django.conf import settings
 
 from ambulance.models import Ambulance, \
     AmbulanceStatus
-from mqtt.publish import SingletonPublishClient
+from mqtt.publish_client import SingletonPublishClient
 from .client import MQTTTestCase, MQTTTestClient, TestMQTT
 from mqtt.client import RETRY_TIMER_SECONDS
 

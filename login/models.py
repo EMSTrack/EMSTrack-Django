@@ -415,6 +415,12 @@ class Client(models.Model):
                                 'activity': ClientActivity.AO.name,
                                 'details': last_ambulance.identifier})
 
+                    if self.status == ClientStatus.O.name and last_ambulance.status != AmbulanceStatus.UK.name:
+
+                        # change status of ambulance to unknown; do not publish yet
+                        last_ambulance.status = AmbulanceStatus.UK.name
+                        last_ambulance.save(publish=False)
+
                     # publish ambulance
                     publish_ambulance.add(last_ambulance)
 

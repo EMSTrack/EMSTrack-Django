@@ -5,7 +5,7 @@ from django.core.management.base import BaseCommand
 from django.conf import settings
 from django.utils import timezone
 
-from mqtt.publish import PublishClient
+from mqtt.publish_client import PublishClient
 
 
 class Client(PublishClient):
@@ -89,20 +89,20 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('--base-topic', nargs='?', default='')
-        parser.add_argument('--timeout', nargs='?', type=int, default=10)
+        parser.add_argument('--timeout', nargs='?', type=int, default=None)
 
     def handle(self, *args, **options):
 
         import os
 
         broker = {
-            'HOST': '127.0.0.1',
+            'HOST': settings.MQTT['BROKER_HOST'],
             'PORT': 1883,
             'KEEPALIVE': 60,
             'CLEAN_SESSION': True
         }
         broker.update(settings.MQTT)
-        broker['CLIENT_ID'] = 'mqttclean_' + str(os.getpid())
+        broker['CLIENT_ID'] = 'mqttinspect_' + str(os.getpid())
 
         base_topic = options['base_topic']
         timeout = options['timeout']
@@ -115,10 +115,18 @@ class Command(BaseCommand):
                         verbosity=options['verbosity'])
 
         try:
-            client.loop()
+            # timeout?
+            if timeout is None:
+                if options['verbosity'] > 0:
+                    self.stdout.write(self.style.SUCCESS(">> Will listen forever."))
+                client.loop_forever()
+            else:
+                client.loop()
 
         except KeyboardInterrupt:
-            pass
+            if timeout is None:
+                client.loop_stop()
+                client.disconnect()
 
         finally:
             client.wait()

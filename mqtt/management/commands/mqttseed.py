@@ -3,7 +3,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 
 from login.permissions import cache_clear
-from mqtt.publish import PublishClient
+from mqtt.publish_client import PublishClient
 
 from ambulance.models import Ambulance, Call, CallStatus, AmbulanceCallStatus
 

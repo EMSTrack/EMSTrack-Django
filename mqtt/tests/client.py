@@ -16,7 +16,7 @@ from equipment.models import EquipmentType, Equipment, EquipmentItem
 from login.models import GroupAmbulancePermission, GroupHospitalPermission, \
     UserAmbulancePermission, UserHospitalPermission
 from mqtt.client import BaseClient
-from mqtt.publish import SingletonPublishClient
+from mqtt.publish_client import SingletonPublishClient
 from mqtt.subscribe import SubscribeClient
 
 logger = logging.getLogger(__name__)
