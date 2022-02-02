@@ -78,7 +78,7 @@ export function ambulanceStatusIcon(ambulance) {
     let icon = settings.ambulance.statusIcon[ambulance.status];
     let color = settings.ambulance.statusColor[ambulance.status];
     if (typeof icon === 'undefined' || typeof color === 'undefined') {
-        logger.log('warn', "Unknown vehicle status'%s'.", ambulance.status);
+        logger.log('warn', "Unknown vehicle status '%s'.", ambulance.status);
         icon = 'question';
         color = 'warning';
     }

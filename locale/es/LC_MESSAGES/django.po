@@ -1854,4 +1854,4 @@ msgid "Timestamp"
 msgstr "Hora y Fecha"
 
 msgid "Dispatch Vehicles"
-msgstr "Despacho de Vehículo"
+msgstr "Despacho de Vehículos"
