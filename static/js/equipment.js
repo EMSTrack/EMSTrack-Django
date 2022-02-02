@@ -16,12 +16,44 @@ function init (client) {
 }
 
 function equipmentSelected(select, value) {
-    console.log('equipment selected: ' + value);
-    console.log(select);
+
+    // get value and comment fields
     const prefix = select.getAttribute('id').replace('-equipment', '');
-    console.log(prefix);
-    const disabled = value === "";
-    $(`#${prefix}-value`).prop('disabled', disabled);
-    $(`#${prefix}-comment`).prop('disabled', disabled);
+    const valueField = $(`#${prefix}-value`);
+    const commentField = $(`#${prefix}-comment`);
+
+    // disable value and comment
+    valueField.prop('disabled', true);
+    commentField.prop('disabled', true);
+
+    if (value !== "") {
+
+        apiClient.getEquipmentMetadata(value)
+            .then( (equipment) => {
+                logger.log('debug', "Got equipment metadata");
+
+                if (equipment.type === 'I') {
+                    valueField.attr('type', 'number');
+                    valueField.attr('value', equipment.default);
+                } else if (equipment.type === 'B') {
+                    valueField.attr('type', 'checkbox');
+                } else if (equipment.type === 'S') {
+                    valueField.attr('type', 'text');
+                    valueField.attr('value', equipment.default);
+                }
+
+                // enable fields
+                valueField.prop('disabled', false);
+                commentField.prop('disabled', false);
+
+            })
+            .catch( (error) => {
+                logger.log('error', 'Failed to retrieve equipment metadata: %s', error);
+            });
+
+    }
+
 }
 
+// https://stackoverflow.com/questions/34357489/calling-webpacked-code-from-outside-html-script-tag
+window.equipmentSelected = equipmentSelected;

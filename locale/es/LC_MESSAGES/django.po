@@ -312,8 +312,8 @@ msgid "AED"
 msgstr "AED"
 
 #: ambulance/models.py:689 templates/ambulance/location_list.html:131
-msgid "Incident"
-msgstr "Incidente"
+msgid "Incidents"
+msgstr "Incidentes"
 
 #: ambulance/models.py:690 login/forms.py:189 login/forms.py:207
 #: templates/hospital/hospital_detail.html:20

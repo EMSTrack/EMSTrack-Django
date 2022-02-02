@@ -30,9 +30,8 @@ class EquipmentItemForm(forms.ModelForm):
         else:
             self.fields['equipment'] = \
                 forms.ModelChoiceField(queryset=Equipment.objects.all(),
-                                       widget=forms.Select(attrs={'onChange': 'equipmentSelected(this, this.value)'}))
-            self.fields['value'].disabled = True
-            self.fields['comment'].disabled = True
+                                       widget=forms.Select(attrs={'onChange':
+                                                                      'window.equipmentSelected(this, this.value)'}))
 
 class EquipmentSetItemForm(forms.ModelForm):
 

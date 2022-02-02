@@ -1,17 +1,9 @@
 import logging
-import random
-import string
-
-from datetime import timedelta
-
-from django.conf import settings
-from django.urls import reverse_lazy
-from django.utils.http import is_safe_url
-from django.contrib.auth import authenticate, login
-from tablib import Dataset
 
 from braces.views import CsrfExemptMixin
+from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth import login
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -20,15 +12,13 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http.response import HttpResponse, HttpResponseForbidden
-from django.shortcuts import redirect, render
-from django.utils import timezone
-from django.views import View
+from django.shortcuts import redirect
+from django.urls import reverse_lazy
+from django.utils.translation import ugettext_lazy as _
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import View, TemplateView
 from django.views.generic.detail import BaseDetailView
-from django.views.generic.edit import FormView, CreateView, BaseFormView
-from django.utils.translation import ugettext_lazy as _
-
+from django.views.generic.edit import FormView, CreateView
 from drf_extra_fields.geo_fields import PointField
 from extra_views import InlineFormSetFactory, CreateWithInlinesView, UpdateWithInlinesView
 from rest_framework.response import Response
@@ -49,7 +39,7 @@ from .forms import MQTTAuthenticationForm, AuthenticationForm, SignupForm, \
     GroupAdminUpdateForm, \
     GroupProfileAdminForm, GroupAmbulancePermissionAdminForm, GroupHospitalPermissionAdminForm, \
     UserAmbulancePermissionAdminForm, \
-    UserHospitalPermissionAdminForm, RestartForm, UserProfileAdminForm, UploadFileForm
+    UserHospitalPermissionAdminForm, RestartForm, UserProfileAdminForm
 from .models import TemporaryPassword, \
     UserAmbulancePermission, UserHospitalPermission, \
     GroupProfile, GroupAmbulancePermission, \

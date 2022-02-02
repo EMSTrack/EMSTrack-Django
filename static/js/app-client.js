@@ -265,6 +265,16 @@ export class AppClient extends TopicObserver {
             });
     }
 
+    getEquipmentMetadata(id) {
+
+        // retrieve equipment
+        return this.httpClient.get('equipment/' + id + '/')
+            .then( (response) => {
+                // return equipment
+                return response.data;
+            });
+    }
+
     getClients() {
 
         // retrieve clients

@@ -35,14 +35,12 @@
                     <div id="formset" data-formset-prefix="{{ formset.prefix }}">
                         {{ formset.management_form }}
 
-                        <table class="table table-striped table-sm">
-                            {% with formset|first as form %}
-                                <thead><tr>
-                                    {% for field in form.visible_fields %}
-                                        <th>{{ field.label|capfirst }}</th>
-                                    {% endfor %}
-                                </tr></thead>
-                            {% endwith %}
+                        <table id="formTable" class="table table-striped table-sm">
+                            <thead><tr>
+                                {% for field in formset.empty_form.visible_fields %}
+                                    <th>{{ field.label|capfirst }}</th>
+                                {% endfor %}
+                            </tr></thead>
                             <tbody data-formset-body>
                             {% for form in formset %}
                                 <tr data-formset-form>
