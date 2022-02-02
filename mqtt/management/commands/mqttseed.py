@@ -99,7 +99,7 @@ class Client(PublishClient):
     def seed_ambulance_data(self):
 
         if self.verbosity > 0:
-            self.stdout.write(self.style.SUCCESS(">> Seeding ambulance data"))
+            self.stdout.write(self.style.SUCCESS(">> Seeding vehicle data"))
 
         # seeding ambulances
         for obj in Ambulance.objects.all():

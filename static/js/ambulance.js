@@ -89,7 +89,7 @@ function retrieveAmbulanceData(ambulanceId, page, page_size) {
             $('#pagination')
                 .html(pagination.render((pg, options) => render_page_callback(pg, options, ambulanceId, page_size)));
 
-            logger.log('debug', "Got '%s' ambulance '%d' updates from API", response.data.length, ambulanceId);
+            logger.log('debug', "Got '%s' vehicle '%d' updates from API", response.data.length, ambulanceId);
             addAmbulanceRoute(map, response.data, apiClient.settings.ambulance_status, true);
             // addAmbulanceRoute(response.data);
 
@@ -98,7 +98,7 @@ function retrieveAmbulanceData(ambulanceId, page, page_size) {
 
         })
         .catch( (error) => {
-            logger.log('info', 'Failed to retrieve ambulance data: %s', error);
+            logger.log('info', 'Failed to retrieve vehicle data: %s', error);
         });
 
 }

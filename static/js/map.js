@@ -217,11 +217,11 @@ function init( client ) {
             setupAmbulances();
 
             // signup for ambulance updates
-            logger.log('info', 'Signing up for ambulance updates');
+            logger.log('info', 'Signing up for vehicle updates');
             apiClient.observe('ambulance/+/data', (message) => { updateAmbulance(message.payload) } );
 
             // signup for ambulance call status updates
-            logger.log('info', 'Signing up for ambulance call status updates');
+            logger.log('info', 'Signing up for vehicle call status updates');
             apiClient.observe('ambulance/+/call/+/status', (message) => {
                 const topics = message.topic.split('/');
                 const ambulance_id = topics[1];
@@ -2044,7 +2044,7 @@ function updateAmbulanceStatus(ambulance, status) {
         return;
 
     dialog.dialog(
-        sprintf(settings.translation_table["Do you want to modify ambulance <strong>%s</strong> status to <strong>%s</strong>?"],
+        sprintf(settings.translation_table["Do you want to modify vehicle <strong>%s</strong> status to <strong>%s</strong>?"],
             ambulance.identifier, settings.ambulance_status[status]),
         (retval) => {
 
@@ -2078,7 +2078,7 @@ function doUpdateAmbulanceStatus(ambulance_id, status) {
             logger.log('error', 'Failed to patch ambulance: %j', error);
 
             // modal alert
-            dialog.alert(settings.translation_table["Could not update ambulance status"]);
+            dialog.alert(settings.translation_table["Could not update vehicle status"]);
 
         });
 }
@@ -2233,7 +2233,7 @@ function addToDispatchingList(ambulance) {
     // not available?
     if (ambulance.status !== STATUS_AVAILABLE) {
         logger.log('info', 'Ambulance is not available');
-        dialog.alert(settings.translation_table["Can only dispatch available ambulances!"]);
+        dialog.alert(settings.translation_table["Can only dispatch available vehicles!"]);
         return;
     }
 
@@ -2420,7 +2420,7 @@ function dispatchCall() {
         return;
     }
     if (numberOfDispatchingAmbulances === 0) {
-        dialog.alert(settings.translation_table["Please dispatch at least one ambulance"]);
+        dialog.alert(settings.translation_table["Please dispatch at least one vehicle"]);
 
         // enable dispatch button
         $('#dispatchSubmitButton').attr("disabled", false);

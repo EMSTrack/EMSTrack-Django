@@ -178,7 +178,7 @@ class HospitalPermissionModelChoiceField(forms.ModelChoiceField):
 
 
 class UserAmbulancePermissionAdminForm(forms.ModelForm):
-    ambulance = AmbulancePermissionModelChoiceField(label=_('Ambulance'),
+    ambulance = AmbulancePermissionModelChoiceField(label=_('Vehicle'),
                                                     queryset=Ambulance.objects.all())
 
     class Meta:
@@ -206,7 +206,7 @@ class UserHospitalPermissionAdminForm(forms.ModelForm):
 
 
 class GroupAmbulancePermissionAdminForm(forms.ModelForm):
-    ambulance = AmbulancePermissionModelChoiceField(label=_('Ambulance'),
+    ambulance = AmbulancePermissionModelChoiceField(label=_('Vehicle'),
                                                     queryset=Ambulance.objects.all())
 
     class Meta:

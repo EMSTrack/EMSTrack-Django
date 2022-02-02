@@ -265,6 +265,16 @@ export class AppClient extends TopicObserver {
             });
     }
 
+    getEquipmentMetadata(id) {
+
+        // retrieve equipment
+        return this.httpClient.get('equipment/' + id + '/')
+            .then( (response) => {
+                // return equipment
+                return response.data;
+            });
+    }
+
     getClients() {
 
         // retrieve clients
@@ -432,7 +442,7 @@ export class AppClient extends TopicObserver {
         const call_id = topic[3];
 
         // is this a new call?
-        logger.log('debug', "Received ambulance '%d' call '%d' status '%s'", ambulance_id, call_id, status);
+        logger.log('debug', "Received vehicle '%d' call '%d' status '%s'", ambulance_id, call_id, status);
         if ( !this.calls.hasOwnProperty(call_id) && status !== 'C' ) {
 
             // retrieve call from api

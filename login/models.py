@@ -490,7 +490,7 @@ class Client(models.Model):
             if self.ambulance is not None:
 
                 # log warning
-                logger.error("Client.save() called with status '{}' and ambulance '{} not None".format(self.status,
+                logger.error("Client.save() called with status '{}' and vehicle '{} not None".format(self.status,
                                                                                                        self.ambulance))
 
                 # logout ambulance

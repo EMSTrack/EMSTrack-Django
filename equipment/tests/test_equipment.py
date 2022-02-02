@@ -623,7 +623,7 @@ class TestEquipmentMetadata(TestSetup):
         # retrieve any hospital equipment
         response = client.get('/en/api/equipment/{}/metadata/'.format(str(self.h3.equipmentholder.id)),
                               follow=True)
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 403)
 
         # logout
         client.logout()
@@ -634,17 +634,17 @@ class TestEquipmentMetadata(TestSetup):
         # retrieve any hospital equipment
         response = client.get('/en/api/equipment/{}/metadata/'.format(str(self.h1.equipmentholder.id)),
                               follow=True)
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 403)
 
         # retrieve any hospital equipment
         response = client.get('/en/api/equipment/{}/metadata/'.format(str(self.h2.equipmentholder.id)),
                               follow=True)
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 403)
 
         # retrieve any hospital equipment
         response = client.get('/en/api/equipment/{}/metadata/'.format(str(self.h3.equipmentholder.id)),
                               follow=True)
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 403)
 
         # logout
         client.logout()

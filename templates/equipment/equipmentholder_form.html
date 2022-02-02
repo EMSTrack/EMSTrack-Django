@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% load i18n %}
+{% load render_bundle from webpack_loader %}
 
 {% block head %}
 {{ form.media }}
@@ -17,7 +18,7 @@
             <h1>{{ equipmentholder.get_name }} &mdash; {% trans "equipments" %}</h1>
 
             <p>
-                <a href="{{ equipmentholder.get_absolute_url }}">{% trans "back to" %} {{ equipmentholder.get_type }}</a>
+                <a href="{{ equipmentholder.get_absolute_url }}">{% trans "back to" %} {{ equipmentholder.get_type_name }}</a>
             </p>
 
             <form method="POST" class="post-form">
@@ -34,14 +35,12 @@
                     <div id="formset" data-formset-prefix="{{ formset.prefix }}">
                         {{ formset.management_form }}
 
-                        <table class="table table-striped table-sm">
-                            {% with formset|first as form %}
-                                <thead><tr>
-                                    {% for field in form.visible_fields %}
-                                        <th>{{ field.label|capfirst }}</th>
-                                    {% endfor %}
-                                </tr></thead>
-                            {% endwith %}
+                        <table id="formTable" class="table table-striped table-sm">
+                            <thead><tr>
+                                {% for field in formset.empty_form.visible_fields %}
+                                    <th>{{ field.label|capfirst }}</th>
+                                {% endfor %}
+                            </tr></thead>
                             <tbody data-formset-body>
                             {% for form in formset %}
                                 <tr data-formset-form>
@@ -95,9 +94,9 @@ W                            {% endescapescript %}
                         </script>
 
                         <!-- This button will add a new form when clicked -->
-                        <!--
-                        <input type="button" value="{% trans 'Add another' %}" data-formset-add>
-                        -->
+                        <p>
+                            <input type="button" class="btn btn-secondary" value="{% trans 'Add another' %}" data-formset-add>
+                        </p>
 
                         <script>jQuery(function($) {
                             $("#formset").formset({
@@ -118,5 +117,11 @@ W                            {% endescapescript %}
         </div>
     </div>
 </div>
+
+{% endblock %}
+
+{% block scripts %}
+
+{% render_bundle 'main' 'js' 'EQUIPMENT' %}
 
 {% endblock %}

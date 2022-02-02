@@ -258,7 +258,7 @@ class SubscribeClient(BaseClient):
 
             # send error message to user
             self.send_error_message(user, client, msg.topic, msg.payload,
-                                    "Ambulance with id '{}' does not exist".format(ambulance_id))
+                                    "Vehicle with id '{}' does not exist".format(ambulance_id))
             return
 
         except Exception as e:
@@ -277,7 +277,7 @@ class SubscribeClient(BaseClient):
                 logger.info("client.ambulance != ambulance ('{}')\nclient = '{}'".format(ambulance, client))
                 # send error message to user
                 self.send_error_message(user, client, msg.topic, msg.payload,
-                                        "Client '{}' is not currently authorized to update ambulance '{}'"
+                                        "Client '{}' is not currently authorized to update vehicle '{}'"
                                         .format(client.client_id, ambulance.identifier))
                 return
 
@@ -551,7 +551,7 @@ class SubscribeClient(BaseClient):
         except Ambulance.DoesNotExist:
 
             self.send_error_message(user, client, msg.topic, msg.payload,
-                                    "Ambulance with id '{}' does not exist".format(ambulance_id))
+                                    "Vehicle with id '{}' does not exist".format(ambulance_id))
             return
 
         except Call.DoesNotExist:
@@ -583,7 +583,7 @@ class SubscribeClient(BaseClient):
             except AmbulanceCall.DoesNotExist:
 
                 self.send_error_message(user, client, msg.topic, msg.payload,
-                                        "Ambulance with id '{}' is not part of call '{}'".format(ambulance_id, call_id))
+                                        "Vehicle with id '{}' is not part of call '{}'".format(ambulance_id, call_id))
                 return
 
             if status == AmbulanceCallStatus.A:
@@ -649,7 +649,7 @@ class SubscribeClient(BaseClient):
         except Ambulance.DoesNotExist:
 
             self.send_error_message(user, client, msg.topic, msg.payload,
-                                    "Ambulance with id '{}' does not exist".format(ambulance_id))
+                                    "Vehicle with id '{}' does not exist".format(ambulance_id))
             return
 
         except Call.DoesNotExist:

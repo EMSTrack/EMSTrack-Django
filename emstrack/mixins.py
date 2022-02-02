@@ -5,7 +5,6 @@ import tempfile
 from django.contrib import messages
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponseRedirect, HttpResponse
-from django.template.response import TemplateResponse
 from django.utils.encoding import force_text
 from django.utils.translation import ugettext_lazy as _
 
@@ -91,8 +90,8 @@ class BasePermissionMixin:
         # add filter
         filter_params = {self.filter_field + '__in': can_do}
 
-        logger.debug('can_do = {}'.format(can_do))
-        logger.debug('filter_params = {}'.format(filter_params))
+        # logger.debug('can_do = {}'.format(can_do))
+        # logger.debug('filter_params = {}'.format(filter_params))
 
         # retrieve query
         return super().get_queryset().filter(**filter_params)
@@ -128,11 +127,16 @@ class UpdatedByWithInlinesMixin:
 
             # save form
             for obj in instances:
+
                 # add updated_by to formset instance
                 obj.updated_by = self.request.user
 
                 # then save
                 obj.save()
+
+            # delete objects
+            for obj in formset.deleted_objects:
+                obj.delete()
 
         return HttpResponseRedirect(self.get_success_url())
 

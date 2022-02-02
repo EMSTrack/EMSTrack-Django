@@ -68,7 +68,7 @@ class Equipment(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return "{} ({})".format(self.name, self.type)
+        return self.name
 
     def get_absolute_url(self, target='equipment:detail'):
         return reverse(target, kwargs={'pk': self.id})
@@ -121,6 +121,13 @@ class EquipmentHolder(models.Model):
             return "ambulance"
         return None
 
+    def get_type_name(self):
+        if self.is_hospital():
+            return _("hospital")
+        elif self.is_ambulance():
+            return _("vehicle")
+        return None
+
     def get_name(self):
         if self.is_hospital():
             return self.hospital.name
@@ -133,7 +140,7 @@ class EquipmentHolder(models.Model):
         if self.is_hospital():
             retval += ", Hospital '{}'".format(self.hospital)
         elif self.is_ambulance():
-            retval += ", Ambulance '{}'".format(self.ambulance)
+            retval += ", Vehicle '{}'".format(self.ambulance)
         else:
             retval += ", Unknown"
         return retval

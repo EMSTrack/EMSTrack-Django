@@ -18,7 +18,7 @@ from .models import EquipmentItem, Equipment, EquipmentHolder, EquipmentSet, Equ
 class EquipmentItemInline(InlineFormSetFactory):
     model = EquipmentItem
     form_class = EquipmentItemForm
-    factory_kwargs = {'extra': 0, 'can_delete': False}
+    factory_kwargs = {'extra': 0, 'can_delete': True}
 
 
 class EquipmentSetCreateInline(InlineFormSetFactory):
