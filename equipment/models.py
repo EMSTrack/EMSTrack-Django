@@ -68,7 +68,7 @@ class Equipment(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return "{} ({})".format(self.name, self.type)
+        return self.name
 
     def get_absolute_url(self, target='equipment:detail'):
         return reverse(target, kwargs={'pk': self.id})

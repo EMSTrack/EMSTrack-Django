@@ -32,13 +32,15 @@ function equipmentSelected(select, value) {
             .then( (equipment) => {
                 logger.log('debug', "Got equipment metadata");
 
-                if (equipment.type === 'I') {
-                    valueField.attr('type', 'number');
-                    valueField.attr('value', equipment.default);
-                } else if (equipment.type === 'B') {
+                if (equipment.type === 'B') {
                     valueField.attr('type', 'checkbox');
-                } else if (equipment.type === 'S') {
-                    valueField.attr('type', 'text');
+                    valueField.attr('checked', equipment.default);
+                } else {
+                    if (equipment.type === 'I') {
+                        valueField.attr('type', 'number');
+                    } else if (equipment.type === 'S') {
+                        valueField.attr('type', 'text');
+                    }
                     valueField.attr('value', equipment.default);
                 }
 
