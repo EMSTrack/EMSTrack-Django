@@ -143,6 +143,9 @@ urlpatterns += i18n_patterns(*[
     # report
     url(r'^report/', include('report.urls')),
 
+    # dashboard
+    url(r'^dashboard/', include('dashboard.urls')),
+
     # video
     url(r'^video/', include('video.urls')),
 

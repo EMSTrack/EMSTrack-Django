@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block content %}
+
+<div class="embed-responsive embed-responsive-16by9">
+    <iframe class="embed-responsive-item" src="https://localhost/dashboard/?token={{ token }}"></iframe>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+{% autoescape off %}
+<script>
+
+    const token = {{ token }}
+
+</script>
+{% endautoescape %}
+
+{% endblock %}
+
