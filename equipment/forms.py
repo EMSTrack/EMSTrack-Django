@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 from djangoformsetjs.utils import formset_media_js
 
-from equipment.models import Equipment, EquipmentHolder, EquipmentItem, EquipmentSetItem, EquipmentSet, EquipmentType
+from equipment.models import Equipment, EquipmentHolder, EquipmentItem, EquipmentSetItem, EquipmentSet
 
 logger = logging.getLogger(__name__)
 
@@ -17,7 +17,8 @@ class EquipmentItemForm(forms.ModelForm):
 
     class Media(object):
         js = formset_media_js + (
-            # Other form media here
+            # Other form media
+            # 'js/equipment.js',
         )
 
     def __init__(self, *args, **kwargs):
@@ -26,7 +27,12 @@ class EquipmentItemForm(forms.ModelForm):
         if instance is not None:
             self.fields['value'].widget = instance.equipment.get_value_widget()
             self.fields['equipment'].disabled = True
-
+        else:
+            self.fields['equipment'] = \
+                forms.ModelChoiceField(queryset=Equipment.objects.all(),
+                                       widget=forms.Select(attrs={'onChange': 'equipmentSelected(this, this.value)'}))
+            self.fields['value'].disabled = True
+            self.fields['comment'].disabled = True
 
 class EquipmentSetItemForm(forms.ModelForm):
 

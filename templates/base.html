@@ -46,7 +46,7 @@
     <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
 
     <!-- title -->
-    <title>{% block title %}EMSTrack - {% trans "Ambulance Tracker" %}{% endblock %}</title>
+    <title>{% block title %}EMSTrack - {% trans "Vehicle Tracker" %}{% endblock %}</title>
     {% block head %}
     {% endblock %}
 </head>
@@ -86,7 +86,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'ambulance:list' %}">
                     <span class="fas fa-ambulance"></span>
-                    {% trans "Ambulances" %}
+                    {% trans "Vehicles" %}
                 </a>
             </li>
             <li class="nav-item">

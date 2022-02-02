@@ -16,7 +16,7 @@ from ambulance.viewsets import AmbulanceEquipmentItemViewSet, AmbulanceViewSet, 
     CallRadioViewSet, AmbulanceCallWaypointViewSet, CallNoteViewSet
 
 from hospital.viewsets import HospitalViewSet, HospitalEquipmentItemViewSet
-from equipment.viewsets import EquipmentItemViewSet, EquipmentViewSet
+from equipment.viewsets import EquipmentItemViewSet, EquipmentViewSet, EquipmentItemMetadataViewSet
 
 from .views import IndexView
 
@@ -62,11 +62,15 @@ router.register(r'hospital/(?P<hospital_id>[0-9]+)/equipment',
 
 router.register(r'equipment/(?P<equipmentholder_id>[0-9]+)/item',
                 EquipmentItemViewSet,
-                basename='api-equipment')
+                basename='api-equipment-item')
+
+router.register(r'equipment/(?P<equipmentholder_id>[0-9]+)/metadata',
+                EquipmentItemMetadataViewSet,
+                basename='api-equipment-metadata')
 
 router.register(r'equipment',
                 EquipmentViewSet,
-                basename='api-equipment-metadata')
+                basename='api-equipment')
 
 router.register(r'call',
                 CallViewSet,

@@ -78,7 +78,7 @@ class AmbulanceCreateView(LoginRequiredMixin,
     form_class = AmbulanceCreateForm
 
     def get_success_message(self, cleaned_data):
-        return "Successfully created ambulance '{}'".format(cleaned_data['identifier'])
+        return "Successfully created vehicle '{}'".format(cleaned_data['identifier'])
 
     def get_success_url(self):
         return self.object.get_absolute_url()
@@ -94,7 +94,7 @@ class AmbulanceUpdateView(LoginRequiredMixin,
     form_class = AmbulanceUpdateForm
 
     def get_success_message(self, cleaned_data):
-        return "Successfully updated ambulance '{}'".format(cleaned_data['identifier'])
+        return "Successfully updated vehicle '{}'".format(cleaned_data['identifier'])
 
     def get_success_url(self):
         return self.object.get_absolute_url()
@@ -272,14 +272,14 @@ class AmbulanceMap(TemplateView):
             "Invalid radio code": _("Invalid radio code"),
             "Invalid priority code": _("Invalid priority code"),
             "Please select the priority": _("Please select the priority"),
-            "Please dispatch at least one ambulance": _("Please dispatch at least one ambulance"),
+            "Please dispatch at least one vehicle": _("Please dispatch at least one vehicle"),
             "Blank name": _("Blank name"),
-            "Can only dispatch available ambulances!": _("Can only dispatch available ambulances!"),
-            "Could not update ambulance status": _("Could not update ambulance status"),
+            "Can only dispatch available vehicles!": _("Can only dispatch available vehicles!"),
+            "Could not update vehicle status": _("Could not update vehicle status"),
             "'%s' is now '%s'": _("'%s' is now '%s'"),
             "Do you want to abort call %d?": _("Do you want to abort call %d?"),
-            "Do you want to modify ambulance <strong>%s</strong> status to <strong>%s</strong>?":
-                _("Do you want to modify ambulance <strong>%s</strong> status to <strong>%s</strong>?"),
+            "Do you want to modify vehicle <strong>%s</strong> status to <strong>%s</strong>?":
+                _("Do you want to modify vehicle <strong>%s</strong> status to <strong>%s</strong>?"),
             "Patients": _("Patients"),
             "No patient names are available.": _("No patient names are available."),
             "Details": _("Details"),
@@ -524,7 +524,7 @@ class AmbulanceImportView(ImportModelMixin,
     resource_class = AmbulanceResource
 
     process_import_url = 'ambulance:process-import-ambulance'
-    import_breadcrumbs = {'ambulance:list': _("Ambulances")}
+    import_breadcrumbs = {'ambulance:list': _("Vehicles")}
 
 
 class AmbulanceProcessImportView(SuccessMessageMixin,
@@ -533,10 +533,10 @@ class AmbulanceProcessImportView(SuccessMessageMixin,
     model = Ambulance
     resource_class = AmbulanceResource
 
-    success_message = _('Successfully imported ambulances')
+    success_message = _('Successfully imported vehicles')
     success_url = reverse_lazy('ambulance:list')
 
-    import_breadcrumbs = {'ambulance:list': _("Ambulances")}
+    import_breadcrumbs = {'ambulance:list': _("Vehicles")}
 
 
 # CallRadioCode import and export

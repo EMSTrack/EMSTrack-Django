@@ -116,7 +116,7 @@ $(function () {
 
         })
         .then( (ambulances) => {
-            logger.log('info', Object.keys(ambulances).length + ' ambulances retrieved');
+            logger.log('info', Object.keys(ambulances).length + ' vehicles retrieved');
 
             // retrieve calls
             logger.log('info', 'Retrieving calls');

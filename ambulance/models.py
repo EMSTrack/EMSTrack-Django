@@ -285,7 +285,7 @@ class Ambulance(PublishMixin,
         return reverse('ambulance:detail', kwargs={'pk': self.id})
 
     def __str__(self):
-        return ('Ambulance {}(id={}) ({}) [{}]:\n' +
+        return ('Vehicle {}(id={}) ({}) [{}]:\n' +
                 '    Status: {}\n' +
                 '  Location: {} @ {}\n' +
                 '   Updated: {} by {}').format(self.identifier,
@@ -529,7 +529,7 @@ class Call(PublishMixin,
             message = self.details
 
         # id, priority, details, ambulances
-        return "#{}({}):\n- {}\n* {}:\n{}".format(self.id, priority, message, _('Ambulances'), ambulances)
+        return "#{}({}):\n- {}\n* {}:\n{}".format(self.id, priority, message, _('Vehicles'), ambulances)
 
     def __str__(self):
         return "{} ({})".format(self.status, self.priority)
@@ -602,7 +602,7 @@ class AmbulanceCall(PublishMixin,
             if (set_size == 0 or
                     (set_size == 1 and accepted_ambulancecalls[0].ambulance is not self)):
 
-                logger.debug('This is the last ambulance; will end call.')
+                logger.debug('This is the last vehicle; will end call.')
 
                 # then change call status to ended
                 call.status = CallStatus.E.name
@@ -610,18 +610,18 @@ class AmbulanceCall(PublishMixin,
 
             else:
 
-                logger.debug('There are still {} ambulances in this call.'.format(set_size))
+                logger.debug('There are still {} vehicles in this call.'.format(set_size))
                 logger.debug(accepted_ambulancecalls)
 
         # changed to declined?
         elif self.status == AmbulanceCallStatus.D.name:
 
-            logger.debug('Ambulance call declined.')
+            logger.debug('Vehicle call declined.')
 
         # changed to suspended?
         elif self.status == AmbulanceCallStatus.S.name:
 
-            logger.debug('Ambulance call suspended.')
+            logger.debug('Vehicle call suspended.')
 
         # call super
         super().save(*args, **kwargs)

@@ -72,7 +72,7 @@ function retrieveCall(map, call_id) {
 
 function retrieveAmbulanceUpdates(map, ambulance_id, call_id) {
 
-    logger.log('info', "Retrieving ambulance '%d' updates from API", ambulance_id);
+    logger.log('info', "Retrieving vehicle '%d' updates from API", ambulance_id);
 
     // Build url
     const url = 'ambulance/' + ambulance_id + '/updates/?call_id=' + call_id;
@@ -80,12 +80,12 @@ function retrieveAmbulanceUpdates(map, ambulance_id, call_id) {
     apiClient.httpClient.get(url)
         .then( (response) => {
 
-            logger.log('debug', "Got '%s' ambulance '%d' updates from API", response.data.length, ambulance_id);
+            logger.log('debug', "Got '%s' vehicle '%d' updates from API", response.data.length, ambulance_id);
             addAmbulanceRoute(map, response.data, apiClient.settings.ambulance_status, true);
 
         })
         .catch( (error) => {
-            logger.log('error', "'Failed to retrieve ambulance '%d' updates: %s", ambulance_id, error);
+            logger.log('error', "'Failed to retrieve vehicle '%d' updates: %s", ambulance_id, error);
         });
 
 }

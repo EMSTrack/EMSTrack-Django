@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% load i18n %}
+{% load render_bundle from webpack_loader %}
 
 {% block head %}
 {{ form.media }}
@@ -17,7 +18,7 @@
             <h1>{{ equipmentholder.get_name }} &mdash; {% trans "equipments" %}</h1>
 
             <p>
-                <a href="{{ equipmentholder.get_absolute_url }}">{% trans "back to" %} {{ equipmentholder.get_type }}</a>
+                <a href="{{ equipmentholder.get_absolute_url }}">{% trans "back to" %} {{ equipmentholder.get_type_name }}</a>
             </p>
 
             <form method="POST" class="post-form">
@@ -95,9 +96,9 @@ W                            {% endescapescript %}
                         </script>
 
                         <!-- This button will add a new form when clicked -->
-                        <!--
-                        <input type="button" value="{% trans 'Add another' %}" data-formset-add>
-                        -->
+                        <p>
+                            <input type="button" class="btn btn-secondary" value="{% trans 'Add another' %}" data-formset-add>
+                        </p>
 
                         <script>jQuery(function($) {
                             $("#formset").formset({
@@ -118,5 +119,11 @@ W                            {% endescapescript %}
         </div>
     </div>
 </div>
+
+{% endblock %}
+
+{% block scripts %}
+
+{% render_bundle 'main' 'js' 'EQUIPMENT' %}
 
 {% endblock %}

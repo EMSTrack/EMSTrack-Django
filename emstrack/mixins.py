@@ -134,6 +134,10 @@ class UpdatedByWithInlinesMixin:
                 # then save
                 obj.save()
 
+            # delete objects
+            for obj in formset.deleted_objects:
+                obj.delete()
+
         return HttpResponseRedirect(self.get_success_url())
 
 

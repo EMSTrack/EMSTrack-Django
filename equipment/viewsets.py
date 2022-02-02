@@ -15,33 +15,10 @@ from login.permissions import get_permissions
 logger = logging.getLogger(__name__)
 
 
-class EquipmentItemViewSet(mixins.ListModelMixin,
-                           mixins.RetrieveModelMixin,
-                           UpdateModelUpdateByMixin,
-                           viewsets.GenericViewSet):
-    """
-    API endpoint for manipulating equipment.
-
-    list:
-    Retrieve list of equipment.
-
-    retrieve:
-    Retrieve an existing equipment instance.
-
-    update:
-    Update existing equipment instance.
-
-    partial_update:
-    Partially update existing equipment instance.
-    """
-
-    queryset = EquipmentItem.objects.all()
-
-    serializer_class = EquipmentItemSerializer
-    lookup_field = 'equipment_id'
+class BaseEquipmentItemViewSet:
 
     # make sure both fields are looked up
-    def get_queryset(self, equipmentholder_id=None):
+    def check_holder_permissions(self):
 
         # retrieve user
         user = self.request.user
@@ -49,14 +26,14 @@ class EquipmentItemViewSet(mixins.ListModelMixin,
         # return nothing if anonymous
         if user.is_anonymous:
             raise PermissionDenied()
-        
+
         # retrieve id
-        if equipmentholder_id is None:
-            equipmentholder_id = int(self.kwargs['equipmentholder_id'])
+        equipmentholder_id = int(self.kwargs['equipmentholder_id'])
         logger.debug('kwargs = {}'.format(self.kwargs))
+        logger.debug('equipmentholder_id = {}'.format(equipmentholder_id))
 
         try:
-            
+
             # retrieve equipmentholder
             equipmentholder = EquipmentHolder.objects.get(id=equipmentholder_id)
 
@@ -96,33 +73,105 @@ class EquipmentItemViewSet(mixins.ListModelMixin,
         except EquipmentHolder.DoesNotExist as e:
             raise PermissionDenied()
 
+        return equipmentholder
+
+class EquipmentItemViewSet(BaseEquipmentItemViewSet,
+                           mixins.ListModelMixin,
+                           mixins.RetrieveModelMixin,
+                           UpdateModelUpdateByMixin,
+                           viewsets.GenericViewSet):
+    """
+    API endpoint for manipulating equipment owned by equipmentholder.
+
+    list:
+    Retrieve list of equipment.
+
+    retrieve:
+    Retrieve an existing equipment instance.
+
+    update:
+    Update existing equipment instance.
+
+    partial_update:
+    Partially update existing equipment instance.
+    """
+
+    serializer_class = EquipmentItemSerializer
+    lookup_field = 'equipment_id'
+
+    # make sure both fields are looked up
+    def get_queryset(self):
+
+        # check permissions
+        # will raise exception if not authorized
+        equipmentholder = self.check_holder_permissions()
+
         # build queryset
-        filter = {'equipmentholder_id': equipmentholder_id}
-        return self.queryset.filter(**filter)
+        filter = {'equipmentholder_id': equipmentholder.id}
+        return EquipmentItem.objects.filter(**filter)
 
 
-class EquipmentViewSet(BasePermissionMixin,
+class EquipmentItemMetadataViewSet(BaseEquipmentItemViewSet,
+                                   mixins.ListModelMixin,
+                                   viewsets.GenericViewSet):
+    """
+    API endpoint for manipulating equipment.
+
+    list:
+    Retrieve list of equipment metadata owned by equipmentholder.
+    """
+
+    serializer_class = EquipmentSerializer
+
+    # make sure both fields are looked up
+    def get_queryset(self):
+
+        # check permissions
+        # will raise exception if not authorized
+        equipmentholder = self.check_holder_permissions()
+
+        equipment_list = equipmentholder.equipmentitem_set.values('equipment')
+        return Equipment.objects.filter(id__in=equipment_list)
+
+
+class EquipmentViewSet(mixins.ListModelMixin,
+                       mixins.RetrieveModelMixin,
                        viewsets.GenericViewSet):
     """
     API endpoint for manipulating equipment.
 
-    metadata:
-    Retrieve equipment metadata.
+    list:
+    Retrieve list of equipment.
+
+    retrieve:
+    Retrieve an existing equipment instance.
     """
 
-    profile_field = 'equipments'
-    filter_field = 'id'
-    queryset = EquipmentHolder.objects.all()
+    queryset = Equipment.objects.all()
     serializer_class = EquipmentSerializer
 
-    @action(detail=True)
-    def metadata(self, request, pk=None, **kwargs):
-        """
-        Retrive equipment metadata.
-        """
 
-        equipmentholder = self.get_object()
-        equipment_list = equipmentholder.equipmentitem_set.values('equipment')
-        equipment = Equipment.objects.filter(id__in=equipment_list)
-        serializer = EquipmentSerializer(equipment, many=True)
-        return Response(serializer.data)
+# class EquipmentMetadataViewSet(viewsets.GenericViewSet):
+#     """
+#     API endpoint for manipulating equipment.
+#
+#     metadata:
+#     Retrieve equipment metadata.
+#     """
+#
+#     profile_field = 'equipments'
+#     filter_field = 'id'
+#     queryset = EquipmentHolder.objects.all()
+#     serializer_class = EquipmentSerializer
+#
+#     @action(detail=True)
+#     def metadata(self, request, pk=None, **kwargs):
+#         """
+#         Retrive equipment metadata.
+#         """
+#
+#         equipmentholder = self.get_object()
+#         equipment_list = equipmentholder.equipmentitem_set.values('equipment')
+#         equipment = Equipment.objects.filter(id__in=equipment_list)
+#         serializer = EquipmentSerializer(equipment, many=True)
+#         return Response(serializer.data)

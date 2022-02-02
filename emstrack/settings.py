@@ -285,6 +285,10 @@ WEBPACK_LOADER = {
         'BUNDLE_DIR_NAME': 'bundles/video/',
         'STATS_FILE': os.path.join(BASE_DIR, 'webpack/video-stats.json'),
     },
+    'EQUIPMENT': {
+        'BUNDLE_DIR_NAME': 'bundles/equipment/',
+        'STATS_FILE': os.path.join(BASE_DIR, 'webpack/equipment-stats.json'),
+    },
 }
 
 # Import-export settings
