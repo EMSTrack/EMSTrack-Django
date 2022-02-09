@@ -62,7 +62,7 @@ button:focus {
 }
 
 /* test for bootstrap local css overide */
-:local(.nav-link.active) {
+.nav-link.active {
     border-width: 4px 0 0 0 !important;
     border-color: #408bf9 !important;
     border-radius: 0 !important;
