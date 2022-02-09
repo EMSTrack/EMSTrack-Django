@@ -2734,7 +2734,7 @@ for (let iconId of rhsTabIconIds) {
 // Add event listener of changing selected styles to lhs/rhs tab buttons
 for (let btnId of lhsTabBtnIds) {
 	const button = document.getElementById(btnId);
-    button.addEventListener("click", (e) => lhsToggleSelByBtn(e)); 
+    // button.addEventListener("click", (e) => lhsToggleSelByBtn(e)); 
 }
 for (let btnId of rhsTabBtnIds) {
 	const button = document.getElementById(btnId);
