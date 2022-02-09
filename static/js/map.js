@@ -2,6 +2,8 @@ import L from "leaflet";
 import "leaflet-rotatedmarker";
 import "leaflet/dist/leaflet.css";
 
+import "../css/map-side-bar.css";
+
 import { Settings } from "./settings";
 
 import { LeafletWidget } from "./leaflet/LeafletWidget";
