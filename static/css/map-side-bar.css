@@ -76,6 +76,14 @@ button:focus {
 }
 
 
+.some-custom-class {
+	color: red !important;
+}
+
+.some-custom-class.active {
+	color: green !important;
+}
+
 .left-dimiss {
 	margin-left: auto;
 }
