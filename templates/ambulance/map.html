@@ -26,21 +26,9 @@
 
     <div class="row mx-1">
 
-        <!-- Filter -->
+        <!-- Left Hand Side Menu -->
         <nav class="left-side-bar bg-light" id="filtersDiv">
-            
-            <!-- Old Version -->
-            <!-- <div class="d-flex justify-content-start" style="height: 3.8rem; background-color: #e9ecef;"> -->
-                <!-- ambulance/settings/calls button -->
-                <!-- <button type="button" class="btn-selected d-flex align-items-center justify-content-center" id="ambulance-tab-button">
-                        <i class="fas fa-ambulance center tab-btn-icon" id="ambulance-tab-icon"></i>
-                    </button>
-                    <button type="button" class="tab-button d-flex align-items-center justify-content-center" id="settings-tab-button">
-                        <i class="fas fa-cog center tab-btn-icon" id="settings-tab-icon"></i>
-                    </button> -->
-
-            <!-- New Version -->
-
+            <!-- Left hand side menu tabs -->
             <div class="nav nav-tabs" role="tablist" style="height: 3.8rem; background-color: #e9ecef;">
                 <a class="nav-item nav-link tab-button active d-flex align-items-center justify-content-center" id="ambulance-tab-button"
                     data-toggle="tab" href="#ambulance-tab-content" role="tab" aria-controls="ambulance-tab-content" aria-selected="true">
@@ -51,145 +39,85 @@
                     <i class="fas fa-cog center tab-btn-icon" id="settings-tab-icon"></i>
                 </a>
 
-                    <!-- <button type="button" class="tab-button d-flex align-items-center justify-content-center" id="calls-tab-button">
-                        <i class="fas fa-phone center tab-btn-icon" onclick="lhsToggleSelByIcon(this.parentNode.id)"></i>
-                    </button> -->
-                
                 <!-- exit button -->
                 <button type="button" class="tab-button d-flex align-items-center justify-content-center left-dismiss" id="left-return-tab-button">
                     <i class="fas fa-angle-left tab-btn-icon"></i>
                 </button>						
             </div>
 
-            <!-- Ambulances Filter (by default displayed, since ambulance tab is selected by default) -->
-            <!-- <h5 class="mt-2"
-                style="cursor: pointer;"
-                data-toggle="collapse"
-                data-target="#ambulance-status"
-                aria-expanded="true"
-                aria-controls="ambulance-status">
-                <span class="fas fa-ambulance"></span>
-                {% trans "Ambulances" %}
-            </h5> -->
-            <!-- <div class="collapse show"
-                 id="ambulance-status">
-            </div> -->
-
-            <!-- Left hand side tab content: ambulance, settings -->
+            <!-- Left hand side tab content: Ambulance, Settings -->
             <div class="tab-content">
+                <!-- Ambulances Tab Content (by default displayed, since ambulance tab is selected by default) -->
                 <div id="ambulance-tab-content" class="tab-pane active" role="tabpanel">
                     <div id="ambulance-status"></div>
                 </div>
-
-
-                <!-- Settings Filters (including the following filters, by default hidden, since not selected yet) -->
-                <!-- 1. Ambulance Online Filter -->
-                <!-- <h5 class="mt-2"
-                    style="cursor: pointer;"
-                    data-toggle="collapse"
-                    data-target="#ambulance-online-status"
-                    aria-expanded="true"
-                    aria-controls="ambulance-online-status">
-                    <span class="fas fa-mobile-alt"></span>
-                    {% trans "Service" %}
-                </h5>
-                <div class="collapse"
-                    id="ambulance-online-status">
-                </div> -->
-
             
-                <!-- <div class="settings-tab-content d-none"> -->
+                <!-- Settings Tab Content (by default hidden, shown upon selection) -->
                 <div id="settings-tab-content" class="tab-pane fade" role="tabpanel">
-
-                    <h5 class="mt-2"
-                        aria-expanded="true">
+                    <!-- 1. Service Filter -->
+                    <h5 class="mt-2" aria-expanded="true">
                         <span class="fas fa-mobile-alt"></span>
                         {% trans "Service" %}
                     </h5>
                     <div id="ambulance-online-status"></div>
             
                     <!-- 2. Capability Filter -->
-                    <!-- <h5 class="mt-2"
-                    style="cursor: pointer;"
-                    data-toggle="collapse"
-                    data-target="#ambulance-capability"
-                    aria-expanded="true" aria-controls="ambulance-capability">
-                    <span class="fas fa-bed"></span>
-                    {% trans "Capability" %}
-                    </h5>
-                    <div class="collapse ml-1"
-                        id="ambulance-capability">
-                    </div> -->
-           
-                    <h5 class="mt-2"
-                        aria-expanded="true">
+                    <h5 class="mt-2" aria-expanded="true">
                         <span class="fas fa-bed"></span>
                         {% trans "Capability" %}
                     </h5>
                     <div id="ambulance-capability"></div>
 
-
                     <!-- 3. Location Filter -->
-                    <!-- <h5 class="mt-2"
-                    style="cursor: pointer;"
-                    data-toggle="collapse"
-                    data-target="#location-type"
-                    aria-expanded="true" aria-controls="location-type">
-                    <span class="fas fa-map-marker"></span>
-                    {% trans "Locations" %}
-                    </h5>
-                    <div class="collapse ml-1"
-                        id="location-type">
-                    </div> -->
-                    <h5 class="mt-2"
-                        aria-expanded="true">
+                    <h5 class="mt-2" aria-expanded="true">
                         <span class="fas fa-map-marker"></span>
                         {% trans "Locations" %}
                     </h5>
                     <div id="location-type"></div>
                 </div>
-
-                <!-- Calls Filter -->               <!-- TODO: not yet implemented!! -->
-                <!-- <div class="calls-tab-content d-none" id="TODO"></div> -->
-
             </div>
+
         </nav>
 
-        
         <!-- open/close left side bar btn -->
         <div class="open-menu" id="left-side-bar-btn">
             <i class="fas fa-filter" id="left-side-bar-filter-icon"></i>
             <i class="fas fa-angle-right fa-lg"></i>
         </div>
         
-
         <!-- Map -->
         <div class="col border-top border-secondary px-0">
             <div id="live-map" style="height: 650px"></div>
         </div>
 
-        <!-- Dispatching -->
+        <!-- Right Hand Side Menu -->
         <nav class="right-side-bar bg-light" id="dispatchDiv">
-            
-            <div class="d-flex justify-content-end" style="height: 3.8rem; background-color: #e9ecef;">
+
+            <!-- Right hand side menu tabs -->
+            <div class="nav nav-tabs d-flex justify-content-end" role="tablist" style="height: 3.8rem; background-color: #e9ecef;">
                 <!-- exit button -->
                 <button type="button" class="tab-button d-flex align-items-center justify-content-center right-dismiss" id="right-return-tab-button">
                     <i class="fas fa-angle-right tab-btn-icon"></i>
                 </button>	
 
                 <!-- new-call/calls button -->
-                <button type="button" class="btn-selected d-flex align-items-center justify-content-center" id="dispatch-tab-button">
+                <a class="nav-item nav-link tab-button active d-flex align-items-center justify-content-center" id="dispatch-tab-button"
+                    data-toggle="tab" href="#dispatch-tab-content" role="tab" aria-controls="dispatch-tab-content" aria-selected="true">
                     <img src="{%  static 'icons/dispatch-icon.png' %}" class="d-none" id="dispatch-tab-icon"></img>
                     <img src="{%  static 'icons/dispatch-icon-active.png' %}" id="dispatch-tab-icon-active"></img>
-
-                </button>
-                <button type="button" class="tab-button d-flex align-items-center justify-content-center" id="calls-tab-button">
+                </a>
+                <a class="nav-item nav-link tab-button d-flex align-items-center justify-content-center" id="calls-tab-button"
+                    data-toggle="tab" href="#calls-tab-content" role="tab" aria-controls="calls-tab-content" aria-selected="false">
                     <i class="fas fa-phone center tab-btn-icon" id="calls-tab-icon"></i>
-                </button>        					
+                </a>        					
             </div>
 
+            <!-- Right hand side tab content: Dispatch (New Call), Calls -->
+            <div class="tab-content">
+        
             <!-- Dispatch tab -->
-            <div class="dispatch-tab-content" id="newDispatchDiv">
+            <div id="dispatch-tab-content" class="tab-pane active" role="tabpanel">
+                <div id="newDispatchDiv">
                 <!-- Dispatch -->
                 <form id="dispatch-form-collapse"
                       method="POST" action="">
@@ -326,12 +254,14 @@
                     </datalist>
 
                 </form>
-
+                </div>
             </div>
 
             <!-- Calls tab -->
-            <div class="calls-tab-content d-none">
+            <div id="calls-tab-content" class="tab-pane fade" role="tabpanel">
                 <div id="call-status"></div>
+            </div>
+
             </div>
         </nav>
 
