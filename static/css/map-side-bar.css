@@ -29,7 +29,9 @@ button:focus {
 
 .tab-button {
 	background-color: #e9ecef;
-	border: 0px transparent;
+	/* border: 0px transparent; */
+	border-width: 4px 0 0 0 !important;
+	border-radius: 0px !important;
 	padding: .375rem .75rem;
 	font-size: 1rem;
 	line-height: 3;
@@ -69,11 +71,11 @@ button:focus {
     border-radius: 0 !important;
     color: #408bf9 !important;
     background-color: white !important;
-    padding: 0.375rem 0.75rem;
+    /* padding: 0.375rem 0.75rem;
     font-size: 1rem;
-    /* line-height: 5; */
+    line-height: 5;
     text-align: center;
-    margin: 0;
+    margin: 0; */
 }
 
 .left-dimiss {
