@@ -2628,125 +2628,6 @@ function newPatientForm(index, symbol) {
 }
 
 /* Map Side Bars Frontend */
-/*
-const lhsTabBtnIds = ["ambulance-tab-button", "settings-tab-button"];
-const lhsTabIconIds = ["ambulance-tab-icon", "settings-tab-icon"];
-const rhsTabBtnIds = ["dispatch-tab-button", "calls-tab-button"];
-const rhsTabIconIds = ["dispatch-tab-icon", "dispatch-tab-icon-active", "calls-tab-icon"];
-
-let lhsCurrTab = "ambulance-tab-button";
-let rhsCurrTab = "dispatch-tab-button";
-
-const tabContentMap = new Map([	
-    [lhsTabBtnIds[0], "ambulance-tab-content"], 
-	[lhsTabBtnIds[1], "settings-tab-content"], 
-	[rhsTabBtnIds[0], "dispatch-tab-content"], 
-	[rhsTabBtnIds[1], "calls-tab-content"]
-]);
-
-function selectBtn(btnId) {
-    // Special case here for the dispatch tab as it is alternating between two images = not a font icon
-    if (btnId === "dispatch-tab-button") {
-        document.getElementById("dispatch-tab-icon").className = "d-none";
-        document.getElementById("dispatch-tab-icon-active").className = "d-inline-block";
-    }
-
-    // set btn style to dark
-	document.getElementById(btnId).setAttribute('class', "btn-selected d-flex align-items-center justify-content-center");
-	// let the corresponding content visible by setting their class name
-	const tabContentClass = tabContentMap.get(btnId);
-    var tabContent = document.getElementsByClassName(tabContentClass);
-    for (let content of tabContent) {
-        content.setAttribute('class', tabContentClass);
-    }
-}
-
-function unSelectBtn(btnId) {
-    // Special case here for the dispatch tab as it is alternating between two images = not a font icon
-    if (btnId === "dispatch-tab-button") {
-        document.getElementById("dispatch-tab-icon-active").className = "d-none";
-        document.getElementById("dispatch-tab-icon").className = "d-inline-block";
-    }
-
-    // set btn style to light
-	document.getElementById(btnId).setAttribute('class', "tab-button d-flex align-items-center justify-content-center");
-	// let the corresponding content box invisible
-    const tabContentClass = tabContentMap.get(btnId);
-    var tabContent = document.getElementsByClassName(tabContentClass);
-    for (let content of tabContent) {
-        content.setAttribute('class', tabContentClass + " d-none");
-    }
-}
-
-// Toggle lhs tab selection
-function lhsToggleSelByBtn(e) {
-    e.preventDefault();
-	if ((e.target.id.length !== 0) && (lhsTabBtnIds.includes(e.target.id)) && (e.target.id !== lhsCurrTab)) {
-		unSelectBtn(lhsCurrTab);
-		lhsCurrTab = e.target.id;
-		selectBtn(lhsCurrTab);
-	}
-}
-function lhsToggleSelByIcon(id, e) {
-    e.stopPropagation();    // we don't want to call lhsToggleSelByBtn again
-    if (!lhsTabBtnIds.includes(id)) return;
-	if ((id.length !== 0) && (id !== lhsCurrTab)) {
-    	unSelectBtn(lhsCurrTab);
-		lhsCurrTab = id;
-        selectBtn(lhsCurrTab);
-    }
-}
-/*
-for (let iconId of lhsTabIconIds) {
-    $(document).on('click', '#' + iconId, (e) => {
-        lhsToggleSelByIcon(iconId.replace('icon', 'button'), e);
-    });
-}
-*/
-// Toggle rhs tab selection
-/*
-function rhsToggleSelByBtn(e) {
-	e.preventDefault();
-	if ((e.target.id.length !== 0) && (rhsTabBtnIds.includes(e.target.id)) && (e.target.id !== rhsCurrTab)) {
-			unSelectBtn(rhsCurrTab);
-			rhsCurrTab = e.target.id;
-			selectBtn(rhsCurrTab);
-	}
-}
-function rhsToggleSelByIcon(id, e) {
-    // we don't want to call btn's eventlistener to do the same thing again (rhsToggleSelByBtn) 
-    e.stopPropagation();
-    if (!rhsTabBtnIds.includes(id)) return;
-	if ((id.length !== 0) && (id !== rhsCurrTab)) {
-		unSelectBtn(rhsCurrTab);
-        rhsCurrTab = id;
-		selectBtn(rhsCurrTab);
-	}
-}
-/*
-for (let iconId of rhsTabIconIds) {
-    // Special case here: due to two images used for dispatch tab icon; replace images with an icon would be better
-    if (iconId === 'dispatch-tab-icon-active') {
-        $(document).on('click', '#' + iconId, (e) => {
-            rhsToggleSelByIcon('dispatch-tab-button', e);
-        });
-        continue;
-    }
-    $(document).on('click', '#' + iconId, (e) => {
-        rhsToggleSelByIcon(iconId.replace('icon', 'button'), e);
-    });
-}*/
-
-// Add event listener of changing selected styles to lhs/rhs tab buttons
-/*
-for (let btnId of lhsTabBtnIds) {
-	const button = document.getElementById(btnId);
-    // button.addEventListener("click", (e) => lhsToggleSelByBtn(e)); 
-}
-for (let btnId of rhsTabBtnIds) {
-	const button = document.getElementById(btnId);
-	button.addEventListener("click", (e) => rhsToggleSelByBtn(e));
-}*/
 
 // Add event listener for expanding the left side and right side menus
 const leftSideBar = document.getElementById("filtersDiv");
@@ -2758,26 +2639,28 @@ const rightSideBarInitClass = rightSideBar.className;
 			
 leftSideBarBtn.addEventListener("click", (e) => {
 	e.preventDefault();
-	leftSideBar.className += " active";				// Add class = "active"
+	leftSideBar.className += " active";
 })
     
 rightSideBarBtn.addEventListener("click", (e) => {
 	e.preventDefault();
-	rightSideBar.className += " active";				// Add class = "active"
+	rightSideBar.className += " active";
 })
 
 // Add event listener for collapsing the left side bar
 const leftDismissBtn = document.getElementById("left-return-tab-button");
 leftDismissBtn.addEventListener("click", (e) => {
-	e.preventDefault();
-	leftSideBar.className = leftSideBarInitClass;	// Remove class = "active"
+    e.preventDefault();
+    // Remove class = "active"
+	leftSideBar.className = leftSideBarInitClass;
 })
 
 // Add event listener for collapsing the right side bar
 const rightDismissBtn = document.getElementById("right-return-tab-button");
 rightDismissBtn.addEventListener("click", (e) => {
-	e.preventDefault();
-	rightSideBar.className = rightSideBarInitClass;	// Remove class = "active"
+    e.preventDefault();
+    // Remove class = "active"
+	rightSideBar.className = rightSideBarInitClass;
 })
 
 /* Map Side Bar Frontend Logis Ends HERE */
