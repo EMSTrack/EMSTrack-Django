@@ -63,6 +63,7 @@ button:focus {
 
 /* test for bootstrap local css overide */
 .tab-button.active {
+	border-style: solid hidden hidden hidden;
     border-width: 4px 0 0 0 !important;
     border-color: #408bf9 !important;
     border-radius: 0 !important;
@@ -73,15 +74,6 @@ button:focus {
     /* line-height: 5; */
     text-align: center;
     margin: 0;
-}
-
-
-.some-custom-class {
-	color: red !important;
-}
-
-.some-custom-class.active {
-	color: green !important;
 }
 
 .left-dimiss {
