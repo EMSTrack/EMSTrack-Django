@@ -2,16 +2,6 @@ button:focus {
 	outline: none;
 }
 
-
-/* .tab-selector {
-	height: 3.8rem;
-	display: flex;
-	justify-content: flex-start;
-	background-color: #e9ecef;
-}*/
-
-/* .tab-content {} */
-
 .left-side-bar {
     width: 400px;
     max-width: 25%; 
@@ -59,20 +49,6 @@ button:focus {
     background-color: white !important;
 }
 
-/*
-.btn-selected {
-	border-style: solid transparent transparent transparent;
-	border-width: 4px 0 0 0;
-	border-color: #408bf9;
-	color: #408bf9 !important;
-	background-color: white;
-	padding: .375rem .75rem;
-	font-size: 1rem;
-	line-height: 5;
-	text-align: center;
-	margin: 0;
-}*/
-
 .left-dimiss {
 	margin-left: auto;
 }
@@ -92,7 +68,6 @@ button:focus {
 .tab-btn-icon {
 	font-size: 25px;
 }
-
 
 .open-menu { 
 	background: white;
@@ -127,16 +102,9 @@ button:focus {
 	margin-right: 15px;
 }
 
-
 .tab-content {
 	padding: 10px;
 }
-
-/*
-.ambulance-tab-content, .settings-tab-content, .calls-tab-content, .dispatch-tab-content {
-    padding: 10px;
-}*/
-
 
 /*----------------------------------------------------------*/
 /* Right side Bar */
@@ -174,7 +142,6 @@ button:focus {
 .open-menu:hover #right-side-bar-phone-icon-active {
 	display: inline;
 }
-
 
 .right-dimiss {
 	margin-right: auto;
