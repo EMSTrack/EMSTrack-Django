@@ -157,7 +157,7 @@ settings.geocoder = geocoder;
 
 // resize map
 function resizeMap() {
-    $("#live-map").height($(window).height() - $('#base-navbar').outerHeight() - $('#map-navbar').outerHeight() - 5);
+    $("#live-map").height($(window).height() - $('#base-navbar').outerHeight() - 5);
     mymap.invalidateSize();
 }
 
