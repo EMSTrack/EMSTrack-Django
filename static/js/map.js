@@ -2628,6 +2628,7 @@ function newPatientForm(index, symbol) {
 }
 
 /* Map Side Bars Frontend */
+/*
 const lhsTabBtnIds = ["ambulance-tab-button", "settings-tab-button"];
 const lhsTabIconIds = ["ambulance-tab-icon", "settings-tab-icon"];
 const rhsTabBtnIds = ["dispatch-tab-button", "calls-tab-button"];
@@ -2703,6 +2704,7 @@ for (let iconId of lhsTabIconIds) {
 }
 */
 // Toggle rhs tab selection
+/*
 function rhsToggleSelByBtn(e) {
 	e.preventDefault();
 	if ((e.target.id.length !== 0) && (rhsTabBtnIds.includes(e.target.id)) && (e.target.id !== rhsCurrTab)) {
@@ -2721,6 +2723,7 @@ function rhsToggleSelByIcon(id, e) {
 		selectBtn(rhsCurrTab);
 	}
 }
+/*
 for (let iconId of rhsTabIconIds) {
     // Special case here: due to two images used for dispatch tab icon; replace images with an icon would be better
     if (iconId === 'dispatch-tab-icon-active') {
@@ -2732,9 +2735,10 @@ for (let iconId of rhsTabIconIds) {
     $(document).on('click', '#' + iconId, (e) => {
         rhsToggleSelByIcon(iconId.replace('icon', 'button'), e);
     });
-}
+}*/
 
 // Add event listener of changing selected styles to lhs/rhs tab buttons
+/*
 for (let btnId of lhsTabBtnIds) {
 	const button = document.getElementById(btnId);
     // button.addEventListener("click", (e) => lhsToggleSelByBtn(e)); 
@@ -2742,9 +2746,10 @@ for (let btnId of lhsTabBtnIds) {
 for (let btnId of rhsTabBtnIds) {
 	const button = document.getElementById(btnId);
 	button.addEventListener("click", (e) => rhsToggleSelByBtn(e));
-}
+}*/
 
 // Add event listener for expanding the left side bar
+/*
 const leftSideBar = document.getElementById("filtersDiv");
 const leftSideBarBtn = document.getElementById("left-side-bar-btn");
 const rightSideBar = document.getElementById("dispatchDiv");
