@@ -42,13 +42,13 @@
             <!-- New Version -->
 
             <div class="nav nav-tabs" style="height: 3.8rem; background-color: #e9ecef;">
-                <a class="nav-item nav-link active tab-button d-flex align-items-center justify-content-center" id="ambulance-tab-button"
+                <a class="nav-item nav-link tab-button active d-flex align-items-center justify-content-center" id="ambulance-tab-button"
                     data-toggle="tab" role="tab" aria-controls="ambulance-status" aria-selected="true">
-                    <i class="fas fa-ambulance center tab-btn-icon" id="ambulance-tab-icon"></i>
+                    <i class="fas fa-ambulance center tab-btn-icon" id="ambulance-tab-content"></i>
                 </a>
                 <a class="nav-item nav-link tab-button d-flex align-items-center justify-content-center" id="settings-tab-button"
                     data-toggle="tab" role="tab" aria-controls="" aria-selected="false">
-                    <i class="fas fa-cog center tab-btn-icon" id="settings-tab-icon"></i>
+                    <i class="fas fa-cog center tab-btn-icon" id="settings-tab-content"></i>
                 </a>
 
                     <!-- <button type="button" class="tab-button d-flex align-items-center justify-content-center" id="calls-tab-button">
@@ -74,9 +74,14 @@
             <!-- <div class="collapse show"
                  id="ambulance-status">
             </div> -->
-            <div class="ambulance-tab-content">
-                <div id="ambulance-status"></div>
-            </div>
+
+            <!-- Left hand side tab content: ambulance, settings -->
+            <div class="tab-content">
+                <div id="ambulance-tab-content" class="tab-pane active">
+                    <div id="ambulance-status"></div>
+                </div>
+
+            <!-- </div> -->
 
             <!-- Settings Filters (including the following filters, by default hidden, since not selected yet) -->
             <!-- 1. Ambulance Online Filter -->
@@ -92,7 +97,11 @@
             <div class="collapse"
                  id="ambulance-online-status">
             </div> -->
-            <div class="settings-tab-content d-none">
+
+            
+            <!-- <div class="settings-tab-content d-none"> -->
+            <div id="settings-tab-content" class="tab-pane hide">
+
                 <h5 class="mt-2"
                     aria-expanded="true">
                     <span class="fas fa-mobile-alt"></span>

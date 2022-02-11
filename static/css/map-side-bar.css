@@ -128,9 +128,14 @@ button:focus {
 }
 
 
+.tab-content {
+	padding: 10px;
+}
+
+/*
 .ambulance-tab-content, .settings-tab-content, .calls-tab-content, .dispatch-tab-content {
     padding: 10px;
-}
+}*/
 
 
 /*----------------------------------------------------------*/
