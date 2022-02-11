@@ -2748,8 +2748,7 @@ for (let btnId of rhsTabBtnIds) {
 	button.addEventListener("click", (e) => rhsToggleSelByBtn(e));
 }*/
 
-// Add event listener for expanding the left side bar
-/*
+// Add event listener for expanding the left side and right side menus
 const leftSideBar = document.getElementById("filtersDiv");
 const leftSideBarBtn = document.getElementById("left-side-bar-btn");
 const rightSideBar = document.getElementById("dispatchDiv");
