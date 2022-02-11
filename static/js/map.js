@@ -2695,12 +2695,13 @@ function lhsToggleSelByIcon(id, e) {
         selectBtn(lhsCurrTab);
     }
 }
+/*
 for (let iconId of lhsTabIconIds) {
     $(document).on('click', '#' + iconId, (e) => {
         lhsToggleSelByIcon(iconId.replace('icon', 'button'), e);
     });
 }
-
+*/
 // Toggle rhs tab selection
 function rhsToggleSelByBtn(e) {
 	e.preventDefault();
