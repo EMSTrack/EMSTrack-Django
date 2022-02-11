@@ -29,9 +29,9 @@ button:focus {
 
 .tab-button {
 	background-color: #e9ecef;
-	/* border: 0px transparent; */
-	border-width: 4px 0 0 0 !important;
+	border-width: 0 !important;
 	border-radius: 0px !important;
+	border-color: #e9ecef !important;
 	padding: .375rem .75rem;
 	font-size: 1rem;
 	line-height: 3;
@@ -49,9 +49,19 @@ button:focus {
 	color: #408bf9 !important;
 }
 
+/* When tab is selected */
+.tab-button.active {
+	border-style: solid hidden hidden hidden;
+    border-width: 4px 0 0 0 !important;
+	border-radius: 0 !important;
+	border-color: #408bf9 !important;
+    color: #408bf9 !important;
+    background-color: white !important;
+}
 
+/*
 .btn-selected {
-	/* border-style: solid transparent transparent transparent; */
+	border-style: solid transparent transparent transparent;
 	border-width: 4px 0 0 0;
 	border-color: #408bf9;
 	color: #408bf9 !important;
@@ -61,22 +71,7 @@ button:focus {
 	line-height: 5;
 	text-align: center;
 	margin: 0;
-}
-
-/* test for bootstrap local css overide */
-.tab-button.active {
-	border-style: solid hidden hidden hidden;
-    border-width: 4px 0 0 0 !important;
-    border-color: #408bf9 !important;
-    border-radius: 0 !important;
-    color: #408bf9 !important;
-    background-color: white !important;
-    /* padding: 0.375rem 0.75rem;
-    font-size: 1rem;
-    line-height: 5;
-    text-align: center;
-    margin: 0; */
-}
+}*/
 
 .left-dimiss {
 	margin-left: auto;
