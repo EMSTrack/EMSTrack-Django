@@ -76,7 +76,7 @@ def can_sms_notifications():
     n = len(users)
     if n > 1:
         # union of all groups
-        users = users[0].union(users[1:])
+        users = users[0].union(*users[1:])
     elif n == 1:
         # just one group
         users = users[0]
