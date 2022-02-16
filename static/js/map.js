@@ -39,7 +39,6 @@ delete reduced_location_type_order[reduced_location_type_order.indexOf('i')];
 
 const markersGroup = new L.LayerGroup();
 let isDispatching = false;
-let rightBarIsOpen = false;
 // let isFilterOpen = false;
 const placeIcon = L.icon({
     iconUrl: '/static/icons/place_marker.png',
@@ -2098,12 +2097,12 @@ const select = new Select({
 function beginDispatching() {
 
     // quick return if not dispatching
-    if (isDispatching) return;
+    // if (isDispatching) return;
 
     // quick return if the right side bar is closed
-    if (!rightBarIsOpen) return;
+    // if (!rightBarIsOpen) return;
 
-    isDispatching = true;
+    // isDispatching = true;
     /* const filtersDiv = $('#filtersDiv');
     isFilterOpen = filtersDiv.hasClass('show'); */  // No need
 
@@ -2157,13 +2156,13 @@ function beginDispatching() {
 function endDispatching() {
 
     // quick return if not dispatching
-    if (!isDispatching) return;
+    // if (!isDispatching) return;
 
     // quick return if the right side bar is opened
-    if (rightBarIsOpen) return;
+    // if (!rightBarIsOpen) return;
 
 
-    isDispatching = false;
+    // isDispatching = false;
     dispatchingAmbulances = {};
 
     alert("End Dispatch=====");
@@ -2657,8 +2656,7 @@ leftSideBarBtn.addEventListener("click", (e) => {
     
 rightSideBarBtn.addEventListener("click", (e) => {
     e.preventDefault();
-    rightBarIsOpen = true;
-    beginDispatching();
+    if ($('#dispatch-tab-button').hasClass('active')) beginDispatching();
 	rightSideBar.className += " active";
 })
 
@@ -2675,8 +2673,7 @@ const rightDismissBtn = document.getElementById("right-return-tab-button");
 rightDismissBtn.addEventListener("click", (e) => {
     e.preventDefault();
     // Remove class = "active"
-    rightBarIsOpen = false;
-    endDispatching();
+    if ($('#dispatch-tab-button').hasClass('active')) endDispatching();
 	rightSideBar.className = rightSideBarInitClass;
 })
 
