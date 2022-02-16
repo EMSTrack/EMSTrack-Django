@@ -2097,16 +2097,11 @@ const select = new Select({
 function beginDispatching() {
 
     // quick return if not dispatching
-    // if (isDispatching) return;
+    if (isDispatching) return;
+    isDispatching = true;
 
-    // quick return if the right side bar is closed
-    // if (!rightBarIsOpen) return;
-
-    // isDispatching = true;
     /* const filtersDiv = $('#filtersDiv');
     isFilterOpen = filtersDiv.hasClass('show'); */  // No need
-
-    alert("Begin Dispatch!!!");
 
     logger.log('info', 'Begin dispatching.');
 
@@ -2156,17 +2151,10 @@ function beginDispatching() {
 function endDispatching() {
 
     // quick return if not dispatching
-    // if (!isDispatching) return;
+    if (!isDispatching) return;
+    isDispatching = false;
 
-    // quick return if the right side bar is opened
-    // if (!rightBarIsOpen) return;
-
-
-    // isDispatching = false;
     dispatchingAmbulances = {};
-
-    alert("End Dispatch=====");
-
 
     logger.log('info', 'End dispatching.');
 
@@ -2707,7 +2695,7 @@ $(function() {
     }).trigger("resize");
 
     // Close popovers if dispatchDiv is hidden
-    $('#dispatchDiv')
+    /* $('#dispatchDiv')
         .on('hide.bs.collapse', function(event) {
 
             // hide all popovers
@@ -2723,7 +2711,7 @@ $(function() {
             */
 
 
-        });
+    //    });   // no need
 
     // Handle begin dispatching button
     /* Old Logic 
