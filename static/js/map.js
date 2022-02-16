@@ -2101,20 +2101,23 @@ function beginDispatching() {
         return;
 
     isDispatching = true;
-    const filtersDiv = $('#filtersDiv');
-    isFilterOpen = filtersDiv.hasClass('show');
+    /* const filtersDiv = $('#filtersDiv');
+    isFilterOpen = filtersDiv.hasClass('show'); */  // No need
+
+    alert("Begin Dispatch!!!");
+
     logger.log('info', 'Begin dispatching.');
 
     // open filter and available ambulances
-    filtersDiv.addClass('show');
+    /* filtersDiv.addClass('show');
     $('#ambulance_status').addClass('show');
-    $('#ambulance_AV').addClass('show');
+    $('#ambulance_AV').addClass('show'); */ // No need
 
     // Handle double click
     mymap.doubleClickZoom.disable();
     mymap.on('dblclick', function(e) {
-	// update marker location
-	updateCurrentMarker(e.latlng);
+	    // update marker location
+	    updateCurrentMarker(e.latlng);
     });
 
     // Update current location
@@ -2156,6 +2159,10 @@ function endDispatching() {
 
     isDispatching = false;
     dispatchingAmbulances = {};
+
+    alert("End Dispatch=====");
+
+
     logger.log('info', 'End dispatching.');
 
     // remove marker
@@ -2191,10 +2198,10 @@ function endDispatching() {
     // clear sms notifications
     $('#sms-notifications').empty();
 
-    if (!isFilterOpen) {
+    /* if (!isFilterOpen) {
         // close filter panel
         $('#filtersDiv').removeClass('show');
-    }
+    } */ // No need
 
     // remove dblclick handler
     mymap.off('dblclick');
@@ -2712,6 +2719,7 @@ $(function() {
         });
 
     // Handle begin dispatching button
+    /* Old Logic 
     $('#newDispatchDiv')
         .on('show.bs.collapse', function(event) {
 
@@ -2725,6 +2733,19 @@ $(function() {
             endDispatching();
 
         });
+
+    */
+    $('#dispatch-tab-button')
+        .on('click', function(event) {
+            if ($('#dispatch-tab-button').hasClass('active')) {
+                // call begin dispatching
+                beginDispatching();
+            } else {
+                // call end dispatching
+                endDispatching();
+            }
+        })
+
 
     $('#dispatch-form-collapse')
         .submit(function (e) {
