@@ -2097,8 +2097,10 @@ const select = new Select({
 function beginDispatching() {
 
     // quick return if not dispatching
-    if (isDispatching)
-        return;
+    if (isDispatching) return;
+
+    // quick return if the dispatch tab is not selected
+    if (!$('#dispatch-tab-button').hasClass('active')) return;
 
     isDispatching = true;
     /* const filtersDiv = $('#filtersDiv');
@@ -2154,8 +2156,11 @@ function beginDispatching() {
 function endDispatching() {
 
     // quick return if not dispatching
-    if (!isDispatching)
-        return;
+    if (!isDispatching) return;
+
+    // quick return if the dispatch tab is selected
+    if ($('#dispatch-tab-button').hasClass('active')) return;
+
 
     isDispatching = false;
     dispatchingAmbulances = {};
