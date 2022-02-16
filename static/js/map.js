@@ -2650,7 +2650,8 @@ leftSideBarBtn.addEventListener("click", (e) => {
 })
     
 rightSideBarBtn.addEventListener("click", (e) => {
-	e.preventDefault();
+    e.preventDefault();
+    beginDispatching();
 	rightSideBar.className += " active";
 })
 
@@ -2667,6 +2668,7 @@ const rightDismissBtn = document.getElementById("right-return-tab-button");
 rightDismissBtn.addEventListener("click", (e) => {
     e.preventDefault();
     // Remove class = "active"
+    endDispatching();
 	rightSideBar.className = rightSideBarInitClass;
 })
 
@@ -2735,16 +2737,16 @@ $(function() {
         });
 
     */
+
     $('#dispatch-tab-button')
-        .on('click', function(event) {
-            if ($('#dispatch-tab-button').hasClass('active')) {
-                // call begin dispatching
-                beginDispatching();
-            } else {
-                // call end dispatching
-                endDispatching();
-            }
+        .on('show.bs.tab', function(event) {
+            // call begin dispatching when the dispatch tab content is about to show
+            beginDispatching();
         })
+        .on('hide.bs.tab', function(event) {
+            // call end dispatching when the dispatch tab content is about to hide
+            endDispatching();
+        });
 
 
     $('#dispatch-form-collapse')
