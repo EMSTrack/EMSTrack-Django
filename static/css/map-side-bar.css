@@ -3,7 +3,8 @@ button:focus {
 }
 
 .left-side-bar {
-    width: 400px;
+	width: 400px;
+	min-width: 270px;
     max-width: 25%; 
 	height: 100%; 
 	position: fixed; 
@@ -109,7 +110,8 @@ button:focus {
 /*----------------------------------------------------------*/
 /* Right side Bar */
 .right-side-bar {
-    width: 400px;
+	width: 400px;
+	min-width: 270px;
     max-width: 25%; 
 	height: 100%; 
 	position: fixed; 
