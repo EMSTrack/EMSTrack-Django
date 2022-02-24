@@ -554,10 +554,10 @@ class Client(models.Model):
 # Client activity
 class ClientActivity(Enum):
     HS = _('handshake')
-    AI = _('ambulance login')
-    AO = _('ambulance logout')
-    TL = _('ambulance stop location')
-    SL = _('ambulance start location')
+    AI = _('vehicle login')
+    AO = _('vehicle logout')
+    TL = _('vehicle stop location')
+    SL = _('vehicle start location')
     HI = _('hospital login')
     HO = _('hospital logout')
 
