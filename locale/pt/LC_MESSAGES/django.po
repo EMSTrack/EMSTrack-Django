@@ -472,7 +472,7 @@ msgstr "Pacientes"
 
 #: ambulance/views.py:284 templates/ambulance/call_detail.html:133
 msgid "No patient names are available."
-msgstr "Não ha nomes de pacientes disponiveis."
+msgstr "Não há nomes de pacientes disponiveis."
 
 #: ambulance/views.py:285 templates/ambulance/ambulance_detail.html:23
 #: templates/ambulance/call_list.html:21 templates/ambulance/call_list.html:63
@@ -498,7 +498,7 @@ msgstr "Notas"
 
 #: ambulance/views.py:287
 msgid "Enter new note"
-msgstr "Escreve uma nova nota"
+msgstr "Escreva uma nova nota"
 
 #: ambulance/views.py:288
 msgid "Send SMS notifications?"
@@ -1285,7 +1285,7 @@ msgstr "Base"
 
 #: templates/ambulance/location_list.html:50
 msgid "No bases have been created yet."
-msgstr "Não ha bases."
+msgstr "Não há bases."
 
 #: templates/ambulance/location_list.html:54
 msgid "Others"
