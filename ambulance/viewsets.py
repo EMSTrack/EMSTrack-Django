@@ -65,7 +65,9 @@ class AmbulanceEquipmentItemViewSet(EquipmentItemViewSet):
         ambulance_id = int(self.kwargs['ambulance_id'])
         ambulance = Ambulance.objects.get(id=ambulance_id)
         equipmentholder_id = ambulance.equipmentholder.id
-        return super().get_queryset(equipmentholder_id)
+
+        self.kwargs['equipmentholder_id'] = equipmentholder_id
+        return super().get_queryset()
 
 
 class AmbulancePageNumberPagination(PageNumberPagination):

@@ -46,7 +46,9 @@ class HospitalEquipmentItemViewSet(EquipmentItemViewSet):
         hospital_id = int(self.kwargs['hospital_id'])
         hospital = Hospital.objects.get(id=hospital_id)
         equipmentholder_id = hospital.equipmentholder.id
-        return super().get_queryset(equipmentholder_id)
+
+        self.kwargs['equipmentholder_id'] = equipmentholder_id
+        return super().get_queryset()
 
 
 # Hospital viewset
