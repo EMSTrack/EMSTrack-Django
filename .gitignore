@@ -97,9 +97,9 @@ ENV/
 
 # Migrations and static
 # emstrack/settings.py
-ambulance/migrations
-hospital/migrations
-login/migrations
+#ambulance/migrations
+#hospital/migrations
+#login/migrations
 deploy/static
 nohup.out
 
