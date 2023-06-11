@@ -1,21 +1,29 @@
 import logging
 from datetime import timedelta
 
-import django.forms as forms
 import django.contrib.auth.forms as auth_forms
-
-from django.utils import timezone
+import django.forms as forms
+from django.contrib.auth import authenticate
+from django.contrib.auth.hashers import check_password, get_hasher
+from django.contrib.auth.models import Group, User
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth.hashers import get_hasher, check_password
-
-from django.contrib.auth.models import User, Group
 from djangoformsetjs.utils import formset_media_js
 
 from ambulance.models import Ambulance
 from hospital.models import Hospital
-from .models import TemporaryPassword, GroupProfile, UserAmbulancePermission, UserHospitalPermission, UserProfile, \
-    GroupAmbulancePermission, GroupHospitalPermission
+
+from .models import (
+    GroupAmbulancePermission,
+    GroupHospitalPermission,
+    GroupProfile,
+    Organization,
+    TemporaryPassword,
+    UserAmbulancePermission,
+    UserHospitalPermission,
+    UserProfile,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -26,9 +34,11 @@ class SignupForm(auth_forms.UserCreationForm):
         max_length=150,
         required=True,
         widget=forms.TextInput(
-            attrs={'autofocus': True,
-                   'placeholder': _('Username'),
-                   'class': 'form-control input-lg'}
+            attrs={
+                'autofocus': True,
+                'placeholder': _('Username'),
+                'class': 'form-control input-lg',
+            }
         ),
     )
     password1 = forms.CharField(
@@ -36,8 +46,7 @@ class SignupForm(auth_forms.UserCreationForm):
         strip=False,
         required=True,
         widget=forms.PasswordInput(
-            attrs={'placeholder': _('Password'),
-                   'class': 'form-control input-lg'}
+            attrs={'placeholder': _('Password'), 'class': 'form-control input-lg'}
         ),
     )
     password2 = forms.CharField(
@@ -45,8 +54,10 @@ class SignupForm(auth_forms.UserCreationForm):
         strip=False,
         required=True,
         widget=forms.PasswordInput(
-            attrs={'placeholder': _('Confirm password'),
-                   'class': 'form-control input-lg'}
+            attrs={
+                'placeholder': _('Confirm password'),
+                'class': 'form-control input-lg',
+            }
         ),
     )
     first_name = forms.CharField(
@@ -54,35 +65,35 @@ class SignupForm(auth_forms.UserCreationForm):
         max_length=30,
         required=False,
         widget=forms.TextInput(
-            attrs={'placeholder': _('First name'),
-                   'class': 'form-control input-lg'}
-        )
+            attrs={'placeholder': _('First name'), 'class': 'form-control input-lg'}
+        ),
     )
     last_name = forms.CharField(
         label=_("Last name"),
         max_length=30,
         required=False,
         widget=forms.TextInput(
-            attrs={'placeholder': _('Last name'),
-                   'class': 'form-control input-lg'}
-        )
+            attrs={'placeholder': _('Last name'), 'class': 'form-control input-lg'}
+        ),
     )
     email = forms.EmailField(
         label=_("Email"),
         required=True,
         widget=forms.EmailInput(
-            attrs={'placeholder': _('Email'),
-                   'class': 'form-control input-lg'}
-        )
+            attrs={'placeholder': _('Email'), 'class': 'form-control input-lg'}
+        ),
     )
 
     class Meta:
         model = User
-        fields = ('username',
-                  'first_name', 'last_name',
-                  'email',
-                  'password1', 'password2')
-
+        fields = (
+            'username',
+            'first_name',
+            'last_name',
+            'email',
+            'password1',
+            'password2',
+        )
 
 class AuthenticationForm(auth_forms.AuthenticationForm):
     username = auth_forms.UsernameField(
@@ -90,9 +101,11 @@ class AuthenticationForm(auth_forms.AuthenticationForm):
         max_length=150,
         required=True,
         widget=forms.TextInput(
-            attrs={'autofocus': True,
-                   'placeholder': _('Username'),
-                   'class': 'form-control input-lg'}
+            attrs={
+                'autofocus': True,
+                'placeholder': _('Username'),
+                'class': 'form-control input-lg',
+            }
         ),
     )
     password = forms.CharField(
@@ -100,10 +113,41 @@ class AuthenticationForm(auth_forms.AuthenticationForm):
         strip=False,
         required=True,
         widget=forms.PasswordInput(
-            attrs={'placeholder': _('Password'),
-                   'class': 'form-control input-lg'}
+            attrs={'placeholder': _('Password'), 'class': 'form-control input-lg'}
         ),
     )
+    organization = forms.ModelChoiceField(
+        label=_("Organization"),
+        required=False,
+        queryset=Organization.objects.all(),
+        widget=forms.Select(
+            attrs={'placeholder': _('Organization'), 'class': 'form-control input-lg'},
+        ),
+    )
+
+    def clean(self):
+        username = self.cleaned_data.get("username")
+        password = self.cleaned_data.get("password")
+        organization = self.cleaned_data.get("organization",'')
+
+        if username is not None and password:
+            user = User.objects.filter(username=username).first()
+            if user is None:
+                raise self.get_invalid_login_error()
+            if user.userprofile.is_organization:
+                if str(organization) == user.userprofile.organization.name:
+                    self.user_cache = authenticate(
+                        self.request, username=username, password=password
+                    )
+            else:
+                if not organization:
+                    self.user_cache = authenticate(
+                        self.request, username=username, password=password
+                )
+            if self.user_cache is None:
+                raise self.get_invalid_login_error()
+            self.confirm_login_allowed(self.user_cache)
+        return self.cleaned_data
 
 
 class MQTTAuthenticationForm(AuthenticationForm):
@@ -178,8 +222,9 @@ class HospitalPermissionModelChoiceField(forms.ModelChoiceField):
 
 
 class UserAmbulancePermissionAdminForm(forms.ModelForm):
-    ambulance = AmbulancePermissionModelChoiceField(label=_('Vehicle'),
-                                                    queryset=Ambulance.objects.all())
+    ambulance = AmbulancePermissionModelChoiceField(
+        label=_('Vehicle'), queryset=Ambulance.objects.all()
+    )
 
     class Meta:
         model = UserAmbulancePermission
@@ -192,8 +237,9 @@ class UserAmbulancePermissionAdminForm(forms.ModelForm):
 
 
 class UserHospitalPermissionAdminForm(forms.ModelForm):
-    hospital = HospitalPermissionModelChoiceField(label=_('Hospital'),
-                                                  queryset=Hospital.objects.all())
+    hospital = HospitalPermissionModelChoiceField(
+        label=_('Hospital'), queryset=Hospital.objects.all()
+    )
 
     class Meta:
         model = UserHospitalPermission
@@ -206,8 +252,9 @@ class UserHospitalPermissionAdminForm(forms.ModelForm):
 
 
 class GroupAmbulancePermissionAdminForm(forms.ModelForm):
-    ambulance = AmbulancePermissionModelChoiceField(label=_('Vehicle'),
-                                                    queryset=Ambulance.objects.all())
+    ambulance = AmbulancePermissionModelChoiceField(
+        label=_('Vehicle'), queryset=Ambulance.objects.all()
+    )
 
     class Meta:
         model = GroupAmbulancePermission
@@ -220,8 +267,9 @@ class GroupAmbulancePermissionAdminForm(forms.ModelForm):
 
 
 class GroupHospitalPermissionAdminForm(forms.ModelForm):
-    hospital = HospitalPermissionModelChoiceField(label=_('Hospital'),
-                                                  queryset=Hospital.objects.all())
+    hospital = HospitalPermissionModelChoiceField(
+        label=_('Hospital'), queryset=Hospital.objects.all()
+    )
 
     class Meta:
         model = GroupHospitalPermission
@@ -261,6 +309,7 @@ class UserProfileAdminForm(forms.ModelForm):
         labels = {
             'is_dispatcher': _('Dispatcher'),
             'is_guest': _('Guest'),
+            'organization': _('Organization'),
         }
         exclude = ['user']
 
@@ -268,9 +317,17 @@ class UserProfileAdminForm(forms.ModelForm):
 class UserAdminCreateForm(auth_forms.UserCreationForm):
     class Meta:
         model = User
-        fields = ['username',
-                  'password1', 'password2',
-                  'first_name', 'last_name', 'email', 'is_staff', 'is_active', 'groups']
+        fields = [
+            'username',
+            'password1',
+            'password2',
+            'first_name',
+            'last_name',
+            'email',
+            'is_staff',
+            'is_active',
+            'groups',
+        ]
 
     def save(self, commit=True):
         # UserCreationForm calls ModelForm.save() with commit = False, which prevents groups from being saved.
@@ -285,8 +342,15 @@ class UserAdminCreateForm(auth_forms.UserCreationForm):
 class UserAdminUpdateForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['username',
-                  'first_name', 'last_name', 'email', 'is_staff', 'is_active', 'groups']
+        fields = [
+            'username',
+            'first_name',
+            'last_name',
+            'email',
+            'is_staff',
+            'is_active',
+            'groups',
+        ]
 
     def __init__(self, *args, **kwargs):
         # call super
