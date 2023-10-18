@@ -14,8 +14,8 @@ RUN set -x && \
             rsync
 
 # Install node
-RUN curl -sL https://deb.nodesource.com/setup_21.x | bash - && \
-    apt-get install -y nodejs
+# RUN curl -sL https://deb.nodesource.com/setup_21.x | bash - && \
+RUN apt-get install -y nodejs npm
 
 # Build variables
 ARG BUILD_APP_HOME=/app
