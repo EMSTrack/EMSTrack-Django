@@ -71,6 +71,8 @@ RUN set -x && \
     touch /etc/emstrack/log/emstrack.log && \
     ln -s /etc/emstrack/log $APP_HOME/log
 
+RUN ls /etc/emstrack
+
 # Clone application
 COPY . .
 
