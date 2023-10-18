@@ -50,16 +50,16 @@ RUN set -x && \
     mkdir -p /etc/emstrack/migrations && \
     mkdir -p /etc/emstrack/migrations/ambulance && \
     mkdir ambulance && \
-    ln -s /etc/emstrack/migrations/ambulance $APP_HOME/ambulance/migrations && \
+    # ln -s /etc/emstrack/migrations/ambulance $APP_HOME/ambulance/migrations && \
     mkdir -p /etc/emstrack/migrations/login && \
     mkdir login && \
-    ln -s /etc/emstrack/migrations/login     $APP_HOME/login/migrations && \
+    # ln -s /etc/emstrack/migrations/login     $APP_HOME/login/migrations && \
     mkdir -p /etc/emstrack/migrations/hospital && \
     mkdir hospital && \
-    ln -s /etc/emstrack/migrations/hospital  $APP_HOME/hospital/migrations && \
+    # ln -s /etc/emstrack/migrations/hospital  $APP_HOME/hospital/migrations && \
     mkdir -p /etc/emstrack/migrations/equipment && \
     mkdir equipment && \
-    ln -s /etc/emstrack/migrations/equipment $APP_HOME/equipment/migrations && \
+    # ln -s /etc/emstrack/migrations/equipment $APP_HOME/equipment/migrations && \
     # mosquitto directories
     mkdir -p /mosquitto/data && \
     touch /mosquitto/data/passwd && \
