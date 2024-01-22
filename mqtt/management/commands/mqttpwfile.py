@@ -55,7 +55,7 @@ class Command(BaseCommand):
             # Retrieve current users
             for u in User.objects.filter(is_superuser=True):
                 # write to file
-                file.write('user {}\ntopic write #\n\n'.format(u.username))
+                file.write('user {}\ntopic read #\ntopic write #\n\n'.format(u.username))
 
         if options['verbosity'] >= 1:
             self.stdout.write(
