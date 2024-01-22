@@ -78,7 +78,7 @@ class UserProfile(ClearPermissionCacheMixin, models.Model):
         on_delete=models.CASCADE,
         verbose_name=_('user'),
     )
-    is_dispatcher = models.BooleanField(_('s'), default=False)
+    is_dispatcher = models.BooleanField(_('is_dispatcher'), default=False)
     is_guest = models.BooleanField(_('is_guest'), default=False)
     mobile_number = PhoneNumberField(blank=True)
     # user profile links with organization
