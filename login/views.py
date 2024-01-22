@@ -465,7 +465,8 @@ class RestartView(FormView):
 
 
 # MQTT login views
-
+# New auth plugin is finicky about ok being low caps
+MQTT_OK = 'ok'
 
 class MQTTLoginView(CsrfExemptMixin, FormView):
     """
@@ -480,8 +481,7 @@ class MQTTLoginView(CsrfExemptMixin, FormView):
         return HttpResponseForbidden()
 
     def form_valid(self, form):
-        # return HttpResponse('OK')
-        return HttpResponse('ok')
+        return HttpResponse(MQTT_OK)
 
     def post(self, request, *args, **kwargs):
         data = {}
@@ -513,7 +513,7 @@ class MQTTSuperuserView(CsrfExemptMixin, View):
         try:
             user = User.objects.get(username=username, is_active=True)
             if user.is_superuser or user.is_staff:
-                return HttpResponse('OK')
+                return HttpResponse(MQTT_OK)
 
         except User.DoesNotExist:
             pass
@@ -562,11 +562,11 @@ class MQTTAclView(CsrfExemptMixin, View):
 
                 # is user admin?
                 if user.is_staff:
-                    return HttpResponse('OK')
+                    return HttpResponse(MQTT_OK)
 
                 #  - settings
                 if len(topic) == 1 and topic[0] == 'settings':
-                    return HttpResponse('OK')
+                    return HttpResponse(MQTT_OK)
 
                 #  - user/{username}/error
                 #  - user/{username}/profile
@@ -575,7 +575,7 @@ class MQTTAclView(CsrfExemptMixin, View):
                 ):
 
                     if topic[2] == 'profile' or topic[2] == 'error':
-                        return HttpResponse('OK')
+                        return HttpResponse(MQTT_OK)
 
                 #  - user/{username}/client/{client-id}/webrtc/message
                 elif (
@@ -587,7 +587,7 @@ class MQTTAclView(CsrfExemptMixin, View):
                     and topic[4] == 'webrtc'
                     and topic[5] == 'message'
                 ):
-                    return HttpResponse('OK')
+                    return HttpResponse(MQTT_OK)
 
                 #  - hospital/{hospital-id}/data
                 elif len(topic) == 3 and topic[0] == 'hospital' and topic[2] == 'data':
@@ -604,7 +604,7 @@ class MQTTAclView(CsrfExemptMixin, View):
                         )
 
                         if can_read:
-                            return HttpResponse('OK')
+                            return HttpResponse(MQTT_OK)
 
                     except ObjectDoesNotExist:
                         pass
@@ -635,7 +635,7 @@ class MQTTAclView(CsrfExemptMixin, View):
                                 and topic[4] == 'data'
                             )
                         ):
-                            return HttpResponse('OK')
+                            return HttpResponse(MQTT_OK)
 
                     except ObjectDoesNotExist:
                         # logger.debug('ObjectDoesNotExist exception')
@@ -664,7 +664,7 @@ class MQTTAclView(CsrfExemptMixin, View):
                                 and topic[4] == 'status'
                             )
                         ):
-                            return HttpResponse('OK')
+                            return HttpResponse(MQTT_OK)
 
                     except ObjectDoesNotExist:
                         pass
@@ -688,7 +688,7 @@ class MQTTAclView(CsrfExemptMixin, View):
                                 ambulance=ambulancecall.ambulance_id
                             )
                             if can_read:
-                                return HttpResponse('OK')
+                                return HttpResponse(MQTT_OK)
 
                     except ObjectDoesNotExist:
                         pass
@@ -700,7 +700,7 @@ class MQTTAclView(CsrfExemptMixin, View):
                 #  - message
                 if len(topic) == 1 and topic[0] == 'message' and user.is_superuser:
 
-                    return HttpResponse('OK')
+                    return HttpResponse(MQTT_OK)
 
                 #  - user/{username}/client/{client-id}/#
                 elif (
@@ -716,7 +716,7 @@ class MQTTAclView(CsrfExemptMixin, View):
                     if len(topic) == 5 and (
                         topic[4] == 'error' or topic[4] == 'status'
                     ):
-                        return HttpResponse('OK')
+                        return HttpResponse(MQTT_OK)
 
                     #  - user/{username}/client/{client-id}/webrtc/message
                     elif (
@@ -724,7 +724,7 @@ class MQTTAclView(CsrfExemptMixin, View):
                         and topic[4] == 'webrtc'
                         and topic[5] == 'message'
                     ):
-                        return HttpResponse('OK')
+                        return HttpResponse(MQTT_OK)
 
                     #  - user/{username}/client/{client-id}/ambulance/{ambulance-id}/data
                     #  - user/{username}/client/{client-id}/ambulance/{ambulance-id}/call/{call-id}/status
@@ -756,7 +756,7 @@ class MQTTAclView(CsrfExemptMixin, View):
                             )
 
                             if can_write:
-                                return HttpResponse('OK')
+                                return HttpResponse(MQTT_OK)
 
                         except ObjectDoesNotExist:
                             pass
@@ -780,7 +780,7 @@ class MQTTAclView(CsrfExemptMixin, View):
                             )
 
                             if can_write:
-                                return HttpResponse('OK')
+                                return HttpResponse(MQTT_OK)
 
                         except ObjectDoesNotExist:
                             pass
@@ -805,7 +805,7 @@ class MQTTAclView(CsrfExemptMixin, View):
                             )
 
                             if can_write:
-                                return HttpResponse('OK')
+                                return HttpResponse(MQTT_OK)
 
                         except ObjectDoesNotExist:
                             pass
