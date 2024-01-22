@@ -47,3 +47,16 @@ class Command(BaseCommand):
         if options['verbosity'] >= 1:
             self.stdout.write(
                 self.style.SUCCESS("Done."))
+
+            self.stdout.write('Creating mosquitto-auth-plugin compatible aclfile')
+
+        with open('aclfile', 'w') as file:
+
+            # Retrieve current users
+            for u in User.objects.filter(is_superuser=True):
+                # write to file
+                file.write('user {}\ntopic write #\n\n'.format(u.username))
+
+        if options['verbosity'] >= 1:
+            self.stdout.write(
+                self.style.SUCCESS("Done."))

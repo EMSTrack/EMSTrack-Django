@@ -7,7 +7,9 @@ if [ -f $INIT_FILE ]; then
     echo "> Rebuild MQTT password files"
     python manage.py mqttpwfile --encode_salt
     cp pwfile /mosquitto/data/passwd
+    cp aclfile /mosquitto/data/acl
     cp pwfile /mosquitto-test/data/passwd
+    cp aclfile /mosquitto-test/data/acl
     chown -R 1883:1883 /mosquitto/data
     chown -R 1883:1883 /mosquitto-test/data
 
