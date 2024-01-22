@@ -480,7 +480,8 @@ class MQTTLoginView(CsrfExemptMixin, FormView):
         return HttpResponseForbidden()
 
     def form_valid(self, form):
-        return HttpResponse('OK')
+        # return HttpResponse('OK')
+        return HttpResponse('ok')
 
     def post(self, request, *args, **kwargs):
         data = {}
