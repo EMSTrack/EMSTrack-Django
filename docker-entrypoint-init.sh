@@ -5,7 +5,7 @@ if [ -f $INIT_FILE ]; then
     echo "> Container is already initialized"
 
     echo "> Rebuild MQTT password files"
-    python manage.py mqttpwfile
+    python manage.py mqttpwfile --encode_salt
     cp pwfile /mosquitto/data/passwd
     cp pwfile /mosquitto-test/data/passwd
     chown -R 1883:1883 /mosquitto/data
