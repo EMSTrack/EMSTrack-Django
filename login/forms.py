@@ -95,6 +95,7 @@ class SignupForm(auth_forms.UserCreationForm):
             'password2',
         )
 
+
 class AuthenticationForm(auth_forms.AuthenticationForm):
     username = auth_forms.UsernameField(
         label=_("Username"),
@@ -128,13 +129,13 @@ class AuthenticationForm(auth_forms.AuthenticationForm):
     def clean(self):
         username = self.cleaned_data.get("username")
         password = self.cleaned_data.get("password")
-        organization = self.cleaned_data.get("organization",'')
+        organization = self.cleaned_data.get("organization", '')
 
         if username is not None and password:
             user = User.objects.filter(username=username).first()
             if user is None:
                 raise self.get_invalid_login_error()
-            if user.userprofile.is_organization:
+            if user.userprofile.has_organization:
                 if str(organization) == user.userprofile.organization.name:
                     self.user_cache = authenticate(
                         self.request, username=username, password=password
@@ -143,7 +144,7 @@ class AuthenticationForm(auth_forms.AuthenticationForm):
                 if not organization:
                     self.user_cache = authenticate(
                         self.request, username=username, password=password
-                )
+                    )
             if self.user_cache is None:
                 raise self.get_invalid_login_error()
             self.confirm_login_allowed(self.user_cache)

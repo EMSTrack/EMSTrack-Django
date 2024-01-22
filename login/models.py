@@ -54,8 +54,8 @@ def is_guest(user):
 
 
 @register.filter
-def is_organization(user):
-    return user.userprofile.is_organization
+def has_organization(user):
+    return user.userprofile.has_organization
 
 
 # create the place to add organization - name and slug
@@ -101,7 +101,7 @@ class UserProfile(ClearPermissionCacheMixin, models.Model):
         return '{}'.format(self.user)
 
     @property
-    def is_organization(self):
+    def has_organization(self):
         return self.organization is not None
 
     def save(self, *args, **kwargs):
