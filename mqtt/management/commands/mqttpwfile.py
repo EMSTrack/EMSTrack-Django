@@ -24,8 +24,9 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         if options['verbosity'] >= 1:
-            self.stdout.write('Creating mosquitto-auth-plugin compatible pwfile')
-            self.stdout.write('encode_salt = {}'.format(options['encode_salt']))
+            self.stdout.write('Creating mosquitto-auth-plugin '
+                              'compatible pwfile '
+                              '(encode_salt = {})'.format(options['encode_salt']))
 
         with open('pwfile', 'w') as file:
             
