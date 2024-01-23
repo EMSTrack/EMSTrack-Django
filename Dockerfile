@@ -6,7 +6,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 # Install dependencies
 RUN set -x && \
-    apt-get --allow-releaseinfo-change update -y && \
+    apt-get update -y && \
     apt-get install -y apt-utils && \
     apt-get install -y dumb-init git gettext \
             gdal-bin libgdal-dev python3-gdal \
@@ -14,8 +14,8 @@ RUN set -x && \
             rsync
 
 # Install node
-RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
-    apt-get install -y nodejs
+# RUN curl -sL https://deb.nodesource.com/setup_21.x | bash - && \
+RUN apt-get install -y nodejs npm
 
 # Build variables
 ARG BUILD_APP_HOME=/app
@@ -45,21 +45,17 @@ RUN pip install .
 
 WORKDIR $APP_HOME
 
-# link migration directories into persistent volume
+# create application directories
 RUN set -x && \
     mkdir -p /etc/emstrack/migrations && \
     mkdir -p /etc/emstrack/migrations/ambulance && \
     mkdir ambulance && \
-    ln -s /etc/emstrack/migrations/ambulance $APP_HOME/ambulance/migrations && \
     mkdir -p /etc/emstrack/migrations/login && \
     mkdir login && \
-    ln -s /etc/emstrack/migrations/login     $APP_HOME/login/migrations && \
     mkdir -p /etc/emstrack/migrations/hospital && \
     mkdir hospital && \
-    ln -s /etc/emstrack/migrations/hospital  $APP_HOME/hospital/migrations && \
     mkdir -p /etc/emstrack/migrations/equipment && \
     mkdir equipment && \
-    ln -s /etc/emstrack/migrations/equipment $APP_HOME/equipment/migrations && \
     # mosquitto directories
     mkdir -p /mosquitto/data && \
     touch /mosquitto/data/passwd && \
@@ -68,11 +64,19 @@ RUN set -x && \
     # log directories
     mkdir -p /etc/emstrack/log && \
     touch /etc/emstrack/log/django.log && \
-    touch /etc/emstrack/log/emstrack.log && \
-    ln -s /etc/emstrack/log $APP_HOME/log
+    touch /etc/emstrack/log/emstrack.log
 
 # Clone application
 COPY . .
+
+# link migration directories into persistent volume
+# since fall of 2024 copy fails if links are made before
+RUN set -x && \
+    ln -s /etc/emstrack/migrations/ambulance $APP_HOME/ambulance/migrations && \
+    ln -s /etc/emstrack/migrations/login     $APP_HOME/login/migrations && \
+    ln -s /etc/emstrack/migrations/hospital  $APP_HOME/hospital/migrations && \
+    ln -s /etc/emstrack/migrations/equipment $APP_HOME/equipment/migrations && \
+    ln -s /etc/emstrack/log $APP_HOME/log
 
 # Init scripts
 COPY scripts/. $SCRIPT_HOME

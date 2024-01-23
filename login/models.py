@@ -32,6 +32,7 @@ logger = logging.getLogger(__name__)
 
 # filters
 
+
 @register.filter
 def get_client_status(key):
     return ClientStatus[key].value
@@ -50,13 +51,28 @@ def is_dispatcher(user):
 @register.filter
 def is_guest(user):
     return user.userprofile.is_guest
-    
 
-class UserProfile(ClearPermissionCacheMixin,
-                  models.Model):
-    user = models.OneToOneField(User,
-                                on_delete=models.CASCADE,
-                                verbose_name=_('user'))
+
+# create the place to add organization
+class Organization(models.Model):
+    name = models.CharField(_('name'), max_length=100, unique=True)
+    description = models.CharField(_('description'), max_length=100, blank=True)
+    users = models.ManyToManyField(User)
+
+    def get_absolute_url(self):
+        return reverse('login:detail-organization', kwargs={'pk': self.id})
+
+    def __str__(self):
+        return '{}'.format(self.name)
+
+
+# class UserProfile(models.Model):
+class UserProfile(ClearPermissionCacheMixin, models.Model):
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name=_('user'),
+    )
     is_dispatcher = models.BooleanField(_('is_dispatcher'), default=False)
     is_guest = models.BooleanField(_('is_guest'), default=False)
     mobile_number = PhoneNumberField(blank=True)
@@ -67,11 +83,23 @@ class UserProfile(ClearPermissionCacheMixin,
     def __str__(self):
         return '{}'.format(self.user)
 
+    def save(self, *args, **kwargs):
+        u = User.objects.filter(username=self.user.username)
+        p = UserProfile.objects.filter(user=self.user)
+        if u.exists() and p.exists():
+            p.update(
+                is_dispatcher=self.is_dispatcher,
+                is_guest=self.is_guest,
+                mobile_number=self.mobile_number,
+            )
+        else:
+            super().save(*args, **kwargs)
 
-# GroupProfile
 
 def can_sms_notifications():
-    groups = Group.objects.filter(groupprofile__can_sms_notifications=True).prefetch_related('user_set')
+    groups = Group.objects.filter(
+        groupprofile__can_sms_notifications=True
+    ).prefetch_related('user_set')
     users = [g.user_set.all() for g in groups]
     n = len(users)
     if n > 1:
@@ -86,15 +114,19 @@ def can_sms_notifications():
     return users
 
 
-class GroupProfile(ClearPermissionCacheMixin,
-                   models.Model):
-    group = models.OneToOneField(Group,
-                                 on_delete=models.CASCADE,
-                                 verbose_name=_('group'))
+# GroupProfile
+class GroupProfile(ClearPermissionCacheMixin, models.Model):
+    group = models.OneToOneField(
+        Group, on_delete=models.CASCADE, verbose_name=_('group')
+    )
 
     description = models.CharField(_('description'), max_length=100, blank=True)
-    priority = models.PositiveIntegerField(_('priority'), validators=[MinValueValidator(1)], default=10)
-    can_sms_notifications = models.BooleanField(_('can_sms_notifications'), default=False)
+    priority = models.PositiveIntegerField(
+        _('priority'), validators=[MinValueValidator(1)], default=10
+    )
+    can_sms_notifications = models.BooleanField(
+        _('can_sms_notifications'), default=False
+    )
 
     def get_absolute_url(self):
         return reverse('login:detail-group', kwargs={'pk': self.group.id})
@@ -108,6 +140,7 @@ class GroupProfile(ClearPermissionCacheMixin,
 
 # Group Ambulance and Hospital Permissions
 
+
 class Permission(models.Model):
     can_read = models.BooleanField(_('can_read'), default=True)
     can_write = models.BooleanField(_('can_write'), default=False)
@@ -116,54 +149,49 @@ class Permission(models.Model):
         abstract = True
 
 
-class UserAmbulancePermission(ClearPermissionCacheMixin,
-                              Permission):
-    user = models.ForeignKey(User,
-                             on_delete=models.CASCADE,
-                             verbose_name=_('user'))
-    ambulance = models.ForeignKey('ambulance.Ambulance',
-                                  on_delete=models.CASCADE,
-                                  verbose_name=_('ambulance'))
+class UserAmbulancePermission(ClearPermissionCacheMixin, Permission):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_('user'))
+    ambulance = models.ForeignKey(
+        'ambulance.Ambulance', on_delete=models.CASCADE, verbose_name=_('ambulance')
+    )
 
     class Meta:
         unique_together = ('user', 'ambulance')
 
     def __str__(self):
-        return '{}/{}(id={}): read[{}] write[{}]'.format(self.user,
-                                                         self.ambulance.identifier,
-                                                         self.ambulance.id,
-                                                         self.can_read,
-                                                         self.can_write)
+        return '{}/{}(id={}): read[{}] write[{}]'.format(
+            self.user,
+            self.ambulance.identifier,
+            self.ambulance.id,
+            self.can_read,
+            self.can_write,
+        )
 
 
-class UserHospitalPermission(ClearPermissionCacheMixin,
-                             Permission):
-    user = models.ForeignKey(User,
-                             on_delete=models.CASCADE,
-                             verbose_name=_('user'))
-    hospital = models.ForeignKey('hospital.Hospital',
-                                 on_delete=models.CASCADE,
-                                 verbose_name=_('hospital'))
+class UserHospitalPermission(ClearPermissionCacheMixin, Permission):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_('user'))
+    hospital = models.ForeignKey(
+        'hospital.Hospital', on_delete=models.CASCADE, verbose_name=_('hospital')
+    )
 
     class Meta:
         unique_together = ('user', 'hospital')
 
     def __str__(self):
-        return '{}/{}(id={}): read[{}] write[{}]'.format(self.user,
-                                                         self.hospital.name,
-                                                         self.hospital.id,
-                                                         self.can_read,
-                                                         self.can_write)
+        return '{}/{}(id={}): read[{}] write[{}]'.format(
+            self.user,
+            self.hospital.name,
+            self.hospital.id,
+            self.can_read,
+            self.can_write,
+        )
 
 
-class GroupAmbulancePermission(ClearPermissionCacheMixin,
-                               Permission):
-    group = models.ForeignKey(Group,
-                              on_delete=models.CASCADE,
-                              verbose_name=_('group'))
-    ambulance = models.ForeignKey('ambulance.Ambulance',
-                                  on_delete=models.CASCADE,
-                                  verbose_name=_('ambulance'))
+class GroupAmbulancePermission(ClearPermissionCacheMixin, Permission):
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, verbose_name=_('group'))
+    ambulance = models.ForeignKey(
+        'ambulance.Ambulance', on_delete=models.CASCADE, verbose_name=_('ambulance')
+    )
 
     class Meta:
         unique_together = ('group', 'ambulance')
@@ -172,21 +200,20 @@ class GroupAmbulancePermission(ClearPermissionCacheMixin,
         return reverse('login:detail-group', kwargs={'pk': self.group.id})
 
     def __str__(self):
-        return '{}/{}(id={}): read[{}] write[{}]'.format(self.group,
-                                                         self.ambulance.identifier,
-                                                         self.ambulance.id,
-                                                         self.can_read,
-                                                         self.can_write)
+        return '{}/{}(id={}): read[{}] write[{}]'.format(
+            self.group,
+            self.ambulance.identifier,
+            self.ambulance.id,
+            self.can_read,
+            self.can_write,
+        )
 
 
-class GroupHospitalPermission(ClearPermissionCacheMixin,
-                              Permission):
-    group = models.ForeignKey(Group,
-                              on_delete=models.CASCADE,
-                              verbose_name=_('group'))
-    hospital = models.ForeignKey('hospital.Hospital',
-                                 on_delete=models.CASCADE,
-                                 verbose_name=_('hospital'))
+class GroupHospitalPermission(ClearPermissionCacheMixin, Permission):
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, verbose_name=_('group'))
+    hospital = models.ForeignKey(
+        'hospital.Hospital', on_delete=models.CASCADE, verbose_name=_('hospital')
+    )
 
     class Meta:
         unique_together = ('group', 'hospital')
@@ -195,58 +222,60 @@ class GroupHospitalPermission(ClearPermissionCacheMixin,
         return reverse('login:detail-group', kwargs={'pk': self.group.id})
 
     def __str__(self):
-        return '{}/{}(id={}): read[{}] write[{}]'.format(self.group,
-                                                         self.hospital.name,
-                                                         self.hospital.id,
-                                                         self.can_read,
-                                                         self.can_write)
+        return '{}/{}(id={}): read[{}] write[{}]'.format(
+            self.group,
+            self.hospital.name,
+            self.hospital.id,
+            self.can_read,
+            self.can_write,
+        )
 
 
 # random string
-def random_string_generator(size=20,
-                            chars=(string.ascii_letters +
-                                   string.digits +
-                                   string.punctuation)):
+def random_string_generator(
+    size=20, chars=(string.ascii_letters + string.digits + string.punctuation)
+):
     return ''.join(random.choice(chars) for _ in range(size))
 
 
 # TokenLogin
+
 
 def unique_slug_generator(new_slug=None):
     # generate slug
     if new_slug is not None:
         slug = new_slug
     else:
-        slug = slugify(random_string_generator(size=50,
-                                               chars=(string.ascii_letters +
-                                                      string.digits)))
+        slug = slugify(
+            random_string_generator(
+                size=50, chars=(string.ascii_letters + string.digits)
+            )
+        )
 
     # if exists, try again
     if TokenLogin.objects.filter(token=slug).exists():
-        return unique_slug_generator(new_slug=random_string_generator(size=50,
-                                                                      chars=(string.ascii_letters +
-                                                                             string.digits)))
+        return unique_slug_generator(
+            new_slug=random_string_generator(
+                size=50, chars=(string.ascii_letters + string.digits)
+            )
+        )
     return slug
 
 
 class TokenLogin(models.Model):
-    user = models.ForeignKey(User,
-                             on_delete=models.CASCADE)
-    token = models.SlugField(max_length=50,
-                             default=unique_slug_generator,
-                             unique=True,
-                             null=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    token = models.SlugField(
+        max_length=50, default=unique_slug_generator, unique=True, null=False
+    )
     url = models.URLField(max_length=512, null=True, blank=True)
-    created_on = models.DateTimeField(_('created_on'),
-                                      auto_now=True)
+    created_on = models.DateTimeField(_('created_on'), auto_now=True)
 
 
 # TemporaryPassword
 
+
 class TemporaryPassword(models.Model):
-    user = models.OneToOneField(User,
-                                on_delete=models.CASCADE,
-                                verbose_name=_('user'))
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name=_('user'))
     password = models.CharField(_('password'), max_length=254)
     created_on = models.DateTimeField(_('created_on'), auto_now=True)
 
@@ -280,8 +309,7 @@ class TemporaryPassword(models.Model):
             if pwd is None:
 
                 # create password
-                pwd = TemporaryPassword(user=user,
-                                        password=password)
+                pwd = TemporaryPassword(user=user, password=password)
 
             else:
 
@@ -311,22 +339,27 @@ class Client(models.Model):
     # WARNING: mqtt client_id's can be up to 65536 bytes!
     client_id = models.CharField(_('client_id'), max_length=254, unique=True)
 
-    user = models.ForeignKey(User,
-                             on_delete=models.CASCADE,
-                             verbose_name=_('user'))
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_('user'))
 
-    status = models.CharField(_('status'), max_length=1,
-                              choices=make_choices(ClientStatus))
+    status = models.CharField(
+        _('status'), max_length=1, choices=make_choices(ClientStatus)
+    )
 
-    ambulance = models.OneToOneField('ambulance.Ambulance',
-                                     on_delete=models.CASCADE,
-                                     blank=True, null=True,
-                                     verbose_name=_('ambulance'))
+    ambulance = models.OneToOneField(
+        'ambulance.Ambulance',
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+        verbose_name=_('ambulance'),
+    )
 
-    hospital = models.OneToOneField('hospital.Hospital',
-                                    on_delete=models.CASCADE,
-                                    blank=True, null=True,
-                                    verbose_name=_('hospital'))
+    hospital = models.OneToOneField(
+        'hospital.Hospital',
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+        verbose_name=_('hospital'),
+    )
 
     updated_on = models.DateTimeField(_('updated_on'), auto_now=True)
 
@@ -334,8 +367,9 @@ class Client(models.Model):
     _loaded_values = None
 
     def __str__(self):
-        return '{}[{},{}](ambulance={},hospital={})'.format(self.client_id, self.status,
-                                                            self.user, self.ambulance, self.hospital)
+        return '{}[{},{}](ambulance={},hospital={})'.format(
+            self.client_id, self.status, self.user, self.ambulance, self.hospital
+        )
 
     def get_absolute_url(self):
         return reverse('login:detail-client', kwargs={'pk': self.id})
@@ -378,15 +412,23 @@ class Client(models.Model):
         if self.status == ClientStatus.O.name or self.status == ClientStatus.R.name:
 
             # log operation
-            log.append({'client': self, 'user': self.user, 'status': self.status, 'activity': ClientActivity.HS.name})
+            log.append(
+                {
+                    'client': self,
+                    'user': self.user,
+                    'status': self.status,
+                    'activity': ClientActivity.HS.name,
+                }
+            )
 
             if self.status == ClientStatus.R.name and self.ambulance is None:
 
                 try:
 
                     # retrieve latest ambulance logout
-                    latest = ClientLog.objects.filter(status=ClientStatus.D.name,
-                                                      activity=ClientActivity.AO.name).latest('updated_on')
+                    latest = ClientLog.objects.filter(
+                        status=ClientStatus.D.name, activity=ClientActivity.AO.name
+                    ).latest('updated_on')
 
                     identifier = latest.details
                     if identifier is not None:
@@ -400,7 +442,9 @@ class Client(models.Model):
 
             # last ambulance
             if loaded_values and self._loaded_values['ambulance_id'] is not None:
-                last_ambulance = Ambulance.objects.get(id=self._loaded_values['ambulance_id'])
+                last_ambulance = Ambulance.objects.get(
+                    id=self._loaded_values['ambulance_id']
+                )
             else:
                 last_ambulance = None
 
@@ -411,11 +455,20 @@ class Client(models.Model):
                 if last_ambulance is not None:
 
                     # log ambulance logout operation
-                    log.append({'client': self, 'user': self.user, 'status': ClientStatus.O.name,
-                                'activity': ClientActivity.AO.name,
-                                'details': last_ambulance.identifier})
+                    log.append(
+                        {
+                            'client': self,
+                            'user': self.user,
+                            'status': ClientStatus.O.name,
+                            'activity': ClientActivity.AO.name,
+                            'details': last_ambulance.identifier,
+                        }
+                    )
 
-                    if self.status == ClientStatus.O.name and last_ambulance.status != AmbulanceStatus.UK.name:
+                    if (
+                        self.status == ClientStatus.O.name
+                        and last_ambulance.status != AmbulanceStatus.UK.name
+                    ):
 
                         # change status of ambulance to unknown; do not publish yet
                         last_ambulance.status = AmbulanceStatus.UK.name
@@ -428,16 +481,24 @@ class Client(models.Model):
                 if self.ambulance is not None:
 
                     # log ambulance login operation
-                    log.append({'client': self, 'user': self.user, 'status': ClientStatus.O.name,
-                                'activity': ClientActivity.AI.name,
-                                'details': self.ambulance.identifier})
+                    log.append(
+                        {
+                            'client': self,
+                            'user': self.user,
+                            'status': ClientStatus.O.name,
+                            'activity': ClientActivity.AI.name,
+                            'details': self.ambulance.identifier,
+                        }
+                    )
 
                     # publish ambulance
                     publish_ambulance.add(self.ambulance)
 
             # last hospital
             if loaded_values and self._loaded_values['hospital_id'] is not None:
-                last_hospital = Hospital.objects.get(id=self._loaded_values['hospital_id'])
+                last_hospital = Hospital.objects.get(
+                    id=self._loaded_values['hospital_id']
+                )
             else:
                 last_hospital = None
 
@@ -448,9 +509,15 @@ class Client(models.Model):
                 if last_hospital is not None:
 
                     # log hospital logout operation
-                    log.append({'client': self, 'user': self.user, 'status': ClientStatus.O.name,
-                                'activity': ClientActivity.HO.name,
-                                'details': last_hospital.name})
+                    log.append(
+                        {
+                            'client': self,
+                            'user': self.user,
+                            'status': ClientStatus.O.name,
+                            'activity': ClientActivity.HO.name,
+                            'details': last_hospital.name,
+                        }
+                    )
 
                     # publish hospital
                     publish_hospital.add(last_hospital)
@@ -459,9 +526,15 @@ class Client(models.Model):
                 if self.hospital is not None:
 
                     # log hospital login operation
-                    log.append({'client': self, 'user': self.user, 'status': ClientStatus.O.name,
-                                'activity': ClientActivity.HI.name,
-                                'details': self.hospital.name})
+                    log.append(
+                        {
+                            'client': self,
+                            'user': self.user,
+                            'status': ClientStatus.O.name,
+                            'activity': ClientActivity.HI.name,
+                            'details': self.hospital.name,
+                        }
+                    )
 
                     # publish hospital
                     publish_hospital.add(self.hospital)
@@ -473,12 +546,23 @@ class Client(models.Model):
             if loaded_values and self._loaded_values['ambulance_id'] is not None:
 
                 # log ambulance logout activity
-                last_ambulance = Ambulance.objects.get(id=self._loaded_values['ambulance_id'])
-                log.append({'client': self, 'user': self.user, 'status': self.status,
-                            'activity': ClientActivity.AO.name,
-                            'details': last_ambulance.identifier})
+                last_ambulance = Ambulance.objects.get(
+                    id=self._loaded_values['ambulance_id']
+                )
+                log.append(
+                    {
+                        'client': self,
+                        'user': self.user,
+                        'status': self.status,
+                        'activity': ClientActivity.AO.name,
+                        'details': last_ambulance.identifier,
+                    }
+                )
 
-                if self.status == ClientStatus.F.name and last_ambulance.status != AmbulanceStatus.UK.name:
+                if (
+                    self.status == ClientStatus.F.name
+                    and last_ambulance.status != AmbulanceStatus.UK.name
+                ):
 
                     # change status of ambulance to unknown; do not publish yet
                     last_ambulance.status = AmbulanceStatus.UK.name
@@ -490,8 +574,11 @@ class Client(models.Model):
             if self.ambulance is not None:
 
                 # log warning
-                logger.error("Client.save() called with status '{}' and vehicle '{} not None".format(self.status,
-                                                                                                       self.ambulance))
+                logger.error(
+                    "Client.save() called with status '{}' and vehicle '{} not None".format(
+                        self.status, self.ambulance
+                    )
+                )
 
                 # logout ambulance
                 self.ambulance = None
@@ -500,33 +587,55 @@ class Client(models.Model):
             if loaded_values and self._loaded_values['hospital_id'] is not None:
 
                 # log hospital logout activity
-                last_hospital = Hospital.objects.get(id=self._loaded_values['hospital_id'])
-                log.append({'client': self, 'user': self.user, 'status': self.status,
-                            'activity': ClientActivity.HO.name,
-                            'details': last_hospital.name})
+                last_hospital = Hospital.objects.get(
+                    id=self._loaded_values['hospital_id']
+                )
+                log.append(
+                    {
+                        'client': self,
+                        'user': self.user,
+                        'status': self.status,
+                        'activity': ClientActivity.HO.name,
+                        'details': last_hospital.name,
+                    }
+                )
 
                 # publish hospital
                 publish_hospital.add(last_hospital)
 
             if self.hospital is not None:
                 # log warning
-                logger.error("Client.save() called with status '{}' and hospital '{} not None".format(self.status,
-                                                                                                      self.hospital))
+                logger.error(
+                    "Client.save() called with status '{}' and hospital '{} not None".format(
+                        self.status, self.hospital
+                    )
+                )
 
                 # logout hospital
                 self.hospital = None
 
             # log operation
-            log.append({'client': self, 'user': self.user, 'status': self.status, 'activity': ClientActivity.HS.name})
+            log.append(
+                {
+                    'client': self,
+                    'user': self.user,
+                    'status': self.status,
+                    'activity': ClientActivity.HS.name,
+                }
+            )
 
         # check permissions
         if self.ambulance is not None or self.hospital is not None:
 
             permissions = get_permissions(self.user)
-            if self.ambulance is not None and not permissions.check_can_write(ambulance=self.ambulance.id):
+            if self.ambulance is not None and not permissions.check_can_write(
+                ambulance=self.ambulance.id
+            ):
                 raise PermissionDenied(_('Cannot write on ambulance'))
 
-            if self.hospital is not None and not permissions.check_can_write(hospital=self.hospital.id):
+            if self.hospital is not None and not permissions.check_can_write(
+                hospital=self.hospital.id
+            ):
                 raise PermissionDenied(_('Cannot write on hospital'))
 
         # call super
@@ -565,19 +674,19 @@ class ClientActivity(Enum):
 # Client log
 class ClientLog(models.Model):
 
-    client = models.ForeignKey(Client,
-                               on_delete=models.CASCADE,
-                               verbose_name=_('client'))
+    client = models.ForeignKey(
+        Client, on_delete=models.CASCADE, verbose_name=_('client')
+    )
 
-    user = models.ForeignKey(User,
-                             on_delete=models.CASCADE,
-                             verbose_name=_('user'))
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_('user'))
 
-    status = models.CharField(_('status'), max_length=1,
-                              choices=make_choices(ClientStatus))
+    status = models.CharField(
+        _('status'), max_length=1, choices=make_choices(ClientStatus)
+    )
 
-    activity = models.CharField(_('activity'), max_length=2,
-                                choices=make_choices(ClientActivity))
+    activity = models.CharField(
+        _('activity'), max_length=2, choices=make_choices(ClientActivity)
+    )
 
     details = models.CharField(_('details'), max_length=100, blank=True)
 

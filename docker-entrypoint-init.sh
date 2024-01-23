@@ -5,9 +5,11 @@ if [ -f $INIT_FILE ]; then
     echo "> Container is already initialized"
 
     echo "> Rebuild MQTT password files"
-    python manage.py mqttpwfile
+    python manage.py mqttpwfile --encode_salt
     cp pwfile /mosquitto/data/passwd
+    cp aclfile /mosquitto/data/acl
     cp pwfile /mosquitto-test/data/passwd
+    cp aclfile /mosquitto-test/data/acl
     chown -R 1883:1883 /mosquitto/data
     chown -R 1883:1883 /mosquitto-test/data
 
@@ -48,7 +50,7 @@ sed -i'' \
 psql -f init/init.psql -d postgres://postgres:$DB_PASSWORD@$DB_HOST
 
 # Setup Django
-python manage.py makemigrations ambulance login hospital equipment
+# python manage.py makemigrations ambulance login hospital equipment
 python manage.py migrate
 
 # Has backup?
