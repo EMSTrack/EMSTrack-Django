@@ -17,12 +17,15 @@ from ..serializers import UserProfileSerializer
 
 from mqtt.tests.client import MQTTTestCase
 
+from .setup_data import TestSetup
+
 logger = logging.getLogger(__name__)
 
 # TODO: Test admin permissions for staff that is not superuser
 
 
-class MyTestCase(MQTTTestCase):
+# class MyTestCase(MQTTTestCase):
+class MyTestCase(TestSetup):
 
     @classmethod
     def setUpClass(cls):
