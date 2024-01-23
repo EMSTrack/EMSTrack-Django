@@ -50,7 +50,7 @@ sed -i'' \
 psql -f init/init.psql -d postgres://postgres:$DB_PASSWORD@$DB_HOST
 
 # Setup Django
-python manage.py makemigrations ambulance login hospital equipment
+# python manage.py makemigrations ambulance login hospital equipment
 python manage.py migrate
 
 # Has backup?
