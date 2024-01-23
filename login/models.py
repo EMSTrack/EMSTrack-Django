@@ -53,16 +53,11 @@ def is_guest(user):
     return user.userprofile.is_guest
 
 
-@register.filter
-def has_organization(user):
-    return user.userprofile.has_organization
-
-
-# create the place to add organization - name and slug
+# create the place to add organization
 class Organization(models.Model):
     name = models.CharField(_('name'), max_length=100, unique=True)
-    slug = models.SlugField(_('slug'), max_length=100, unique=False)
     description = models.CharField(_('description'), max_length=100, blank=True)
+    users = models.ManyToManyField(User)
 
     def get_absolute_url(self):
         return reverse('login:detail-organization', kwargs={'pk': self.id})
@@ -81,28 +76,12 @@ class UserProfile(ClearPermissionCacheMixin, models.Model):
     is_dispatcher = models.BooleanField(_('is_dispatcher'), default=False)
     is_guest = models.BooleanField(_('is_guest'), default=False)
     mobile_number = PhoneNumberField(blank=True)
-    # user profile links with organization
-    organization = models.ForeignKey(
-        Organization,
-        on_delete=models.CASCADE,
-        verbose_name=_('organization'),
-        blank=True,
-        null=True,
-        unique=False,
-    )
-
-    class Meta:
-        unique_together = ('user', 'organization')
 
     def get_absolute_url(self):
         return reverse('login:detail-user', kwargs={'pk': self.user.id})
 
     def __str__(self):
         return '{}'.format(self.user)
-
-    @property
-    def has_organization(self):
-        return self.organization is not None
 
     def save(self, *args, **kwargs):
         u = User.objects.filter(username=self.user.username)
@@ -112,13 +91,9 @@ class UserProfile(ClearPermissionCacheMixin, models.Model):
                 is_dispatcher=self.is_dispatcher,
                 is_guest=self.is_guest,
                 mobile_number=self.mobile_number,
-                organization=self.organization,
             )
         else:
             super().save(*args, **kwargs)
-
-
-# GroupProfile
 
 
 def can_sms_notifications():
@@ -139,6 +114,7 @@ def can_sms_notifications():
     return users
 
 
+# GroupProfile
 class GroupProfile(ClearPermissionCacheMixin, models.Model):
     group = models.OneToOneField(
         Group, on_delete=models.CASCADE, verbose_name=_('group')

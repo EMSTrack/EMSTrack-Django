@@ -135,16 +135,10 @@ class AuthenticationForm(auth_forms.AuthenticationForm):
             user = User.objects.filter(username=username).first()
             if user is None:
                 raise self.get_invalid_login_error()
-            if user.userprofile.has_organization:
-                if str(organization) == user.userprofile.organization.name:
-                    self.user_cache = authenticate(
-                        self.request, username=username, password=password
-                    )
-            else:
-                if not organization:
-                    self.user_cache = authenticate(
-                        self.request, username=username, password=password
-                    )
+            # TODO: handle organization, for now ignore it...
+            self.user_cache = authenticate(
+                self.request, username=username, password=password
+            )
             if self.user_cache is None:
                 raise self.get_invalid_login_error()
             self.confirm_login_allowed(self.user_cache)
@@ -310,7 +304,6 @@ class UserProfileAdminForm(forms.ModelForm):
         labels = {
             'is_dispatcher': _('Dispatcher'),
             'is_guest': _('Guest'),
-            'organization': _('Organization'),
         }
         exclude = ['user']
 
