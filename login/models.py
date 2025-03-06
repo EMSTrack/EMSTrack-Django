@@ -120,7 +120,7 @@ def can_sms_notifications():
 
 # GroupProfile
 class GroupProfile(ClearPermissionCacheMixin, models.Model):
-    organization = models.ForeignKey(Organization, on_delete = models.CASCADE, verbose_name = _('organization'), null = False)
+    organization = models.ForeignKey(Organization, on_delete = models.CASCADE, verbose_name = _('organization'), null = True)
 
     group = models.OneToOneField(
         Group, on_delete=models.CASCADE, verbose_name=_('group')

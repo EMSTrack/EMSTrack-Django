@@ -15,6 +15,6 @@ class Migration(migrations.Migration):
             model_name='groupprofile',
             name='organization',
             # Remove default to make "required field"
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='login.Organization', verbose_name='organization'),
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='login.Organization', verbose_name='organization'),
         ),
     ]
