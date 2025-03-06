@@ -152,6 +152,7 @@ class OrganizationAdminListView(PaginationViewMixin, ListView):
     template_name = 'login/organization_list.html'
     ordering = 'name'
 
+#https://docs.djangoproject.com/en/5.1/topics/db/queries/#lookups-that-span-relationships
 class OrganizationAdminDetailView(DetailView):
     model = Organization
     template_name = 'login/organization_detail.html'
@@ -168,7 +169,7 @@ class OrganizationAdminDetailView(DetailView):
 
         # retrieve users and add to context
         # context['user_list'] = self.object.user_set.all()
-        context['group_list'] = Group.objects.all()
+        context['group_list'] = GroupProfile.objects.filter(organization = self.object)
 
         return context
     

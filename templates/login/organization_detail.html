@@ -65,10 +65,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for group in group_list %}
+                    {% for group_profile in group_list %}
                     <tr>
                         <td>
-                            <a href="{% url 'login:detail-group' pk=group.id %}">{{ group.name }}</a>
+                            <a href="{% url 'login:detail-group' pk=group_profile.group.id %}">{{ group_profile.group.name }}</a>
                         </td>
                     </tr>
                     {% endfor %}
