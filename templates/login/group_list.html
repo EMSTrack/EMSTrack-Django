@@ -34,6 +34,7 @@
                     <tr>
                         <th>{% trans "Name" %}</th>
                         <th>{% trans "Description" %}</th>
+                        <th>{% trans "Organization" %}</th>
                         <th>{% trans "Priority" %}</th>
                         <th>{% trans "SMS Notifications" %}</th>
                         <th>{% trans "Number of Users" %}</th>
@@ -47,6 +48,9 @@
                         </td>
                         <td>
                             {{ group.groupprofile.description }}
+                        </td>
+                        <td>
+                            {{ group.groupprofile.organization }}
                         </td>
                         <td>
                             {{ group.groupprofile.priority }}
