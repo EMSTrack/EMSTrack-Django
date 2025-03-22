@@ -6,19 +6,19 @@
 
 <div class="container">
 
+    <!-- FIXED: Changed breadcrumb from 'Groups' to 'Organizations' -->
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'login:list-organization' %}">{% trans "Organizations" %}</a></li>
+            <li class="breadcrumb-item">
+                <a href="{% url 'login:list-organization' %}">{% trans "Organizations" %}</a> 
+            </li>
             <li class="breadcrumb-item active" aria-current="page">{{ organization.name }}</li>
         </ol>
     </nav>
 
     <div class="row">
         <div class="col">
-
-            <h1>{% trans "Organization" %}</h1>
-
-            <h3>{% trans "Details" %}:</h3>
+            <h1>{% trans "Organization Details" %}</h1>
 
             <p>
                 <strong>{% trans "Name" %}:</strong>
@@ -27,11 +27,58 @@
 
             <p>
                 <strong>{% trans "Description" %}:</strong>
-                {{ organization.description }}
+                {{ organization.description|default:"<em>No description provided</em>"|safe }}
             </p>
+
+            {% if organization.permissions.all %}
+                <h3>{% trans "Organization Permissions" %}</h3>
+                <ul>
+                    {% for permission in organization.permissions.all %}
+                        <li>{{ permission.name }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <h3>{% trans "Organization Permissions" %}</h3>
+                <p><em>{% trans "No permissions assigned." %}</em></p>
+            {% endif %}
+
+            {% if organization.ambulances.all %}
+                <h3>{% trans "Ambulances in this Organization" %}</h3>
+                <ul>
+                    {% for ambulance in organization.ambulances.all %}
+                        <li>{{ ambulance.name }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <h3>{% trans "Ambulances in this Organization" %}</h3>
+                <p><em>{% trans "No ambulances assigned." %}</em></p>
+            {% endif %}
+
+            <!-- ADDED: Groups in Organization -->
+            <h3>{% trans "Groups in this Organization" %}</h3>
+
+            {% if group_list %}
+            <table class="table table-striped table-sm">
+                <thead>
+                    <tr>
+                        <th>{% trans "Name" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for group_profile in group_list %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'login:detail-group' pk=group_profile.group.id %}">{{ group_profile.group.name }}</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+                <p><em>{% trans "No groups assigned." %}</em></p>
+            {% endif %}
 
         </div>
     </div>
 </div>
-
 {% endblock %}

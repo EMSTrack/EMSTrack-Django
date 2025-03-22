@@ -57,6 +57,7 @@ def is_guest(user):
 class Organization(models.Model):
     name = models.CharField(_('name'), max_length=100, unique=True)
     description = models.CharField(_('description'), max_length=100, blank=True)
+    #symmetrical relationships
     users = models.ManyToManyField(User)
     ambulances = models.ManyToManyField('ambulance.Ambulance')
     equipment_set = models.ManyToManyField('equipment.EquipmentSet')
@@ -119,7 +120,7 @@ def can_sms_notifications():
 
 # GroupProfile
 class GroupProfile(ClearPermissionCacheMixin, models.Model):
-    organization = models.ForeignKey(Organization, on_delete = models.CASCADE, verbose_name = _('organization'), null = False)
+    organization = models.ForeignKey(Organization, on_delete = models.CASCADE, verbose_name = _('organization'), null = True)
 
     group = models.OneToOneField(
         Group, on_delete=models.CASCADE, verbose_name=_('group')
@@ -235,8 +236,8 @@ class GroupHospitalPermission(ClearPermissionCacheMixin, Permission):
             self.can_write,
         )
 #OrganizationAmbulancePermission
-class OrganizationAmbulancePermission(ClearPermissionCacheMixin, Permission):
-    pass
+#class OrganizationAmbulancePermission(ClearPermissionCacheMixin, Permission):
+#    pass
 
 # random string
 def random_string_generator(

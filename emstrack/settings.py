@@ -43,7 +43,7 @@ SWAGGER_SETTINGS = {
 }
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.bool('DJANGO_DEBUG', default=False)
+DEBUG = env.bool('DJANGO_DEBUG', default=True)
 allowed_hosts = env.str('DJANGO_HOSTNAMES', default="*")
 if allowed_hosts == "*":
     ALLOWED_HOSTS = ["*"]

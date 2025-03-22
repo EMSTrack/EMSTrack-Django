@@ -12,6 +12,7 @@ from ambulance.models import Ambulance, \
 
 from hospital.models import Hospital
 from equipment.models import EquipmentType, Equipment, EquipmentHolder, EquipmentItem
+from login.models import Organization
 
 
 class TestSetupData:
@@ -243,6 +244,10 @@ class TestSetupData:
                                                 can_write=False)
         
         #TODO: Add organizations to groups
+        cls.o1 = Organization.objects.create(
+            name = "CruzRoja",
+            description = "Red Cross"
+        )
 
         cls.u4.groups.set([cls.g2])
         cls.u5.groups.set([cls.g1, cls.g3])

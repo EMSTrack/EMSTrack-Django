@@ -31,6 +31,16 @@
             </p>
 
             <p>
+                <strong>{% trans "Organization" %}:</strong>
+                {% if group.groupprofile.organization %}
+                    <a href="{% url 'login:detail-organization' pk=group.groupprofile.organization.id %}">{{ group.groupprofile.organization }}</a>
+                {% else %}
+                    {{ group.groupprofile.organization }}
+                {% endif %}
+
+            </p>
+
+            <p>
                 <strong>{% trans "Priority" %}:</strong>
                 {{ group.groupprofile.priority }}
             </p>
