@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% load static %}
 {% load i18n %}
-{% load formset_tags %}  {# Added this here to keep all template tags together at the top for better readability #}
 
 {% block head %}
 {{ form.media }}
 {% endblock %}
 
 {% block content %}
+{% load formset_tags %}
 
 <div class="container">
     
@@ -81,7 +81,9 @@
                             </tbody>
                         </table>
 
-                        <!-- Fixed: Removed incorrect character 'W' after {% endescapescript %} -->
+                        <!-- The empty form template. By wrapping this in a <script> tag, the
+                        __prefix__ placeholder can easily be replaced in both attributes and
+                        any scripts -->
                         <script type="form-template" data-formset-empty-form>
                             {% escapescript %}
                                 <tr data-formset-form>
@@ -103,23 +105,20 @@
                                         </td>
                                     {% endif %}
                                 </tr>
-                            {% endescapescript %} {# Fixed incorrect closing tag here #}
+W                            {% endescapescript %}
                         </script>
 
-                        <!-- Improved: "Add another" button placement for better UI clarity -->
+                        <!-- This button will add a new form when clicked -->
                         <p>
                             <input type="button" value="{% trans 'Add another' %}" data-formset-add>
                         </p>
 
-                        <!-- Fixed: Wrapped jQuery inside $(document).ready() to prevent execution issues -->
-                        <script>
-                            jQuery(document).ready(function($) {
-                                $("#formset-{{ formset.prefix }}").formset({
-                                    animateForms: false,
-                                    reorderMode: 'dom',
-                                });
+                        <script>jQuery(function($) {
+                            $("#formset-{{ formset.prefix }}").formset({
+                                animateForms: false,
+                                reorderMode: 'dom',
                             });
-                        </script>
+                        });</script>
 
                     </div>
                 {% endfor %}

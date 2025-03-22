@@ -275,6 +275,7 @@ class GroupHospitalPermissionAdminForm(forms.ModelForm):
             # Other form media here
         )
 
+# Currently unused, but probably needed in future.
 class OrganizationAdminUpdateForm(forms.ModelForm):
     class Meta:
         model = Organization
