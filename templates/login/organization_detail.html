@@ -27,7 +27,7 @@
 
             <p>
                 <strong>{% trans "Description" %}:</strong>
-                {{ organization.description|default:"<em>{% trans 'No description provided.' %}</em>"|safe }}
+                {{ organization.description|default:"<em>No description provided</em>"|safe }}
             </p>
 
             {% if organization.permissions.all %}

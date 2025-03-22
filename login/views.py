@@ -18,7 +18,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import View, TemplateView
 from django.views.generic.detail import BaseDetailView
-from django.views.generic.edit import FormView, CreateView
+from django.views.generic.edit import FormView, CreateView, UpdateView
 from drf_extra_fields.geo_fields import PointField
 from extra_views import (
     InlineFormSetFactory,
@@ -184,9 +184,15 @@ class OrganizationAdminCreateView(SuccessMessageMixin, CreateView):
     def get_success_url(self):
         return self.object.get_absolute_url()
 
-class OrganizationAdminUpdateView(SuccessMessageWithInlinesMixin, UpdateWithInlinesView):
+#class OrganizationAdminInline(InlineFormSetFactory):
+#    model = Organization
+    # form_class = Orga
+
+#TODO: Convert to UpdateWithInlinesView, remove UpdateView import
+class OrganizationAdminUpdateView(SuccessMessageMixin, UpdateView):
     model = Organization
-    #template_name = 'login/group_form.html'
+    fields = ['name', 'description']
+    template_name = 'login/organization_form.html'
     #form_class = GroupAdminUpdateForm
     #inlines = [
     #    GroupProfileAdminInline,

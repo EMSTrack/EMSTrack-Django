@@ -236,8 +236,8 @@ class GroupHospitalPermission(ClearPermissionCacheMixin, Permission):
             self.can_write,
         )
 #OrganizationAmbulancePermission
-class OrganizationAmbulancePermission(ClearPermissionCacheMixin, Permission):
-    pass
+#class OrganizationAmbulancePermission(ClearPermissionCacheMixin, Permission):
+#    pass
 
 # random string
 def random_string_generator(

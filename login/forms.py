@@ -275,6 +275,17 @@ class GroupHospitalPermissionAdminForm(forms.ModelForm):
             # Other form media here
         )
 
+class OrganizationAdminUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Organization
+        fields = ['name', 'description']
+
+    def __init__(self, *args, **kwargs):
+        # call super
+        super().__init__(*args, **kwargs)
+
+        # disable name
+        self.fields['name'].disabled = True
 
 class GroupProfileAdminForm(forms.ModelForm):
     class Meta:
