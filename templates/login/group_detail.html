@@ -29,12 +29,11 @@
                 <strong>{% trans "Description" %}:</strong>
                 {{ group.groupprofile.description }}
             </p>
-
             <p>
                 <strong>{% trans "Organization" %}:</strong>
-                {{ group.groupprofile.organization }}
+                {{ group.groupprofile.organization.name|default:"Uncategorized" }}
             </p>
-
+            
             <p>
                 <strong>{% trans "Priority" %}:</strong>
                 {{ group.groupprofile.priority }}
