@@ -1,5 +1,5 @@
 # Using ubuntu as a base image
-FROM python:3.7
+FROM python:3.8
 
 # Getting rid of debconf messages
 ARG DEBIAN_FRONTEND=noninteractive
@@ -15,7 +15,10 @@ RUN set -x && \
 
 # Install node
 # RUN curl -sL https://deb.nodesource.com/setup_21.x | bash - && \
-RUN apt-get install -y nodejs npm
+#RUN apt-get install -y nodejs npm
+
+RUN curl -sL https://deb.nodesource.com/setup_21.x | bash - && \
+    apt-get install -y nodejs
 
 # Build variables
 ARG BUILD_APP_HOME=/app
