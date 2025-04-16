@@ -91,7 +91,18 @@ class MQTTTestCase(StaticLiveServerTestCase):
         cls.port = 8001
         cls.host = socket.gethostbyname(socket.gethostname())
         # cls.allowed_host = 'emstrack'
-        super(MQTTTestCase, cls).setUpClass()
+
+        number_of_attempts = 10
+        while number_of_attempts > 0:
+            try:
+                super(MQTTTestCase, cls).setUpClass()
+                break
+            except:
+                number_of_attempts -= 1
+
+        if number_of_attempts == 0:
+            # failed to start server
+            raise Exception("Could not start server, aborting...")
 
         # determine server and port
         protocol, host, port = cls.live_server_url.split(':')

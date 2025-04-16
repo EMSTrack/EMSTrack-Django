@@ -1,5 +1,5 @@
 # Using ubuntu as a base image
-FROM python:3.7
+FROM python:3.12
 
 # Getting rid of debconf messages
 ARG DEBIAN_FRONTEND=noninteractive
@@ -20,6 +20,7 @@ RUN apt-get install -y nodejs npm
 # Build variables
 ARG BUILD_APP_HOME=/app
 ARG BUILD_SCRIPT_HOME=/usr/local/bin
+# ARG BUILD_SCRIPT_HOME=/usr/bin
 
 ENV APP_HOME=$BUILD_APP_HOME
 ENV SCRIPT_HOME=$BUILD_SCRIPT_HOME
@@ -94,6 +95,8 @@ RUN chmod +x $SCRIPT_HOME/docker-entrypoint.sh
 COPY docker-entrypoint-init.sh $SCRIPT_HOME/docker-entrypoint-init.sh
 RUN chmod +x $SCRIPT_HOME/docker-entrypoint-init.sh
 
+RUN ls /usr/local/bin
+
 # Add VOLUME to allow backup of config, logs and databases
-ENTRYPOINT ["/usr/bin/dumb-init", "--", "docker-entrypoint.sh"]
+ENTRYPOINT ["/usr/bin/dumb-init", "--", "bash", "docker-entrypoint.sh"]
 CMD ["all"]

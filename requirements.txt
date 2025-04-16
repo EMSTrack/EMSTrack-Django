@@ -1,8 +1,11 @@
-django==3.0.6
+# django==3.0.6
+django
 django-braces
 environs
-psycopg2-binary==2.8.6
-djangorestframework==3.10.3
+# psycopg2-binary==2.8.6
+psycopg2-binary
+# djangorestframework==3.10.3
+djangorestframework
 markdown
 django-filter
 drf-yasg==1.17.1
@@ -10,7 +13,7 @@ django-extra-fields
 django-extra-views
 django-import-export
 django-phonenumber-field[phonenumberslite]
-django-nose
+# django-nose
 paho-mqtt
 django-formset-js
 django-webpack-loader
