@@ -47,6 +47,7 @@
     "immutability-helper": "^3.0.1",
     "moment": "^2.24.0",
     "nouislider": "^14.0.3",
-    "wnumb": "^1.2.0"
+    "wnumb": "^1.2.0",
+    "@dabh/diagnostics": "^2.0.2"
   }
 }
