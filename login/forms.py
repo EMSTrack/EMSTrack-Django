@@ -19,6 +19,7 @@ from .models import (
     GroupHospitalPermission,
     GroupProfile,
     Organization,
+    OrganizationProfile,
     TemporaryPassword,
     UserAmbulancePermission,
     UserHospitalPermission,
@@ -244,6 +245,21 @@ class UserHospitalPermissionAdminForm(forms.ModelForm):
         js = formset_media_js + (
             # Other form media here
         )
+
+class OrganizationProfileAdminForm(forms.ModelForm):
+    class Meta:
+        model = OrganizationProfile
+        labels = {
+            'description': _('Description'),
+        }
+        exclude = ['organization']
+
+class OrganizationAdminUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Organization
+        fields = ['name', 'description']
+
+
 
 
 class GroupAmbulancePermissionAdminForm(forms.ModelForm):

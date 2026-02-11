@@ -103,6 +103,14 @@ ENV/
 deploy/static
 nohup.out
 
+# Webpack generated files
+webpack/*-stats.json
+static/bundles/
+
+# MQTT auth files
+aclfile
+pwfile
+
 # IntelliJ
 .idea/
 
