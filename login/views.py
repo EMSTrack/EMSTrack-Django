@@ -136,6 +136,12 @@ class LoginView(auth_views.LoginView):
 
         # get user
         user = self.request.user
+        # get organization
+        organization = form.cleaned_data.get('organization') 
+        if organization:
+            self.request.session["organization_id"] = organization.id
+
+        
 
         # if user is dispatcher set session to expire in 14 days
         if user.is_superuser or user.is_staff or user.userprofile.is_dispatcher:
@@ -249,7 +255,7 @@ class GroupAdminDetailView(DetailView):
         context['hospital_list'] = self.object.grouphospitalpermission_set.all()
 
         # retrieve users and add to context
-        context['user_list'] = self.object.users.all()
+        context['user_list'] = self.object.user_set.all()
 
         return context
 
@@ -331,8 +337,12 @@ class UserAdminDetailView(DetailView):
         context['ambulance_list'] = self.object.userambulancepermission_set.all()
         context['hospital_list'] = self.object.userhospitalpermission_set.all()
 
+
         # retrieve groups and add to context
         context['group_list'] = self.object.groups.all()
+
+        #retrieve organization and add to context
+        context['organization_list'] = self.object.organization_set.all()  
 
         return context
 
