@@ -27,8 +27,130 @@
 
             <p>
                 <strong>{% trans "Description" %}:</strong>
-                {{ organization.description }}
+                {{ organization.organizationprofile.description }}
             </p>
+
+            <p>
+                <strong>{% trans "Priority" %}:</strong>
+                {{ organization.organizationprofile.priority }}
+            </p>
+
+            <p>
+                <strong>{% trans "SMS Notifications" %}:</strong>
+                {{ organization.organizationprofile.can_sms_notifications|get_check }}
+            </p>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+
+            <h3>{% trans "Users" %}:</h3>
+
+            {% if user_list %}
+
+            <table class="table table-striped table-sm">
+                <thead>
+                <tr>
+                    <th>{% trans "Username" %}</th>
+                    <th>{% trans "First" %}</th>
+                    <th>{% trans "Last" %}</th>
+                    <th>{% trans "Email" %}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for user in user_list %}
+                <tr>
+                    <td>
+                        <a href="{% url 'login:detail-user' pk=user.id %}">{{ user.username }}</a>
+                    </td>
+                    <td>
+                        {{ user.first_name }}
+                    </td>
+                    <td>
+                        {{ user.last_name }}
+                    </td>
+                    <td>
+                        {{ user.email }}
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            {% else %}
+
+            <p>{% trans "This group has no users yet." %}</p>
+
+            {% endif %}
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+
+            <h3>{% trans "Permissions" %}:</h3>
+
+            <h4>{% trans "Vehicles" %}:</h4>
+
+            {% if ambulance_list %}
+
+            <table class="table table-striped table-sm">
+                <thead>
+                <tr>
+                    <th>{% trans "Vehicle" %}</th>
+                    <th>{% trans "Read" %}</th>
+                    <th>{% trans "Write" %}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for permission in ambulance_list %}
+                <tr>
+                    <td> {{ permission.ambulance.identifier }} </td>
+                    <td> {{ permission.can_read|get_check }} </td>
+                    <td> {{ permission.can_write|get_check }} </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+
+            {% else %}
+
+            <p>{% trans "This group does not have access to any vehicles." %}</p>
+
+            {% endif %}
+
+            <h4>{% trans "Hospitals" %}:</h4>
+
+            {% if hospital_list %}
+
+            <table class="table table-striped table-sm">
+                <thead>
+                <tr>
+                    <th>{% trans "Hospital" %}</th>
+                    <th>{% trans "Read" %}</th>
+                    <th>{% trans "Write" %}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for permission in hospital_list %}
+                <tr>
+                    <td> {{ permission.hospital.name }} </td>
+                    <td> {{ permission.can_read|get_check }} </td>
+                    <td> {{ permission.can_write|get_check }} </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            {% else %}
+
+            <p>{% trans "This organization does not have access to any hospitals." %}</p>
+
+            {% endif %}
 
         </div>
     </div>

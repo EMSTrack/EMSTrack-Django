@@ -59,6 +59,8 @@ from mqtt.cache_clear import mqtt_cache_clear
 from .forms import (
     MQTTAuthenticationForm,
     AuthenticationForm,
+    OrganizationAdminUpdateForm,
+    OrganizationProfileAdminForm,
     SignupForm,
     UserAdminCreateForm,
     UserAdminUpdateForm,
@@ -72,6 +74,9 @@ from .forms import (
     UserProfileAdminForm,
 )
 from .models import (
+    OrganizationAmbulancePermission,
+    OrganizationHospitalPermission,
+    OrganizationProfile,
     TemporaryPassword,
     UserAmbulancePermission,
     UserHospitalPermission,
@@ -131,6 +136,12 @@ class LoginView(auth_views.LoginView):
 
         # get user
         user = self.request.user
+        # get organization
+        organization = form.cleaned_data.get('organization') 
+        if organization:
+            self.request.session["organization_id"] = organization.id
+
+        
 
         # if user is dispatcher set session to expire in 14 days
         if user.is_superuser or user.is_staff or user.userprofile.is_dispatcher:
@@ -163,16 +174,18 @@ class OrganizationAdminDetailView(DetailView):
         context = super().get_context_data(**kwargs)
 
         # retrieve permissions and add to context
-        # context['ambulance_list'] = self.object.groupambulancepermission_set.all()
-        # context['hospital_list'] = self.object.grouphospitalpermission_set.all()
+        context['ambulance_list'] = self.object.organizationambulancepermission_set.all()
+        context['hospital_list'] = self.object.organizationhospitalpermission_set.all()
 
         # retrieve users and add to context
-        # context['user_list'] = self.object.user_set.all()
+        context['user_list'] = self.object.users.all()
 
         return context
     
 class OrganizationAdminCreateView(SuccessMessageMixin, CreateView):
     fields = ['name', 'description']
+    template_name = 'login/organization_form.html'
+    model = Organization
     #template_name = 'login/group_create.html'
 
     def get_success_message(self, cleaned_data):
@@ -180,16 +193,38 @@ class OrganizationAdminCreateView(SuccessMessageMixin, CreateView):
 
     def get_success_url(self):
         return self.object.get_absolute_url()
+    
+class OrganizationAmbulancePermissionInline(InlineFormSetFactory):
+    model = OrganizationAmbulancePermission
+    extra = 1
+    fields = ['ambulance', 'can_read', 'can_write']
+    fk_name = 'organization'
+
+# Inline for hospital permissions
+class OrganizationHospitalPermissionInline(InlineFormSetFactory):
+    model = OrganizationHospitalPermission
+    extra = 1
+    fields = ['hospital', 'can_read', 'can_write']
+    fk_name = 'organization'
+    
+class OrganizationProfileAdminInline(InlineFormSetFactory):
+    model = OrganizationProfile
+    form_class = OrganizationProfileAdminForm
+    factory_kwargs = {'min_num': 1, 'max_num': 1, 'extra': 0, 'can_delete': False}
+
+
 
 class OrganizationAdminUpdateView(SuccessMessageWithInlinesMixin, UpdateWithInlinesView):
     model = Organization
-    #template_name = 'login/group_form.html'
-    #form_class = GroupAdminUpdateForm
-    #inlines = [
-    #    GroupProfileAdminInline,
-    #    GroupAmbulancePermissionAdminInline,
-    #    GroupHospitalPermissionAdminInline,
-    #]
+    template_name = 'login/organization_form.html'
+    context_object_name = 'view_organization'
+    form_class = OrganizationAdminUpdateForm
+    inlines = [
+        OrganizationProfileAdminInline,
+        OrganizationAmbulancePermissionInline,
+        OrganizationHospitalPermissionInline,
+
+    ]
     def get_success_message(self, cleaned_data):
         return "Successfully updated organization '{}'".format(cleaned_data['name'])
 
@@ -302,8 +337,12 @@ class UserAdminDetailView(DetailView):
         context['ambulance_list'] = self.object.userambulancepermission_set.all()
         context['hospital_list'] = self.object.userhospitalpermission_set.all()
 
+
         # retrieve groups and add to context
         context['group_list'] = self.object.groups.all()
+
+        #retrieve organization and add to context
+        context['organization_list'] = self.object.organization_set.all()  
 
         return context
 

@@ -7,6 +7,7 @@ from django.db import DEFAULT_DB_ALIAS
 from django.db import IntegrityError
 
 
+
 class Command(BaseCommand):
 
     help = 'Create admin user'
@@ -41,6 +42,10 @@ class Command(BaseCommand):
                 u = model._default_manager.db_manager(database).create_superuser(**user_data)
             else:
                 u = model._default_manager.db_manager(database).create_user(**user_data)
+            
+            from login.models import Organization
+            organization = Organization.objects.first() # Get the first organization (assuming there's at least one)
+            u.organization_set.add(organization)
 
             if type_of_user == 'guest':
                 u.userprofile.is_guest = True

@@ -9,12 +9,7 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{% url 'login:list-group' %}">{% trans "Groups" %}</a></li>
-            {% if group %}
-                <li class="breadcrumb-item"><a href="{% url 'login:detail-group' pk=group.id %}">{{ group.name }}</a></li>
-                <li class="breadcrumb-item active" aria-current="page">{% trans "Update" %}</li>
-            {% else %}
-                <li class="breadcrumb-item active" aria-current="page">{% trans "Create" %}</li>
-            {% endif %}
+            <li class="breadcrumb-item active" aria-current="page">{% trans "Create" %}</li>
         </ol>
     </nav>
 
@@ -26,10 +21,10 @@
             <form method="POST" class="post-form">
                 {% csrf_token %}
 
-                <h3>{% trans "Details" %}:</h3>
+                <h3>{% trans "Group Details" %}:</h3>
 
                 <table>
-                    {{ form }}
+                    {{ form.as_table }}
                 </table>
 
                 <p>

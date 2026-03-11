@@ -234,9 +234,64 @@ class GroupHospitalPermission(ClearPermissionCacheMixin, Permission):
             self.can_read,
             self.can_write,
         )
+    
 #OrganizationAmbulancePermission
+class OrganizationProfile(ClearPermissionCacheMixin, models.Model):
+    organization = models.OneToOneField(
+        Organization, on_delete=models.CASCADE, verbose_name=_('organization')
+    )
+
+    description = models.CharField(_('description'), max_length=100, blank=True)
+
+    def get_absolute_url(self):
+        return reverse('login:detail-organization', kwargs={'pk': self.organization.id})
+
+    def __str__(self):
+        return '{}: description = {}'.format(self.organization, self.description)
+    
+
 class OrganizationAmbulancePermission(ClearPermissionCacheMixin, Permission):
-    pass
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, verbose_name=_('organization'))
+    ambulance = models.ForeignKey(
+        'ambulance.Ambulance', on_delete=models.CASCADE, verbose_name=_('ambulance')
+    )
+
+    class Meta:
+        unique_together = ('organization', 'ambulance')
+
+    def get_absolute_url(self):
+        return reverse('login:detail-organization', kwargs={'pk': self.organization.id})
+
+    def __str__(self):
+        return '{}/{}(id={}): read[{}] write[{}]'.format(
+            self.organization,
+            self.ambulance.identifier,
+            self.ambulance.id,
+            self.can_read,
+            self.can_write,
+        )
+    
+class OrganizationHospitalPermission(ClearPermissionCacheMixin, Permission):
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, verbose_name=_('organization'))
+    hospital = models.ForeignKey(
+        'hospital.Hospital', on_delete=models.CASCADE, verbose_name=_('hospital')
+    )
+
+    class Meta:
+        unique_together = ('organization', 'hospital')
+
+    def get_absolute_url(self):
+        return reverse('login:detail-organization', kwargs={'pk': self.organization.id})
+
+    def __str__(self):
+        return '{}/{}(id={}): read[{}] write[{}]'.format(
+            self.organization,
+            self.hospital.name,
+            self.hospital.id,
+            self.can_read,
+            self.can_write,
+        )
+
 
 # random string
 def random_string_generator(

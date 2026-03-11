@@ -19,6 +19,7 @@ from .models import (
     GroupHospitalPermission,
     GroupProfile,
     Organization,
+    OrganizationProfile,
     TemporaryPassword,
     UserAmbulancePermission,
     UserHospitalPermission,
@@ -119,7 +120,7 @@ class AuthenticationForm(auth_forms.AuthenticationForm):
     )
     organization = forms.ModelChoiceField(
         label=_("Organization"),
-        required=False,
+        required=True,
         queryset=Organization.objects.all(),
         widget=forms.Select(
             attrs={'placeholder': _('Organization'), 'class': 'form-control input-lg'},
@@ -129,19 +130,34 @@ class AuthenticationForm(auth_forms.AuthenticationForm):
     def clean(self):
         username = self.cleaned_data.get("username")
         password = self.cleaned_data.get("password")
-        organization = self.cleaned_data.get("organization", '')
+        organization = self.cleaned_data.get("organization")
 
         if username is not None and password:
             user = User.objects.filter(username=username).first()
             if user is None:
                 raise self.get_invalid_login_error()
             # TODO: handle organization, for now ignore it...
+            #check if user in organization
+
             self.user_cache = authenticate(
                 self.request, username=username, password=password
             )
             if self.user_cache is None:
                 raise self.get_invalid_login_error()
             self.confirm_login_allowed(self.user_cache)
+
+            #if organization and self.user_cache not in organization.users.all():
+            #    raise self.get_invalid_login_error()
+            if organization is None:
+                raise forms.ValidationError(
+                    _("Organization is required."),
+                    code="invalid_organization",
+                )
+            if not organization.users.filter(id=user.id).exists():
+                raise forms.ValidationError(
+                    _("User does not belong to the selected organization."),
+                    code="invalid_organization",)
+            
         return self.cleaned_data
 
 
@@ -245,6 +261,21 @@ class UserHospitalPermissionAdminForm(forms.ModelForm):
             # Other form media here
         )
 
+class OrganizationProfileAdminForm(forms.ModelForm):
+    class Meta:
+        model = OrganizationProfile
+        labels = {
+            'description': _('Description'),
+        }
+        exclude = ['organization']
+
+class OrganizationAdminUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Organization
+        fields = ['name', 'description']
+
+
+
 
 class GroupAmbulancePermissionAdminForm(forms.ModelForm):
     ambulance = AmbulancePermissionModelChoiceField(
@@ -282,7 +313,8 @@ class GroupProfileAdminForm(forms.ModelForm):
         labels = {
             'can_sms_notifications': _('SMS Notifications'),
         }
-        exclude = ['group']
+        fields = ['organization', 'description', 'can_sms_notifications']
+        #exclude = ['group']
 
 
 class GroupAdminUpdateForm(forms.ModelForm):
